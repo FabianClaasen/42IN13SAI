@@ -29,6 +29,8 @@ Tokenizer::Tokenizer(std::string fileLocation, std::list<TokenDefinition> defini
     nextLine();
 }
 
+// The tokenize function will fill the tokenlist with all the tokens
+// gathered from the code send to it.
 void Tokenizer::Tokenize()
 {
 	tokenList = new std::list<Token>();
@@ -43,6 +45,7 @@ void Tokenizer::Tokenize()
 			continue;
 		}
 
+		// Loop through all the token definitions
 		std::list<TokenDefinition>::iterator definitionIterator;
 		for (definitionIterator = tokenDefinitions.begin(); definitionIterator != tokenDefinitions.end(); ++definitionIterator)
 		{
@@ -53,11 +56,11 @@ void Tokenizer::Tokenize()
 			{
 				match = true;
 
-				std::string tokenValue = lineRemaining.substr(0, matched);
-
+				// Check if the level should be raised
 				if (definition.tokenType == TokenType::OpenBracket || definition.tokenType == TokenType::OpenCurlyBracket || definition.tokenType == TokenType::OpenMethod)
 					level++;
 
+				// Find a partner
 				Token *partner = nullptr;
 				if (shouldFindPartner(definition.tokenType))
 				{
@@ -70,20 +73,21 @@ void Tokenizer::Tokenize()
 				}
 
 				// Create token
+				std::string tokenValue = lineRemaining.substr(0, matched);
 				Token *token = new Token(lineNumber, linePosition, level, tokenValue, definition.tokenType, partner);
-
+				
 				// if partner found, give this token to partner
 				if (partner)
 					partner->Partner = token;
-
 				tokenList->push_back(*token);
 
+				// Check if the level should be lowered
 				if (definition.tokenType == TokenType::CloseBracket || definition.tokenType == TokenType::CloseCurlyBracket || definition.tokenType == TokenType::CloseMethod)
 					level--;
 
+				// Change your position and line
 				linePosition += matched;
 				lineRemaining = lineRemaining.substr(matched);
-
 				if (lineRemaining.length() == 0)
 					nextLine();
 
@@ -91,19 +95,24 @@ void Tokenizer::Tokenize()
 			}
 		}
 
+		// Throw an exception if the target couldnt be parsed as a token.
 		if (!match)
 			throw new ParseException("Unrecognized character '" + lineRemaining + "' on line " + std::to_string(lineNumber) + " at position " + std::to_string(linePosition));
 	}
 }
 
-Token* Tokenizer::findPartner(TokenType &tokenType, int level)
+// Find a partner for the current token.
+// @param
+//  type: this is the type of the token where you need to find a match for.
+//	level: this is the level of the tokentype, the partner needs to be on the same level.
+Token* Tokenizer::findPartner(TokenType &type, int level)
 {
     Token *token = nullptr;
     std::list<TokenPartner>::iterator tokenPartner;
     for (tokenPartner = tokenPartners.begin(); tokenPartner != tokenPartners.end(); ++tokenPartner)
     {
         TokenPartner tokenP = *tokenPartner;
-        if (tokenP.token == tokenType)
+		if (tokenP.token == type)
         {
             std::list<Token>::reverse_iterator tokenIt;
             for (tokenIt = tokenList->rbegin(); tokenIt != tokenList->rend(); ++tokenIt)
@@ -114,17 +123,21 @@ Token* Tokenizer::findPartner(TokenType &tokenType, int level)
             }
         }
     }
-    throw new PartnerNotFoundException("Partner not found for: " + std::to_string(tokenType) + " on line " + std::to_string(lineNumber) + " at position " + std::to_string(linePosition));
+	throw new PartnerNotFoundException("Partner not found for: " + std::to_string(type) + " on line " + std::to_string(lineNumber) + " at position " + std::to_string(linePosition));
     
     return token;
 }
 
+// Check if the current token is able to have a partner
+// @Param
+//	type: the function will check if this type can have a partner.
 bool Tokenizer::shouldFindPartner(TokenType type)
 {
 	std::vector<TokenType> types{ TokenType::CloseCurlyBracket, TokenType::CloseMethod, TokenType::Else, TokenType::ElseIf };
 	return std::find(types.begin(), types.end(), type) != types.end();
 }
 
+// This function will read a new line from the file.
 void Tokenizer::nextLine()
 {
     while (std::getline(file, lineRemaining))
