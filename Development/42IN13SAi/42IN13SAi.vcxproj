@@ -14,6 +14,7 @@
     <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="CompilerNode.cpp" />
     <ClCompile Include="Grammar.cpp" />
+    <ClCompile Include="LabelStack.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NativeCodeGenerator.cpp" />
     <ClCompile Include="ParseException.cpp" />
@@ -28,6 +29,7 @@
     <ClInclude Include="Compiler.h" />
     <ClInclude Include="CompilerNode.h" />
     <ClInclude Include="Grammar.h" />
+    <ClInclude Include="LabelStack.h" />
     <ClInclude Include="NativeCodeGenerator.h" />
     <ClInclude Include="ParseException.h" />
     <ClInclude Include="PartnerNotFoundException.h" />
