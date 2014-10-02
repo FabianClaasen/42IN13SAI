@@ -66,9 +66,6 @@
     <ClCompile Include="CompilerNode.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
-    <ClCompile Include="NativeCodeGenerator.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grammar.h">
@@ -97,9 +94,6 @@
     </ClInclude>
     <ClInclude Include="TokenType.h">
       <Filter>Header Files\Tokenizer</Filter>
-    </ClInclude>
-    <ClInclude Include="NativeCodeGenerator.h">
-      <Filter>Header Files\Compiler</Filter>
     </ClInclude>
     <ClInclude Include="CompilerNode.h">
       <Filter>Header Files\Compiler</Filter>
