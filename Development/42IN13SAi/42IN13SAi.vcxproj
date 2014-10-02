@@ -22,6 +22,7 @@
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="TokenDefinition.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
+    <ClCompile Include="TokenizerController.cpp" />
     <ClCompile Include="TokenPartner.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -35,6 +36,7 @@
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenDefinition.h" />
     <ClInclude Include="Tokenizer.h" />
+    <ClInclude Include="TokenizerController.h" />
     <ClInclude Include="TokenPartner.h" />
     <ClInclude Include="TokenType.h" />
   </ItemGroup>
