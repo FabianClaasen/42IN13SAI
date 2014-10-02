@@ -13,63 +13,99 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Tokenizer">
+      <UniqueIdentifier>{6cef5649-67fd-4a6a-bb7f-ab4dc45e2fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tokenizer">
+      <UniqueIdentifier>{ac716a45-d6e4-4646-8cf3-9ce6278277e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Compiler">
+      <UniqueIdentifier>{c4f0dd0a-de5a-4229-b949-3637e1f56ba2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compiler">
+      <UniqueIdentifier>{3816c30b-2c9d-491d-a1a2-ad35c8cbd79f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Virtual_Machine">
+      <UniqueIdentifier>{9187b2b9-41d3-4d1f-93f3-c6a0fb971368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Virtual_Machine">
+      <UniqueIdentifier>{d3c01a3b-687d-4722-831b-b621cac7bba7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Grammar.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="ParseException.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="PartnerNotFoundException.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="RegexMatcher.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="Token.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="TokenDefinition.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="Tokenizer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="TokenPartner.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="Compiler.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="CompilerNode.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="NativeCodeGenerator.cpp">
+      <Filter>Source Files\Compiler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grammar.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tokenizer</Filter>
     </ClInclude>
     <ClInclude Include="ParseException.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tokenizer</Filter>
     </ClInclude>
     <ClInclude Include="PartnerNotFoundException.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tokenizer</Filter>
     </ClInclude>
     <ClInclude Include="RegexMatcher.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tokenizer</Filter>
     </ClInclude>
     <ClInclude Include="Token.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tokenizer</Filter>
     </ClInclude>
     <ClInclude Include="TokenDefinition.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tokenizer</Filter>
     </ClInclude>
     <ClInclude Include="Tokenizer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tokenizer</Filter>
     </ClInclude>
     <ClInclude Include="TokenPartner.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tokenizer</Filter>
     </ClInclude>
     <ClInclude Include="TokenType.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tokenizer</Filter>
+    </ClInclude>
+    <ClInclude Include="NativeCodeGenerator.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="CompilerNode.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Compiler.h">
+      <Filter>Header Files\Compiler</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
