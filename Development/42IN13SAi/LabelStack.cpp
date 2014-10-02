@@ -7,6 +7,8 @@ LabelStack::LabelStack(std::string prefix)
 
 LabelStack::~LabelStack()
 {
+	delete stack;
+	stack = nullptr;
 }
 
 std::string LabelStack::Push()
