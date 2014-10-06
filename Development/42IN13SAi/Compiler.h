@@ -1,4 +1,7 @@
 #pragma once
+#include "Token.h"
+#include <list>
+#include "CompilerNode.h"
 class Compiler
 {
 public:

@@ -1,6 +1,4 @@
 #include "DefaultFunction.h"
-
-
 DefaultFunction::DefaultFunction()
 {
 }

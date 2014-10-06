@@ -1,25 +1,26 @@
 #include "InteralFunction.h"
-#include "DefaultFunction.h"
+#include "InternalFunctionType.h"
 #include <string>
 
 InteralFunction::InteralFunction()
 {
-	DefaultFunction* _default = new DefaultFunction();
+	_default = new DefaultFunction();
+	GetInternalFunction("gddsdgsfsd");
 }
 
 
 InteralFunction::~InteralFunction()
 {
+	
 }
 
-void InteralFunction::GetInternalFunction()
+void InteralFunction::GetInternalFunction(std::string identifier)
 {
-	std::string identifier("if");
-	switch (identifier)
+	/*switch (identifier)
 	{
-	case "if":
+	case InternalFunctionType::IF:
 		_default->ParseIfStatement();
 			break;
 	defaut:break;
-	}
+	}*/
 }

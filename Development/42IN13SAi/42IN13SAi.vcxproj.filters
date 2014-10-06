@@ -1,143 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Tokenizer">
-      <UniqueIdentifier>{6cef5649-67fd-4a6a-bb7f-ab4dc45e2fdd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Tokenizer">
-      <UniqueIdentifier>{ac716a45-d6e4-4646-8cf3-9ce6278277e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Compiler">
-      <UniqueIdentifier>{c4f0dd0a-de5a-4229-b949-3637e1f56ba2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Compiler">
-      <UniqueIdentifier>{3816c30b-2c9d-491d-a1a2-ad35c8cbd79f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Virtual_Machine">
-      <UniqueIdentifier>{9187b2b9-41d3-4d1f-93f3-c6a0fb971368}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Virtual_Machine">
-      <UniqueIdentifier>{d3c01a3b-687d-4722-831b-b621cac7bba7}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="Compiler.cpp" />
+    <ClCompile Include="CompilerNode.cpp" />
+    <ClCompile Include="DefaultFunction.cpp" />
+    <ClCompile Include="Grammar.cpp" />
+    <ClCompile Include="InteralFunction.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MathFunction.cpp" />
+    <ClCompile Include="NativeCodeGenerator.cpp" />
+    <ClCompile Include="ParseException.cpp" />
+    <ClCompile Include="PartnerNotFoundException.cpp" />
+    <ClCompile Include="PhysicsFunction.cpp" />
+    <ClCompile Include="RegexMatcher.cpp" />
+    <ClCompile Include="Token.cpp" />
+    <ClCompile Include="TokenDefinition.cpp" />
+    <ClCompile Include="Tokenizer.cpp" />
+    <ClCompile Include="TokenizerController.cpp" />
+    <ClCompile Include="TokenPartner.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Grammar.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="ParseException.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="PartnerNotFoundException.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="RegexMatcher.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Token.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TokenDefinition.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Tokenizer.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TokenPartner.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Compiler.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="CompilerNode.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="NativeCodeGenerator.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="DefaultFunction.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="IInteralFunction.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="InteralFunction.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="MathFunction.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsFunction.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="TokenizerController.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Grammar.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </ClInclude>
-    <ClInclude Include="ParseException.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </ClInclude>
-    <ClInclude Include="PartnerNotFoundException.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </ClInclude>
-    <ClInclude Include="RegexMatcher.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </ClInclude>
-    <ClInclude Include="Token.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TokenDefinition.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </ClInclude>
-    <ClInclude Include="Tokenizer.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TokenPartner.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TokenType.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </ClInclude>
-    <ClInclude Include="CompilerNode.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="Compiler.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="DefaultFunction.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="IInteralFunction.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="InteralFunction.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="MathFunction.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsFunction.h">
-      <Filter>Header Files\Compiler</Filter>
-    <ClInclude Include="TokenizerController.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </ClInclude>
+    <ClInclude Include="Compiler.h" />
+    <ClInclude Include="CompilerNode.h" />
+    <ClInclude Include="DefaultFunction.h" />
+    <ClInclude Include="Grammar.h" />
+    <ClInclude Include="IInteralFunction.h" />
+    <ClInclude Include="InteralFunction.h" />
+    <ClInclude Include="MathFunction.h" />
+    <ClInclude Include="NativeCodeGenerator.h" />
+    <ClInclude Include="ParseException.h" />
+    <ClInclude Include="PartnerNotFoundException.h" />
+    <ClInclude Include="PhysicsFunction.h" />
+    <ClInclude Include="RegexMatcher.h" />
+    <ClInclude Include="Token.h" />
+    <ClInclude Include="TokenDefinition.h" />
+    <ClInclude Include="Tokenizer.h" />
+    <ClInclude Include="TokenizerController.h" />
+    <ClInclude Include="TokenPartner.h" />
+    <ClInclude Include="TokenType.h" />
+    <ClInclude Include="InternalFunctionType.h" />
   </ItemGroup>
 </Project>

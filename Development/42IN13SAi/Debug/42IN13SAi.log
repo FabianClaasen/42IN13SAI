@@ -1,42 +1,19 @@
-﻿Build started 6-10-2014 11:57:06.
-     1>Project "D:\Users\Devin\Documents\GitHub\42IN13SAI\Development\42IN13SAi\42IN13SAi.vcxproj" on node 2 (Build target(s)).
+﻿Build started 10/6/2014 4:20:23 PM.
+     1>Project "C:\Users\stefan\Documents\Sourcetree\TokenizerCompiler\Development\42IN13SAi\42IN13SAi.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Compiler.cpp CompilerNode.cpp DefaultFunction.cpp Grammar.cpp IInteralFunction.cpp InteralFunction.cpp main.cpp MathFunction.cpp NativeCodeGenerator.cpp ParseException.cpp PartnerNotFoundException.cpp PhysicsFunction.cpp RegexMatcher.cpp Token.cpp TokenDefinition.cpp Tokenizer.cpp TokenPartner.cpp
-         TokenPartner.cpp
-         Tokenizer.cpp
-         TokenDefinition.cpp
-         Token.cpp
-         RegexMatcher.cpp
-         PhysicsFunction.cpp
-         PartnerNotFoundException.cpp
-         ParseException.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DefaultFunction.cpp InteralFunction.cpp MathFunction.cpp NativeCodeGenerator.cpp
          NativeCodeGenerator.cpp
+     1>c1xx : fatal error C1083: Cannot open source file: 'NativeCodeGenerator.cpp': No such file or directory
          MathFunction.cpp
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C2146: syntax error : missing ';' before identifier '_default'
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-         main.cpp
+     1>c:\users\stefan\documents\sourcetree\tokenizercompiler\development\42in13sai\defaultfunction.h(4): error C2504: 'InteralFunction' : base class undefined
          InteralFunction.cpp
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C2146: syntax error : missing ';' before identifier '_default'
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.cpp(18): error C2450: switch expression of type 'std::string' is illegal
-                 No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.cpp(20): error C2051: case expression not constant
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.cpp(21): error C2065: '_default' : undeclared identifier
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.cpp(21): error C2227: left of '->ParseIfStatement' must point to class/struct/union/generic type
-                 type is 'unknown-type'
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.cpp(24): warning C4060: switch statement contains no 'case' or 'default' labels
-         IInteralFunction.cpp
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\iinteralfunction.cpp(3): error C2084: function 'IInteralFunction::~IInteralFunction(void)' already has a body
-                 d:\users\devin\documents\github\42in13sai\development\42in13sai\iinteralfunction.h(5) : see previous definition of '{dtor}'
-         Grammar.cpp
+     1>c:\users\stefan\documents\sourcetree\tokenizercompiler\development\42in13sai\defaultfunction.h(4): error C2504: 'InteralFunction' : base class undefined
          DefaultFunction.cpp
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C2146: syntax error : missing ';' before identifier '_default'
-     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-         CompilerNode.cpp
-         Compiler.cpp
+     1>c:\users\stefan\documents\sourcetree\tokenizercompiler\development\42in13sai\interalfunction.h(13): error C2143: syntax error : missing ';' before '*'
+     1>c:\users\stefan\documents\sourcetree\tokenizercompiler\development\42in13sai\interalfunction.h(13): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
          Generating Code...
-     1>Done Building Project "D:\Users\Devin\Documents\GitHub\42IN13SAI\Development\42IN13SAi\42IN13SAi.vcxproj" (Build target(s)) -- FAILED.
+     1>Done Building Project "C:\Users\stefan\Documents\Sourcetree\TokenizerCompiler\Development\42IN13SAi\42IN13SAi.vcxproj" (Build target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:27.29
+Time Elapsed 00:00:00.97

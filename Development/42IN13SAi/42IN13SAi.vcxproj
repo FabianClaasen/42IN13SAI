@@ -15,7 +15,6 @@
     <ClCompile Include="CompilerNode.cpp" />
     <ClCompile Include="DefaultFunction.cpp" />
     <ClCompile Include="Grammar.cpp" />
-    <ClCompile Include="IInteralFunction.cpp" />
     <ClCompile Include="InteralFunction.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathFunction.cpp" />
@@ -37,6 +36,7 @@
     <ClInclude Include="Grammar.h" />
     <ClInclude Include="IInteralFunction.h" />
     <ClInclude Include="InteralFunction.h" />
+    <ClInclude Include="InternalFunctionType.h" />
     <ClInclude Include="MathFunction.h" />
     <ClInclude Include="NativeCodeGenerator.h" />
     <ClInclude Include="ParseException.h" />

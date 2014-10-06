@@ -58,7 +58,7 @@ void Compiler::parseStatement()
 
 void Compiler::compile()
 {
-	while (peekNext != nullptr)
+	while (&Compiler::peekNext != nullptr)
 	{
 		parseStatement();
 	}
