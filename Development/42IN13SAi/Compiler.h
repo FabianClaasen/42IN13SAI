@@ -16,8 +16,9 @@ private:
 	Token peekNext();
 	Token getNext();
 	void parseIfStatement();
-	void parseWhileStatement();
+	void parseLoopStatement();
 	void parseAssignmentStatement();
+	std::string getTokenValueType(Token currentToken);
 	void parseStatement();
 	void compile();
 };
