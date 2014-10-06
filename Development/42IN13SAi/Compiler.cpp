@@ -6,6 +6,9 @@
 #include <string>
 #include <list>
 
+/*
+	Check what the next token is
+*/
 Token Compiler::peekNext()
 {
 	std::list<Token>::iterator it = tokenizerTokens.begin();
@@ -14,29 +17,99 @@ Token Compiler::peekNext()
 	return *it;
 }
 
+/*
+	Get the next token
+*/
 Token Compiler::getNext()
 {
 	std::list<Token>::iterator it = tokenizerTokens.begin();
-	std::advance(it, ++currentToken);
+
+	if (&Compiler::peekNext() != nullptr)
+	{
+		std::advance(it, ++currentToken);
+	}
+	else
+	{
+		throw new exception("Token missing");
+	}
 
 	return *it;
 }
 
+/*
+	Also check and parse if-else statement
+*/
 void Compiler::parseIfStatement()
 {
 
 }
 
-void Compiler::parseWhileStatement()
+/*
+	Parse while and for loops
+*/
+void Compiler::parseLoopStatement()
 {
 
 }
 
+/*
+	Return the type of the value from a token
+*/
+string Compiler::getTokenValueType(Token currentToken)
+{
+	if (currentToken.Type == TokenType::Boolean)
+	{
+		return "Boolean";
+	}
+	else if (currentToken.Type == TokenType::Integer)
+	{
+		return "Integer";
+	}
+	else if (currentToken.Type == TokenType::Double)
+	{
+		return "Double";
+	}
+	else
+	{
+		return "String";
+	}
+}
+
+/*
+	Also parse (standard) Arithmetical operations
+*/
 void Compiler::parseAssignmentStatement()
 {
+	std::string expression;
+	std::string identifier;
+	std::string value;
 
+	Token currentToken = getNext();
+	if (currentToken.Type == TokenType::Identifier)
+	{
+		identifier = currentToken.Value;
+	}
+	else
+	{
+		throw new exception("Identifier expected");
+	}
+	
+	currentToken = getNext();
+
+	if (currentToken.Type == TokenType::Equals)
+	{
+		expression = "$assignment";
+	}
+
+	currentToken = getNext();
+
+	value = currentToken.Value;
+	expression = expression + getTokenValueType(currentToken);
 }
 
+/*
+	Check what to parse
+*/
 void Compiler::parseStatement()
 {
 	switch (peekNext().Type)
@@ -45,7 +118,7 @@ void Compiler::parseStatement()
 		parseIfStatement();
 		break;
 	case TokenType::While:
-		parseWhileStatement();
+		parseLoopStatement();
 		break;
 	case TokenType::Identifier:
 		parseAssignmentStatement();
@@ -56,14 +129,20 @@ void Compiler::parseStatement()
 	}
 }
 
+/*
+	keep parsing as long as there are tokens 
+*/
 void Compiler::compile()
 {
-	while (&Compiler::peekNext != nullptr)
+	while (&Compiler::peekNext() != nullptr)
 	{
 		parseStatement();
 	}
 }
 
+/*
+	Constructor
+*/
 Compiler::Compiler(std::list<Token> tokens)
 {
 	tokenizerTokens = tokens;
@@ -71,7 +150,9 @@ Compiler::Compiler(std::list<Token> tokens)
 	compile();
 }
 
-
+/*
+	Destructor
+*/
 Compiler::~Compiler()
 {
 }
