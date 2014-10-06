@@ -18,11 +18,8 @@
     <ClCompile Include="IInteralFunction.cpp" />
     <ClCompile Include="InteralFunction.cpp" />
     <ClCompile Include="main.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="MathFunction.cpp" />
     <ClCompile Include="NativeCodeGenerator.cpp" />
-=======
->>>>>>> 6f1a61a1bfb40a47d19d1b4a7ceda0446e6d2eac
     <ClCompile Include="ParseException.cpp" />
     <ClCompile Include="PartnerNotFoundException.cpp" />
     <ClCompile Include="PhysicsFunction.cpp" />
@@ -38,13 +35,10 @@
     <ClInclude Include="CompilerNode.h" />
     <ClInclude Include="DefaultFunction.h" />
     <ClInclude Include="Grammar.h" />
-<<<<<<< HEAD
     <ClInclude Include="IInteralFunction.h" />
     <ClInclude Include="InteralFunction.h" />
     <ClInclude Include="MathFunction.h" />
     <ClInclude Include="NativeCodeGenerator.h" />
-=======
->>>>>>> 6f1a61a1bfb40a47d19d1b4a7ceda0446e6d2eac
     <ClInclude Include="ParseException.h" />
     <ClInclude Include="PartnerNotFoundException.h" />
     <ClInclude Include="PhysicsFunction.h" />
