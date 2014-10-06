@@ -13,11 +13,16 @@
   <ItemGroup>
     <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="CompilerNode.cpp" />
+    <ClCompile Include="DefaultFunction.cpp" />
     <ClCompile Include="Grammar.cpp" />
+    <ClCompile Include="IInteralFunction.cpp" />
+    <ClCompile Include="InteralFunction.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MathFunction.cpp" />
     <ClCompile Include="NativeCodeGenerator.cpp" />
     <ClCompile Include="ParseException.cpp" />
     <ClCompile Include="PartnerNotFoundException.cpp" />
+    <ClCompile Include="PhysicsFunction.cpp" />
     <ClCompile Include="RegexMatcher.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="TokenDefinition.cpp" />
@@ -27,10 +32,15 @@
   <ItemGroup>
     <ClInclude Include="Compiler.h" />
     <ClInclude Include="CompilerNode.h" />
+    <ClInclude Include="DefaultFunction.h" />
     <ClInclude Include="Grammar.h" />
+    <ClInclude Include="IInteralFunction.h" />
+    <ClInclude Include="InteralFunction.h" />
+    <ClInclude Include="MathFunction.h" />
     <ClInclude Include="NativeCodeGenerator.h" />
     <ClInclude Include="ParseException.h" />
     <ClInclude Include="PartnerNotFoundException.h" />
+    <ClInclude Include="PhysicsFunction.h" />
     <ClInclude Include="RegexMatcher.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenDefinition.h" />

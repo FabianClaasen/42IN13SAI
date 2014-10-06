@@ -1,31 +1,42 @@
-﻿Build started 1-10-2014 13:38:49.
-     1>Project "D:\Workspace\42IN13SAI\Development\42IN13SAi\42IN13SAi.vcxproj" on node 2 (Build target(s)).
+﻿Build started 6-10-2014 11:57:06.
+     1>Project "D:\Users\Devin\Documents\GitHub\42IN13SAI\Development\42IN13SAi\42IN13SAi.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Grammar.cpp main.cpp ParseException.cpp PartnerNotFoundException.cpp RegexMatcher.cpp Token.cpp TokenDefinition.cpp Tokenizer.cpp TokenPartner.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Compiler.cpp CompilerNode.cpp DefaultFunction.cpp Grammar.cpp IInteralFunction.cpp InteralFunction.cpp main.cpp MathFunction.cpp NativeCodeGenerator.cpp ParseException.cpp PartnerNotFoundException.cpp PhysicsFunction.cpp RegexMatcher.cpp Token.cpp TokenDefinition.cpp Tokenizer.cpp TokenPartner.cpp
          TokenPartner.cpp
          Tokenizer.cpp
          TokenDefinition.cpp
          Token.cpp
          RegexMatcher.cpp
+         PhysicsFunction.cpp
          PartnerNotFoundException.cpp
          ParseException.cpp
+         NativeCodeGenerator.cpp
+         MathFunction.cpp
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C2146: syntax error : missing ';' before identifier '_default'
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
          main.cpp
+         InteralFunction.cpp
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C2146: syntax error : missing ';' before identifier '_default'
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.cpp(18): error C2450: switch expression of type 'std::string' is illegal
+                 No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.cpp(20): error C2051: case expression not constant
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.cpp(21): error C2065: '_default' : undeclared identifier
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.cpp(21): error C2227: left of '->ParseIfStatement' must point to class/struct/union/generic type
+                 type is 'unknown-type'
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.cpp(24): warning C4060: switch statement contains no 'case' or 'default' labels
+         IInteralFunction.cpp
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\iinteralfunction.cpp(3): error C2084: function 'IInteralFunction::~IInteralFunction(void)' already has a body
+                 d:\users\devin\documents\github\42in13sai\development\42in13sai\iinteralfunction.h(5) : see previous definition of '{dtor}'
          Grammar.cpp
+         DefaultFunction.cpp
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C2146: syntax error : missing ';' before identifier '_default'
+     1>d:\users\devin\documents\github\42in13sai\development\42in13sai\interalfunction.h(10): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+         CompilerNode.cpp
+         Compiler.cpp
          Generating Code...
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Workspace\42IN13SAI\Development\Debug\42IN13SAi.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Workspace\42IN13SAI\Development\Debug\42IN13SAi.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Workspace\42IN13SAI\Development\Debug\42IN13SAi.lib" /MACHINE:X86 Debug\Grammar.obj
-         Debug\main.obj
-         Debug\ParseException.obj
-         Debug\PartnerNotFoundException.obj
-         Debug\RegexMatcher.obj
-         Debug\Token.obj
-         Debug\TokenDefinition.obj
-         Debug\Tokenizer.obj
-         Debug\TokenPartner.obj
-         LINK : D:\Workspace\42IN13SAI\Development\Debug\42IN13SAi.exe not found or not built by the last incremental link; performing full link
-         42IN13SAi.vcxproj -> D:\Workspace\42IN13SAI\Development\Debug\42IN13SAi.exe
-     1>Done Building Project "D:\Workspace\42IN13SAI\Development\42IN13SAi\42IN13SAi.vcxproj" (Build target(s)).
+     1>Done Building Project "D:\Users\Devin\Documents\GitHub\42IN13SAI\Development\42IN13SAi\42IN13SAi.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:06.22
+Time Elapsed 00:00:27.29
