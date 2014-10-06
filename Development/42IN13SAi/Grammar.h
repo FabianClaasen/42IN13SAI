@@ -2,9 +2,7 @@
 //  Grammar.h
 //  tokenizer
 //
-//  Created by Alex Nagelkerke on 20-09-14.
-//  Copyright (c) 2014 Alex Nagelkerke. All rights reserved.
-//
+#pragma once
 
 #include <list>
 #include "TokenDefinition.h"

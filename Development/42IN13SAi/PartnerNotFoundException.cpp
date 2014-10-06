@@ -2,10 +2,6 @@
 //  ParseException.cpp
 //  tokenizer
 //
-//  Created by Alex Nagelkerke on 20-09-14.
-//  Copyright (c) 2014 Alex Nagelkerke. All rights reserved.
-//
-
 #include <stdio.h>
 #include "PartnerNotFoundException.h"
 

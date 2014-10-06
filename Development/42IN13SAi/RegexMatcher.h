@@ -2,11 +2,7 @@
 //  RegexMatcher.h
 //  tokenizer
 //
-//  Created by Alex Nagelkerke on 19-09-14.
-//  Copyright (c) 2014 Alex Nagelkerke. All rights reserved.
-//
-#ifndef REGEXMATCHER_H_INCLUDED
-#define REGEXMATCHER_H_INCLUDED
+#pragma once
 
 #include <regex>
 #include <string>
@@ -20,5 +16,3 @@ public:
     RegexMatcher(std::string regexString);
     int Match(std::string &text);
 };
-
-#endif

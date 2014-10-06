@@ -4,7 +4,7 @@
 TokenizerController::TokenizerController(std::string filename)
 {
 	std::list<TokenDefinition> definitions = Grammar::getGrammar();
-	std::list<TokenPartner> partners	   = Grammar::getPartners();
+	std::list<TokenPartner> partners = Grammar::getPartners();
 
 	tokenizer = new Tokenizer(filename, definitions, partners);
 }
@@ -22,4 +22,5 @@ std::list<Token> TokenizerController::GetCompilerTokens()
 TokenizerController::~TokenizerController()
 {
 	delete tokenizer;
+	tokenizer = nullptr;
 }
