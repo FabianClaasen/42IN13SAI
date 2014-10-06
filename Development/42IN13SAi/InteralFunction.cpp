@@ -1,10 +1,11 @@
 #include "InteralFunction.h"
+#include "DefaultFunction.h"
 #include "InternalFunctionType.h"
 #include <string>
 
-InteralFunction::InteralFunction()
+InteralFunction::InteralFunction(DefaultFunction &_default)
 {
-	_default = new DefaultFunction();
+	_default.GetInternalFunction;
 	GetInternalFunction("gddsdgsfsd");
 }
 
