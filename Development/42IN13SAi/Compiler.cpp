@@ -36,12 +36,62 @@ Token Compiler::getNext()
 	return *it;
 }
 
+void Compiler::match(TokenType type)
+{
+	if (&Compiler::peekNext() == nullptr)
+	{
+		throw new exception("Expected: " + type);
+	}
+
+	Token currentToken = getNext();
+
+	if (currentToken.Type != type)
+	{
+		throw new exception("Expected: " + type);
+	}
+}
+
+void Compiler::parseExpression()
+{
+	//TODO might need to return something
+}
+
 /*
 	Also check and parse if-else statement
 */
 void Compiler::parseIfStatement()
 {
+	Token currentToken = getNext();
+	bool hasPartner = false;
 
+	if (currentToken.Type == TokenType::If)
+	{
+		if (currentToken.Partner != nullptr)
+		{
+			hasPartner = true;
+		}
+	}
+	else
+	{
+		throw new exception("Expected if keyword");
+	}
+
+	match(TokenType::OpenBracket);
+
+	parseExpression();
+
+	match(TokenType::CloseBracket);
+	match(TokenType::OpenCurlyBracket);
+
+	while ((currentToken = getNext()).Type != TokenType::CloseCurlyBracket)
+	{
+		//TODO parse stuff in if statement
+	}
+
+	if (hasPartner)
+	{
+		//TODO parse else statement
+	}
 }
 
 /*
@@ -96,6 +146,8 @@ void Compiler::parseAssignmentStatement()
 	
 	currentToken = getNext();
 
+	//TODO Arithmetical operations
+
 	if (currentToken.Type == TokenType::Equals)
 	{
 		expression = "$assignment";
@@ -124,7 +176,7 @@ void Compiler::parseStatement()
 		parseAssignmentStatement();
 		break;
 	default:
-		throw new exception("Statement expected");
+		throw new exception("No statement found");
 		break;
 	}
 }

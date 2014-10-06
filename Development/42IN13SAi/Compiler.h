@@ -15,6 +15,8 @@ private:
 
 	Token peekNext();
 	Token getNext();
+	void match(TokenType type);
+	void parseExpression();
 	void parseIfStatement();
 	void parseLoopStatement();
 	void parseAssignmentStatement();
