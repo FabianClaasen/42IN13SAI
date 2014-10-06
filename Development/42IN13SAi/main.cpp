@@ -7,21 +7,17 @@
 //
 
 #include <iostream>
-#include "Tokenizer.h"
-#include "Grammar.h"
+#include "TokenizerController.h"
 
 int main(int argc, const char * argv[])
 {
-    std::list<TokenDefinition>  definitions = Grammar::getGrammar();
-    std::list<TokenPartner>     partners    = Grammar::getPartners();
-    
-    Tokenizer *tokenizer = new Tokenizer("/Users/Alex/test.txt", definitions, partners);
-    tokenizer->Tokenize();
+	TokenizerController *tokenizer_controler = new TokenizerController("C:\\Users\\Alex\\Documents\\test.txt");
+	tokenizer_controler->Tokenize();
     
     // Show tokenized items
-    std::list<Token> *tokens = tokenizer->GetTokenList();
+	std::list<Token> tokens = tokenizer_controler->GetCompilerTokens();
     std::list<Token>::iterator tokenIt;
-    for (tokenIt = tokens->begin(); tokenIt != tokens->end(); ++tokenIt)
+    for (tokenIt = tokens.begin(); tokenIt != tokens.end(); ++tokenIt)
     {
         Token token = *tokenIt;
         Token partner;

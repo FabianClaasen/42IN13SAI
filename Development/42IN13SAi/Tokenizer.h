@@ -18,19 +18,19 @@
 class Tokenizer
 {
 private:
+	int line_number;
+	int line_position;
+	int level;
+	std::string line_remaining;
+
     std::ifstream file;
-    std::list<TokenDefinition> tokenDefinitions;
-    std::list<TokenPartner> tokenPartners;
+    std::list<TokenDefinition> token_definitions;
+    std::list<TokenPartner> token_partners;
     
-    std::list<Token> *tokenList;
-    
-    int lineNumber;
-    int linePosition;
-    int level;
-    std::string lineRemaining;
+    std::list<Token> *token_list;
     
     void nextLine();
-    Token* findPartner(TokenType &tokenType, int level);
+    Token* findPartner(TokenType &token_type, int level);
 	bool shouldFindPartner(TokenType type);
     std::string ltrim(std::string &s);
     std::string rtrim(std::string &s);
@@ -38,6 +38,8 @@ private:
     
 public:
     Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::list<TokenPartner> partners);
+	virtual ~Tokenizer();
+
     void Tokenize();
     std::list<Token>* GetTokenList();
 };

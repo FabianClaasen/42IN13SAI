@@ -2,55 +2,72 @@
 #include "CompilerNode.h"
 #include "Token.h"
 
+#include <iterator>
 #include <string>
 #include <list>
 
-using namespace std;
-
-std::list<Token> *tokens;
-
-Token lookAhead;
-
-void compile()
+Token Compiler::peekNext()
 {
-	string expression = "";
-	string identifier = "";
-	string value = "";
+	std::list<Token>::iterator it = tokenizerTokens.begin();
+	std::advance(it, currentToken + 1);
 
-	std::list<Token>::iterator tokenIt;
-	for (tokenIt = tokens->begin(); tokenIt != tokens->end(); ++tokenIt)
+	return *it;
+}
+
+Token Compiler::getNext()
+{
+	std::list<Token>::iterator it = tokenizerTokens.begin();
+	std::advance(it, ++currentToken);
+
+	return *it;
+}
+
+void Compiler::parseIfStatement()
+{
+
+}
+
+void Compiler::parseWhileStatement()
+{
+
+}
+
+void Compiler::parseAssignmentStatement()
+{
+
+}
+
+void Compiler::parseStatement()
+{
+	switch (peekNext().Type)
 	{
-		Token token = *tokenIt;
-		Token partner;
-
-		if (token.Partner)
-			partner = *token.Partner;
-
-		if (token.Type == TokenType::Identifier)
-		{
-			identifier = token.Value;
-		}
-
-		if (token.Type == TokenType::Equals)
-		{
-			expression = "$Equals";
-		}
-
-		if (token.Type == TokenType::Integer || token.Type == TokenType::Double)
-		{
-			value = token.Value;
-		}
-
-		CompilerNode* node = new CompilerNode(expression, identifier, value);
-
-		expression = "";
-		identifier = "";
-		value = "";
+	case TokenType::If:
+		parseIfStatement();
+		break;
+	case TokenType::While:
+		parseWhileStatement();
+		break;
+	case TokenType::Identifier:
+		parseAssignmentStatement();
+		break;
+	default:
+		throw new exception("Statement expected");
+		break;
 	}
 }
 
-Compiler::Compiler()
+void Compiler::compile()
 {
+	while (peekNext != nullptr)
+	{
+		parseStatement();
+	}
+}
+
+Compiler::Compiler(std::list<Token> tokens)
+{
+	tokenizerTokens = tokens;
+
 	compile();
 }
 

@@ -66,9 +66,11 @@
     <ClCompile Include="CompilerNode.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="NativeCodeGenerator.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="DefaultFunction.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
@@ -84,6 +86,13 @@
     <ClCompile Include="PhysicsFunction.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
+=======
+    <ClCompile Include="TokenizerController.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+=======
+>>>>>>> ca52c77bc1a61cc899afbb242c876406fd36ff07
+>>>>>>> 6f1a61a1bfb40a47d19d1b4a7ceda0446e6d2eac
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grammar.h">
@@ -113,15 +122,13 @@
     <ClInclude Include="TokenType.h">
       <Filter>Header Files\Tokenizer</Filter>
     </ClInclude>
-    <ClInclude Include="NativeCodeGenerator.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
     <ClInclude Include="CompilerNode.h">
       <Filter>Header Files\Compiler</Filter>
     </ClInclude>
     <ClInclude Include="Compiler.h">
       <Filter>Header Files\Compiler</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="DefaultFunction.h">
       <Filter>Header Files\Compiler</Filter>
     </ClInclude>
@@ -136,6 +143,10 @@
     </ClInclude>
     <ClInclude Include="PhysicsFunction.h">
       <Filter>Header Files\Compiler</Filter>
+=======
+    <ClInclude Include="TokenizerController.h">
+      <Filter>Header Files\Tokenizer</Filter>
+>>>>>>> 6f1a61a1bfb40a47d19d1b4a7ceda0446e6d2eac
     </ClInclude>
   </ItemGroup>
 </Project>
