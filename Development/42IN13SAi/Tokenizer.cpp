@@ -47,7 +47,7 @@ void Tokenizer::Tokenize()
 		}
 
 		// Loop through all the token definitions
-		std::list<TokenDefinition>::iterator definitionIterator;
+		std::list<TokenDefinition>::const_iterator definitionIterator;
 		for (definitionIterator = token_definitions.begin(); definitionIterator != token_definitions.end(); ++definitionIterator)
 		{
 			TokenDefinition definition = *definitionIterator;
@@ -109,7 +109,7 @@ void Tokenizer::Tokenize()
 Token* Tokenizer::findPartner(TokenType &type, int level)
 {
     Token *token = nullptr;
-    std::list<TokenPartner>::iterator token_partner;
+    std::list<TokenPartner>::const_iterator token_partner;
     for (token_partner = token_partners.begin(); token_partner != token_partners.end(); ++token_partner)
     {
         TokenPartner tokenP = *token_partner;
@@ -157,7 +157,6 @@ std::list<Token>* Tokenizer::GetTokenList()
 }
 
 // From Stackoverflow http://stackoverflow.com/a/217605
-// doesn't work in VS no idea why
 // trim from start
 std::string Tokenizer::ltrim(std::string &s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
@@ -180,4 +179,5 @@ Tokenizer::~Tokenizer()
 {
 	file.close();
 	delete token_list;
+	token_list = nullptr;
 }
