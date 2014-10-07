@@ -1,27 +1,27 @@
 #include "InteralFunction.h"
 #include "DefaultFunction.h"
-#include "InternalFunctionType.h"
+#include "Token.h"
 #include <string>
 
 InteralFunction::InteralFunction()
 {
-	_default->GetInternalFunction;
-	GetInternalFunction("gddsdgsfsd");
+	
 }
-
 
 InteralFunction::~InteralFunction()
 {
 	
 }
 
-void InteralFunction::GetInternalFunction(std::string identifier)
+void InteralFunction::GetInternalFunction(Token identifier)
 {
-	/*switch (identifier)
+	switch (identifier.Type)
 	{
-	case InternalFunctionType::IF:
-		_default->ParseIfStatement();
-			break;
+	case TokenType::Cosine:
+		_default->CosFunction(std::stod(identifier.Value));
+		break;
+	case TokenType::Sine:
+		_default->SinFunction;
 	defaut:break;
-	}*/
+	}
 }

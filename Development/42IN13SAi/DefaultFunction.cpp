@@ -8,6 +8,10 @@ DefaultFunction::~DefaultFunction()
 {
 }
 
-void DefaultFunction::ParseIfStateMent() {
+void DefaultFunction::CosFunction(double x) {
+
+}
+
+void DefaultFunction::SinFunction(double x) {
 
 }

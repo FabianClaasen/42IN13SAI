@@ -36,6 +36,5 @@
     <ClInclude Include="TokenizerController.h" />
     <ClInclude Include="TokenPartner.h" />
     <ClInclude Include="TokenType.h" />
-    <ClInclude Include="InternalFunctionType.h" />
   </ItemGroup>
 </Project>

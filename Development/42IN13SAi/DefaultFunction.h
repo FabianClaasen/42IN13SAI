@@ -4,6 +4,6 @@ class DefaultFunction : public InteralFunction
 public:
 	DefaultFunction();
 	virtual ~DefaultFunction();
-	void ParseIfStateMent();
-	void ParseWhileStateMent();
+	void CosFunction(double x);
+	void SinFunction(double x);
 };

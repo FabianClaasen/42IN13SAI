@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
+#include "Token.h"
 class IInteralFunction
 {
 public:
 	virtual ~IInteralFunction(){}
-	virtual void GetInternalFunction(std::string) = 0;
+	virtual void GetInternalFunction(Token id) = 0;
 };
