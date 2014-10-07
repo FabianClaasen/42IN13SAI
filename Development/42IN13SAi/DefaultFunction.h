@@ -1,9 +1,10 @@
 #include "InteralFunction.h"
+#include "CompilerNode.h"
 class DefaultFunction : public InteralFunction
 {
 public:
 	DefaultFunction();
 	virtual ~DefaultFunction();
-	void CosFunction(double x);
-	void SinFunction(double x);
+	CompilerNode CosFunction(Token id);
+	CompilerNode SinFunction(Token id);
 };

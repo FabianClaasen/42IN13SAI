@@ -1,5 +1,6 @@
 #include "InteralFunction.h"
 #include "DefaultFunction.h"
+#include "CompilerNode.h"
 #include "Token.h"
 #include <string>
 
@@ -13,12 +14,12 @@ InteralFunction::~InteralFunction()
 	
 }
 
-void InteralFunction::GetInternalFunction(Token identifier)
+CompilerNode InteralFunction::GetInternalFunction(Token identifier)
 {
 	switch (identifier.Type)
 	{
 	case TokenType::Cosine:
-		_default->CosFunction(std::stod(identifier.Value));
+		return _default->CosFunction(identifier);
 		break;
 	case TokenType::Sine:
 		_default->SinFunction;

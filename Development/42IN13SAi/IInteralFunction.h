@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
 #include "Token.h"
+#include "CompilerNode.h"
 class IInteralFunction
 {
 public:
 	virtual ~IInteralFunction(){}
-	virtual void GetInternalFunction(Token id) = 0;
+	virtual CompilerNode GetInternalFunction(Token id) = 0;
 };
