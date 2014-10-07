@@ -10,5 +10,5 @@ public:
 	virtual ~InteralFunction();
 	
 private:
-	
+	DefaultFunction* _default;
 };

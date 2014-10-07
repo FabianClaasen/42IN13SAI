@@ -5,7 +5,7 @@
 
 InteralFunction::InteralFunction()
 {
-	//_default.GetInternalFunction;
+	_default->GetInternalFunction;
 	GetInternalFunction("gddsdgsfsd");
 }
 
