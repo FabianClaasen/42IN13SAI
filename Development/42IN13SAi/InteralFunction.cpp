@@ -3,9 +3,9 @@
 #include "InternalFunctionType.h"
 #include <string>
 
-InteralFunction::InteralFunction(DefaultFunction &_default)
+InteralFunction::InteralFunction()
 {
-	_default.GetInternalFunction;
+	//_default.GetInternalFunction;
 	GetInternalFunction("gddsdgsfsd");
 }
 

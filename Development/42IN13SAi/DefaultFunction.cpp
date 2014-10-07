@@ -8,6 +8,6 @@ DefaultFunction::~DefaultFunction()
 {
 }
 
-DefaultFunction::ParseIfStateMent() {
+void DefaultFunction::ParseIfStateMent() {
 
 }

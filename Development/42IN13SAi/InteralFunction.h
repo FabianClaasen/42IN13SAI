@@ -1,10 +1,11 @@
 #pragma once
 #include  "IInteralFunction.h"
 class DefaultFunction;
+class MathFunction;
 class InteralFunction : public IInteralFunction
 {
 public:
-	InteralFunction(DefaultFunction &);
+	InteralFunction();
 	virtual void GetInternalFunction(std::string);
 	virtual ~InteralFunction();
 	
