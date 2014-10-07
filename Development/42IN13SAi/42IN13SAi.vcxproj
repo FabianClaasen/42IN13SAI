@@ -18,7 +18,6 @@
     <ClCompile Include="InteralFunction.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathFunction.cpp" />
-    <ClCompile Include="NativeCodeGenerator.cpp" />
     <ClCompile Include="ParseException.cpp" />
     <ClCompile Include="PartnerNotFoundException.cpp" />
     <ClCompile Include="PhysicsFunction.cpp" />
@@ -38,7 +37,6 @@
     <ClInclude Include="InteralFunction.h" />
     <ClInclude Include="InternalFunctionType.h" />
     <ClInclude Include="MathFunction.h" />
-    <ClInclude Include="NativeCodeGenerator.h" />
     <ClInclude Include="ParseException.h" />
     <ClInclude Include="PartnerNotFoundException.h" />
     <ClInclude Include="PhysicsFunction.h" />

@@ -7,3 +7,7 @@ DefaultFunction::DefaultFunction()
 DefaultFunction::~DefaultFunction()
 {
 }
+
+void DefaultFunction::ParseIfStateMent() {
+
+}

@@ -1,6 +1,5 @@
 #include "MathFunction.h"
 
-
 MathFunction::MathFunction()
 {
 }

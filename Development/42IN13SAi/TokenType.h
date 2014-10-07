@@ -1,13 +1,9 @@
 //
 //  TokenType.h
-//  tokenizer
+//  part of tokenizer
+//  Contains all the possible token types
 //
-//  Created by Alex Nagelkerke on 19-09-14.
-//  Copyright (c) 2014 Alex Nagelkerke. All rights reserved.
-//
-
-#ifndef TOKENTYPE_H_INCLUDED
-#define TOKENTYPE_H_INCLUDED
+#pragma once
 
 enum TokenType {
     KeyIdentifier,
@@ -44,5 +40,3 @@ enum TokenType {
     CloseBracket,
     Comparator
 };
-
-#endif
