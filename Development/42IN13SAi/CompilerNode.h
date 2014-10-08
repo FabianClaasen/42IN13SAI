@@ -1,13 +1,12 @@
 #pragma once
 #include <string>
-
-using namespace std;
+#include <vector>
 
 class CompilerNode
 {
 public:
-	CompilerNode(string expression, string identifier, string value);
-	CompilerNode(string expression, string identifier, CompilerNode value);
+	CompilerNode(std::string expression, std::vector<std::string> *stringParameters, CompilerNode *jumpTo);
+	CompilerNode(std::string expression, std::vector<CompilerNode> *nodeParameters, CompilerNode *jumpTo);
 	CompilerNode();
 	~CompilerNode();
 };

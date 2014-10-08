@@ -1,6 +1,8 @@
 #pragma once
 #include "InteralFunction.h"
 
+#include <vector>
+
 class InteralFunction;
 class Compiler;
 

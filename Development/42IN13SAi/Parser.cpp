@@ -89,7 +89,7 @@ CompilerNode Parser::ParseTerm()
 	}
 	else if (token.Type == TokenType::Identifier)
 	{
-		string identifier = token.Value;
+		std::string identifier = token.Value;
 		
 		/*if (variable == null)
 			throw std::exception();*/
@@ -156,15 +156,14 @@ Also parse (standard) Arithmetical operations
 CompilerNode Parser::ParseAssignmentStatement()
 {
 	std::string expression = "";
-	std::string identifier = "";
-	std::string valueString = "";
+	std::vector<std::string> parameters;
 	CompilerNode *valueNode = nullptr;
 	CompilerNode endNode;
 
 	Token currentToken = GetNext();
 	if (currentToken.Type == TokenType::Identifier)
 	{
-		identifier = currentToken.Value;
+		parameters.push_back(currentToken.Value);
 	}
 	else
 	{
@@ -182,7 +181,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 
 	if (PeekNext()->Type == TokenType::EOL)
 	{
-		valueString = currentToken.Value;
+		parameters.push_back(currentToken.Value);
 		expression = expression;
 	}
 	else
@@ -191,13 +190,14 @@ CompilerNode Parser::ParseAssignmentStatement()
 		valueNode = &node;
 	}
 
-	if (valueString == "" && valueNode != nullptr)
+	if (valueNode != nullptr)
 	{
-		endNode = CompilerNode(expression, identifier, *valueNode);
+		//TODO make parameters list
+		endNode = CompilerNode(expression, &parameters, nullptr);
 	}
 	else
 	{
-		endNode = CompilerNode(expression, identifier, valueString);
+		endNode = CompilerNode(expression, &parameters, nullptr);
 	}
 
 	return endNode;

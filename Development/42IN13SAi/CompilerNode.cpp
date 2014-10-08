@@ -1,37 +1,36 @@
 #include "CompilerNode.h"
 
-#include <string>
+std::string _expression;
+CompilerNode *_jumpTo;
 
-using namespace std;
+std::vector<CompilerNode> *_nodeParameters;
+std::vector<std::string> *_stringParameters;
 
-string _expression;
-string _identifier;
-string _valueString;
-CompilerNode *_valueNode;
-
-CompilerNode::CompilerNode(string expression, string identifier, string value)
+CompilerNode::CompilerNode(std::string expression, std::vector<std::string> *stringParameters, CompilerNode *jumpTo)
 {
 	_expression = expression;
-	_identifier = identifier;
-	_valueString = value;
+	_stringParameters = stringParameters;
+	_nodeParameters = nullptr;
+	_jumpTo = jumpTo;
 }
 
-CompilerNode::CompilerNode(string expression, string identifier, CompilerNode value)
+CompilerNode::CompilerNode(std::string expression, std::vector<CompilerNode> *nodeParameters, CompilerNode *jumpTo)
 {
 	_expression = expression;
-	_identifier = identifier;
-	_valueNode = &value;
+	_nodeParameters = nodeParameters;
+	_stringParameters = nullptr;
+	_jumpTo = jumpTo;
 }
 
 CompilerNode::CompilerNode()
 {
 	_expression = "";
-	_identifier = "";
-	_valueString = "";
-	_valueNode = nullptr;
+	_jumpTo = nullptr;
+	_nodeParameters = nullptr;
+	_stringParameters = nullptr;
 }
 
 CompilerNode::~CompilerNode()
 {
-	delete _valueNode;
+	delete _jumpTo, _nodeParameters, _stringParameters;
 }
