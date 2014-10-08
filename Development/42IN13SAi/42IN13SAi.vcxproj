@@ -20,6 +20,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathFunction.cpp" />
     <ClCompile Include="ParseException.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="PartnerNotFoundException.cpp" />
     <ClCompile Include="PhysicsFunction.cpp" />
     <ClCompile Include="RegexMatcher.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="LabelStack.h" />
     <ClInclude Include="MathFunction.h" />
     <ClInclude Include="ParseException.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="PartnerNotFoundException.h" />
     <ClInclude Include="PhysicsFunction.h" />
     <ClInclude Include="RegexMatcher.h" />

@@ -14,7 +14,7 @@ public:
 	virtual ~InteralFunction();
 	
 private:
-	DefaultFunction* _defaultFunction;
-	MathFunction*	 _mathFunction;
-	PhysicsFunction* _physicsFunction;
+	DefaultFunction* defaultFunction;
+	MathFunction*	 mathFunction;
+	PhysicsFunction* physicsFunction;
 };
