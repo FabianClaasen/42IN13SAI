@@ -1,15 +1,15 @@
 #pragma once
 #include "Token.h"
-#include "Parser.h"
 #include <list>
 #include "CompilerNode.h"
+#include "Parser.h"
 
 class Compiler
 {
 public:
 	Compiler();
 	Compiler(std::list<Token> tokens);
-	~Compiler();
+	virtual ~Compiler();
 
 private:
 	const std::list<Token>::iterator it;

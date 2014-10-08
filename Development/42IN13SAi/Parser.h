@@ -1,12 +1,11 @@
 #pragma once
-#include "Compiler.h"
 #include "InteralFunction.h"
+
+class InteralFunction;
+class Compiler;
 
 class Parser : public Compiler
 {
-private:
-	InteralFunction internal;
-
 public:
 	// Constructor
 	Parser();
@@ -23,5 +22,8 @@ public:
 	CompilerNode ParseMulExpression();
 	CompilerNode ParseUniExpression();
 	CompilerNode ParseTerm();
+
+private:
+	InteralFunction internal;
 };
 
