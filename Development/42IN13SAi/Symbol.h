@@ -18,6 +18,7 @@ public:
     const TokenType type;
     const SymbolKind kind;
     
+    Symbol();
     Symbol(std::string p_name, TokenType p_type, SymbolKind p_kind);
     
     Symbol(std::string p_name, TokenType p_type, SymbolKind p_kind, float p_value);

@@ -1,6 +1,5 @@
 #pragma once
-#include "Token.h"
-#include "CompilerNode.h"
+#include <string>
 #include "Compiler.h"
 
 class DefaultFunction;

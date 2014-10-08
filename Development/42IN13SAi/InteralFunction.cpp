@@ -1,12 +1,9 @@
 #include "InteralFunction.h"
-#include "DefaultFunction.h"
-#include "CompilerNode.h"
-#include "Token.h"
-#include <string>
 
 #include "MathFunction.h"
 #include "DefaultFunction.h"
 #include "PhysicsFunction.h"
+
 InteralFunction::InteralFunction()
 {
 	
@@ -30,5 +27,5 @@ CompilerNode InteralFunction::GetInternalFunction(Token identifier)
 	default:
 		break;
 	}
-    return CompilerNode("","","");
+    return CompilerNode();
 }

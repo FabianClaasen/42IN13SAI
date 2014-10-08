@@ -18,7 +18,7 @@ CompilerNode MathFunction::CosFunction(Token identifier) {
 
 	Match(TokenType::OpenBracket);
 	// Parse expression to Parser class
-	CompilerNode node = parser.ParseExpression();
+	CompilerNode node = parser->ParseExpression();
 	Match(TokenType::CloseBracket);
 	//second parameter not working yet (think has to be a token instead of string)
 	return CompilerNode(std::string("$cos"), identifier.Value, identifier.Value);

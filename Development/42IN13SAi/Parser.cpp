@@ -28,7 +28,7 @@ void Parser::ParseIfStatement()
 		throw std::runtime_error("Expected if keyword");
 	}
 
-	Match(TokenType::OpenBracket);
+    Compiler::Match(TokenType::OpenBracket);
 
 	ParseExpression();
 
@@ -49,6 +49,7 @@ void Parser::ParseIfStatement()
 CompilerNode Parser::ParseExpression()
 {
 	CompilerNode parsedExpr = ParseRelationalExpression();
+    return parsedExpr;
 }
 
 CompilerNode Parser::ParseRelationalExpression()

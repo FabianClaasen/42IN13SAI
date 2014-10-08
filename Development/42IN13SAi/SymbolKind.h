@@ -7,6 +7,7 @@
 
 #pragma once
 enum SymbolKind {
+    None,
     Global,
     Local,
     Parameter

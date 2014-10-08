@@ -1,7 +1,5 @@
 #include "CompilerNode.h"
 
-#include <string>
-
 using namespace std;
 
 string _expression;

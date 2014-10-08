@@ -1,7 +1,6 @@
 #pragma once
-#include "InteralFunction.h";
-#include "CompilerNode.h"
-#include "Token.h"
+#include "InteralFunction.h"
+
 class DefaultFunction : public InteralFunction
 {
 public:
