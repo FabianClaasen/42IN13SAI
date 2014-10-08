@@ -13,7 +13,7 @@ private:
 	std::list<CompilerNode> *compilerNodes;
 	int currentToken = 0;
 
-	Token peekNext();
+	Token* peekNext();
 	Token getNext();
 	void match(TokenType type);
 	void parseExpression();

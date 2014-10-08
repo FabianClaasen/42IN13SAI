@@ -22,7 +22,9 @@ CompilerNode InteralFunction::GetInternalFunction(Token identifier)
 		return _default->CosFunction(identifier);
 		break;
 	case TokenType::Sine:
-		_default->SinFunction;
-	defaut:break;
+            return _default->SinFunction(identifier);
+            break;
+	default:break;
 	}
+    return CompilerNode("","","");
 }
