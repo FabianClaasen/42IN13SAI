@@ -146,8 +146,15 @@ void Compiler::parseAssignmentStatement()
 	
 	currentToken = getNext();
 
-	//TODO Arithmetical operations
-
+	/*if (currentToken.Type == TokenType::OperatorDivide || currentToken.Type == TokenType::OperatorMinus || currentToken.Type == TokenType::OperatorMultiply || currentToken.Type == TokenType::OperatorPlus || currentToken.Type == TokenType::OperatorRaised)
+	{
+		parseOperatorStatement();
+	}
+	else if (currentToken.Type == TokenType::UniOperatorMinus || currentToken.Type == TokenType::UniOperatorPlus)
+	{
+		parseUniOperatorStatement();
+	}*/
+	
 	if (currentToken.Type == TokenType::Equals)
 	{
 		expression = "$assignment";

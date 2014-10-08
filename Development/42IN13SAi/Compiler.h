@@ -9,6 +9,7 @@ public:
 	~Compiler();
 
 private:
+	const std::list<Token>::iterator it;
 	std::list<Token> tokenizerTokens;
 	std::list<CompilerNode> *compilerNodes;
 	int currentToken = 0;
