@@ -22,11 +22,9 @@ CompilerNode InteralFunction::GetInternalFunction(Token identifier)
 	switch (identifier.Type)
 	{
 	case TokenType::Cosine:
-		return _mathFunction->CosFunction(identifier);
-		break;
+		return mathFunction->CosFunction(identifier);
 	case TokenType::Sine:
-		return _mathFunction->SinFunction(identifier);
-        break;
+		return mathFunction->SinFunction(identifier);
 	default:
 		break;
 	}
