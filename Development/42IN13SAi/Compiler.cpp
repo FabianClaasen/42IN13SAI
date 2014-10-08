@@ -1,11 +1,5 @@
 #include "Compiler.h"
-#include "CompilerNode.h"
-#include "Token.h"
-
-#include <iterator>
-#include <string>
-#include <list>
-
+#include "Parser.h"
 
 /*
 Constructor
@@ -18,7 +12,6 @@ Compiler::Compiler()
 Compiler::Compiler(std::list<Token> tokens)
 {
 	tokenizerTokens = tokens;
-
 	Compile();
 }
 
@@ -83,7 +76,7 @@ void Compiler::Match(TokenType type)
 	}
 	else
 	{
-		throw new exception("Identifier expected");
+		throw runtime_error("Identifier expected");
 	}
 	
 	currentToken = GetNext();
@@ -127,13 +120,13 @@ void Compiler::ParseStatement()
 	switch (PeekNext()->Type)
 	{
 	case TokenType::If:
-		compilerNodes->push_back(parser.ParseIfStatement());
+		parser->ParseIfStatement();
 		break;
 	case TokenType::While:
-		compilerNodes->push_back(parser.ParseLoopStatement());
+		parser->ParseLoopStatement();
 		break;
 	case TokenType::Identifier:
-		compilerNodes->push_back(parser.ParseAssignmentStatement());
+		parser->ParseAssignmentStatement();
 		break;
 	default:
 		throw std::runtime_error("No statement found");

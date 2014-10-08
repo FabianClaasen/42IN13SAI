@@ -33,3 +33,8 @@ Symbol* SymbolTable::GetSymbol(std::string symbolName)
         return &(symbols[symbolName]);
     return nullptr;
 }
+
+SymbolTable::~SymbolTable()
+{
+    
+}

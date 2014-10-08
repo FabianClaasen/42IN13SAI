@@ -1,10 +1,14 @@
 #include "CompilerNode.h"
 
+<<<<<<< HEAD
 std::string _expression;
 CompilerNode *_jumpTo;
 
 std::vector<CompilerNode> *_nodeParameters;
 std::vector<std::string> *_stringParameters;
+=======
+using namespace std;
+>>>>>>> 24acf3a57308c73cc10a380cd43c8be74401a676
 
 CompilerNode::CompilerNode(std::string expression, std::vector<std::string> *stringParameters, CompilerNode *jumpTo)
 {

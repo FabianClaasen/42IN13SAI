@@ -1,5 +1,4 @@
 #include "DefaultFunction.h"
-#include "Token.h"
 
 DefaultFunction::DefaultFunction()
 {
