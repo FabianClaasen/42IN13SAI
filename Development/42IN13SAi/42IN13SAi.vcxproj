@@ -29,6 +29,8 @@
     <ClCompile Include="Tokenizer.cpp" />
     <ClCompile Include="TokenizerController.cpp" />
     <ClCompile Include="TokenPartner.cpp" />
+    <ClCompile Include="Symbol.cpp" />
+    <ClCompile Include="SymbolTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compiler.h" />
@@ -49,6 +51,9 @@
     <ClInclude Include="TokenizerController.h" />
     <ClInclude Include="TokenPartner.h" />
     <ClInclude Include="TokenType.h" />
+    <ClInclude Include="Symbol.h" />
+    <ClInclude Include="SymbolTable.h" />
+    <ClInclude Include="SymbolKind.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0F8E62D6-F5A0-4C66-AD23-F45D847EB1FE}</ProjectGuid>
