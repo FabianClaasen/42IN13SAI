@@ -136,9 +136,10 @@ Also parse (standard) Arithmetical operations
 */
 void Parser::ParseAssignmentStatement()
 {
-	std::string expression;
-	std::string identifier;
-	std::string value;
+	std::string expression = "";
+	std::string identifier = "";
+	std::string valueString = "";
+	CompilerNode *valueNode = nullptr;
 
 	Token currentToken = GetNext();
 	if (currentToken.Type == TokenType::Identifier)
@@ -159,8 +160,20 @@ void Parser::ParseAssignmentStatement()
 
 	currentToken = GetNext();
 
-	//if (parser.PeekNext().Type == TokenType::)
+	if (parser.PeekNext().Type == TokenType::EOL)
+	{
+		valueString = currentToken.Value;
+		expression = expression;
+	}
+	else
+	{
+		CompilerNode node = ParseExpression();
+		valueNode = &node;
+	}
 
-	value = currentToken.Value;
-	expression = expression + GetTokenValueType(currentToken);
+	if (valueString == "" && valueNode != nullptr)
+	{
+		CompilerNode endNode = CompilerNode(expression, identifier, *valueNode);
+		compilerNodes->push_back(endNode);
+	}
 }
