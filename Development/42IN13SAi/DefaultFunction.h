@@ -1,10 +1,13 @@
-#include "InteralFunction.h"
+#pragma once
+#include "InteralFunction.h";
 #include "CompilerNode.h"
+#include "Token.h"
 class DefaultFunction : public InteralFunction
 {
 public:
 	DefaultFunction();
 	virtual ~DefaultFunction();
-	CompilerNode CosFunction(Token id);
-	CompilerNode SinFunction(Token id);
+private:
+	CompilerNode Printline(Token identifier);
+	CompilerNode Stop(Token identifier);
 };
