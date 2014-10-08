@@ -54,9 +54,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IInteralFunction.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
     <ClInclude Include="InteralFunction.h">
       <Filter>Header Files\Compiler</Filter>
     </ClInclude>

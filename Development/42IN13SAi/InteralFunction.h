@@ -1,16 +1,20 @@
 #pragma once
-#include  "IInteralFunction.h"
 #include "Token.h"
 #include "CompilerNode.h"
+#include "Compiler.h"
 class DefaultFunction;
 class MathFunction;
-class InteralFunction : public IInteralFunction
+class PhysicsFunction;
+
+class InteralFunction : public Compiler 
 {
 public:
 	InteralFunction();
-	virtual CompilerNode GetInternalFunction(Token id);
+	CompilerNode GetInternalFunction(Token id);
 	virtual ~InteralFunction();
 	
 private:
-	DefaultFunction* _default;
+	DefaultFunction* _defaultFunction;
+	MathFunction*	 _mathFunction;
+	PhysicsFunction* _physicsFunction;
 };
