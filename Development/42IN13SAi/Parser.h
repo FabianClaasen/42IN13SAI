@@ -1,6 +1,5 @@
 #pragma once
 #include "Compiler.h"
-#pragma once
 #include "InteralFunction.h"
 
 class Parser :

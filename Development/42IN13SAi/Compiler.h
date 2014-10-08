@@ -10,6 +10,9 @@ public:
 	Compiler(std::list<Token> tokens);
 	~Compiler();
 
+private:
+	const std::list<Token>::iterator it;
+
 protected:
 	// Variables
 	Parser parser;

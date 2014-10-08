@@ -36,7 +36,7 @@ void Compiler::Compile()
 {
 	while (Compiler::PeekNext() != nullptr)
 	{
-		parser.ParseStatement();
+		ParseStatement();
 	}
 }
 
@@ -72,6 +72,41 @@ Token Compiler::GetNext()
 
 void Compiler::Match(TokenType type)
 {
+	std::string expression;
+	std::string identifier;
+	std::string value;
+
+	Token currentToken = GetNext();
+	if (currentToken.Type == TokenType::Identifier)
+	{
+		identifier = currentToken.Value;
+	}
+	else
+	{
+		throw new exception("Identifier expected");
+	}
+	
+	currentToken = GetNext();
+
+	/*if (currentToken.Type == TokenType::OperatorDivide || currentToken.Type == TokenType::OperatorMinus || currentToken.Type == TokenType::OperatorMultiply || currentToken.Type == TokenType::OperatorPlus || currentToken.Type == TokenType::OperatorRaised)
+	{
+		parseOperatorStatement();
+	}
+	else if (currentToken.Type == TokenType::UniOperatorMinus || currentToken.Type == TokenType::UniOperatorPlus)
+	{
+		parseUniOperatorStatement();
+	}*/
+	
+	if (currentToken.Type == TokenType::Equals)
+	{
+		expression = "$assignment";
+	}
+
+	currentToken = GetNext();
+
+	value = currentToken.Value;
+	expression = expression + parser.GetTokenValueType(currentToken);
+
     if (Compiler::PeekNext() == nullptr)
     {
         throw std::runtime_error(&"Expected: "[type]);

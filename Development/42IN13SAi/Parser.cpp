@@ -152,14 +152,14 @@ void Parser::ParseAssignmentStatement()
 
 	currentToken = GetNext();
 
-	//TODO Arithmetical operations
-
 	if (currentToken.Type == TokenType::Equals)
 	{
 		expression = "$assignment";
 	}
 
 	currentToken = GetNext();
+
+	//if (parser.PeekNext().Type == TokenType::)
 
 	value = currentToken.Value;
 	expression = expression + GetTokenValueType(currentToken);
