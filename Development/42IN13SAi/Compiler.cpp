@@ -30,7 +30,7 @@ Token Compiler::getNext()
     }
     else
     {
-        throw std::string("Token missing");
+        throw std::runtime_error("Token missing");
     }
     
     return *it;
@@ -40,14 +40,14 @@ void Compiler::match(TokenType type)
 {
     if (Compiler::peekNext() == nullptr)
     {
-        throw std::string(&"Expected: "[type]);
+        throw std::runtime_error(&"Expected: "[type]);
     }
     
     Token currentToken = getNext();
     
     if (currentToken.Type != type)
     {
-        throw std::string(&"Expected: "[type]);
+        throw std::runtime_error(&"Expected: "[type]);
     }
 }
 
@@ -73,7 +73,7 @@ void Compiler::parseIfStatement()
     }
     else
     {
-        throw std::string("Expected if keyword");
+        throw std::runtime_error("Expected if keyword");
     }
     
     match(TokenType::OpenBracket);
@@ -141,7 +141,7 @@ void Compiler::parseAssignmentStatement()
     }
     else
     {
-        throw std::string("Identifier expected");
+        throw std::runtime_error("Identifier expected");
     }
     
     currentToken = getNext();
@@ -176,7 +176,7 @@ void Compiler::parseStatement()
             parseAssignmentStatement();
             break;
         default:
-            throw std::string("No statement found");
+            throw std::runtime_error("No statement found");
             break;
     }
 }
