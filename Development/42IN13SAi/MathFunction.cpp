@@ -1,6 +1,8 @@
 #include "MathFunction.h"
 #include "TokenType.h"
 #include "Token.h"
+#include "Parser.h"
+
 MathFunction::MathFunction()
 {
 }

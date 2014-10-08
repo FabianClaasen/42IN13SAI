@@ -23,9 +23,7 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions->push_back(*new TokenDefinition("ret", TokenType::Return));
     
     // types
-    definitions->push_back(*new TokenDefinition("yes|no", TokenType::Boolean));
-    definitions->push_back(*new TokenDefinition("[0-9]{1,12}(?:\\.[0-9]{1,12}|(?:e|E)-?[1-9]{1,3})", TokenType::Double));
-    definitions->push_back(*new TokenDefinition("[0-9]+", TokenType::Integer));
+    definitions->push_back(*new TokenDefinition("[0-9]{1,12}(?:\\.[0-9]{1,12}|(?:e|E)-?[1-9]{1,3})", TokenType::Float));
     
     //specials
     definitions->push_back(*new TokenDefinition(">=", TokenType::GreaterOrEqThan));

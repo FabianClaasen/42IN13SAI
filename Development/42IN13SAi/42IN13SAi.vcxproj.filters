@@ -55,6 +55,12 @@
     <ClCompile Include="Parser.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
+    <ClCompile Include="Symbol.cpp">
+        <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="SymbolTable.cpp">
+        <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InteralFunction.h">
@@ -110,6 +116,15 @@
     </ClInclude>
     <ClInclude Include="Parser.h">
       <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol.h">
+        <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolTable.h">
+        <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolKind.h">
+        <Filter>Header Files\Compiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

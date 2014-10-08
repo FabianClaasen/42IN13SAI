@@ -2,6 +2,7 @@
 #include "Token.h"
 #include "CompilerNode.h"
 #include "Compiler.h"
+
 class DefaultFunction;
 class MathFunction;
 class PhysicsFunction;
