@@ -1,5 +1,6 @@
 #pragma once
-class PhysicsFunction
+#include "InteralFunction.h"
+static class PhysicsFunction : public InteralFunction
 {
 public:
 	PhysicsFunction();

@@ -79,7 +79,7 @@ CompilerNode Parser::ParseTerm()
 {
 	Token token = GetNext();
 
-	if (token.Type == TokenType::Float)
+	if (token.Type == TokenType::Integer)
 	{
 
 	}
@@ -87,7 +87,6 @@ CompilerNode Parser::ParseTerm()
 	{
 		string identifier = token.Value;
 		
-		// Symbol table moet worden afgemaakt.
 		/*if (variable == null)
 			throw std::exception();*/
 	}
@@ -98,7 +97,7 @@ CompilerNode Parser::ParseTerm()
 		return expr;
 	}
 
-	return CompilerNode();
+	return;
 }
 
 /*
@@ -110,13 +109,37 @@ void Parser::ParseLoopStatement()
 }
 
 /*
+Return the type of the value from a token
+*/
+string Parser::GetTokenValueType(Token currentToken)
+{
+	if (currentToken.Type == TokenType::Boolean)
+	{
+		return "Boolean";
+	}
+	else if (currentToken.Type == TokenType::Integer)
+	{
+		return "Integer";
+	}
+	else if (currentToken.Type == TokenType::Double)
+	{
+		return "Double";
+	}
+	else
+	{
+		return "String";
+	}
+}
+
+/*
 Also parse (standard) Arithmetical operations
 */
 void Parser::ParseAssignmentStatement()
 {
-	std::string expression;
-	std::string identifier;
-	std::string value;
+	std::string expression = "";
+	std::string identifier = "";
+	std::string valueString = "";
+	CompilerNode *valueNode = nullptr;
 
 	Token currentToken = GetNext();
 	if (currentToken.Type == TokenType::Identifier)
@@ -137,7 +160,20 @@ void Parser::ParseAssignmentStatement()
 
 	currentToken = GetNext();
 
-	//if (parser.PeekNext().Type == TokenType::)
+	if (parser.PeekNext().Type == TokenType::EOL)
+	{
+		valueString = currentToken.Value;
+		expression = expression;
+	}
+	else
+	{
+		CompilerNode node = ParseExpression();
+		valueNode = &node;
+	}
 
-	value = currentToken.Value;
+	if (valueString == "" && valueNode != nullptr)
+	{
+		CompilerNode endNode = CompilerNode(expression, identifier, *valueNode);
+		compilerNodes->push_back(endNode);
+	}
 }
