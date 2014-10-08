@@ -79,7 +79,7 @@ CompilerNode Parser::ParseTerm()
 {
 	Token token = GetNext();
 
-	if (token.Type == TokenType::Integer)
+	if (token.Type == TokenType::Float)
 	{
 
 	}
@@ -87,6 +87,7 @@ CompilerNode Parser::ParseTerm()
 	{
 		string identifier = token.Value;
 		
+		// Symbol table moet worden afgemaakt.
 		/*if (variable == null)
 			throw std::exception();*/
 	}
@@ -97,7 +98,7 @@ CompilerNode Parser::ParseTerm()
 		return expr;
 	}
 
-	return;
+	return CompilerNode();
 }
 
 /*
@@ -106,29 +107,6 @@ Parse while and for loops
 void Parser::ParseLoopStatement()
 {
 
-}
-
-/*
-Return the type of the value from a token
-*/
-string Parser::GetTokenValueType(Token currentToken)
-{
-	if (currentToken.Type == TokenType::Boolean)
-	{
-		return "Boolean";
-	}
-	else if (currentToken.Type == TokenType::Integer)
-	{
-		return "Integer";
-	}
-	else if (currentToken.Type == TokenType::Double)
-	{
-		return "Double";
-	}
-	else
-	{
-		return "String";
-	}
 }
 
 /*
@@ -162,5 +140,4 @@ void Parser::ParseAssignmentStatement()
 	//if (parser.PeekNext().Type == TokenType::)
 
 	value = currentToken.Value;
-	expression = expression + GetTokenValueType(currentToken);
 }

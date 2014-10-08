@@ -52,6 +52,9 @@
     <ClCompile Include="LabelStack.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
+    <ClCompile Include="Parser.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IInteralFunction.h">
@@ -106,6 +109,9 @@
       <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="LabelStack.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser.h">
       <Filter>Header Files\Compiler</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,5 +14,5 @@ CompilerNode DefaultFunction::CosFunction(Token identifier) {
 }
 
 CompilerNode DefaultFunction::SinFunction(Token identifier) {
-
+	return CompilerNode();
 }

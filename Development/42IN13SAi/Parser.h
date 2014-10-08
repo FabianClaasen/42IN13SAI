@@ -2,8 +2,7 @@
 #include "Compiler.h"
 #include "InteralFunction.h"
 
-class Parser :
-	public Compiler
+class Parser : public Compiler
 {
 private:
 	InteralFunction internal;
@@ -24,7 +23,5 @@ public:
 	CompilerNode ParseMulExpression();
 	CompilerNode ParseUniExpression();
 	CompilerNode ParseTerm();
-
-	std::string GetTokenValueType(Token currentToken);
 };
 
