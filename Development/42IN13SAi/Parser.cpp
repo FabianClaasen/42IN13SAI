@@ -11,10 +11,12 @@ Parser::~Parser()
 /*
 Also check and parse if-else statement
 */
-void Parser::ParseIfStatement()
+CompilerNode Parser::ParseIfStatement()
 {
 	Token currentToken = Compiler::GetNext();
 	bool hasPartner = false;
+
+	CompilerNode endNode;
 
 	if (currentToken.Type == TokenType::If)
 	{
@@ -44,6 +46,8 @@ void Parser::ParseIfStatement()
 	{
 		//TODO parse else statement
 	}
+
+	return endNode;
 }
 
 CompilerNode Parser::ParseExpression()
@@ -103,9 +107,47 @@ CompilerNode Parser::ParseTerm()
 /*
 Parse while and for loops
 */
-void Parser::ParseLoopStatement()
+CompilerNode Parser::ParseLoopStatement()
 {
+	Token currentToken = Compiler::GetNext();
+	bool forLoop = false;
 
+	CompilerNode endNode;
+
+	if (currentToken.Type != TokenType::While || currentToken.Type != TokenType::ForLoop)
+	{
+		throw std::runtime_error("Expected a loop keyword");
+	}
+	else
+	{
+		if (currentToken.Type == TokenType::ForLoop)
+		{
+			forLoop = true;
+		}
+	}
+
+	Match(TokenType::OpenBracket);
+
+	if (forLoop)
+	{
+		CompilerNode assignmentNode = ParseAssignmentStatement();
+		CompilerNode expressionNode = ParseExpression();
+		CompilerNode addExpressionNode = ParseAddExpression();
+	}
+	else
+	{
+		CompilerNode expressionNode = ParseExpression();
+	}
+
+	Match(TokenType::CloseBracket);
+	Match(TokenType::OpenCurlyBracket);
+
+	while ((currentToken = GetNext()).Type != TokenType::CloseCurlyBracket)
+	{
+		//TODO parse stuff in the loop
+	}
+
+	return endNode;
 }
 
 /*
@@ -134,12 +176,13 @@ string Parser::GetTokenValueType(Token currentToken)
 /*
 Also parse (standard) Arithmetical operations
 */
-void Parser::ParseAssignmentStatement()
+CompilerNode Parser::ParseAssignmentStatement()
 {
 	std::string expression = "";
 	std::string identifier = "";
 	std::string valueString = "";
 	CompilerNode *valueNode = nullptr;
+	CompilerNode endNode;
 
 	Token currentToken = GetNext();
 	if (currentToken.Type == TokenType::Identifier)
@@ -173,7 +216,12 @@ void Parser::ParseAssignmentStatement()
 
 	if (valueString == "" && valueNode != nullptr)
 	{
-		CompilerNode endNode = CompilerNode(expression, identifier, *valueNode);
-		compilerNodes->push_back(endNode);
+		endNode = CompilerNode(expression, identifier, *valueNode);
 	}
+	else
+	{
+		endNode = CompilerNode(expression, identifier, valueString);
+	}
+
+	return endNode;
 }
