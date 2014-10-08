@@ -12,9 +12,9 @@ public:
 	virtual ~Parser();
 
 	// Functions
-	void ParseIfStatement();
-	void ParseLoopStatement();
-	void ParseAssignmentStatement();
+	CompilerNode ParseIfStatement();
+	CompilerNode ParseLoopStatement();
+	CompilerNode ParseAssignmentStatement();
 
 	CompilerNode ParseExpression();
 	CompilerNode ParseRelationalExpression();

@@ -127,13 +127,13 @@ void Compiler::ParseStatement()
 	switch (PeekNext()->Type)
 	{
 	case TokenType::If:
-		parser.ParseIfStatement();
+		compilerNodes->push_back(parser.ParseIfStatement());
 		break;
 	case TokenType::While:
-		parser.ParseLoopStatement();
+		compilerNodes->push_back(parser.ParseLoopStatement());
 		break;
 	case TokenType::Identifier:
-		parser.ParseAssignmentStatement();
+		compilerNodes->push_back(parser.ParseAssignmentStatement());
 		break;
 	default:
 		throw std::runtime_error("No statement found");
