@@ -10,14 +10,12 @@ public:
 	Compiler(std::list<Token> tokens);
 	~Compiler();
 
-<<<<<<< HEAD
 private:
 	const std::list<Token>::iterator it;
-=======
+
 protected:
 	// Variables
 	Parser parser;
->>>>>>> b9aca7a85a1442e2a2e7e3fa9fea7811306e99eb
 	std::list<Token> tokenizerTokens;
 	std::list<CompilerNode> *compilerNodes;
 
