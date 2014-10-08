@@ -1,26 +1,31 @@
 #pragma once
 #include "Token.h"
+#include "Parser.h"
 #include <list>
 #include "CompilerNode.h"
 class Compiler
 {
 public:
+	Compiler();
 	Compiler(std::list<Token> tokens);
 	~Compiler();
 
 private:
+	const std::list<Token>::iterator it;
+
+protected:
+	// Variables
+	Parser parser;
 	std::list<Token> tokenizerTokens;
 	std::list<CompilerNode> *compilerNodes;
-	int currentToken = 0;
 
-	Token* peekNext();
-	Token getNext();
-	void match(TokenType type);
-	void parseExpression();
-	void parseIfStatement();
-	void parseLoopStatement();
-	void parseAssignmentStatement();
-	std::string getTokenValueType(Token currentToken);
-	void parseStatement();
-	void compile();
+	// Functions
+	Token* PeekNext();
+	Token GetNext();
+	void Match(TokenType type);
+	void ParseStatement();
+
+private:
+	int currentToken = 0;
+	void Compile();
 };

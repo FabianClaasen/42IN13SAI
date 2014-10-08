@@ -4,6 +4,9 @@
 #include "Token.h"
 #include <string>
 
+#include "MathFunction.h"
+#include "DefaultFunction.h"
+#include "PhysicsFunction.h"
 InteralFunction::InteralFunction()
 {
 	
@@ -19,12 +22,13 @@ CompilerNode InteralFunction::GetInternalFunction(Token identifier)
 	switch (identifier.Type)
 	{
 	case TokenType::Cosine:
-		return _default->CosFunction(identifier);
+		return _mathFunction->CosFunction(identifier);
 		break;
 	case TokenType::Sine:
-            return _default->SinFunction(identifier);
-            break;
-	default:break;
+		return _mathFunction->SinFunction(identifier);
+        break;
+	default:
+		break;
 	}
     return CompilerNode("","","");
 }
