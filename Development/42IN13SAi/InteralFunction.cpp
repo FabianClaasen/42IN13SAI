@@ -20,10 +20,8 @@ CompilerNode InteralFunction::GetInternalFunction(Token identifier)
 	{
 	case TokenType::Cosine:
 		return mathFunction->CosFunction(identifier);
-		break;
 	case TokenType::Sine:
 		return mathFunction->SinFunction(identifier);
-        break;
 	default:
 		break;
 	}

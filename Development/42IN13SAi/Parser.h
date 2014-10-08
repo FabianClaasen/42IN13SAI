@@ -8,9 +8,9 @@ public:
     virtual ~Parser() throw();
 
 	// Functions
-	void ParseIfStatement();
-	void ParseLoopStatement();
-	void ParseAssignmentStatement();
+	CompilerNode ParseIfStatement();
+	CompilerNode ParseLoopStatement();
+	CompilerNode ParseAssignmentStatement();
 
 	CompilerNode ParseExpression();
 	CompilerNode ParseRelationalExpression();
