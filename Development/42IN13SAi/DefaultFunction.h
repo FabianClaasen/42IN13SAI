@@ -1,9 +1,10 @@
 #include "InteralFunction.h"
+#include "CompilerNode.h"
 class DefaultFunction : public InteralFunction
 {
 public:
 	DefaultFunction();
 	virtual ~DefaultFunction();
-	void ParseIfStateMent();
-	void ParseWhileStateMent();
+	CompilerNode CosFunction(Token id);
+	CompilerNode SinFunction(Token id);
 };

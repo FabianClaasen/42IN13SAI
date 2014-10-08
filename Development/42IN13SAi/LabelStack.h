@@ -8,7 +8,7 @@ class LabelStack
 private:
 	std::string prefix;
 	int current;
-	__readonly std::stack<std::string> *stack;
+    std::stack<std::string> stack;
 
 public:
 	LabelStack(std::string prefix);

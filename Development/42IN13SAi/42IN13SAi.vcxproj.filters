@@ -1,41 +1,147 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Compiler.cpp" />
-    <ClCompile Include="CompilerNode.cpp" />
-    <ClCompile Include="DefaultFunction.cpp" />
-    <ClCompile Include="Grammar.cpp" />
-    <ClCompile Include="InteralFunction.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MathFunction.cpp" />
-    <ClCompile Include="ParseException.cpp" />
-    <ClCompile Include="PartnerNotFoundException.cpp" />
-    <ClCompile Include="PhysicsFunction.cpp" />
-    <ClCompile Include="RegexMatcher.cpp" />
-    <ClCompile Include="Token.cpp" />
-    <ClCompile Include="TokenDefinition.cpp" />
-    <ClCompile Include="Tokenizer.cpp" />
-    <ClCompile Include="TokenizerController.cpp" />
-    <ClCompile Include="TokenPartner.cpp" />
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compiler.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="CompilerNode.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="InteralFunction.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultFunction.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="MathFunction.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="ParseException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="PartnerNotFoundException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="TokenPartner.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="TokenizerController.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="Tokenizer.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="TokenDefinition.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="Token.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="RegexMatcher.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsFunction.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Grammar.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="LabelStack.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Compiler.h" />
-    <ClInclude Include="CompilerNode.h" />
-    <ClInclude Include="DefaultFunction.h" />
-    <ClInclude Include="Grammar.h" />
-    <ClInclude Include="IInteralFunction.h" />
-    <ClInclude Include="InteralFunction.h" />
-    <ClInclude Include="MathFunction.h" />
-    <ClInclude Include="ParseException.h" />
-    <ClInclude Include="PartnerNotFoundException.h" />
-    <ClInclude Include="PhysicsFunction.h" />
-    <ClInclude Include="RegexMatcher.h" />
-    <ClInclude Include="Token.h" />
-    <ClInclude Include="TokenDefinition.h" />
-    <ClInclude Include="Tokenizer.h" />
-    <ClInclude Include="TokenizerController.h" />
-    <ClInclude Include="TokenPartner.h" />
-    <ClInclude Include="TokenType.h" />
-    <ClInclude Include="InternalFunctionType.h" />
+    <ClInclude Include="IInteralFunction.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="InteralFunction.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultFunction.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="CompilerNode.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Compiler.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="MathFunction.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsFunction.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Grammar.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </ClInclude>
+    <ClInclude Include="RegexMatcher.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </ClInclude>
+    <ClInclude Include="Token.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TokenDefinition.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </ClInclude>
+    <ClInclude Include="Tokenizer.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TokenizerController.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TokenPartner.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TokenType.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </ClInclude>
+    <ClInclude Include="ParseException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="PartnerNotFoundException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="LabelStack.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{3e1c29e5-9cb8-4084-b403-6b045e4cc29e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{929180c7-406f-4ee2-a057-315f80b68f18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tokenizer">
+      <UniqueIdentifier>{185bada5-5136-4d41-a390-f0bbe106e1bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Virtual Machine">
+      <UniqueIdentifier>{1acf653c-d22f-4ff6-9faa-a53426d620c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Compiler">
+      <UniqueIdentifier>{e162f620-9dcc-439f-adc1-ef10370cd3ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compiler">
+      <UniqueIdentifier>{431bd891-df84-422f-b18b-0960a41f18ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Virtual Machine">
+      <UniqueIdentifier>{6a6928c3-7546-495b-a692-2f908ca96e3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tokenizer">
+      <UniqueIdentifier>{10d423a5-b716-4b25-90dd-abbaa4bac5d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Exceptions">
+      <UniqueIdentifier>{1b4961e6-f617-41bf-b9ce-2e21dd48c8e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Exceptions">
+      <UniqueIdentifier>{b25466ae-fabf-4a78-9868-9357a450931c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{06aacc4a-8af8-4a5c-bc86-f855fc9bf70a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

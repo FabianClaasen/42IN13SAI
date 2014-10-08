@@ -38,5 +38,8 @@ enum TokenType {
     CloseCurlyBracket,
     OpenBracket,
     CloseBracket,
-    Comparator
+    Comparator,
+	Cosine,
+	Sine,
+	Tangent
 };

@@ -6,130 +6,73 @@
 #include <string>
 #include <list>
 
-/*
-	Check what the next token is
-*/
-Token Compiler::peekNext()
-{
-	std::list<Token>::iterator it = tokenizerTokens.begin();
-	std::advance(it, currentToken + 1);
-
-	return *it;
-}
 
 /*
-	Get the next token
+Constructor
 */
-Token Compiler::getNext()
+Compiler::Compiler()
 {
-	std::list<Token>::iterator it = tokenizerTokens.begin();
 
-	if (&Compiler::peekNext() != nullptr)
-	{
-		std::advance(it, ++currentToken);
-	}
-	else
-	{
-		throw new exception("Token missing");
-	}
-
-	return *it;
 }
 
-void Compiler::match(TokenType type)
+Compiler::Compiler(std::list<Token> tokens)
 {
-	if (&Compiler::peekNext() == nullptr)
-	{
-		throw new exception("Expected: " + type);
-	}
+	tokenizerTokens = tokens;
 
-	Token currentToken = getNext();
-
-	if (currentToken.Type != type)
-	{
-		throw new exception("Expected: " + type);
-	}
-}
-
-void Compiler::parseExpression()
-{
-	//TODO might need to return something
+	Compile();
 }
 
 /*
-	Also check and parse if-else statement
+Destructor
 */
-void Compiler::parseIfStatement()
+Compiler::~Compiler()
 {
-	Token currentToken = getNext();
-	bool hasPartner = false;
+}
 
-	if (currentToken.Type == TokenType::If)
+/*
+keep parsing as long as there are tokens
+*/
+void Compiler::Compile()
+{
+	while (Compiler::PeekNext() != nullptr)
 	{
-		if (currentToken.Partner != nullptr)
-		{
-			hasPartner = true;
-		}
-	}
-	else
-	{
-		throw new exception("Expected if keyword");
-	}
-
-	match(TokenType::OpenBracket);
-
-	parseExpression();
-
-	match(TokenType::CloseBracket);
-	match(TokenType::OpenCurlyBracket);
-
-	while ((currentToken = getNext()).Type != TokenType::CloseCurlyBracket)
-	{
-		//TODO parse stuff in if statement
-	}
-
-	if (hasPartner)
-	{
-		//TODO parse else statement
+		parser.ParseStatement();
 	}
 }
 
 /*
-	Parse while and for loops
-*/
-void Compiler::parseLoopStatement()
+ Check what the next token is
+ */
+Token* Compiler::PeekNext()
 {
-
+    std::list<Token>::iterator it = tokenizerTokens.begin();
+    std::advance(it, currentToken + 1);
+    
+    return &*it;
 }
 
 /*
-	Return the type of the value from a token
-*/
-string Compiler::getTokenValueType(Token currentToken)
+ Get the next token
+ */
+Token Compiler::GetNext()
 {
-	if (currentToken.Type == TokenType::Boolean)
-	{
-		return "Boolean";
-	}
-	else if (currentToken.Type == TokenType::Integer)
-	{
-		return "Integer";
-	}
-	else if (currentToken.Type == TokenType::Double)
-	{
-		return "Double";
-	}
-	else
-	{
-		return "String";
-	}
+    std::list<Token>::iterator it = tokenizerTokens.begin();
+    
+    if (Compiler::PeekNext() != nullptr)
+    {
+        std::advance(it, ++currentToken);
+    }
+    else
+    {
+        throw std::runtime_error("Token missing");
+    }
+    
+    return *it;
 }
 
-/*
-	Also parse (standard) Arithmetical operations
-*/
-void Compiler::parseAssignmentStatement()
+void Compiler::Match(TokenType type)
 {
+<<<<<<< HEAD
 	std::string expression;
 	std::string identifier;
 	std::string value;
@@ -164,54 +107,39 @@ void Compiler::parseAssignmentStatement()
 
 	value = currentToken.Value;
 	expression = expression + getTokenValueType(currentToken);
+=======
+    if (Compiler::PeekNext() == nullptr)
+    {
+        throw std::runtime_error(&"Expected: "[type]);
+    }
+    
+    Token currentToken = GetNext();
+    
+    if (currentToken.Type != type)
+    {
+        throw std::runtime_error(&"Expected: "[type]);
+    }
+>>>>>>> b9aca7a85a1442e2a2e7e3fa9fea7811306e99eb
 }
 
 /*
-	Check what to parse
+Check what to parse
 */
-void Compiler::parseStatement()
+void Compiler::ParseStatement()
 {
-	switch (peekNext().Type)
+	switch (PeekNext()->Type)
 	{
 	case TokenType::If:
-		parseIfStatement();
+		parser.ParseIfStatement();
 		break;
 	case TokenType::While:
-		parseLoopStatement();
+		parser.ParseLoopStatement();
 		break;
 	case TokenType::Identifier:
-		parseAssignmentStatement();
+		parser.ParseAssignmentStatement();
 		break;
 	default:
-		throw new exception("No statement found");
+		throw std::runtime_error("No statement found");
 		break;
 	}
-}
-
-/*
-	keep parsing as long as there are tokens 
-*/
-void Compiler::compile()
-{
-	while (&Compiler::peekNext() != nullptr)
-	{
-		parseStatement();
-	}
-}
-
-/*
-	Constructor
-*/
-Compiler::Compiler(std::list<Token> tokens)
-{
-	tokenizerTokens = tokens;
-
-	compile();
-}
-
-/*
-	Destructor
-*/
-Compiler::~Compiler()
-{
 }
