@@ -1,13 +1,11 @@
 #pragma once
-#include "Compiler.h"
 #include "InteralFunction.h"
 
-class Parser :
-	public Compiler
-{
-private:
-	InteralFunction internal;
+class InteralFunction;
+class Compiler;
 
+class Parser : public Compiler
+{
 public:
 	// Constructor
 	Parser();
@@ -25,6 +23,7 @@ public:
 	CompilerNode ParseUniExpression();
 	CompilerNode ParseTerm();
 
-	std::string GetTokenValueType(Token currentToken);
+private:
+	InteralFunction internal;
 };
 

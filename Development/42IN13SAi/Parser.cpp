@@ -83,7 +83,7 @@ CompilerNode Parser::ParseTerm()
 {
 	Token token = GetNext();
 
-	if (token.Type == TokenType::Integer)
+	if (token.Type == TokenType::Float)
 	{
 
 	}
@@ -101,7 +101,7 @@ CompilerNode Parser::ParseTerm()
 		return expr;
 	}
 
-	return;
+	return CompilerNode();
 }
 
 /*
@@ -151,29 +151,6 @@ CompilerNode Parser::ParseLoopStatement()
 }
 
 /*
-Return the type of the value from a token
-*/
-string Parser::GetTokenValueType(Token currentToken)
-{
-	if (currentToken.Type == TokenType::Boolean)
-	{
-		return "Boolean";
-	}
-	else if (currentToken.Type == TokenType::Integer)
-	{
-		return "Integer";
-	}
-	else if (currentToken.Type == TokenType::Double)
-	{
-		return "Double";
-	}
-	else
-	{
-		return "String";
-	}
-}
-
-/*
 Also parse (standard) Arithmetical operations
 */
 CompilerNode Parser::ParseAssignmentStatement()
@@ -203,7 +180,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 
 	currentToken = GetNext();
 
-	if (parser.PeekNext().Type == TokenType::EOL)
+	if (PeekNext()->Type == TokenType::EOL)
 	{
 		valueString = currentToken.Value;
 		expression = expression;

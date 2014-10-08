@@ -105,14 +105,13 @@ void Compiler::Match(TokenType type)
 	currentToken = GetNext();
 
 	value = currentToken.Value;
-	expression = expression + parser.GetTokenValueType(currentToken);
 
     if (Compiler::PeekNext() == nullptr)
     {
         throw std::runtime_error(&"Expected: "[type]);
     }
     
-    Token currentToken = GetNext();
+    /*Token*/ currentToken = GetNext(); // Bestaat al
     
     if (currentToken.Type != type)
     {
