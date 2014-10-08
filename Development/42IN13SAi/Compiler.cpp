@@ -76,7 +76,7 @@ void Compiler::Match(TokenType type)
 	}
 	else
 	{
-		throw runtime_error("Identifier expected");
+		throw std::runtime_error("Identifier expected");
 	}
 	
 	currentToken = GetNext();

@@ -1,14 +1,12 @@
 #pragma once
-<<<<<<< HEAD
 #include "InteralFunction.h"
 
 #include <vector>
 
 class InteralFunction;
 class Compiler;
-=======
+
 #include "Compiler.h"
->>>>>>> 24acf3a57308c73cc10a380cd43c8be74401a676
 
 class Parser : public Compiler
 {
