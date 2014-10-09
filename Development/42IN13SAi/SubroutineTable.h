@@ -6,7 +6,21 @@
 //
 
 #pragma once
+#include <string>
+#include <unordered_map>
+#include "Subroutine.h"
 
-#include <stdio.h>
+class SubroutineTable {
+private:
+    typedef std::unordered_map<std::string, Subroutine> subroutineMap;
+    subroutineMap subroutines;
+public:
+    SubroutineTable();
+    virtual ~SubroutineTable();
+    
+    void AddSubroutine(Subroutine subroutine);
+    bool HasSubroutine(std::string name);
+    Subroutine* GetSubroutine(std::string name);
+};
 
 

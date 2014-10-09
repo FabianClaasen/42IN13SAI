@@ -5,7 +5,7 @@
 //
 #pragma once
 
-enum TokenType {
+enum class TokenType : int {
     KeyIdentifier,
     Function,
     Identifier,
@@ -39,5 +39,6 @@ enum TokenType {
     Comparator,
 	Cosine,
 	Sine,
-	Tangent
+	Tangent,
+    None
 };

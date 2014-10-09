@@ -2,12 +2,13 @@
 //  ParseException.cpp
 //  tokenizer
 //
-#include <stdio.h>
 #include "ParseException.h"
 
 ParseException::ParseException(std::string m) : message(m)
 {}
 
+ParseException::~ParseException()
+{}
 
 const char* ParseException::what() const throw()
 {

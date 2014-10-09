@@ -120,9 +120,9 @@ Token* Tokenizer::FindPartner(TokenType &type, int level)
             }
         }
     }
-	throw new PartnerNotFoundException("Partner not found for: " + std::to_string(type) + " on line " + std::to_string(lineNumber) + " at position " + std::to_string(linePosition));
-    
-    return token;
+    char buffer[1024];
+    sprintf(buffer, "Partner not found for %d on line %s at position %s", int(type), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
+	throw new PartnerNotFoundException(buffer);
 }
 
 // Check if the current token is able to have a partner

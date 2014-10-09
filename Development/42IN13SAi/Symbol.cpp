@@ -7,7 +7,7 @@
 
 #include "Symbol.h"
 
-Symbol::Symbol() :name(""), type(TokenType::EOL), kind(SymbolKind::None)
+Symbol::Symbol() :name(""), type(TokenType::None), kind(SymbolKind::None)
 {
     
 }
