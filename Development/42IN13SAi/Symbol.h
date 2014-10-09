@@ -12,7 +12,6 @@
 class Symbol
 {
 private:
-    float value;
 public:
     const std::string name;
     const TokenType type;
@@ -20,8 +19,6 @@ public:
     
     Symbol();
     Symbol(std::string p_name, TokenType p_type, SymbolKind p_kind);
-    
-    Symbol(std::string p_name, TokenType p_type, SymbolKind p_kind, float p_value);
     virtual ~Symbol();
     
     float GetValue();
