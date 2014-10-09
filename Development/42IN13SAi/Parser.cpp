@@ -57,12 +57,19 @@ CompilerNode Parser::ParseExpression()
 	{
 		Token logicalOp = GetNext();
 		CompilerNode secondParsedExpr = ParseRelationalExpression();
+		std::vector<CompilerNode> parameters;
 
 		switch (logicalOp.Type)
 		{
 		case TokenType::And:
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
+			parsedExpr = CompilerNode("$and", parameters, nullptr);
 			break;
 		case TokenType::Or:
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
+			parsedExpr = CompilerNode("$or", parameters, nullptr);
 			break;
 		}
 	}
