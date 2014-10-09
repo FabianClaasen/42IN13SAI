@@ -367,7 +367,6 @@ CompilerNode Parser::ParseAssignmentStatement()
 		std::vector<CompilerNode> nodeParameters;
 
 		nodeParameters.push_back(CompilerNode("$identifier", stringParameters, nullptr));
-		nodeParameters.push_back(*valueNode);
 		nodeParameters.push_back(*arithmeticalNode);
 
 		endNode = CompilerNode(expression, nodeParameters, nullptr);
