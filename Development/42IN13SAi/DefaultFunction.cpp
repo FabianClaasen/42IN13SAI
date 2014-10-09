@@ -19,7 +19,7 @@ CompilerNode DefaultFunction::Printline()
 CompilerNode DefaultFunction::Stop()
 {
 	std::vector<CompilerNode> compiler_nodes = parseParameters();
-	CheckNumberOfParameters(compiler_nodes, 0);
+	//CheckNumberOfParameters(compiler_nodes, 0);
 	Match(TokenType::EOL);
 	return CompilerNode(std::string("$stop"), compiler_nodes, nullptr);
 }
