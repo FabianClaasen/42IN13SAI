@@ -64,6 +64,12 @@
     <ClCompile Include="SymbolNotFoundException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="Subroutine.cpp">
+        <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="SubroutineTable.cpp">
+        <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DefaultFunction.h">
@@ -131,6 +137,18 @@
     </ClInclude>
     <ClInclude Include="SymbolNotFoundException.h">
       <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Subroutine.h">
+        <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="SubroutineKind.h">
+        <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="SubroutineTable.h">
+        <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="ReturnKind.h">
+        <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
