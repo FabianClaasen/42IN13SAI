@@ -9,9 +9,8 @@ Compiler::Compiler()
 
 }
 
-Compiler::Compiler(std::list<Token> tokens)
+Compiler::Compiler(std::list<Token> tokens) : tokenizerTokens(tokens)
 {
-	tokenizerTokens = tokens;
 	Compile();
 }
 
