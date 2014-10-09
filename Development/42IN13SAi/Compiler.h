@@ -4,6 +4,8 @@
 #include <string>
 #include "CompilerNode.h"
 #include "Token.h"
+#include "Symbol.h"
+#include "SymbolTable.h"
 class Parser;
 
 class Compiler
@@ -21,6 +23,7 @@ protected:
 	Parser* parser;
 	std::list<Token> tokenizerTokens;
 	std::list<CompilerNode> *compilerNodes;
+	SymbolTable symbolTable;
 
 	// Functions
 	Token* PeekNext();

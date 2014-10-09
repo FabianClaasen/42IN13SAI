@@ -15,4 +15,5 @@ private:
 public:
     const char* what() const throw();
     PartnerNotFoundException(std::string m);
+	~PartnerNotFoundException();
 };

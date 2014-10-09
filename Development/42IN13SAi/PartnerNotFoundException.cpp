@@ -2,12 +2,13 @@
 //  ParseException.cpp
 //  tokenizer
 //
-#include <stdio.h>
 #include "PartnerNotFoundException.h"
 
 PartnerNotFoundException::PartnerNotFoundException(std::string m) : message(m)
 {}
 
+PartnerNotFoundException::~PartnerNotFoundException()
+{}
 
 const char* PartnerNotFoundException::what() const throw()
 {
