@@ -7,6 +7,6 @@ public:
 	DefaultFunction();
 	virtual ~DefaultFunction();
 private:
-	CompilerNode Printline(Token identifier);
-	CompilerNode Stop(Token identifier);
+	CompilerNode Printline();
+	CompilerNode Stop();
 };

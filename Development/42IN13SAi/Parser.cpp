@@ -118,7 +118,8 @@ void Parser::ParseLoopStatement()
 	std::string innerStatementExpression;
 
 	CompilerNode statementNode;
-	CompilerNode innerStatementNode;
+
+	std::list<CompilerNode> innerStatementNodes;
 
 	if (currentToken.Type != TokenType::While || currentToken.Type != TokenType::ForLoop)
 	{
@@ -157,17 +158,16 @@ void Parser::ParseLoopStatement()
 		switch (currentToken.Type)
 		{
 		case TokenType::If:
-			ParseIfStatement();
+			innerStatementNodes.push_back(ParseIfStatement());
 			break;
 		case TokenType::While:
 			ParseLoopStatement();
 			break;
 		case TokenType::Identifier:
-			ParseAssignmentStatement();
+			innerStatementNodes.push_back(ParseAssignmentStatement());
 			break;
 		default:
-			std::vector<std::string> doNothing;
-			CompilerNode jumpTo = CompilerNode("$doNothing", &doNothing, nullptr);
+			throw std::runtime_error("No statement found");
 			break;
 		}
 	}
@@ -176,6 +176,15 @@ void Parser::ParseLoopStatement()
 	CompilerNode jumpTo = CompilerNode("$doNothing", &doNothing, nullptr);
 
 	statementNode = CompilerNode(statementExpression, &nodeParameters, &jumpTo);
+
+	compilerNodes->push_back(statementNode);
+
+	std::list<CompilerNode>::const_iterator iterator;
+	for (iterator = innerStatementNodes.begin(); iterator != innerStatementNodes.end(); ++iterator) {
+		compilerNodes->push_back(*iterator);
+	}
+
+	compilerNodes->push_back(jumpTo);
 }
 
 /*
