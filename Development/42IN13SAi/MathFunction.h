@@ -6,7 +6,8 @@ class MathFunction : public InternalFunction
 public:
 	MathFunction();
 	virtual ~MathFunction();
-	CompilerNode CosFunction(Token id);
-	CompilerNode SinFunction(Token id);
+	CompilerNode CosFunction();
+	CompilerNode SinFunction();
+	CompilerNode TanFunction();
 };
 

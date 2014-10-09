@@ -3,7 +3,7 @@
 #include "SymbolNotFoundException.h"
 #include <vector>
 
-class InteralFunction;
+class InternalFunction;
 class Compiler;
 
 #include "Compiler.h"
@@ -16,7 +16,7 @@ public:
 
 	// Functions
 	CompilerNode ParseIfStatement();
-	CompilerNode ParseLoopStatement();
+	void ParseLoopStatement();
 	CompilerNode ParseAssignmentStatement();
 
 	CompilerNode ParseExpression();

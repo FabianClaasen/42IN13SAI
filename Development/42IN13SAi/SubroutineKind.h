@@ -7,7 +7,7 @@
 
 #pragma once
 
-enum SubroutineKind {
+enum class SubroutineKind {
     None,
     Constructor,
     Function

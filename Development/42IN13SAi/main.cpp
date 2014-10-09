@@ -7,7 +7,13 @@
 
 int main(int argc, const char * argv[])
 {
-	TokenizerController *tokenizer_controler = new TokenizerController("C:\\Users\\Alex\\Documents\\test.txt");
+    std::string fileName("C:\\Users\\Alex\\Documents\\test.txt");
+    
+#ifndef _WIN32
+    fileName = "/Users/Alex/Documents/test.txt";
+#endif
+    
+	TokenizerController *tokenizer_controler = new TokenizerController(fileName);
 	tokenizer_controler->Tokenize();
     
     // Show tokenized items
@@ -20,7 +26,10 @@ int main(int argc, const char * argv[])
         if (token.Partner)
             partner = *token.Partner;
         
-        std::cout << "line: " + std::to_string(token.LineNumber) +  " line position: " + std::to_string(token.LinePosition) + " level: " + std::to_string(token.Level) + " type: " + std::to_string(token.Type) + " Value: " + token.Value + " Partner: " + partner.Value << std::endl;
+        char buffer[1024];
+        sprintf(buffer, "line: %d lineposition: %d level: %d type: %d value: %s Partner: %s", token.LineNumber, token.LinePosition, token.Level, int(token.Type), token.Value.c_str(), partner.Value.c_str());
+        
+        std::cout << buffer << std::endl;
     }
     
     return 0;

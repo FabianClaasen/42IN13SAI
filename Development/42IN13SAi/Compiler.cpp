@@ -101,14 +101,14 @@ void Compiler::Match(TokenType type)
 
     if (Compiler::PeekNext() == nullptr)
     {
-        throw std::runtime_error(&"Expected: "[type]);
+        throw std::runtime_error(&"Expected: "[int(type)]);
     }
     
     /*Token*/ currentToken = GetNext(); // Bestaat al
     
     if (currentToken.Type != type)
     {
-        throw std::runtime_error(&"Expected: "[type]);
+        throw std::runtime_error(&"Expected: "[int(type)]);
     }
 }
 

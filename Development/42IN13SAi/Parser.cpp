@@ -240,12 +240,18 @@ bool Parser::IsNextTokenUniOp()
 /*
 Parse while and for loops
 */
-CompilerNode Parser::ParseLoopStatement()
+void Parser::ParseLoopStatement()
 {
 	Token currentToken = Compiler::GetNext();
 	bool forLoop = false;
 
-	CompilerNode endNode;
+	std::vector<CompilerNode> nodeParameters;
+	std::string statementExpression;
+	std::string innerStatementExpression;
+
+	CompilerNode statementNode;
+
+	std::list<CompilerNode> innerStatementNodes;
 
 	if (currentToken.Type != TokenType::While || currentToken.Type != TokenType::ForLoop)
 	{
@@ -263,13 +269,17 @@ CompilerNode Parser::ParseLoopStatement()
 
 	if (forLoop)
 	{
-		CompilerNode assignmentNode = ParseAssignmentStatement();
-		CompilerNode expressionNode = ParseExpression();
-		CompilerNode addExpressionNode = ParseAddExpression();
+		nodeParameters.push_back(ParseAssignmentStatement());
+		nodeParameters.push_back(ParseExpression());
+		nodeParameters.push_back(ParseAddExpression());
+
+		statementExpression = "$forLoop";
 	}
 	else
 	{
-		CompilerNode expressionNode = ParseExpression();
+		nodeParameters.push_back(ParseExpression());
+
+		statementExpression = "$whileLoop";
 	}
 
 	Match(TokenType::CloseBracket);
@@ -277,10 +287,36 @@ CompilerNode Parser::ParseLoopStatement()
 
 	while ((currentToken = GetNext()).Type != TokenType::CloseCurlyBracket)
 	{
-		//TODO parse stuff in the loop
+		switch (currentToken.Type)
+		{
+		case TokenType::If:
+			innerStatementNodes.push_back(ParseIfStatement());
+			break;
+		case TokenType::While:
+			ParseLoopStatement();
+			break;
+		case TokenType::Identifier:
+			innerStatementNodes.push_back(ParseAssignmentStatement());
+			break;
+		default:
+			throw std::runtime_error("No statement found");
+			break;
+		}
 	}
 
-	return endNode;
+	std::vector<std::string> doNothing;
+	CompilerNode jumpTo = CompilerNode("$doNothing", &doNothing, nullptr);
+
+	statementNode = CompilerNode(statementExpression, &nodeParameters, &jumpTo);
+
+	compilerNodes->push_back(statementNode);
+
+	std::list<CompilerNode>::const_iterator iterator;
+	for (iterator = innerStatementNodes.begin(); iterator != innerStatementNodes.end(); ++iterator) {
+		compilerNodes->push_back(*iterator);
+	}
+
+	compilerNodes->push_back(jumpTo);
 }
 
 /*
