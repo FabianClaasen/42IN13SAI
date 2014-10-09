@@ -61,6 +61,12 @@
     <ClCompile Include="InternalFunction.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
+    <ClCompile Include="SubroutineTable.cpp">
+        <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Subroutine.cpp">
+        <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DefaultFunction.h">
@@ -125,6 +131,18 @@
     </ClInclude>
     <ClInclude Include="InternalFunction.h">
       <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="SubroutineTable.h">
+        <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Subroutine.h">
+        <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="SubroutineKind.h">
+        <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="ReturnKind.h">
+        <Filter>Header Files\Compiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

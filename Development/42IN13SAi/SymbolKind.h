@@ -6,7 +6,7 @@
 //
 
 #pragma once
-enum SymbolKind {
+enum class SymbolKind {
     None,
     Global,
     Local,

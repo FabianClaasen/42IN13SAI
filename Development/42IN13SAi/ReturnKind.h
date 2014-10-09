@@ -9,5 +9,6 @@
 
 enum ReturnKind {
     Void,
-    Float
+    Float,
+    None
 };

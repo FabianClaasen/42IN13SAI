@@ -11,7 +11,7 @@ class InternalFunction : public Compiler
 public:
 	InternalFunction();
 	CompilerNode GetInternalFunction(Token id);
-	virtual ~InternalFunction();
+	virtual ~InternalFunction() throw();
 	
 private:
 	DefaultFunction* defaultFunction;
