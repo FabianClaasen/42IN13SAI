@@ -235,18 +235,18 @@ bool Parser::IsNextTokenUniOp()
 
 /*
 Parse while and for loops
+@param standard compilerNodes.size()
 */
-void Parser::ParseLoopStatement()
+void Parser::ParseLoopStatement(int compilerNodesPos)
 {
 	Token currentToken = Compiler::GetNext();
 	bool forLoop = false;
+	/*int compilerNodesPos = compilerNodes->size();*/
 
 	std::vector<CompilerNode> nodeParameters;
 	std::string statementExpression;
-	std::string innerStatementExpression;
 
 	CompilerNode statementNode;
-
 	std::list<CompilerNode> innerStatementNodes;
 
 	if (currentToken.Type != TokenType::While || currentToken.Type != TokenType::ForLoop)
@@ -289,7 +289,7 @@ void Parser::ParseLoopStatement()
 			innerStatementNodes.push_back(ParseIfStatement());
 			break;
 		case TokenType::While:
-			ParseLoopStatement();
+			ParseLoopStatement(compilerNodesPos + 1 + innerStatementNodes.size());
 			break;
 		case TokenType::Identifier:
 			innerStatementNodes.push_back(ParseAssignmentStatement());
@@ -305,11 +305,18 @@ void Parser::ParseLoopStatement()
 
 	statementNode = CompilerNode(statementExpression, nodeParameters, &jumpTo);
 
-	compilerNodes->push_back(statementNode);
+	std::list<CompilerNode>::iterator it;
+	it = compilerNodes->begin();
+	//make it point to the correct compilernode
+	for (int i = 0; i < compilerNodesPos; i++)
+	{
+		it++;
+	}
+	compilerNodes->insert(it, statementNode);
 
 	std::list<CompilerNode>::const_iterator iterator;
 	for (iterator = innerStatementNodes.begin(); iterator != innerStatementNodes.end(); ++iterator) {
-		compilerNodes->push_back(*iterator);
+		compilerNodes->insert(it, *iterator);
 	}
 
 	compilerNodes->push_back(jumpTo);
@@ -322,7 +329,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 {
 	std::string expression = "";
 	std::vector<std::string> stringParameters;
-	CompilerNode *valueNode = nullptr;
+	CompilerNode *arithmeticalNode = nullptr;
 	CompilerNode endNode;
 
 	Token currentToken = GetNext();
@@ -352,15 +359,16 @@ CompilerNode Parser::ParseAssignmentStatement()
 	else
 	{
 		CompilerNode node = ParseExpression();
-		valueNode = &node;
+		arithmeticalNode = &node;
 	}
 
-	if (valueNode != nullptr)
+	if (arithmeticalNode != nullptr)
 	{
 		std::vector<CompilerNode> nodeParameters;
 
 		nodeParameters.push_back(CompilerNode("$identifier", stringParameters, nullptr));
 		nodeParameters.push_back(*valueNode);
+		nodeParameters.push_back(*arithmeticalNode);
 
 		endNode = CompilerNode(expression, nodeParameters, nullptr);
 	}

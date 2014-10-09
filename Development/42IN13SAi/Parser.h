@@ -16,7 +16,7 @@ public:
 
 	// Functions
 	CompilerNode ParseIfStatement();
-	void ParseLoopStatement();
+	void ParseLoopStatement(int compilerNodesPos);
 	CompilerNode ParseAssignmentStatement();
 
 	CompilerNode ParseExpression();
