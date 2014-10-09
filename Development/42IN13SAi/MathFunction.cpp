@@ -13,17 +13,15 @@ MathFunction::~MathFunction()
 
 }
 
-CompilerNode MathFunction::CosFunction(Token identifier) {
-	// Logic for inside cos function
-
-	Match(TokenType::OpenBracket);
-	// Parse expression to Parser class
-	CompilerNode node = parser->ParseExpression();
-	Match(TokenType::CloseBracket);
-	//second parameter not working yet (think has to be a token instead of string)
-	return CompilerNode();
+CompilerNode MathFunction::CosFunction() {
+	return CompilerNode(std::string("$cos"),parseParameters(),nullptr);
 }
 
-CompilerNode MathFunction::SinFunction(Token identifier) {
-	return CompilerNode();
+CompilerNode MathFunction::SinFunction() {
+	return CompilerNode(std::string("$sin"), parseParameters(), nullptr);
 }
+
+CompilerNode MathFunction::TanFunction() {
+	return CompilerNode(std::string("$tan"), parseParameters(), nullptr);
+}
+

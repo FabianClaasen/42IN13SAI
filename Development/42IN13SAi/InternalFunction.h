@@ -11,10 +11,12 @@ class InternalFunction : public Compiler
 public:
 	InternalFunction();
 	CompilerNode GetInternalFunction(Token id);
-	virtual ~InternalFunction() throw();
-	
+	virtual ~InternalFunction();
 private:
 	DefaultFunction* defaultFunction;
 	MathFunction*	 mathFunction;
 	PhysicsFunction* physicsFunction;
+protected:
+	std::vector<CompilerNode> parseParameters();
+	bool CheckNumberOfParameters(std::vector<CompilerNode>, int number);
 };
