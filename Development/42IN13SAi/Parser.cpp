@@ -53,9 +53,18 @@ CompilerNode Parser::ParseIfStatement()
 CompilerNode Parser::ParseExpression()
 {
 	CompilerNode parsedExpr = ParseRelationalExpression();
-	while (IsNextTokenUniOp())
+	while (IsNextTokenLogicalOp())
 	{
+		Token logicalOp = GetNext();
+		CompilerNode secondParsedExpr = ParseRelationalExpression();
 
+		/*switch (logicalOp.Value)
+		{
+		case :
+			break;
+		case "a":
+			break;
+		}*/
 	}
 
     return parsedExpr;
@@ -70,23 +79,34 @@ CompilerNode Parser::ParseRelationalExpression()
 		CompilerNode secondParsedExpr = ParseAddExpression();
 		std::vector<CompilerNode> parameters;
 
-		/*switch (relOp.Type)
+		switch (relOp.Type)
 		{
 		case TokenType::LowerThan:
-			std::vector<CompilerNode> parameters;
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = CompilerNode("$add", parameters, nullptr);
+			parsedExpr = CompilerNode("$less", parameters, nullptr);
 			break;
 		case TokenType::LowerOrEqThan:
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
+			parsedExpr = CompilerNode("$lessOrEq", parameters, nullptr);
 			break;
 		case TokenType::GreaterThan:
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
+			parsedExpr = CompilerNode("$greater", parameters, nullptr);
 			break;
 		case TokenType::GreaterOrEqThan:
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
+			parsedExpr = CompilerNode("$greaterOrEq", parameters, nullptr);
 			break;
 		case TokenType::Comparator:
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
+			parsedExpr = CompilerNode("$equals", parameters, nullptr);
 			break;
-		}*/
+		}
 	}
 
 	return parsedExpr;
