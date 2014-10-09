@@ -58,13 +58,13 @@ CompilerNode Parser::ParseExpression()
 		Token logicalOp = GetNext();
 		CompilerNode secondParsedExpr = ParseRelationalExpression();
 
-		/*switch (logicalOp.Value)
+		switch (logicalOp.Type)
 		{
-		case :
+		case TokenType::And:
 			break;
-		case "a":
+		case TokenType::Or:
 			break;
-		}*/
+		}
 	}
 
     return parsedExpr;
