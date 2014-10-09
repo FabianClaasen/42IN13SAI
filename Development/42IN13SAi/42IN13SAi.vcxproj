@@ -24,6 +24,7 @@
     <ClCompile Include="PartnerNotFoundException.cpp" />
     <ClCompile Include="PhysicsFunction.cpp" />
     <ClCompile Include="RegexMatcher.cpp" />
+    <ClCompile Include="SymbolNotFoundException.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="TokenDefinition.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
@@ -31,8 +32,6 @@
     <ClCompile Include="TokenPartner.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymbolTable.cpp" />
-    <ClCompile Include="SubroutineTable.cpp" />
-    <ClCompile Include="Subroutine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compiler.h" />
@@ -47,6 +46,7 @@
     <ClInclude Include="PartnerNotFoundException.h" />
     <ClInclude Include="PhysicsFunction.h" />
     <ClInclude Include="RegexMatcher.h" />
+    <ClInclude Include="SymbolNotFoundException.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenDefinition.h" />
     <ClInclude Include="Tokenizer.h" />
@@ -56,9 +56,6 @@
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymbolTable.h" />
     <ClInclude Include="SymbolKind.h" />
-    <ClInclude Include="SubroutineTable.h" />
-    <ClInclude Include="Subroutine.h" />
-    <ClInclude Include="ReturnKind.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0F8E62D6-F5A0-4C66-AD23-F45D847EB1FE}</ProjectGuid>
