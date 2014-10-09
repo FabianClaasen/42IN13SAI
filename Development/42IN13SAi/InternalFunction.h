@@ -18,5 +18,5 @@ private:
 	PhysicsFunction* physicsFunction;
 protected:
 	std::vector<CompilerNode> parseParameters();
-	bool CheckNumberOfParameters(std::vector<CompilerNode>, int number);
+	void CheckNumberOfParameters(std::vector<CompilerNode>, int number);
 };

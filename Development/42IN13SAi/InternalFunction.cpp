@@ -43,13 +43,10 @@ std::vector<CompilerNode> InternalFunction::parseParameters()
 	return compiler_nodes;
 }
 
-bool InternalFunction::CheckNumberOfParameters(std::vector<CompilerNode> compiler_nodes, int number)
+void InternalFunction::CheckNumberOfParameters(std::vector<CompilerNode> compiler_nodes, int number)
 {
-	if (compiler_nodes.size() == number)
+	if (!compiler_nodes.size() == number)
 	{
-		return true;
-	}
-	else {
 		throw std::runtime_error("InvalidNumberOfParameterException");
 	}
 }

@@ -15,6 +15,7 @@ CompilerNode DefaultFunction::Printline()
 	Match(TokenType::EOL);
 	return CompilerNode(std::string("$prnt"),compiler_nodes,nullptr);
 }
+
 CompilerNode DefaultFunction::Stop()
 {
 	std::vector<CompilerNode> compiler_nodes = parseParameters();
