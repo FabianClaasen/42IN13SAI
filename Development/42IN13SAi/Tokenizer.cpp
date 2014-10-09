@@ -121,7 +121,13 @@ Token* Tokenizer::FindPartner(TokenType &type, int level)
         }
     }
     char buffer[1024];
-    sprintf(buffer, "Partner not found for %d on line %s at position %s", int(type), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
+    
+#ifdef _WIN32
+    _snprintf(buffer, sizeof(buffer), "Partner not found for %d on line %s at position %s", int(type), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
+#else
+    snprintf(buffer, sizeof(buffer), "Partner not found for %d on line %s at position %s", int(type), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
+#endif
+    
 	throw new PartnerNotFoundException(buffer);
 }
 
