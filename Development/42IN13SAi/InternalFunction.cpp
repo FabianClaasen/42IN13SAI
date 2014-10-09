@@ -1,20 +1,20 @@
-#include "InteralFunction.h"
+#include "InternalFunction.h"
 
 #include "MathFunction.h"
 #include "DefaultFunction.h"
 #include "PhysicsFunction.h"
 
-InteralFunction::InteralFunction()
+InternalFunction::InternalFunction()
 {
 	
 }
 
-InteralFunction::~InteralFunction()
+InternalFunction::~InternalFunction()
 {
 	
 }
 
-CompilerNode InteralFunction::GetInternalFunction(Token identifier)
+CompilerNode InternalFunction::GetInternalFunction(Token identifier)
 {
 	switch (identifier.Type)
 	{

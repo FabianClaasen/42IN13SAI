@@ -64,7 +64,7 @@ void Tokenizer::Tokenize()
 					try {
 						partner = FindPartner(definition.tokenType, level);
 					}
-					catch (std::exception &e) {
+					catch (PartnerNotFoundException &e) {
 						std::cout << e.what();
 					}
 				}

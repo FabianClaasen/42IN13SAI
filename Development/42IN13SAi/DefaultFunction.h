@@ -1,7 +1,7 @@
 #pragma once
-#include "InteralFunction.h"
+#include "InternalFunction.h"
 
-class DefaultFunction : public InteralFunction
+class DefaultFunction : public InternalFunction
 {
 public:
 	DefaultFunction();

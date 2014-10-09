@@ -6,12 +6,12 @@ class DefaultFunction;
 class MathFunction;
 class PhysicsFunction;
 
-class InteralFunction : public Compiler 
+class InternalFunction : public Compiler 
 {
 public:
-	InteralFunction();
+	InternalFunction();
 	CompilerNode GetInternalFunction(Token id);
-	virtual ~InteralFunction();
+	virtual ~InternalFunction();
 	
 private:
 	DefaultFunction* defaultFunction;

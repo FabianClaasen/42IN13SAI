@@ -10,9 +10,6 @@
     <ClCompile Include="CompilerNode.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
-    <ClCompile Include="InteralFunction.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
     <ClCompile Include="DefaultFunction.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
@@ -56,16 +53,16 @@
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
     <ClCompile Include="Symbol.cpp">
-        <Filter>Source Files\Compiler</Filter>
+      <Filter>Source Files\Compiler</Filter>
     </ClCompile>
     <ClCompile Include="SymbolTable.cpp">
-        <Filter>Source Files\Compiler</Filter>
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="InternalFunction.cpp">
+      <Filter>Source Files\Compiler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="InteralFunction.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
     <ClInclude Include="DefaultFunction.h">
       <Filter>Header Files\Compiler</Filter>
     </ClInclude>
@@ -118,13 +115,16 @@
       <Filter>Header Files\Compiler</Filter>
     </ClInclude>
     <ClInclude Include="Symbol.h">
-        <Filter>Header Files\Compiler</Filter>
+      <Filter>Header Files\Compiler</Filter>
     </ClInclude>
     <ClInclude Include="SymbolTable.h">
-        <Filter>Header Files\Compiler</Filter>
+      <Filter>Header Files\Compiler</Filter>
     </ClInclude>
     <ClInclude Include="SymbolKind.h">
-        <Filter>Header Files\Compiler</Filter>
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="InternalFunction.h">
+      <Filter>Header Files\Compiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
