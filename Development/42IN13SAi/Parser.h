@@ -3,7 +3,7 @@
 
 #include <vector>
 
-class InteralFunction;
+class InternalFunction;
 class Compiler;
 
 #include "Compiler.h"
