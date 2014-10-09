@@ -1,6 +1,6 @@
 #pragma once
 #include "InternalFunction.h"
-
+#include "SymbolNotFoundException.h"
 #include <vector>
 
 class InternalFunction;
@@ -16,7 +16,7 @@ public:
 
 	// Functions
 	CompilerNode ParseIfStatement();
-	void ParseLoopStatement();
+	void ParseLoopStatement(int compilerNodesPos);
 	CompilerNode ParseAssignmentStatement();
 
 	CompilerNode ParseExpression();
@@ -27,5 +27,10 @@ public:
 	CompilerNode ParseTerm();
 
 private:
+	bool IsNextTokenUniOp();
+	bool IsNextTokenMulOp();
+	bool IsNextTokenAddOp();
+	bool IsNextTokenRelationalOp();
+	bool IsNextTokenLogicalOp();
 };
 

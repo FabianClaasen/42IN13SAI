@@ -14,6 +14,8 @@ MathFunction::~MathFunction()
 }
 
 CompilerNode MathFunction::CosFunction() {
+	std::vector<CompilerNode> compiler_nodes = parseParameters();
+	CheckNumberOfParameters(compiler_nodes, 1);
 	return CompilerNode(std::string("$cos"),parseParameters(),nullptr);
 }
 
