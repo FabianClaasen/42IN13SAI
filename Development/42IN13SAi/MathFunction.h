@@ -1,7 +1,7 @@
 #pragma once
-#include "InteralFunction.h"
+#include "InternalFunction.h"
 #include "CompilerNode.h"
-class MathFunction : public InteralFunction
+class MathFunction : public InternalFunction
 {
 public:
 	MathFunction();
