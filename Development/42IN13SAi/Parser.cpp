@@ -157,14 +157,14 @@ Also parse (standard) Arithmetical operations
 CompilerNode Parser::ParseAssignmentStatement()
 {
 	std::string expression = "";
-	std::vector<std::string> parameters;
+	std::vector<std::string> stringParameters;
 	CompilerNode *valueNode = nullptr;
 	CompilerNode endNode;
 
 	Token currentToken = GetNext();
 	if (currentToken.Type == TokenType::Identifier)
 	{
-		parameters.push_back(currentToken.Value);
+		stringParameters.push_back(currentToken.Value);
 	}
 	else
 	{
@@ -182,7 +182,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 
 	if (PeekNext()->Type == TokenType::EOL)
 	{
-		parameters.push_back(currentToken.Value);
+		stringParameters.push_back(currentToken.Value);
 		expression = expression;
 	}
 	else
@@ -193,12 +193,16 @@ CompilerNode Parser::ParseAssignmentStatement()
 
 	if (valueNode != nullptr)
 	{
-		//TODO make parameters list
-		endNode = CompilerNode(expression, &parameters, nullptr);
+		std::vector<CompilerNode> nodeParameters;
+
+		nodeParameters.push_back(CompilerNode("$identifier", &stringParameters, nullptr));
+		nodeParameters.push_back(*valueNode);
+
+		endNode = CompilerNode(expression, &nodeParameters, nullptr);
 	}
 	else
 	{
-		endNode = CompilerNode(expression, &parameters, nullptr);
+		endNode = CompilerNode(expression, &stringParameters, nullptr);
 	}
 
 	return endNode;
