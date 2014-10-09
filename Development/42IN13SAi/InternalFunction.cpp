@@ -40,6 +40,7 @@ std::vector<CompilerNode> InternalFunction::parseParameters()
 	Match(TokenType::CloseBracket);
 
 	compiler_nodes.push_back(node);
+	return compiler_nodes;
 }
 
 bool InternalFunction::CheckNumberOfParameters(std::vector<CompilerNode> compiler_nodes, int number)
@@ -49,6 +50,6 @@ bool InternalFunction::CheckNumberOfParameters(std::vector<CompilerNode> compile
 		return true;
 	}
 	else {
-		throw 
+		throw std::runtime_error("InvalidNumberOfParameterException");
 	}
 }
