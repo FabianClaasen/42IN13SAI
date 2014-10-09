@@ -68,13 +68,14 @@ CompilerNode Parser::ParseRelationalExpression()
 	{
 		Token relOp = GetNext();
 		CompilerNode secondParsedExpr = ParseAddExpression();
+		std::vector<CompilerNode> parameters;
 
-		switch (relOp.Type)
+		/*switch (relOp.Type)
 		{
 		case TokenType::LowerThan:
-			std::vector<CompilerNode>* parameters = new std::vector<CompilerNode>();
-			parameters->push_back(parsedExpr);
-			parameters->push_back(secondParsedExpr);
+			std::vector<CompilerNode> parameters;
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = CompilerNode("$add", parameters, nullptr);
 			break;
 		case TokenType::LowerOrEqThan:
@@ -85,7 +86,7 @@ CompilerNode Parser::ParseRelationalExpression()
 			break;
 		case TokenType::Comparator:
 			break;
-		}
+		}*/
 	}
 
 	return parsedExpr;
@@ -98,19 +99,18 @@ CompilerNode Parser::ParseAddExpression()
 	{
 		Token addOp = GetNext();
 		CompilerNode secondParsedExpr = ParseMulExpression();
+		std::vector<CompilerNode> parameters;
 
 		switch (addOp.Type)
 		{
 		case TokenType::OperatorPlus:
-			std::vector<CompilerNode>* parameters = new std::vector<CompilerNode>();
-			parameters->push_back(parsedExpr);
-			parameters->push_back(secondParsedExpr);
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = CompilerNode("$add", parameters, nullptr);
 			break;
 		case TokenType::OperatorMinus:
-			std::vector<CompilerNode>* parameters = new std::vector<CompilerNode>();
-			parameters->push_back(parsedExpr);
-			parameters->push_back(secondParsedExpr);
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = CompilerNode("$min", parameters, nullptr);
 			break;
 		}
@@ -126,25 +126,23 @@ CompilerNode Parser::ParseMulExpression()
 	{
 		Token mullOp = GetNext();
 		CompilerNode secondTerm = ParseUniExpression();
+		std::vector<CompilerNode> parameters;
 
 		switch (mullOp.Type)
 		{
 		case TokenType::OperatorMultiply:
-			std::vector<CompilerNode>* parameters = new std::vector<CompilerNode>();
-			parameters->push_back(term);
-			parameters->push_back(secondTerm);
+			parameters.push_back(term);
+			parameters.push_back(secondTerm);
 			term = CompilerNode("$mul", parameters, nullptr);
 			break;
 		case TokenType::OperatorDivide:
-			std::vector<CompilerNode>* parameters = new std::vector<CompilerNode>();
-			parameters->push_back(term);
-			parameters->push_back(secondTerm);
+			parameters.push_back(term);
+			parameters.push_back(secondTerm);
 			term = CompilerNode("$div", parameters, nullptr);
 			break;
 		case TokenType::OperatorRaised:
-			std::vector<CompilerNode>* parameters = new std::vector<CompilerNode>();
-			parameters->push_back(term);
-			parameters->push_back(secondTerm);
+			parameters.push_back(term);
+			parameters.push_back(secondTerm);
 			term = CompilerNode("$raise", parameters, nullptr);
 			break;
 		}
@@ -159,18 +157,16 @@ CompilerNode Parser::ParseUniExpression()
 	while (IsNextTokenUniOp())
 	{
 		Token uniOp = GetNext();
+		std::vector<CompilerNode> parameters;
 
 		switch (uniOp.Type)
 		{
 		case TokenType::UniOperatorPlus:
-			std::vector<CompilerNode>* parameters = new std::vector<CompilerNode>();
-			parameters->push_back(term);
+			parameters.push_back(term);
 			term = CompilerNode("$uniPlus", parameters, nullptr);
 			Match(TokenType::EOL);
 			break;
-		case TokenType::UniOperatorMinus:
-			std::vector<CompilerNode>* parameters = new std::vector<CompilerNode>();
-			parameters->push_back(term);
+			parameters.push_back(term);
 			term = CompilerNode("$uniMin", parameters, nullptr);
 			Match(TokenType::EOL);
 			break;
@@ -186,8 +182,8 @@ CompilerNode Parser::ParseTerm()
 
 	if (token.Type == TokenType::Float)
 	{
-		std::vector<std::string>* parameters = new std::vector<std::string>();
-		parameters->push_back(token.Value);
+		std::vector<std::string> parameters;
+		parameters.push_back(token.Value);
 		return CompilerNode("$value", parameters, nullptr);
 	}
 	else if (token.Type == TokenType::Identifier)
@@ -198,8 +194,8 @@ CompilerNode Parser::ParseTerm()
 		if (symbol == nullptr)
 			throw SymbolNotFoundException("");
 
-		std::vector<std::string>* parameters = new std::vector<std::string>();
-		parameters->push_back(symbol->name);
+		std::vector<std::string> parameters;
+		parameters.push_back(symbol->name);
 		return CompilerNode("$getVariable", parameters, nullptr);
 	}
 	else if (token.Type == TokenType::OpenBracket)
