@@ -1,31 +1,18 @@
 #include "CompilerNode.h"
 
-std::string _expression;
-CompilerNode *_jumpTo;
-
-std::string _value;
-
-std::vector<CompilerNode> _nodeParameters;
-
-CompilerNode::CompilerNode(std::string expression, std::vector<CompilerNode> nodeParameters, CompilerNode *jumpTo)
+CompilerNode::CompilerNode(std::string p_expression, std::vector<CompilerNode> p_nodeParameters, CompilerNode *p_jumpTo) : expression(p_expression), nodeParameters(p_nodeParameters), jumpTo(p_jumpTo)
 {
-	_expression = expression;
-	_nodeParameters = nodeParameters;
-	_jumpTo = jumpTo;
 }
 
-CompilerNode::CompilerNode(std::string value)
+CompilerNode::CompilerNode(std::string p_expression, std::string p_value) : expression(p_expression), value(p_value)
 {
-	_value = value;
 }
 
-CompilerNode::CompilerNode()
+CompilerNode::CompilerNode() : expression(""), jumpTo(nullptr)
 {
-	_expression = "";
-	_jumpTo = nullptr;
 }
 
 CompilerNode::~CompilerNode()
 {
-	delete _jumpTo;
+	delete jumpTo;
 }
