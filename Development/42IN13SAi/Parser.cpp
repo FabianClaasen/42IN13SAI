@@ -367,7 +367,7 @@ void Parser::ParseLoopStatement()
 	}
 
 	std::vector<std::string> doNothing;
-	CompilerNode jumpTo = CompilerNode("$doNothing", doNothing, nullptr);
+	CompilerNode jumpTo = CompilerNode("$doNothing", "");
 
 	statementNode = CompilerNode(statementExpression, nodeParameters, &jumpTo);
 
@@ -394,14 +394,14 @@ Also parse (standard) Arithmetical operations
 CompilerNode Parser::ParseAssignmentStatement()
 {
 	std::string expression = "";
-	std::vector<std::string> stringParameters;
+	std::vector<CompilerNode> nodeParameters;
 	CompilerNode *arithmeticalNode = nullptr;
 	CompilerNode endNode;
 
 	Token currentToken = GetNext();
 	if (currentToken.Type == TokenType::Identifier)
 	{
-		stringParameters.push_back(currentToken.Value);
+		nodeParameters.push_back(CompilerNode("$identifier", currentToken.Value));
 	}
 	else
 	{
@@ -419,28 +419,19 @@ CompilerNode Parser::ParseAssignmentStatement()
 
 	if (PeekNext()->Type == TokenType::EOL)
 	{
-		stringParameters.push_back(currentToken.Value);
-		expression = expression;
+		nodeParameters.push_back(CompilerNode("$value", currentToken.Value));
 	}
 	else
 	{
-		CompilerNode node = ParseExpression();
-		arithmeticalNode = &node;
+		arithmeticalNode = &ParseExpression();
 	}
 
 	if (arithmeticalNode != nullptr)
 	{
-		std::vector<CompilerNode> nodeParameters;
-
-		nodeParameters.push_back(CompilerNode("$identifier", stringParameters, nullptr));
 		nodeParameters.push_back(*arithmeticalNode);
-
-		endNode = CompilerNode(expression, nodeParameters, nullptr);
 	}
-	else
-	{
-		endNode = CompilerNode(expression, stringParameters, nullptr);
-	}
+	
+	endNode = CompilerNode(expression, nodeParameters, nullptr);
 
 	return endNode;
 }
