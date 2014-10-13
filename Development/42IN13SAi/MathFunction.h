@@ -9,5 +9,6 @@ public:
 	CompilerNode CosFunction();
 	CompilerNode SinFunction();
 	CompilerNode TanFunction();
+	CompilerNode SquareFunction();
 };
 

@@ -19,10 +19,32 @@ CompilerNode InternalFunction::GetInternalFunction(Token identifier)
 {
 	switch (identifier.Type)
 	{
+		// Default functions
+	case TokenType::Stop:
+		return getFunctionNode("$stop",1);
+	case  TokenType::PrintLine:
+		return getFunctionNode("$prnt",1);
+		// Math functions
 	case TokenType::Cosine:
-		return mathFunction->CosFunction();
+		return getFunctionNode("$cos",1);
 	case TokenType::Sine:
-		return mathFunction->SinFunction();
+		return getFunctionNode("$sin", 1);
+	case TokenType::Tangent:
+		return getFunctionNode("$tan", 1);
+	case TokenType::Square:
+		return getFunctionNode("$sqr", 1);
+	case TokenType::Power:
+		return getFunctionNode("$pow", 2);
+	case TokenType::SquareRoot:
+		return getFunctionNode("$sqrt", 1);
+	case TokenType::CubeRoot:
+		return getFunctionNode("$cbrt", 1);
+	case TokenType::Degree:
+		return getFunctionNode("$deg", 1);
+	case TokenType::Radiant:
+		return getFunctionNode("$rad", 1);
+	case TokenType::Percent:
+		return getFunctionNode("$perc", 2);
 	default:
 		break;
 	}
@@ -39,16 +61,15 @@ std::vector<CompilerNode> InternalFunction::parseParameters(int expectedParams)
 		compiler_nodes.push_back(node);
 		if (--expectedParams > 0)
 			Match(TokenType::Seperator);
-		else
-			Match(TokenType::CloseBracket);
 	}
+	Match(TokenType::CloseBracket);
+
 	return compiler_nodes;
 }
 
-void InternalFunction::CheckNumberOfParameters(std::vector<CompilerNode> compiler_nodes, int number)
-{
-	if (!compiler_nodes.size() == number)
-	{
-		throw std::runtime_error("InvalidNumberOfParameterException");
-	}
+CompilerNode InternalFunction::getFunctionNode(std::string functionName, int params) {
+	std::vector<CompilerNode> compiler_nodes = parseParameters(params);
+	return CompilerNode(functionName, compiler_nodes, nullptr);
 }
+
+

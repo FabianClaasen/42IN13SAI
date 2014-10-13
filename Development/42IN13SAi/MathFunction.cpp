@@ -28,3 +28,8 @@ CompilerNode MathFunction::TanFunction() {
 	return CompilerNode("$tan", compiler_nodes, nullptr);
 }
 
+CompilerNode MathFunction::SquareFunction() {
+	std::vector<CompilerNode> compiler_nodes = parseParameters(1);
+	return CompilerNode("$sqr", compiler_nodes, nullptr);
+}
+
