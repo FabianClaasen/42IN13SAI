@@ -2,10 +2,12 @@
 #include <list>
 #include <iterator>
 #include <string>
+
 #include "CompilerNode.h"
 #include "Token.h"
 #include "Symbol.h"
 #include "SymbolTable.h"
+
 class Parser;
 
 class Compiler

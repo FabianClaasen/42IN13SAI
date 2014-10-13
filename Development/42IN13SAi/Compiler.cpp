@@ -1,9 +1,6 @@
 #include "Compiler.h"
 #include "Parser.h"
 
-/*
-Constructor
-*/
 Compiler::Compiler()
 {
 
@@ -14,16 +11,12 @@ Compiler::Compiler(std::list<Token> tokens) : tokenizerTokens(tokens)
 	Compile();
 }
 
-/*
-Destructor
-*/
 Compiler::~Compiler()
 {
 }
 
-/*
-keep parsing as long as there are tokens
-*/
+
+//keep parsing as long as there are tokens
 void Compiler::Compile()
 {
 	while (Compiler::PeekNext() != nullptr)
@@ -32,9 +25,8 @@ void Compiler::Compile()
 	}
 }
 
-/*
- Check what the next token is
- */
+
+// Check what the next token is
 Token* Compiler::PeekNext()
 {
     std::list<Token>::iterator it = tokenizerTokens.begin();
@@ -43,9 +35,8 @@ Token* Compiler::PeekNext()
     return &*it;
 }
 
-/*
- Get the next token
- */
+
+// Get the next token
 Token Compiler::GetNext()
 {
     std::list<Token>::iterator it = tokenizerTokens.begin();
@@ -77,9 +68,8 @@ void Compiler::Match(TokenType type)
     }
 }
 
-/*
-Check what to parse
-*/
+
+// Check what to parse
 void Compiler::ParseStatement()
 {
 	switch (PeekNext()->Type)

@@ -8,9 +8,8 @@ Parser::~Parser()
 {
 }
 
-/*
-Also check and parse if-else statement
-*/
+
+// Also check and parse if-else statement
 CompilerNode Parser::ParseIfStatement()
 {
 	Token currentToken = Compiler::GetNext();

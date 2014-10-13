@@ -1,8 +1,5 @@
-//
-//  TokenDefinition.cpp
-//  tokenizer
-//
 #include <stdio.h>
+
 #include "TokenDefinition.h"
 
 TokenDefinition::TokenDefinition(std::string regexString, TokenType type)

@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+
 #include "Token.h"
 #include "Tokenizer.h"
 #include "Grammar.h"

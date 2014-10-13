@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include "Compiler.h"
 
@@ -10,13 +11,13 @@ class InternalFunction : public Compiler
 {
 public:
 	InternalFunction();
-	CompilerNode GetInternalFunction(Token id);
 	virtual ~InternalFunction();
+	CompilerNode GetInternalFunction(Token id);
+
 private:
-	DefaultFunction* defaultFunction;
-	MathFunction*	 mathFunction;
-	PhysicsFunction* physicsFunction;
-	CompilerNode getFunctionNode(std::string function, int params);
-protected:
-	std::vector<CompilerNode> parseParameters(int expectedParams);
+	DefaultFunction*			defaultFunction;
+	MathFunction*				mathFunction;
+	PhysicsFunction*			physicsFunction;
+	CompilerNode				getFunctionNode(std::string function, int params);
+	std::vector<CompilerNode>	parseParameters(int expectedParams);
 };

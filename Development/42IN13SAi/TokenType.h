@@ -57,7 +57,8 @@ enum class TokenType : int {
 	Radiant,
 	Percent,
 	PerMillage,
-	NormalLog, // with one and with two params
+	NormalLog, 
+	NormaltwoLog,
 	Nlog,
 	Modulo
 };

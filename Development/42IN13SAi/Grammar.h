@@ -1,10 +1,7 @@
-//
-//  Grammar.h
-//  tokenizer
-//
 #pragma once
 
 #include <list>
+
 #include "TokenDefinition.h"
 #include "TokenPartner.h"
 

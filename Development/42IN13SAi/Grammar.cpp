@@ -1,8 +1,5 @@
-//
-//  Grammar.cpp
-//  tokenizer
-//
 #include <stdio.h>
+
 #include "Grammar.h"
 
 std::list<TokenDefinition> Grammar::getGrammar()

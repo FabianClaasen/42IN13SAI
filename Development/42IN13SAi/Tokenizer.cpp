@@ -1,13 +1,10 @@
- //
-//  Tokenizer.cpp
-//  tokenizer
-//
 #include <stdio.h>
 #include <iostream>
 #include <algorithm>
 #include <cctype>
 #include <functional>
 #include <iostream>
+
 #include "Tokenizer.h"
 
 Tokenizer::Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::list<TokenPartner> partners)

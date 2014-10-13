@@ -1,5 +1,4 @@
 #include "InternalFunction.h"
-
 #include "MathFunction.h"
 #include "DefaultFunction.h"
 #include "PhysicsFunction.h"
@@ -7,7 +6,7 @@
 
 InternalFunction::InternalFunction()
 {
-	
+	// Do something?
 }
 
 InternalFunction::~InternalFunction()
@@ -45,6 +44,14 @@ CompilerNode InternalFunction::GetInternalFunction(Token identifier)
 		return getFunctionNode("$rad", 1);
 	case TokenType::Percent:
 		return getFunctionNode("$perc", 2);
+	case  TokenType::PerMillage:
+		return getFunctionNode("$prom", 2);
+	case TokenType::NormalLog:
+		return getFunctionNode("$log", 2); // or 1
+	case TokenType::Nlog:
+		return getFunctionNode("$ln", 1);
+	case TokenType::Modulo:
+		return getFunctionNode("$mod", 2);
 	default:
 		break;
 	}

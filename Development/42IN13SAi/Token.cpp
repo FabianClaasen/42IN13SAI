@@ -1,8 +1,5 @@
-//
-//  Token.cpp
-//  tokenizer
-//
 #include <stdio.h>
+
 #include "Token.h"
 
 Token::Token(int lineNumber, int linePosition, int level, std::string value, TokenType tokenType, Token *partner) : LineNumber(lineNumber)

@@ -1,7 +1,3 @@
-//
-//  RegexMatcher.h
-//  tokenizer
-//
 #pragma once
 
 #include <regex>
