@@ -1,8 +1,3 @@
-//
-//  Symbol.h
-//  mac_42IN13SAI
-//
-
 #pragma once
 
 #include <string>

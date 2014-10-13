@@ -4,10 +4,11 @@
 //
 #include <iostream>
 #include "TokenizerController.h"
+#include "Compiler.h"
 
 int main(int argc, const char * argv[])
 {
-    std::string fileName("C:\\Users\\Alex\\Documents\\test.txt");
+    std::string fileName("C:\\Users\\Fabian Claasen\\Downloads\\test.txt");
     
 #ifndef _WIN32
     fileName = "/Users/Alex/Documents/test.txt";
@@ -15,7 +16,9 @@ int main(int argc, const char * argv[])
     
 	TokenizerController *tokenizer_controler = new TokenizerController(fileName);
 	tokenizer_controler->Tokenize();
-    
+
+	Compiler compiler = Compiler(tokenizer_controler->GetCompilerTokens());
+
     // Show tokenized items
 	std::list<Token> tokens = tokenizer_controler->GetCompilerTokens();
     std::list<Token>::iterator tokenIt;
@@ -36,6 +39,6 @@ int main(int argc, const char * argv[])
         
         std::cout << buffer << std::endl;
     }
-    
+
     return 0;
 }

@@ -1,10 +1,7 @@
-//
-//  TokenDefinition.h
-//  tokenizer
-//
 #pragma once
 
 #include <string>
+
 #include "RegexMatcher.h"
 #include "TokenType.h"
 

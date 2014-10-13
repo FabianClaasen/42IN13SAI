@@ -1,12 +1,9 @@
-//
-//  Tokenizer.h
-//  tokenizer
-//
 #pragma once
 
 #include <fstream>
 #include <list>
 #include <string>
+
 #include "TokenDefinition.h"
 #include "Token.h"
 #include "TokenPartner.h"

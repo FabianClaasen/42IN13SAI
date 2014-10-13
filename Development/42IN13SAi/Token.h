@@ -1,7 +1,3 @@
-//
-//  Token.h
-//  tokenizer
-//
 #pragma once
 
 #include <string>

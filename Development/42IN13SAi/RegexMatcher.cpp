@@ -1,9 +1,5 @@
-
-//
-//  RegexMatcher.cpp
-//  tokenizer
-//
 #include <stdio.h>
+
 #include "RegexMatcher.h"
 
 RegexMatcher::RegexMatcher(std::string regexString)

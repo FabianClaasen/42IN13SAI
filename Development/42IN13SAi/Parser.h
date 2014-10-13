@@ -1,4 +1,5 @@
 #pragma once
+
 #include "InternalFunction.h"
 #include "SymbolNotFoundException.h"
 #include <vector>
