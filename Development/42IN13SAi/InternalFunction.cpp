@@ -29,17 +29,19 @@ CompilerNode InternalFunction::GetInternalFunction(Token identifier)
     return CompilerNode();
 }
 
-std::vector<CompilerNode> InternalFunction::parseParameters()
+std::vector<CompilerNode> InternalFunction::parseParameters(int expectedParams)
 {
-	// Create list for compilernode
+	// Check and parse all the parameters
 	std::vector<CompilerNode> compiler_nodes;
-
 	Match(TokenType::OpenBracket);
-	// Parse expression to Parser class
-	CompilerNode node = parser->ParseExpression();
-	Match(TokenType::CloseBracket);
-
-	compiler_nodes.push_back(node);
+	while (expectedParams > 0) {
+		CompilerNode node = parser->ParseExpression();
+		compiler_nodes.push_back(node);
+		if (--expectedParams > 0)
+			Match(TokenType::Seperator);
+		else
+			Match(TokenType::CloseBracket);
+	}
 	return compiler_nodes;
 }
 

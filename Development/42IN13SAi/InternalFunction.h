@@ -17,6 +17,6 @@ private:
 	MathFunction*	 mathFunction;
 	PhysicsFunction* physicsFunction;
 protected:
-	std::vector<CompilerNode> parseParameters();
+	std::vector<CompilerNode> parseParameters(int expectedParams);
 	void CheckNumberOfParameters(std::vector<CompilerNode>, int number);
 };
