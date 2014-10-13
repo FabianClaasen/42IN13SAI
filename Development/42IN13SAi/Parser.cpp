@@ -247,9 +247,7 @@ CompilerNode Parser::ParseTerm()
 
 	if (token.Type == TokenType::Float)
 	{
-		std::vector<std::string> parameters;
-		parameters.push_back(token.Value);
-		return CompilerNode("$value", parameters, nullptr);
+		return CompilerNode("$value", token.Value);
 	}
 	else if (token.Type == TokenType::Identifier)
 	{
@@ -259,9 +257,7 @@ CompilerNode Parser::ParseTerm()
 		if (symbol == nullptr)
 			throw SymbolNotFoundException("");
 
-		std::vector<std::string> parameters;
-		parameters.push_back(symbol->name);
-		return CompilerNode("$getVariable", parameters, nullptr);
+		return CompilerNode("$getVariable", symbol->name);
 	}
 	else if (token.Type == TokenType::OpenBracket)
 	{

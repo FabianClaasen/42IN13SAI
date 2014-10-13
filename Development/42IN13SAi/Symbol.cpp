@@ -20,3 +20,8 @@ Symbol::~Symbol()
 {
     
 }
+
+void Symbol::SetValue(float p_value)
+{
+	value = p_value;
+}
