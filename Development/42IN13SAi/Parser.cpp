@@ -20,6 +20,7 @@ CompilerNode Parser::ParseIfStatement()
 
 	std::list<CompilerNode> innerIfStatementNodes;
 	std::list<CompilerNode> innerElseStatementNodes;
+	CompilerNode statementNode;
 	CompilerNode endNode;
 
 	if (currentToken.Type == TokenType::If)
@@ -36,7 +37,7 @@ CompilerNode Parser::ParseIfStatement()
 
     Compiler::Match(TokenType::OpenBracket);
 
-	ParseExpression();
+	statementNode = ParseExpression();
 
 	Match(TokenType::CloseBracket);
 	Match(TokenType::OpenCurlyBracket);
@@ -84,6 +85,31 @@ CompilerNode Parser::ParseIfStatement()
 			}
 		}
 	}
+
+	std::vector<std::string> doNothing;
+	CompilerNode jumpTo = CompilerNode("$doNothing", "");
+
+	statementNode.SetJumpTo(jumpTo);
+
+	std::list<CompilerNode>::iterator it;
+	it = compilerNodes->begin();
+	//make it point to the correct compilernode
+	for (int i = 0; i < compilerNodesPos; i++)
+	{
+		it++;
+	}
+	compilerNodes->insert(it, statementNode);
+
+	std::list<CompilerNode>::const_iterator iterator;
+	for (iterator = innerIfStatementNodes.begin(); iterator != innerIfStatementNodes.end(); ++iterator) {
+		compilerNodes->insert(it, *iterator);
+	}
+
+	for (iterator = innerElseStatementNodes.begin(); iterator != innerElseStatementNodes.end(); ++iterator) {
+		compilerNodes->insert(it, *iterator);
+	}
+
+	compilerNodes->push_back(jumpTo);
 
 	return endNode;
 }

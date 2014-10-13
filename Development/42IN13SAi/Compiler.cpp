@@ -122,7 +122,7 @@ void Compiler::ParseStatement()
 		parser->ParseIfStatement();
 		break;
 	case TokenType::While:
-		parser->ParseLoopStatement(compilerNodes->size());
+		parser->ParseLoopStatement();
 		break;
 	case TokenType::Identifier:
 		parser->ParseAssignmentStatement();

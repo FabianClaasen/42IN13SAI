@@ -12,6 +12,11 @@ CompilerNode::CompilerNode() : expression(""), jumpTo(nullptr)
 {
 }
 
+void CompilerNode::SetJumpTo(CompilerNode jump)
+{
+	jumpTo = &jump;
+}
+
 CompilerNode::~CompilerNode()
 {
 	delete jumpTo;
