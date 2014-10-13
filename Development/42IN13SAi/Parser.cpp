@@ -16,6 +16,10 @@ CompilerNode Parser::ParseIfStatement()
 	Token currentToken = Compiler::GetNext();
 	bool hasPartner = false;
 
+	int compilerNodesPos = compilerNodes->size();
+
+	std::list<CompilerNode> innerIfStatementNodes;
+	std::list<CompilerNode> innerElseStatementNodes;
 	CompilerNode endNode;
 
 	if (currentToken.Type == TokenType::If)
@@ -39,12 +43,46 @@ CompilerNode Parser::ParseIfStatement()
 
 	while ((currentToken = GetNext()).Type != TokenType::CloseCurlyBracket)
 	{
-		//TODO parse stuff in if statement
+		switch (currentToken.Type)
+		{
+		case TokenType::If:
+			innerIfStatementNodes.push_back(ParseIfStatement());
+			break;
+		case TokenType::While:
+			ParseLoopStatement();
+			break;
+		case TokenType::Identifier:
+			innerIfStatementNodes.push_back(ParseAssignmentStatement());
+			break;
+		default:
+			throw std::runtime_error("No statement found");
+			break;
+		}
 	}
 
 	if (hasPartner)
 	{
-		//TODO parse else statement
+		Match(TokenType::Else);
+		Match(TokenType::OpenCurlyBracket);
+
+		while ((currentToken = GetNext()).Type != TokenType::CloseCurlyBracket)
+		{
+			switch (currentToken.Type)
+			{
+			case TokenType::If:
+				innerElseStatementNodes.push_back(ParseIfStatement());
+				break;
+			case TokenType::While:
+				ParseLoopStatement();
+				break;
+			case TokenType::Identifier:
+				innerElseStatementNodes.push_back(ParseAssignmentStatement());
+				break;
+			default:
+				throw std::runtime_error("No statement found");
+				break;
+			}
+		}
 	}
 
 	return endNode;
@@ -237,11 +275,12 @@ bool Parser::IsNextTokenUniOp()
 Parse while and for loops
 @param standard compilerNodes.size()
 */
-void Parser::ParseLoopStatement(int compilerNodesPos)
+void Parser::ParseLoopStatement()
 {
 	Token currentToken = Compiler::GetNext();
 	bool forLoop = false;
-	/*int compilerNodesPos = compilerNodes->size();*/
+	
+	int compilerNodesPos = compilerNodes->size();
 
 	std::vector<CompilerNode> nodeParameters;
 	std::string statementExpression;
@@ -289,7 +328,7 @@ void Parser::ParseLoopStatement(int compilerNodesPos)
 			innerStatementNodes.push_back(ParseIfStatement());
 			break;
 		case TokenType::While:
-			ParseLoopStatement(compilerNodesPos + 1 + innerStatementNodes.size());
+			ParseLoopStatement();
 			break;
 		case TokenType::Identifier:
 			innerStatementNodes.push_back(ParseAssignmentStatement());
