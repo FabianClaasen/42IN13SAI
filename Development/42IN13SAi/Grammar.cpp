@@ -38,7 +38,7 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("\\*", TokenType::OperatorMultiply));
     definitions.push_back(TokenDefinition("\\/", TokenType::OperatorDivide));
     definitions.push_back(TokenDefinition("\\^", TokenType::OperatorRaised));
-    definitions.push_back(TokenDefinition("\\|\\||&&|==|!=", TokenType::Comparator));
+    definitions.push_back(TokenDefinition("\\|==|!=", TokenType::Comparator));
     definitions.push_back(TokenDefinition("[#!@$%&*\"\\.]", TokenType::Special));
     definitions.push_back(TokenDefinition("::", TokenType::Special));
     definitions.push_back(TokenDefinition("\\[", TokenType::OpenMethod));
@@ -47,7 +47,9 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("\\}", TokenType::CloseCurlyBracket));
     definitions.push_back(TokenDefinition("\\(", TokenType::OpenBracket));
     definitions.push_back(TokenDefinition("\\)", TokenType::CloseBracket));
-    
+	definitions.push_back(TokenDefinition("&&", TokenType::And));
+	definitions.push_back(TokenDefinition("\\||", TokenType::Or));
+
     definitions.push_back(TokenDefinition("[a-zA-Z][a-zA-Z0-9_]*", TokenType::Identifier));
     
     definitions.push_back(TokenDefinition("\\;", TokenType::EOL));

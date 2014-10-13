@@ -16,14 +16,16 @@ MathFunction::~MathFunction()
 CompilerNode MathFunction::CosFunction() {
 	std::vector<CompilerNode> compiler_nodes = parseParameters();
 	CheckNumberOfParameters(compiler_nodes, 1);
-	return CompilerNode(std::string("$cos"),parseParameters(),nullptr);
+	return CompilerNode("$cos", compiler_nodes, nullptr);
 }
 
 CompilerNode MathFunction::SinFunction() {
-	return CompilerNode(std::string("$sin"), parseParameters(), nullptr);
+	std::vector<CompilerNode> compiler_nodes = parseParameters();
+	return CompilerNode("$sin", compiler_nodes, nullptr);
 }
 
 CompilerNode MathFunction::TanFunction() {
-	return CompilerNode(std::string("$tan"), parseParameters(), nullptr);
+	std::vector<CompilerNode> compiler_nodes = parseParameters();
+	return CompilerNode("$tan", compiler_nodes, nullptr);
 }
 
