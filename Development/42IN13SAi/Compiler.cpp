@@ -127,6 +127,9 @@ void Compiler::ParseStatement()
 	case TokenType::Identifier:
 		parser->ParseAssignmentStatement();
 		break;
+	case TokenType::Function:
+		parser->ParseFunction();
+		break;
 	default:
 		throw std::runtime_error("No statement found");
 		break;

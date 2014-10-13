@@ -8,6 +8,55 @@ Parser::~Parser()
 {
 }
 
+void Parser::ParseFunction()
+{
+	Token currentToken = Compiler::GetNext();
+
+	if (IsNextTokenReturnType())
+	{
+		Token returnType = GetNext();
+		Token functionName = GetNext();
+
+		Match(TokenType::OpenBracket);
+
+		// Set the parameters
+		SymbolTable symbolTable = SymbolTable();
+		std::vector<Symbol> parameters;
+		while (PeekNext()->Type != TokenType::CloseBracket)
+		{
+			if (PeekNext()->Type == TokenType::Seperator)
+			{
+				GetNext(); // remove seperator so you can add a new parameter
+			}
+			else
+			{
+				Token parameter = GetNext();
+				Symbol parameterSymbol = Symbol(parameter.Value, parameter.Type, SymbolKind::Parameter);
+
+				if (!symbolTable.HasSymbol(parameterSymbol.name) &&
+					std::find(parameters.begin(), parameters.end(), parameter.Value) == parameters.end())
+				{
+					symbolTable.AddSymbol(parameterSymbol);
+				}
+				else
+					std::runtime_error("Parameter name is already in use");
+			}
+		}
+
+		Match(TokenType::OpenCurlyBracket);
+
+		// TODO: Set all the nodes of this function
+
+		Match(TokenType::CloseCurlyBracket);
+
+		// Create a subrouyine and add it to the subroutine rable
+		Subroutine routine;
+		subroutineTable.AddSubroutine(routine);
+	}
+	else
+		std::runtime_error("Expected return type");
+}
+
 /*
 Also check and parse if-else statement
 */
@@ -271,27 +320,38 @@ CompilerNode Parser::ParseTerm()
 
 bool Parser::IsNextTokenLogicalOp()
 {
-	return false;
+	std::vector<TokenType> operators{ TokenType::And, TokenType::Or };
+	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
 }
 
 bool Parser::IsNextTokenRelationalOp()
 {
-	return false;
+	std::vector<TokenType> operators{ TokenType::GreaterThan, TokenType::GreaterOrEqThan, TokenType::LowerThan, TokenType::LowerOrEqThan };
+	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
 }
 
 bool Parser::IsNextTokenAddOp()
 {
-	return false;
+	std::vector<TokenType> operators{ TokenType::OperatorPlus, TokenType::OperatorMinus };
+	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
 }
 
 bool Parser::IsNextTokenMulOp()
 {
-	return false;
+	std::vector<TokenType> operators{ TokenType::OperatorMultiply, TokenType::OperatorDivide, TokenType::OperatorRaised };
+	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
 }
 
 bool Parser::IsNextTokenUniOp()
 {
-	return false;
+	std::vector<TokenType> operators{ TokenType::UniOperatorPlus, TokenType::UniOperatorMinus };
+	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
+}
+
+bool Parser::IsNextTokenReturnType()
+{
+	std::vector<TokenType> operators{ TokenType::Void, TokenType::Var };
+	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
 }
 
 /*

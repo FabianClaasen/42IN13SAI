@@ -7,29 +7,24 @@
 
 #include "Subroutine.h"
 
-Subroutine::Subroutine() :name(""), returnType(ReturnKind::None), kind(SubroutineKind::None), parameters(symbolMap())
+Subroutine::Subroutine() :name(""), returnType(ReturnKind::None), kind(SubroutineKind::None)
 {
-    
 }
 
-Subroutine::Subroutine(std::string p_name, ReturnKind p_return, SubroutineKind p_kind, symbolMap p_parameters) :name(p_name), returnType(p_return), kind(p_kind), parameters(p_parameters)
+Subroutine::Subroutine(std::string p_name, ReturnKind p_return, SubroutineKind p_kind, SymbolTable p_parameters) : name(p_name), returnType(p_return), kind(p_kind), symbolTable(p_parameters)
 {
-    
 }
 
 bool Subroutine::HasLocal(std::string name)
 {
-    auto symbol = locals.find(name);
-    if (symbol == locals.end())
-        return false;
-    return true;
+	symbolTable.HasSymbol(name);
 }
 
 void Subroutine::AddLocal(Symbol symbol)
 {
     if (HasLocal(symbol.name))
     {
-        locals.insert(std::make_pair(symbol.name, symbol));
+		symbolTable.AddSymbol(symbol);
     }
 }
 
@@ -37,12 +32,11 @@ Symbol* Subroutine::GetLocal(std::string name)
 {
     if (HasLocal(name))
     {
-        return &(locals[name]);
+        return symbolTable.GetSymbol(name);
     }
     return nullptr;
 }
 
 Subroutine::~Subroutine()
 {
-    
 }

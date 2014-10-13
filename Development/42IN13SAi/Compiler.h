@@ -6,6 +6,8 @@
 #include "Token.h"
 #include "Symbol.h"
 #include "SymbolTable.h"
+#include "Subroutine.h"
+#include "SubroutineTable.h"
 class Parser;
 
 class Compiler
@@ -24,6 +26,7 @@ protected:
 	std::list<Token> tokenizerTokens;
 	std::list<CompilerNode> *compilerNodes;
 	SymbolTable symbolTable;
+	SubroutineTable subroutineTable;
 
 	// Functions
 	Token* PeekNext();

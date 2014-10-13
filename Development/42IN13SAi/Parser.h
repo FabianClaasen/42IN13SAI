@@ -15,8 +15,10 @@ public:
     virtual ~Parser() throw();
 
 	// Functions
-	CompilerNode ParseIfStatement();
+	void ParseFunction();
 	void ParseLoopStatement();
+
+	CompilerNode ParseIfStatement();
 	CompilerNode ParseAssignmentStatement();
 
 	CompilerNode ParseExpression();
@@ -32,5 +34,6 @@ private:
 	bool IsNextTokenAddOp();
 	bool IsNextTokenRelationalOp();
 	bool IsNextTokenLogicalOp();
+	bool IsNextTokenReturnType();
 };
 
