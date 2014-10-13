@@ -64,46 +64,12 @@ Token Compiler::GetNext()
 
 void Compiler::Match(TokenType type)
 {
-	std::string expression;
-	std::string identifier;
-	std::string value;
-
-	Token currentToken = GetNext();
-	if (currentToken.Type == TokenType::Identifier)
-	{
-		identifier = currentToken.Value;
-	}
-	else
-	{
-		throw std::runtime_error("Identifier expected");
-	}
-	
-	currentToken = GetNext();
-
-	/*if (currentToken.Type == TokenType::OperatorDivide || currentToken.Type == TokenType::OperatorMinus || currentToken.Type == TokenType::OperatorMultiply || currentToken.Type == TokenType::OperatorPlus || currentToken.Type == TokenType::OperatorRaised)
-	{
-		parseOperatorStatement();
-	}
-	else if (currentToken.Type == TokenType::UniOperatorMinus || currentToken.Type == TokenType::UniOperatorPlus)
-	{
-		parseUniOperatorStatement();
-	}*/
-	
-	if (currentToken.Type == TokenType::Equals)
-	{
-		expression = "$assignment";
-	}
-
-	currentToken = GetNext();
-
-	value = currentToken.Value;
-
     if (Compiler::PeekNext() == nullptr)
     {
         throw std::runtime_error(&"Expected: "[int(type)]);
     }
     
-    /*Token*/ currentToken = GetNext(); // Bestaat al
+    Token currentToken = GetNext(); // Bestaat al
     
     if (currentToken.Type != type)
     {
@@ -122,7 +88,7 @@ void Compiler::ParseStatement()
 		parser->ParseIfStatement();
 		break;
 	case TokenType::While:
-		parser->ParseLoopStatement(compilerNodes->size());
+		parser->ParseLoopStatement();
 		break;
 	case TokenType::Identifier:
 		parser->ParseAssignmentStatement();
