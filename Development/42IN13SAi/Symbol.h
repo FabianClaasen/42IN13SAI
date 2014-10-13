@@ -12,6 +12,7 @@
 class Symbol
 {
 private:
+	float value;
 public:
     const std::string name;
     const TokenType type;
