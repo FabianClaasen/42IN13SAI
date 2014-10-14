@@ -10,12 +10,6 @@
     <ClCompile Include="CompilerNode.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
-    <ClCompile Include="DefaultFunction.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="MathFunction.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
     <ClCompile Include="ParseException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
@@ -39,9 +33,6 @@
     </ClCompile>
     <ClCompile Include="RegexMatcher.cpp">
       <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsFunction.cpp">
-      <Filter>Source Files\Compiler</Filter>
     </ClCompile>
     <ClCompile Include="Grammar.cpp">
       <Filter>Source Files\Tokenizer</Filter>
@@ -72,19 +63,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DefaultFunction.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
     <ClInclude Include="CompilerNode.h">
       <Filter>Header Files\Compiler</Filter>
     </ClInclude>
     <ClInclude Include="Compiler.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="MathFunction.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsFunction.h">
       <Filter>Header Files\Compiler</Filter>
     </ClInclude>
     <ClInclude Include="Grammar.h">

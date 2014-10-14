@@ -3,10 +3,6 @@
 #include <string>
 #include "Compiler.h"
 
-class DefaultFunction;
-class MathFunction;
-class PhysicsFunction;
-
 class InternalFunction : public Compiler 
 {
 public:
@@ -15,9 +11,6 @@ public:
 	CompilerNode GetInternalFunction(Token id);
 
 private:
-	DefaultFunction*			defaultFunction;
-	MathFunction*				mathFunction;
-	PhysicsFunction*			physicsFunction;
-	CompilerNode				getFunctionNode(std::string function, int params);
+	CompilerNode				getCompilerNode(std::string function, int params);
 	std::vector<CompilerNode>	parseParameters(int expectedParams);
 };
