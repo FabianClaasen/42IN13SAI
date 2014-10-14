@@ -6,8 +6,7 @@
 #pragma once
 
 enum class TokenType : int {
-	// normal
-	None,
+	// Normal tokens
     KeyIdentifier,
     Function,
     Identifier,
@@ -42,10 +41,16 @@ enum class TokenType : int {
     OpenBracket,
     CloseBracket,
     Comparator,
-	//Default functions
+
+	// Return types
+	Void,
+	None,
+
+	// Default functions
 	Stop,
 	PrintLine,
-	// math functions
+	
+	// Math functions
 	Cosine, 
 	Sine,
 	Tangent,

@@ -129,9 +129,6 @@
     <ClInclude Include="SubroutineTable.h">
       <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="ReturnKind.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
