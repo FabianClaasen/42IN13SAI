@@ -17,7 +17,7 @@ Subroutine::Subroutine(std::string p_name, ReturnKind p_return, SubroutineKind p
 
 bool Subroutine::HasLocal(std::string name)
 {
-	symbolTable.HasSymbol(name);
+	return symbolTable.HasSymbol(name);
 }
 
 void Subroutine::AddLocal(Symbol symbol)

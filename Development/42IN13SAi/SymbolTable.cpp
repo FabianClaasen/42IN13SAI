@@ -1,3 +1,5 @@
+#pragma once
+
 #include "SymbolTable.h"
 
 SymbolTable::SymbolTable()

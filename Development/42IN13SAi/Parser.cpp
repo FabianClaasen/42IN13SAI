@@ -1,5 +1,5 @@
 #include "Parser.h"
-
+ 
 Parser::Parser()
 {
 }
@@ -20,7 +20,7 @@ void Parser::ParseFunction()
 		Match(TokenType::OpenBracket);
 
 		// Set the parameters
-		SymbolTable symbolTable = SymbolTable();
+		SymbolTable symbolTable;
 		std::vector<Symbol> parameters;
 		while (PeekNext()->Type != TokenType::CloseBracket)
 		{
@@ -50,8 +50,8 @@ void Parser::ParseFunction()
 		Match(TokenType::CloseCurlyBracket);
 
 		// Create a subrouyine and add it to the subroutine rable
-		//Subroutine routine;
-		//subroutineTable.AddSubroutine(routine);
+		Subroutine routine = Subroutine(functionName.Value, returnType.Type, SubroutineKind::Function, symbolTable);
+		subroutineTable.AddSubroutine(routine);
 	}
 	else
 		std::runtime_error("Expected return type");
@@ -136,7 +136,7 @@ CompilerNode Parser::ParseIfStatement()
 	std::vector<std::string> doNothing;
 	CompilerNode jumpTo = CompilerNode("$doNothing", "");
 
-	//statementNode.SetJumpTo(jumpTo); -> Error??
+	statementNode.SetJumpTo(jumpTo);
 
 	std::list<CompilerNode>::iterator it;
 	it = compilerNodes->begin();
@@ -374,9 +374,8 @@ bool Parser::IsNextTokenUniOp()
 
 bool Parser::IsNextTokenReturnType()
 {
-	/*std::vector<TokenType> operators{ TokenType::Void, TokenType::Var };
-	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();*/
-	return false;
+	std::vector<TokenType> operators{ TokenType::Void, TokenType::Var };
+	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
 }
 
 /*

@@ -6,6 +6,7 @@
 //
 
 #pragma once
+
 #include <string>
 #include <unordered_map>
 #include "Symbol.h"
@@ -17,13 +18,14 @@ class Subroutine {
 private:
 	SymbolTable symbolTable;
 
+
 public:	
     const SubroutineKind kind;
-    const ReturnKind returnType;
+    const TokenType returnType;
     const std::string name;
     
     Subroutine();
-	Subroutine(std::string p_name, ReturnKind p_return, SubroutineKind p_kind, SymbolTable p_parameters);
+	Subroutine(std::string p_name, TokenType p_return, SubroutineKind p_kind, SymbolTable p_parameters);
     virtual ~Subroutine();
     
     void AddLocal(Symbol symbol);
