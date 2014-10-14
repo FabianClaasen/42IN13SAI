@@ -374,7 +374,7 @@ bool Parser::IsNextTokenUniOp()
 
 bool Parser::IsNextTokenReturnType()
 {
-	std::vector<TokenType> operators{ TokenType::Void, TokenType::Var };
+	std::vector<TokenType> operators{ TokenType::Void, TokenType::None, TokenType::Float };
 	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
 }
 

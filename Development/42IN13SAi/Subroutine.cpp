@@ -7,11 +7,11 @@
 
 #include "Subroutine.h"
 
-Subroutine::Subroutine() :name(""), returnType(ReturnKind::None), kind(SubroutineKind::None)
+Subroutine::Subroutine() :name(""), returnType(TokenType::None), kind(SubroutineKind::None)
 {
 }
 
-Subroutine::Subroutine(std::string p_name, ReturnKind p_return, SubroutineKind p_kind, SymbolTable p_parameters) : name(p_name), returnType(p_return), kind(p_kind), symbolTable(p_parameters)
+Subroutine::Subroutine(std::string p_name, TokenType p_return, SubroutineKind p_kind, SymbolTable p_parameters) : name(p_name), returnType(p_return), kind(p_kind), symbolTable(p_parameters)
 {
 }
 

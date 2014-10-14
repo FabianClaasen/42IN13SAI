@@ -12,12 +12,10 @@
 #include "Symbol.h"
 #include "SymbolTable.h"
 #include "SubroutineKind.h"
-#include "ReturnKind.h"
 
 class Subroutine {
 private:
 	SymbolTable symbolTable;
-
 
 public:	
     const SubroutineKind kind;

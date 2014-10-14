@@ -61,7 +61,6 @@
     <ClInclude Include="Subroutine.h" />
     <ClInclude Include="SubroutineKind.h" />
     <ClInclude Include="SubroutineTable.h" />
-    <ClInclude Include="ReturnKind.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0F8E62D6-F5A0-4C66-AD23-F45D847EB1FE}</ProjectGuid>
