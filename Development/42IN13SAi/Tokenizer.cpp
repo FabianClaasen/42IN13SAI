@@ -93,7 +93,7 @@ void Tokenizer::Tokenize()
 
 		// Throw an exception if the target couldnt be parsed as a token.
 		if (!match)
-			throw ParseException("Unrecognized character '" + lineRemaining + "' on line " + std::to_string(lineNumber) + " at position " + std::to_string(linePosition));
+			throw ParseException("Unrecognized character '" + lineRemaining.substr(1) + "' on line " + std::to_string(lineNumber) + " at position " + std::to_string(linePosition));
 	}
 }
 
