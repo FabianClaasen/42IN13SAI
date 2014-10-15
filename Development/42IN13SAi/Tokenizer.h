@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <list>
+#include <vector>
 #include <string>
 
 #include "TokenDefinition.h"
@@ -22,7 +23,7 @@ private:
     std::list<TokenDefinition> tokenDefinitions;
     std::list<TokenPartner> tokenPartners;
     
-    std::list<Token> *tokenList;
+    std::vector<Token> *tokenVector;
     
     void NextLine();
     Token* FindPartner(TokenType &tokenType, int level);
@@ -36,5 +37,5 @@ public:
 	virtual ~Tokenizer();
 
     void Tokenize();
-    std::list<Token>* GetTokenList();
+    std::vector<Token>* GetTokenList();
 };

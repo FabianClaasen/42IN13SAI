@@ -1,14 +1,13 @@
 #include "Compiler.h"
 #include "Parser.h"
-
+Parser parser;
 Compiler::Compiler()
 {
 
 }
 
-Compiler::Compiler(std::list<Token> tokens) : tokenizerTokens(tokens)
+Compiler::Compiler(std::vector<Token> tokens) : tokenizerTokens(tokens)
 {
-	Compile();
 }
 
 Compiler::~Compiler()
@@ -19,11 +18,13 @@ Compiler::~Compiler()
 //keep parsing as long as there are tokens
 void Compiler::Compile()
 {
-	while (Compiler::PeekNext() != nullptr)
+	Compiler::PeekNext();
+	while (currentIndex != tokenizerTokens.size()-1)
 	{
 		currentSubroutine = Subroutine();
 		ParseFunctionOrGlobal();
 		//ParseStatement();
+		currentIndex++;
 	}
 }
 
@@ -31,28 +32,25 @@ void Compiler::Compile()
 // Check what the next token is
 Token* Compiler::PeekNext()
 {
-    std::list<Token>::iterator it = tokenizerTokens.begin();
-    std::advance(it, currentToken + 1);
-    
-    return &*it;
+	Token token = tokenizerTokens.at(currentIndex);
+    return &token;
 }
 
 
 // Get the next token
 Token Compiler::GetNext()
 {
-    std::list<Token>::iterator it = tokenizerTokens.begin();
-    
+	Token token = tokenizerTokens.at(currentIndex);
     if (Compiler::PeekNext() != nullptr)
     {
-        std::advance(it, ++currentToken);
+        //std::advance(it, ++currentToken);
     }
     else
     {
         throw std::runtime_error("Token missing");
     }
     
-    return *it;
+    return token;
 }
 
 void Compiler::Match(TokenType type)
@@ -106,16 +104,16 @@ void Compiler::ParseStatement()
 	switch (PeekNext()->Type)
 	{
 	case TokenType::If:
-		parser->ParseIfStatement();
+		parser.ParseIfStatement();
 		break;
 	case TokenType::While:
-		parser->ParseLoopStatement();
+		parser.ParseLoopStatement();
 		break;
 	case TokenType::Identifier:
-		parser->ParseAssignmentStatement();
+		parser.ParseAssignmentStatement();
 		break;
 	case TokenType::Function:
-		parser->ParseFunction();
+		parser.ParseFunction();
 		break;
 	default:
 		throw std::runtime_error("No statement found");

@@ -5,7 +5,6 @@
 #include <vector>
 
 class InternalFunction;
-class Compiler;
 
 #include "Compiler.h"
 

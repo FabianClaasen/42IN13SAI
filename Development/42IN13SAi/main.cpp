@@ -8,7 +8,7 @@
 
 int main(int argc, const char * argv[])
 {
-    std::string fileName("C:\\Users\\Fabian Claasen\\Dropbox\\42IN13SAI\\Testen\\test.txt");
+    std::string fileName("C:\\Users\\stefan\\Dropbox\\42IN13SAI\\Testen\\Tokenizer\\test.txt");
     
 #ifndef _WIN32
     fileName = "/Users/Alex/Documents/test.txt";
@@ -18,10 +18,11 @@ int main(int argc, const char * argv[])
 	tokenizer_controler->Tokenize();
 
 	Compiler compiler = Compiler(tokenizer_controler->GetCompilerTokens());
+	compiler.Compile();
 
     // Show tokenized items
-	std::list<Token> tokens = tokenizer_controler->GetCompilerTokens();
-    std::list<Token>::iterator tokenIt;
+	std::vector<Token> tokens = tokenizer_controler->GetCompilerTokens();
+    std::vector<Token>::iterator tokenIt;
     for (tokenIt = tokens.begin(); tokenIt != tokens.end(); ++tokenIt)
     {
         Token token = *tokenIt;
