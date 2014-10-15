@@ -7,11 +7,15 @@
 
 #include "Subroutine.h"
 
-Subroutine::Subroutine() :name(""), returnType(TokenType::None), kind(SubroutineKind::None)
+Subroutine::Subroutine() :name(""), returnType(TokenType::None), kind(SubroutineKind::None), isEmpty(true)
 {
 }
 
-Subroutine::Subroutine(std::string p_name, TokenType p_return, SubroutineKind p_kind, SymbolTable p_parameters) : name(p_name), returnType(p_return), kind(p_kind), symbolTable(p_parameters)
+Subroutine::Subroutine(std::string p_name, TokenType p_return, SubroutineKind p_kind, SymbolTable p_parameters) : name(p_name), returnType(p_return), kind(p_kind), symbolTable(p_parameters), isEmpty(false)
+{
+}
+
+Subroutine::~Subroutine()
 {
 }
 
@@ -37,6 +41,7 @@ Symbol* Subroutine::GetLocal(std::string name)
     return nullptr;
 }
 
-Subroutine::~Subroutine()
+std::list<CompilerNode>* Subroutine::GetCompilerNodeCollection()
 {
+	return &subroutineCompilerNodes;
 }

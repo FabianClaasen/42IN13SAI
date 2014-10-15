@@ -36,5 +36,7 @@ private:
 	bool IsNextTokenRelationalOp();
 	bool IsNextTokenLogicalOp();
 	bool IsNextTokenReturnType();
+
+	Symbol* GetSymbol(std::string identifier);
 };
 

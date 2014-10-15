@@ -21,7 +21,9 @@ void Compiler::Compile()
 {
 	while (Compiler::PeekNext() != nullptr)
 	{
-		ParseStatement();
+		currentSubroutine = Subroutine();
+		ParseFunctionOrGlobal();
+		//ParseStatement();
 	}
 }
 
@@ -68,8 +70,37 @@ void Compiler::Match(TokenType type)
     }
 }
 
+// Check if you need to parse a function or a global.
+// This is needed to save the symbols and compiler nodes in the right file.
+void Compiler::ParseFunctionOrGlobal()
+{
+	switch (PeekNext()->Type)
+	{
+	case TokenType::Function:
+		parser->ParseFunction();
+		break;
+	default:
+		ParseGlobalStatement();
+		break;
+	}
+}
 
-// Check what to parse
+// Check if the token type starts with a Var token.
+// A global can only be a variable thats why it can only be an assignment.
+void Compiler::ParseGlobalStatement()
+{
+	switch (PeekNext()->Type)
+	{
+	case TokenType::Var:
+		parser->ParseAssignmentStatement();
+		break;
+	default:
+		throw std::runtime_error("No variable found");
+		break;
+	}
+}
+
+// Parse statements.
 void Compiler::ParseStatement()
 {
 	switch (PeekNext()->Type)

@@ -20,19 +20,22 @@ public:
 
 private:
 	const std::list<Token>::iterator it;
+	void ParseFunctionOrGlobal();
 
 protected:
 	// Variables
 	Parser* parser;
 	std::list<Token> tokenizerTokens;
-	std::list<CompilerNode> *compilerNodes;
+	std::list<CompilerNode> compilerNodes;
 	SymbolTable symbolTable;
 	SubroutineTable subroutineTable;
+	Subroutine currentSubroutine;
 
 	// Functions
 	Token* PeekNext();
 	Token GetNext();
 	void Match(TokenType type);
+	void ParseGlobalStatement();
 	void ParseStatement();
 
 private:
