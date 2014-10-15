@@ -21,7 +21,6 @@ void Parser::ParseFunction()
 
 		// Set the parameters
 		SymbolTable symbolTable;
-		std::vector<Symbol> parameters;
 		while (PeekNext()->Type != TokenType::CloseBracket)
 		{
 			if (PeekNext()->Type == TokenType::Seperator)
@@ -33,19 +32,22 @@ void Parser::ParseFunction()
 				Token parameter = GetNext();
 				Symbol parameterSymbol = Symbol(parameter.Value, parameter.Type, SymbolKind::Parameter);
 
-				if (!symbolTable.HasSymbol(parameterSymbol.name) &&
-					std::find(parameters.begin(), parameters.end(), parameter.Value) == parameters.end())
+				if (!symbolTable.HasSymbol(parameterSymbol.name))
 				{
 					symbolTable.AddSymbol(parameterSymbol);
 				}
 				else
-					std::runtime_error("Parameter name is already in use");
+					throw std::runtime_error("Parameter name is already in use");
 			}
 		}
 
 		Match(TokenType::OpenCurlyBracket);
 
 		// TODO: Set all the nodes of this function
+		while (PeekNext()->Type != TokenType::CloseCurlyBracket)
+		{
+			ParseStatement();
+		}
 
 		Match(TokenType::CloseCurlyBracket);
 
@@ -54,7 +56,7 @@ void Parser::ParseFunction()
 		subroutineTable.AddSubroutine(routine);
 	}
 	else
-		std::runtime_error("Expected return type");
+		throw std::runtime_error("Expected return type");
 }
 
 // Also check and parse if-else statement
@@ -345,37 +347,37 @@ CompilerNode Parser::ParseTerm()
 bool Parser::IsNextTokenLogicalOp()
 {
 	std::vector<TokenType> operators{ TokenType::And, TokenType::Or };
-	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
+	return std::find(operators.begin(), operators.end(), PeekNext()->Type) != operators.end();
 }
 
 bool Parser::IsNextTokenRelationalOp()
 {
 	std::vector<TokenType> operators{ TokenType::GreaterThan, TokenType::GreaterOrEqThan, TokenType::LowerThan, TokenType::LowerOrEqThan };
-	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
+	return std::find(operators.begin(), operators.end(), PeekNext()->Type) != operators.end();
 }
 
 bool Parser::IsNextTokenAddOp()
 {
 	std::vector<TokenType> operators{ TokenType::OperatorPlus, TokenType::OperatorMinus };
-	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
+	return std::find(operators.begin(), operators.end(), PeekNext()->Type) != operators.end();
 }
 
 bool Parser::IsNextTokenMulOp()
 {
 	std::vector<TokenType> operators{ TokenType::OperatorMultiply, TokenType::OperatorDivide, TokenType::OperatorRaised };
-	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
+	return std::find(operators.begin(), operators.end(), PeekNext()->Type) != operators.end();
 }
 
 bool Parser::IsNextTokenUniOp()
 {
 	std::vector<TokenType> operators{ TokenType::UniOperatorPlus, TokenType::UniOperatorMinus };
-	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
+	return std::find(operators.begin(), operators.end(), PeekNext()->Type) != operators.end();
 }
 
 bool Parser::IsNextTokenReturnType()
 {
 	std::vector<TokenType> operators{ TokenType::Void, TokenType::None, TokenType::Float };
-	return std::find(operators.begin(), operators.end(), PeekNext()) != operators.end();
+	return std::find(operators.begin(), operators.end(), PeekNext()->Type) != operators.end();
 }
 
 /*
