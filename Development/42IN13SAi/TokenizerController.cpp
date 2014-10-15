@@ -13,7 +13,7 @@ void TokenizerController::Tokenize()
 	tokenizer->Tokenize();
 }
 
-std::list<Token> TokenizerController::GetCompilerTokens()
+std::vector<Token> TokenizerController::GetCompilerTokens()
 {
 	return *tokenizer->GetTokenList();
 }

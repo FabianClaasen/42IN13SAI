@@ -20,8 +20,8 @@ int main(int argc, const char * argv[])
 	Compiler compiler = Compiler(tokenizer_controler->GetCompilerTokens());
 
     // Show tokenized items
-	std::list<Token> tokens = tokenizer_controler->GetCompilerTokens();
-    std::list<Token>::iterator tokenIt;
+	std::vector<Token> tokens = tokenizer_controler->GetCompilerTokens();
+    std::vector<Token>::iterator tokenIt;
     for (tokenIt = tokens.begin(); tokenIt != tokens.end(); ++tokenIt)
     {
         Token token = *tokenIt;

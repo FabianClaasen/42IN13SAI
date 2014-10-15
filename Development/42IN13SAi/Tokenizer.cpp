@@ -27,7 +27,7 @@ Tokenizer::Tokenizer(std::string fileLocation, std::list<TokenDefinition> defini
 // gathered from the code send to it.
 void Tokenizer::Tokenize()
 {
-	tokenList = new std::list<Token>();
+	tokenVector = new std::vector<Token>();
 
 	while (lineRemaining.length() != 0)
 	{
@@ -75,7 +75,7 @@ void Tokenizer::Tokenize()
 				// if partner found, give this token to partner
 				if (partner)
 					partner->Partner = token;
-				tokenList->push_back(*token);
+				tokenVector->push_back(*token);
 
 				// Check if the level should be lowered
 				if (definition.tokenType == TokenType::CloseBracket || definition.tokenType == TokenType::CloseCurlyBracket || definition.tokenType == TokenType::CloseMethod)
@@ -110,8 +110,8 @@ Token* Tokenizer::FindPartner(TokenType &type, int level)
         TokenPartner tokenP = *token_partner;
 		if (tokenP.token == type)
         {
-            std::list<Token>::reverse_iterator tokenIt;
-            for (tokenIt = tokenList->rbegin(); tokenIt != tokenList->rend(); ++tokenIt)
+            std::vector<Token>::reverse_iterator tokenIt;
+            for (tokenIt = tokenVector->rbegin(); tokenIt != tokenVector->rend(); ++tokenIt)
             {
                 token = &(*tokenIt);
                 if (token->Type == tokenP.partner && token->Level == level)
@@ -152,9 +152,9 @@ void Tokenizer::NextLine()
 	}
 }
 
-std::list<Token>* Tokenizer::GetTokenList()
+std::vector<Token>* Tokenizer::GetTokenList()
 {
-    return tokenList;
+    return tokenVector;
 }
 
 // From Stackoverflow http://stackoverflow.com/a/217605
@@ -179,6 +179,6 @@ std::string Tokenizer::trim(std::string &s) {
 Tokenizer::~Tokenizer()
 {
 	file.close();
-	delete tokenList;
-	tokenList = nullptr;
+	delete tokenVector;
+	tokenVector = nullptr;
 }

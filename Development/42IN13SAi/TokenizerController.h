@@ -1,6 +1,5 @@
 #pragma once
-#include <list>
-#include <boost>
+#include <vector>
 
 #include "Token.h"
 #include "Tokenizer.h"
@@ -15,6 +14,6 @@ public:
 	virtual ~TokenizerController();
 
 	void Tokenize();
-	std::list<Token> GetCompilerTokens();
+	std::vector<Token> GetCompilerTokens();
 };
 

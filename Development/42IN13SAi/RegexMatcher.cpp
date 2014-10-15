@@ -4,7 +4,7 @@
 
 RegexMatcher::RegexMatcher(std::string regexString)
 {
-    Regex = std::regex("^(" + regexString + ")");
+    Regex = std::regex("^(" + regexString + ")", std::regex_constants::syntax_option_type::optimize);
 }
 
 int RegexMatcher::Match(std::string &text)
