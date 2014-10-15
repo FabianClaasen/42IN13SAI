@@ -12,6 +12,11 @@ CompilerNode::CompilerNode() : expression(""), jumpTo(nullptr)
 {
 }
 
+CompilerNode::CompilerNode(const CompilerNode& toCopy) : expression(toCopy.expression), nodeParameters(toCopy.nodeParameters), jumpTo(toCopy.jumpTo)
+{
+    
+}
+
 void CompilerNode::SetJumpTo(CompilerNode jump)
 {
 	jumpTo = &jump;

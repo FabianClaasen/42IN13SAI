@@ -16,6 +16,7 @@ public:
 	CompilerNode(std::string expression, std::string value);
 	void SetJumpTo(CompilerNode jump);
 	CompilerNode();
+    CompilerNode(const CompilerNode& toCopy);
 	~CompilerNode();
 };
 

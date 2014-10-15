@@ -44,6 +44,7 @@ enum class TokenType : int {
 
 	// Return types
 	Void,
+    FloatReturn,
 	None,
 
 	// Default functions
