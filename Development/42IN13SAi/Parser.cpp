@@ -505,7 +505,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 	}
 	else
 	{
-		arithmeticalNode = &ParseExpression();
+        arithmeticalNode = new CompilerNode(ParseExpression());
 	}
 
 	if (arithmeticalNode != nullptr)

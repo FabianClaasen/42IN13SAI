@@ -8,6 +8,7 @@
 enum class TokenType : int {
 	// Normal tokens
     KeyIdentifier,
+    Var,
     Function,
     Identifier,
     If,
@@ -44,6 +45,7 @@ enum class TokenType : int {
 
 	// Return types
 	Void,
+    FloatReturn,
 	None,
 
 	// Default functions
