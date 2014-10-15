@@ -1,5 +1,5 @@
 #include "Compiler.h"
-#include "Parser.h"
+
 Parser parser;
 Compiler::Compiler()
 {
@@ -21,7 +21,7 @@ void Compiler::Compile()
 	Compiler::PeekNext();
 	while (currentIndex != tokenizerTokens.size()-1)
 	{
-		currentSubroutine = Subroutine();
+		//currentSubroutine = Subroutine();
 		ParseFunctionOrGlobal();
 		//ParseStatement();
 		currentIndex++;

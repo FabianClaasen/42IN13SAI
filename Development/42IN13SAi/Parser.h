@@ -2,11 +2,8 @@
 
 #include "InternalFunction.h"
 #include "SymbolNotFoundException.h"
-#include <vector>
-
-class InternalFunction;
-
 #include "Compiler.h"
+#include <vector>
 
 class Parser : public Compiler
 {
@@ -20,7 +17,6 @@ public:
 
 	CompilerNode ParseIfStatement();
 	CompilerNode ParseAssignmentStatement();
-
 	CompilerNode ParseExpression();
 	CompilerNode ParseRelationalExpression();
 	CompilerNode ParseAddExpression();

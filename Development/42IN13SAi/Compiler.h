@@ -9,6 +9,7 @@
 #include "Subroutine.h"
 #include "SubroutineTable.h"
 
+
 class Compiler
 {
 public:
@@ -17,14 +18,8 @@ public:
 	void Compile();
 	virtual ~Compiler() throw();
 
-private:
-	int currentToken = 0;
-	int currentIndex = 0;
-	void ParseFunctionOrGlobal();
-
 protected:
 	// Variables
-	Parser parser;
 	std::vector<Token> tokenizerTokens;
 	std::list<CompilerNode> *compilerNodes;
 	SymbolTable symbolTable;
@@ -37,4 +32,11 @@ protected:
 	void Match(TokenType type);
 	void ParseGlobalStatement();
 	void ParseStatement();
+
+private:
+	int currentToken = 0;
+	int currentIndex = 0;
+	void ParseFunctionOrGlobal();
 };
+
+#include "Parser.h"

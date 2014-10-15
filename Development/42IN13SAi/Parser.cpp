@@ -43,7 +43,7 @@ void Parser::ParseFunction()
 
 		// Check if the functions starts and create a subroutine
 		Match(TokenType::OpenCurlyBracket); 
-		currentSubroutine = Subroutine(functionName.Value, returnType.Type, SubroutineKind::Function, symbolTable);
+		//currentSubroutine = Subroutine(functionName.Value, returnType.Type, SubroutineKind::Function, symbolTable);
 
 		// Set all the statements inside this subroutine
 		while (PeekNext()->Type != TokenType::CloseCurlyBracket && PeekNext()->Level > 1)
