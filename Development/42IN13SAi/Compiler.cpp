@@ -75,7 +75,7 @@ void Compiler::ParseFunctionOrGlobal()
 	switch (PeekNext()->Type)
 	{
 	case TokenType::Function:
-		parser->ParseFunction();
+		parser.ParseFunction();
 		break;
 	default:
 		ParseGlobalStatement();
@@ -90,7 +90,7 @@ void Compiler::ParseGlobalStatement()
 	switch (PeekNext()->Type)
 	{
 	case TokenType::Var:
-		parser->ParseAssignmentStatement();
+		parser.ParseAssignmentStatement();
 		break;
 	default:
 		throw std::runtime_error("No variable found");
