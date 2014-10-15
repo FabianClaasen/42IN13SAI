@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+#include <boost>
 
 #include "Token.h"
 #include "Tokenizer.h"

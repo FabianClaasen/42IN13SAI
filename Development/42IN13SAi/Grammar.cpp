@@ -16,6 +16,7 @@ std::list<TokenDefinition> Grammar::getGrammar()
     // functions
     definitions.push_back(TokenDefinition("func", TokenType::KeyIdentifier));
     definitions.push_back(TokenDefinition("\\|", TokenType::Seperator));
+    definitions.push_back(TokenDefinition("var", TokenType::Var));
     
     //internal functions
     definitions.push_back(TokenDefinition("prnt\b", TokenType::PrintLine));

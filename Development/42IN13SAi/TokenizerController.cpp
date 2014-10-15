@@ -1,6 +1,5 @@
 #include "TokenizerController.h"
 
-
 TokenizerController::TokenizerController(std::string filename)
 {
 	std::list<TokenDefinition> definitions = Grammar::getGrammar();
