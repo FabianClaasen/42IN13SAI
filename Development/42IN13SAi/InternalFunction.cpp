@@ -59,14 +59,14 @@ std::vector<CompilerNode> InternalFunction::parseParameters(int expectedParams)
 {
 	// Check and parse all the parameters
 	std::vector<CompilerNode> compiler_nodes;
-	Match(TokenType::OpenBracket);
+	/*Match(TokenType::OpenBracket);
 	while (expectedParams > 0) {
-		CompilerNode node = parser->ParseExpression();
+		CompilerNode node = parser.ParseExpression();
 		compiler_nodes.push_back(node);
 		if (--expectedParams > 0)
 			Match(TokenType::Seperator);
 	}
-	Match(TokenType::CloseBracket);
+	Match(TokenType::CloseBracket);*/
 
 	return compiler_nodes;
 }

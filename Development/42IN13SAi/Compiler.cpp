@@ -1,6 +1,6 @@
 #include "Compiler.h"
 #include "Parser.h"
-
+Parser parser;
 Compiler::Compiler()
 {
 
@@ -8,6 +8,7 @@ Compiler::Compiler()
 
 Compiler::Compiler(std::list<Token> tokens) : tokenizerTokens(tokens)
 {
+	it = tokenizerTokens.begin();
 	Compile();
 }
 
@@ -27,11 +28,10 @@ void Compiler::Compile()
 
 
 // Check what the next token is
-Token* Compiler::PeekNext()
+Token*  Compiler::PeekNext()
 {
-    std::list<Token>::iterator it = tokenizerTokens.begin();
+	it = tokenizerTokens.begin();
     std::advance(it, currentToken + 1);
-    
     return &*it;
 }
 
@@ -39,8 +39,7 @@ Token* Compiler::PeekNext()
 // Get the next token
 Token Compiler::GetNext()
 {
-    std::list<Token>::iterator it = tokenizerTokens.begin();
-    
+	it = tokenizerTokens.begin();
     if (Compiler::PeekNext() != nullptr)
     {
         std::advance(it, ++currentToken);
@@ -75,16 +74,16 @@ void Compiler::ParseStatement()
 	switch (PeekNext()->Type)
 	{
 	case TokenType::If:
-		parser->ParseIfStatement();
+		parser.ParseIfStatement();
 		break;
 	case TokenType::While:
-		parser->ParseLoopStatement();
+		parser.ParseLoopStatement();
 		break;
 	case TokenType::Identifier:
-		parser->ParseAssignmentStatement();
+		parser.ParseAssignmentStatement();
 		break;
 	case TokenType::Function:
-		parser->ParseFunction();
+		parser.ParseFunction();
 		break;
 	default:
 		throw std::runtime_error("No statement found");

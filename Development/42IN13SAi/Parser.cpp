@@ -1,5 +1,5 @@
 #include "Parser.h"
- 
+
 Parser::Parser()
 {
 }
@@ -490,14 +490,14 @@ CompilerNode Parser::ParseAssignmentStatement()
 		throw std::runtime_error("Identifier expected");
 	}
 
-	currentToken = GetNext();
+	//currentToken = GetNext();
 
 	if (currentToken.Type == TokenType::Equals)
 	{
 		expression = "$assignment";
 	}
 
-	currentToken = GetNext();
+	//currentToken = GetNext();
 
 	if (PeekNext()->Type == TokenType::EOL)
 	{

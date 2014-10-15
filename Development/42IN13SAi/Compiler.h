@@ -9,29 +9,27 @@
 #include "Subroutine.h"
 #include "SubroutineTable.h"
 
-class Parser;
-
 class Compiler
 {
 public:
 	Compiler();
 	Compiler(std::list<Token> tokens);
 	virtual ~Compiler() throw();
-
+	
 private:
-	const std::list<Token>::iterator it;
+	std::list<Token>::iterator it;
 
 protected:
 	// Variables
-	Parser* parser;
+	
 	std::list<Token> tokenizerTokens;
 	std::list<CompilerNode> *compilerNodes;
 	SymbolTable symbolTable;
 	SubroutineTable subroutineTable;
 
 	// Functions
-	Token* PeekNext();
-	Token GetNext();
+	Token*  PeekNext();
+	Token  GetNext();
 	void Match(TokenType type);
 	void ParseStatement();
 
