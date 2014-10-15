@@ -6,10 +6,8 @@ Compiler::Compiler()
 
 }
 
-Compiler::Compiler(std::list<Token> tokens) : tokenizerTokens(tokens)
+Compiler::Compiler(std::vector<Token> tokens) : tokenizerTokens(tokens)
 {
-	it = tokenizerTokens.begin();
-	Compile();
 }
 
 Compiler::~Compiler()
@@ -20,36 +18,37 @@ Compiler::~Compiler()
 //keep parsing as long as there are tokens
 void Compiler::Compile()
 {
-	while (Compiler::PeekNext() != nullptr)
+	Compiler::PeekNext();
+	while (currentIndex != tokenizerTokens.size()-1)
 	{
+		currentIndex++;
 		ParseStatement();
 	}
 }
 
 
 // Check what the next token is
-Token*  Compiler::PeekNext()
+Token* Compiler::PeekNext()
 {
-	it = tokenizerTokens.begin();
-    std::advance(it, currentToken + 1);
-    return &*it;
+	Token token = tokenizerTokens.at(currentIndex);
+    return &token;
 }
 
 
 // Get the next token
 Token Compiler::GetNext()
 {
-	it = tokenizerTokens.begin();
+	Token token = tokenizerTokens.at(currentIndex);
     if (Compiler::PeekNext() != nullptr)
     {
-        std::advance(it, ++currentToken);
+        //std::advance(it, ++currentToken);
     }
     else
     {
         throw std::runtime_error("Token missing");
     }
     
-    return *it;
+    return token;
 }
 
 void Compiler::Match(TokenType type)
