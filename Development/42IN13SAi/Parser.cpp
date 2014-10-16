@@ -496,6 +496,8 @@ CompilerNode Parser::ParseAssignmentStatement()
 	CompilerNode *arithmeticalNode = nullptr;
 	CompilerNode endNode;
 
+	Match(TokenType::Var);
+
 	Token currentToken = GetNext();
 	if (currentToken.Type == TokenType::Identifier)
 	{
