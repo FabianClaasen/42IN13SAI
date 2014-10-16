@@ -16,11 +16,11 @@ Compiler::~Compiler()
 //keep parsing as long as there are tokens
 void Compiler::Compile()
 {
-	while (currentIndex != tokenizerTokens.size()-1)
+	while (currentIndex < tokenizerTokens.size())
 	{
 		currentSubroutine = Subroutine();
-		ParseFunctionOrGlobal();
-		//ParseStatement();
+		//ParseFunctionOrGlobal(); --> this is the final function
+		ParseStatement(); // --> this is the test function
 	}
 }
 
@@ -107,6 +107,9 @@ void Compiler::ParseStatement()
 		parser.ParseLoopStatement();
 		break;
 	case TokenType::Identifier:
+		parser.ParseAssignmentStatement();
+		break;
+	case TokenType::Var:
 		parser.ParseAssignmentStatement();
 		break;
 	case TokenType::Function:
