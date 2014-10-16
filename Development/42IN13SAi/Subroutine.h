@@ -9,6 +9,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <list>
 #include "Symbol.h"
 #include "SymbolTable.h"
 #include "SubroutineKind.h"
