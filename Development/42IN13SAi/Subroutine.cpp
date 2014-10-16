@@ -15,6 +15,20 @@ Subroutine::Subroutine(std::string p_name, TokenType p_return, SubroutineKind p_
 {
 }
 
+Subroutine& Subroutine::operator=(const Subroutine& other)
+{
+	if (this != &other)
+	{
+		kind = other.kind;
+		returnType = other.returnType;
+		name = other.name;
+		isEmpty = other.isEmpty;
+		subroutineCompilerNodes = other.subroutineCompilerNodes;
+		symbolTable = other.symbolTable;
+	}
+	return *this;
+}
+
 Subroutine::~Subroutine()
 {
 }
@@ -39,6 +53,11 @@ Symbol* Subroutine::GetLocal(std::string name)
         return symbolTable.GetSymbol(name);
     }
     return nullptr;
+}
+
+void Subroutine::AddCompilerNode(CompilerNode node)
+{
+	subroutineCompilerNodes.push_back(node);
 }
 
 std::list<CompilerNode>* Subroutine::GetCompilerNodeCollection()

@@ -1,7 +1,19 @@
 #include "Parser.h"
 
-Parser::Parser()
+Parser::Parser(){}
+
+Parser::Parser(std::vector<Token> tokens)
 {
+	tokenizerTokens = tokens;
+}
+
+Parser& Parser::operator=(const Parser& other)
+{
+	if (this != &other)
+	{
+		tokenizerTokens = other.tokenizerTokens;
+	}
+	return *this;
 }
 
 Parser::~Parser()
@@ -43,7 +55,7 @@ void Parser::ParseFunction()
 
 		// Check if the functions starts and create a subroutine
 		Match(TokenType::OpenCurlyBracket); 
-		//currentSubroutine = Subroutine(functionName.Value, returnType.Type, SubroutineKind::Function, symbolTable);
+		currentSubroutine = Subroutine(functionName.Value, returnType.Type, SubroutineKind::Function, symbolTable);
 
 		// Set all the statements inside this subroutine
 		while (PeekNext()->Type != TokenType::CloseCurlyBracket && PeekNext()->Level > 1)
@@ -483,6 +495,8 @@ CompilerNode Parser::ParseAssignmentStatement()
 	std::vector<CompilerNode> nodeParameters;
 	CompilerNode *arithmeticalNode = nullptr;
 	CompilerNode endNode;
+
+	Match(TokenType::Var);
 
 	Token currentToken = GetNext();
 	if (currentToken.Type == TokenType::Identifier)

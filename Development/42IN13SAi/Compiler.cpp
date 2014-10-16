@@ -1,30 +1,26 @@
 #include "Compiler.h"
 
 Parser parser;
-Compiler::Compiler()
-{
 
-}
+Compiler::Compiler(){}
 
 Compiler::Compiler(std::vector<Token> tokens) : tokenizerTokens(tokens)
 {
+	parser = Parser(tokenizerTokens);
 }
 
 Compiler::~Compiler()
 {
 }
 
-
 //keep parsing as long as there are tokens
 void Compiler::Compile()
 {
-	Compiler::PeekNext();
-	while (currentIndex != tokenizerTokens.size()-1)
+	while (currentIndex < tokenizerTokens.size())
 	{
-		//currentSubroutine = Subroutine();
-		ParseFunctionOrGlobal();
-		//ParseStatement();
-		currentIndex++;
+		currentSubroutine = Subroutine();
+		//ParseFunctionOrGlobal(); --> this is the final function
+		ParseStatement(); // --> this is the test function
 	}
 }
 
@@ -32,7 +28,7 @@ void Compiler::Compile()
 // Check what the next token is
 Token* Compiler::PeekNext()
 {
-	Token token = tokenizerTokens.at(currentIndex);
+	Token token = tokenizerTokens.at(currentIndex+1);
     return &token;
 }
 
@@ -40,10 +36,11 @@ Token* Compiler::PeekNext()
 // Get the next token
 Token Compiler::GetNext()
 {
-	Token token = tokenizerTokens.at(currentIndex);
-    if (Compiler::PeekNext() != nullptr)
+	currentIndex++;
+	Token token;
+    if (currentIndex != tokenizerTokens.size()-1)
     {
-        //std::advance(it, ++currentToken);
+		token = tokenizerTokens.at(currentIndex);
     }
     else
     {
@@ -110,6 +107,9 @@ void Compiler::ParseStatement()
 		parser.ParseLoopStatement();
 		break;
 	case TokenType::Identifier:
+		parser.ParseAssignmentStatement();
+		break;
+	case TokenType::Var:
 		parser.ParseAssignmentStatement();
 		break;
 	case TokenType::Function:
