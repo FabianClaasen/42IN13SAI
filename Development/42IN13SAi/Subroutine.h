@@ -29,7 +29,7 @@ public:
     
     Subroutine();
 	Subroutine(std::string p_name, TokenType p_return, SubroutineKind p_kind, SymbolTable p_parameters);
-	Subroutine& Subroutine::operator=(const Subroutine& other);
+	Subroutine& operator=(const Subroutine& other);
     virtual ~Subroutine();
     
     void AddLocal(Symbol symbol);
