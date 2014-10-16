@@ -55,6 +55,11 @@ Symbol* Subroutine::GetLocal(std::string name)
     return nullptr;
 }
 
+void Subroutine::AddCompilerNode(CompilerNode node)
+{
+	subroutineCompilerNodes.push_back(node);
+}
+
 std::list<CompilerNode>* Subroutine::GetCompilerNodeCollection()
 {
 	return &subroutineCompilerNodes;

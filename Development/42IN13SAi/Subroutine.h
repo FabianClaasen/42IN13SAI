@@ -37,6 +37,7 @@ public:
     Symbol* GetLocal(std::string name);
 
 	std::list<CompilerNode>* GetCompilerNodeCollection();
+	void AddCompilerNode(CompilerNode node);
 };
 
 
