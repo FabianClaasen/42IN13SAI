@@ -22,13 +22,14 @@ private:
 	std::list<CompilerNode> subroutineCompilerNodes;
 
 public:	
-    const SubroutineKind kind;
-    const TokenType returnType;
-    const std::string name;
-	const bool isEmpty;
+    SubroutineKind kind;
+    TokenType returnType;
+    std::string name;
+	bool isEmpty;
     
     Subroutine();
 	Subroutine(std::string p_name, TokenType p_return, SubroutineKind p_kind, SymbolTable p_parameters);
+	Subroutine& Subroutine::operator=(const Subroutine& other);
     virtual ~Subroutine();
     
     void AddLocal(Symbol symbol);

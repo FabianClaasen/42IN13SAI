@@ -20,7 +20,7 @@ void Compiler::Compile()
 	Compiler::PeekNext();
 	while (currentIndex != tokenizerTokens.size()-1)
 	{
-		//currentSubroutine = Subroutine();
+		currentSubroutine = Subroutine();
 		ParseFunctionOrGlobal();
 		//ParseStatement();
 		currentIndex++;
