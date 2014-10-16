@@ -35,7 +35,7 @@ protected:
 
 private:
 	int currentToken = 0;
-	int currentIndex = 0;
+	int currentIndex = -1;
 	void ParseFunctionOrGlobal();
 };
 

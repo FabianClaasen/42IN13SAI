@@ -13,11 +13,9 @@ Compiler::~Compiler()
 {
 }
 
-
 //keep parsing as long as there are tokens
 void Compiler::Compile()
 {
-	Compiler::PeekNext();
 	while (currentIndex != tokenizerTokens.size()-1)
 	{
 		//currentSubroutine = Subroutine();
@@ -31,7 +29,7 @@ void Compiler::Compile()
 // Check what the next token is
 Token* Compiler::PeekNext()
 {
-	Token token = tokenizerTokens.at(currentIndex);
+	Token token = tokenizerTokens.at(currentIndex+1);
     return &token;
 }
 
@@ -39,10 +37,11 @@ Token* Compiler::PeekNext()
 // Get the next token
 Token Compiler::GetNext()
 {
-	Token token = tokenizerTokens.at(currentIndex);
-    if (Compiler::PeekNext() != nullptr)
+	currentIndex++;
+	Token token;
+    if (currentIndex != tokenizerTokens.size()-1)
     {
-        //std::advance(it, ++currentToken);
+		token = tokenizerTokens.at(currentIndex);
     }
     else
     {
