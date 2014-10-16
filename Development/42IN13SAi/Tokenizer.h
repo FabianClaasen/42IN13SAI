@@ -21,9 +21,9 @@ private:
 
     std::ifstream file;
     std::list<TokenDefinition> tokenDefinitions;
-    std::list<TokenPartner> tokenPartners;
+    std::vector<TokenPartner> tokenPartners;
     
-    std::vector<Token> *tokenVector;
+    std::vector<Token> tokenVector;
     
     void NextLine();
     Token* FindPartner(TokenType &tokenType, int level);
@@ -33,9 +33,9 @@ private:
     std::string trim(std::string &s);
     
 public:
-    Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::list<TokenPartner> partners);
+    Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::vector<TokenPartner> partners);
 	virtual ~Tokenizer();
 
     void Tokenize();
-    std::vector<Token>* GetTokenList();
+    std::vector<Token> GetTokenList();
 };

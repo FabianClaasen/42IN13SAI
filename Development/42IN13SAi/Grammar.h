@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <list>
 
 #include "TokenDefinition.h"
@@ -9,5 +10,5 @@ class Grammar
 {
 public:
     static std::list<TokenDefinition> getGrammar();
-    static std::list<TokenPartner> getPartners();
+    static std::vector<TokenPartner> getPartners();
 };

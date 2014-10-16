@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <list>
 
 #include "Token.h"
 #include "Tokenizer.h"

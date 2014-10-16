@@ -82,9 +82,9 @@ std::list<TokenDefinition> Grammar::getGrammar()
     return definitions;
 }
 
-std::list<TokenPartner> Grammar::getPartners()
+std::vector<TokenPartner> Grammar::getPartners()
 {
-    std::list<TokenPartner> partners;
+    std::vector<TokenPartner> partners;
     partners.push_back(TokenPartner(TokenType::Else, TokenType::ElseIf));
     partners.push_back(TokenPartner(TokenType::Else, TokenType::If));
     partners.push_back(TokenPartner(TokenType::ElseIf, TokenType::Else));

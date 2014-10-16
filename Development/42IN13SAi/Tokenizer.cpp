@@ -7,7 +7,7 @@
 
 #include "Tokenizer.h"
 
-Tokenizer::Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::list<TokenPartner> partners)
+Tokenizer::Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::vector<TokenPartner> partners)
 {
     // set defaults
     lineNumber      = 0;
@@ -27,8 +27,6 @@ Tokenizer::Tokenizer(std::string fileLocation, std::list<TokenDefinition> defini
 // gathered from the code send to it.
 void Tokenizer::Tokenize()
 {
-	tokenVector = new std::vector<Token>();
-
 	while (lineRemaining.length() != 0)
 	{
 		bool match = false;
@@ -70,12 +68,11 @@ void Tokenizer::Tokenize()
 
 				// Create token
 				std::string token_value = lineRemaining.substr(0, matched);
-				Token *token = new Token(lineNumber, linePosition, level, token_value, definition.tokenType, partner);
-				
-				// if partner found, give this token to partner
-				if (partner)
-					partner->Partner = token;
-				tokenVector->push_back(*token);
+				tokenVector.push_back(Token(lineNumber, linePosition, level, token_value, definition.tokenType, partner));
+                
+                // if partner found, give this token to partner
+                if (partner)
+                    partner->Partner = &tokenVector.back();
 
 				// Check if the level should be lowered
 				if (definition.tokenType == TokenType::CloseBracket || definition.tokenType == TokenType::CloseCurlyBracket || definition.tokenType == TokenType::CloseMethod)
@@ -103,19 +100,16 @@ void Tokenizer::Tokenize()
 //	level: this is the level of the tokentype, the partner needs to be on the same level.
 Token* Tokenizer::FindPartner(TokenType &type, int level)
 {
-    Token *token = nullptr;
     std::list<TokenPartner>::const_iterator token_partner;
-    for (token_partner = tokenPartners.begin(); token_partner != tokenPartners.end(); ++token_partner)
+    for (TokenPartner tokenPartner : tokenPartners)
     {
-        TokenPartner tokenP = *token_partner;
-		if (tokenP.token == type)
+		if (tokenPartner.token == type)
         {
             std::vector<Token>::reverse_iterator tokenIt;
-            for (tokenIt = tokenVector->rbegin(); tokenIt != tokenVector->rend(); ++tokenIt)
+            for (tokenIt = tokenVector.rbegin(); tokenIt != tokenVector.rend(); ++tokenIt)
             {
-                token = &(*tokenIt);
-                if (token->Type == tokenP.partner && token->Level == level)
-                    return token;
+                if (tokenIt->Type == tokenPartner.partner && tokenIt->Level == level)
+                    return &(*tokenIt);
             }
         }
     }
@@ -152,7 +146,7 @@ void Tokenizer::NextLine()
 	}
 }
 
-std::vector<Token>* Tokenizer::GetTokenList()
+std::vector<Token> Tokenizer::GetTokenList()
 {
     return tokenVector;
 }
@@ -179,6 +173,4 @@ std::string Tokenizer::trim(std::string &s) {
 Tokenizer::~Tokenizer()
 {
 	file.close();
-	delete tokenVector;
-	tokenVector = nullptr;
 }
