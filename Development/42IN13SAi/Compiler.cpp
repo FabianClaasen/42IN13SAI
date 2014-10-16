@@ -21,7 +21,6 @@ void Compiler::Compile()
 		//currentSubroutine = Subroutine();
 		ParseFunctionOrGlobal();
 		//ParseStatement();
-		currentIndex++;
 	}
 }
 
