@@ -16,11 +16,11 @@ Compiler::~Compiler()
 //keep parsing as long as there are tokens
 void Compiler::Compile()
 {
-	while (currentIndex < tokenizerTokens.size())
+	while (currentIndex != tokenizerTokens.size()-1)
 	{
 		currentSubroutine = Subroutine();
-		//ParseFunctionOrGlobal(); --> this is the final function
-		ParseStatement(); // --> this is the test function
+		//ParseFunctionOrGlobal();
+		ParseStatement();
 	}
 }
 
