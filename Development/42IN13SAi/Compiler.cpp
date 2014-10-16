@@ -1,13 +1,12 @@
 #include "Compiler.h"
 
 Parser parser;
-Compiler::Compiler()
-{
 
-}
+Compiler::Compiler(){}
 
 Compiler::Compiler(std::vector<Token> tokens) : tokenizerTokens(tokens)
 {
+	parser = Parser(tokenizerTokens);
 }
 
 Compiler::~Compiler()

@@ -1,7 +1,19 @@
 #include "Parser.h"
 
-Parser::Parser()
+Parser::Parser(){}
+
+Parser::Parser(std::vector<Token> tokens)
 {
+	tokenizerTokens = tokens;
+}
+
+Parser& Parser::operator=(const Parser& other)
+{
+	if (this != &other)
+	{
+		tokenizerTokens = other.tokenizerTokens;
+	}
+	return *this;
 }
 
 Parser::~Parser()

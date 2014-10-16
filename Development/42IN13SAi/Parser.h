@@ -9,6 +9,8 @@ class Parser : public Compiler
 {
 public:
 	Parser();
+	Parser(std::vector<Token> tokens);
+	Parser& Parser::operator=(const Parser& other);
     virtual ~Parser() throw();
 
 	// Functions
