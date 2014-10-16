@@ -18,6 +18,7 @@ int main(int argc, const char * argv[])
 	tokenizer_controler->Tokenize();
 
 	Compiler compiler = Compiler(tokenizer_controler->GetCompilerTokens());
+	compiler.Compile();
 
     // Show tokenized items
 	std::vector<Token> tokens = tokenizer_controler->GetCompilerTokens();

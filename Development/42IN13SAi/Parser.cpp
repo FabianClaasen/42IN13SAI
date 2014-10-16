@@ -41,19 +41,20 @@ void Parser::ParseFunction()
 			}
 		}
 
-		Match(TokenType::OpenCurlyBracket);
+		// Check if the functions starts and create a subroutine
+		Match(TokenType::OpenCurlyBracket); 
+		//currentSubroutine = Subroutine(functionName.Value, returnType.Type, SubroutineKind::Function, symbolTable);
 
-		// TODO: Set all the nodes of this function
-		while (PeekNext()->Type != TokenType::CloseCurlyBracket)
+		// Set all the statements inside this subroutine
+		while (PeekNext()->Type != TokenType::CloseCurlyBracket && PeekNext()->Level > 1)
 		{
 			ParseStatement();
 		}
 
+		// Check if the subroutine is closed correctly
+		// And add the subroutine to the subroutine table
 		Match(TokenType::CloseCurlyBracket);
-
-		// Create a subrouyine and add it to the subroutine rable
-		Subroutine routine = Subroutine(functionName.Value, returnType.Type, SubroutineKind::Function, symbolTable);
-		subroutineTable.AddSubroutine(routine);
+		subroutineTable.AddSubroutine(currentSubroutine);
 	}
 	else
 		throw std::runtime_error("Expected return type");
@@ -65,6 +66,7 @@ CompilerNode Parser::ParseIfStatement()
 	Token currentToken = Compiler::GetNext();
 	bool hasPartner = false;
 
+	std::list<CompilerNode>* compilerNodes = currentSubroutine.GetCompilerNodeCollection();
 	int compilerNodesPos = compilerNodes->size();
 
 	std::list<CompilerNode> innerIfStatementNodes;
@@ -327,8 +329,9 @@ CompilerNode Parser::ParseTerm()
 	else if (token.Type == TokenType::Identifier)
 	{
 		std::string identifier = token.Value;
-		
-		Symbol* symbol = symbolTable.GetSymbol(identifier);
+
+		Symbol* symbol = GetSymbol(identifier);
+
 		if (symbol == nullptr)
 			throw SymbolNotFoundException("");
 
@@ -389,6 +392,7 @@ void Parser::ParseLoopStatement()
 	Token currentToken = Compiler::GetNext();
 	bool forLoop = false;
 	
+	std::list<CompilerNode>* compilerNodes = currentSubroutine.GetCompilerNodeCollection();
 	int compilerNodesPos = compilerNodes->size();
 
 	std::vector<CompilerNode> nodeParameters;
@@ -516,4 +520,26 @@ CompilerNode Parser::ParseAssignmentStatement()
 	endNode = CompilerNode(expression, nodeParameters, nullptr);
 
 	return endNode;
+}
+
+// This function will return a symbol based on the identifier parameter.
+// It will not just check the global symboltable but will first check the 
+// symboltable of the current subroutine.
+Symbol* Parser::GetSymbol(std::string identifier)
+{
+	Symbol* symbol;
+
+	if (!currentSubroutine.isEmpty)
+	{
+		if (currentSubroutine.HasLocal(identifier))
+			symbol = currentSubroutine.GetLocal(identifier);
+		else
+			symbol = symbolTable.GetSymbol(identifier);
+	}
+	else
+	{
+		symbol = symbolTable.GetSymbol(identifier);
+	}
+
+	return symbol;
 }
