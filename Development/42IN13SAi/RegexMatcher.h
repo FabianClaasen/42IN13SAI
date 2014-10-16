@@ -1,12 +1,12 @@
 #pragma once
 
-#include <regex>
+#include <boost/regex.hpp>
 #include <string>
 
 class RegexMatcher
 {
 private:
-    std::regex Regex;
+    const boost::regex Regex;
     
 public:
     RegexMatcher(std::string regexString);

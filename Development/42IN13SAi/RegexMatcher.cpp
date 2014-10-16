@@ -1,16 +1,13 @@
-#include <stdio.h>
-
 #include "RegexMatcher.h"
 
-RegexMatcher::RegexMatcher(std::string regexString)
+RegexMatcher::RegexMatcher(std::string regexString) : Regex("^(" + regexString + ")", boost::regex_constants::optimize)
 {
-    Regex = std::regex("^(" + regexString + ")", std::regex_constants::syntax_option_type::optimize);
 }
 
 int RegexMatcher::Match(std::string &text)
 {
-    std::match_results<std::string::const_iterator> item;
-    if (!std::regex_search(text, item, Regex))
+    boost::cmatch item;
+    if (!boost::regex_search(text.c_str(), item, Regex))
         return 0;
     else
         return (int)item.length();
