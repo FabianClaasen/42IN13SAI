@@ -504,28 +504,15 @@ CompilerNode Parser::ParseAssignmentStatement()
 		throw std::runtime_error("Identifier expected");
 	}
 
-	//currentToken = GetNext();
+	currentToken = compiler->GetNext();
 
 	if (currentToken.Type == TokenType::Equals)
 	{
 		expression = "$assignment";
+		nodeParameters.push_back(CompilerNode(ParseExpression()));
 	}
 
-	//currentToken = GetNext();
-
-	if (compiler->PeekNext()->Type == TokenType::EOL)
-	{
-		nodeParameters.push_back(CompilerNode("$value", currentToken.Value));
-	}
-	else
-	{
-		arithmeticalNode = new CompilerNode(ParseExpression());
-	}
-
-	if (arithmeticalNode != nullptr)
-	{
-		nodeParameters.push_back(*arithmeticalNode);
-	}
+	compiler->Match(TokenType::EOL);
 
 	endNode = CompilerNode(expression, nodeParameters, nullptr);
 
