@@ -17,7 +17,6 @@ class Parser;
 class Compiler
 {
 public:
-	Compiler();
 	Compiler(std::vector<Token> tokens);
 	virtual ~Compiler() throw();
 
@@ -35,12 +34,17 @@ public:
 	void ParseStatement();
 	void Match(TokenType type);
 
+	//Info to send to VM
+	SymbolTable GetSymbolTable();
+	SubroutineTable GetSubroutineTable();
+	std::list<CompilerNode> GetCompilerNodes();
+	
 private:
 	// Variables
 	//std::shared_ptr<InternalFunction> internalFunction;
 	//std::shared_ptr<Parser> parser;
 	std::vector<Token> tokenizerTokens;
-	std::list<CompilerNode> *compilerNodes;
+	std::list<CompilerNode> compilerNodes;
 	SymbolTable symbolTable;
 	SubroutineTable subroutineTable;
 	Subroutine currentSubroutine;

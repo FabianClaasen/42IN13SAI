@@ -31,6 +31,7 @@
     <ClCompile Include="SymbolTable.cpp" />
     <ClCompile Include="Subroutine.cpp" />
     <ClCompile Include="SubroutineTable.cpp" />
+    <ClCompile Include="VirtualMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compiler.h" />
@@ -55,6 +56,7 @@
     <ClInclude Include="Subroutine.h" />
     <ClInclude Include="SubroutineKind.h" />
     <ClInclude Include="SubroutineTable.h" />
+    <ClInclude Include="VirtualMachine.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -90,12 +92,17 @@
   <PropertyGroup>
     <NuGetPackageImportStamp>216635e5</NuGetPackageImportStamp>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ExecutablePath>C:\Boost\include\boost-1_56;$(ExecutablePath)</ExecutablePath>
+    <LibraryPath>C:\Boost\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Boost\include\boost-1_56;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

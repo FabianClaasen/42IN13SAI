@@ -2,11 +2,6 @@
 #include "InternalFunction.h"
 #include "Parser.h"
 
-// Constructors
-Compiler::Compiler()
-{
-}
-
 Compiler::Compiler(std::vector<Token> tokens) : tokenizerTokens(tokens)
 {
 }
@@ -157,4 +152,22 @@ void Compiler::ParseStatement()
 		throw std::runtime_error("No statement found");
 		break;
 	}
+}
+
+//Get symbol table for the VM
+SymbolTable Compiler::GetSymbolTable()
+{
+	return symbolTable;
+}
+
+//Get Subroutine table for the VM
+SubroutineTable Compiler::GetSubroutineTable()
+{
+	return subroutineTable;
+}
+
+// Get the Compiler nodes (list) for the VM
+std::list<CompilerNode> Compiler::GetCompilerNodes()
+{
+	return compilerNodes;
 }

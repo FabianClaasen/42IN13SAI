@@ -61,6 +61,9 @@
     <ClCompile Include="SubroutineTable.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="VirtualMachine.cpp">
+      <Filter>Source Files\Virtual Machine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CompilerNode.h">
@@ -128,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="SubroutineTable.h">
       <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="VirtualMachine.h">
+      <Filter>Header Files\Virtual Machine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

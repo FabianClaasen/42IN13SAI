@@ -5,25 +5,30 @@
 #include <iostream>
 #include "TokenizerController.h"
 #include "Compiler.h"
+#include "VirtualMachine.h"
 
 int main(int argc, const char * argv[])
 {
-	std::string fileName("C:\\Users\\Sjoerd\\Dropbox\\42IN13SAI\\Testen\\Compiler\\while_loop.txt");
-	//std::string fileName("C:\\Users\\stefan\\Dropbox\\42IN13SAI\\Testen\\Tokenizer\\test.txt");
+	//std::string fileName("C:\\Users\\Sjoerd\\Dropbox\\42IN13SAI\\Testen\\Compiler\\while_loop.txt");
+	std::string fileName("C:\\Users\\stefan\\Dropbox\\42IN13SAI\\Testen\\Tokenizer\\test.txt");
 	//std::string fileName("C:\\Users\\Fabian Claasen\\Dropbox\\42IN13SAI\\Testen\\Tokenizer\\test.txt");
     
 #ifndef _WIN32
     fileName = "/Users/Alex/Documents/test.txt";
 #endif
     
-	TokenizerController *tokenizer_controler = new TokenizerController(fileName);
-	tokenizer_controler->Tokenize();
+	TokenizerController *tokenizer_controller = new TokenizerController(fileName);
+	tokenizer_controller->Tokenize();
 
-	Compiler compiler = Compiler(tokenizer_controler->GetCompilerTokens());
+	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
 	compiler.Compile();
 
+	VirtualMachine virtual_machine = 
+		VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), compiler.GetCompilerNodes());
+	//virtualMachineController
+
     // Show tokenized items
-	std::vector<Token> tokens = tokenizer_controler->GetCompilerTokens();
+	std::vector<Token> tokens = tokenizer_controller->GetCompilerTokens();
     std::vector<Token>::iterator tokenIt;
     for (tokenIt = tokens.begin(); tokenIt != tokens.end(); ++tokenIt)
     {
