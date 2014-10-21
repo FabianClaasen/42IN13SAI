@@ -16,14 +16,14 @@ public:
 	void ParseFunction();
 	void ParseLoopStatement();
 
-	CompilerNode ParseIfStatement();
-	CompilerNode ParseAssignmentStatement();
-	CompilerNode ParseExpression();
-	CompilerNode ParseRelationalExpression();
-	CompilerNode ParseAddExpression();
-	CompilerNode ParseMulExpression();
-	CompilerNode ParseUniExpression();
-	CompilerNode ParseTerm();
+	CompilerNode* ParseIfStatement();
+	CompilerNode* ParseAssignmentStatement();
+	CompilerNode* ParseExpression();
+	CompilerNode* ParseRelationalExpression();
+	CompilerNode* ParseAddExpression();
+	CompilerNode* ParseMulExpression();
+	CompilerNode* ParseUniExpression();
+	CompilerNode* ParseTerm();
 
 private:
 	Compiler* compiler;

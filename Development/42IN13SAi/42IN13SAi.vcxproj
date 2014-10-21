@@ -94,6 +94,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ExecutablePath>C:\Boost\include\boost-1_56;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>C:\Boost\include\boost-1_56;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Boost\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
