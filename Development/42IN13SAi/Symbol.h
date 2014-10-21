@@ -15,6 +15,7 @@ public:
     
     Symbol();
     Symbol(std::string p_name, TokenType p_type, SymbolKind p_kind);
+    Symbol& operator=(const Symbol& other);
     virtual ~Symbol();
     
     float GetValue();
