@@ -18,6 +18,8 @@ void Parser::ParseFunction()
 {
 	Token currentToken = compiler->GetNext();
 
+	SymbolTable symbolTable;
+
 	if (IsNextTokenReturnType())
 	{
 		Token returnType = compiler->GetNext();
@@ -26,7 +28,6 @@ void Parser::ParseFunction()
 		compiler->Match(TokenType::OpenBracket);
 
 		// Set the parameters
-		SymbolTable symbolTable;
 		while (compiler->PeekNext()->Type != TokenType::CloseBracket)
 		{
 			if (compiler->PeekNext()->Type == TokenType::Seperator)
@@ -37,6 +38,7 @@ void Parser::ParseFunction()
 			{
 				Token parameter = compiler->GetNext();
 				Symbol parameterSymbol = Symbol(parameter.Value, parameter.Type, SymbolKind::Parameter);
+				
 
 				if (!symbolTable.HasSymbol(parameterSymbol.name))
 				{
@@ -496,13 +498,34 @@ CompilerNode* Parser::ParseAssignmentStatement()
 	std::vector<CompilerNode*> nodeParameters;
 	CompilerNode endNode;
 
-	compiler->Match(TokenType::Var);
+	bool newIdentifier = false;
 
 	Token currentToken = compiler->GetNext();
+	if (currentToken.Type == TokenType::Var)
+	{
+		newIdentifier = true;
+		currentToken = compiler->GetNext();
+	}
 	if (currentToken.Type == TokenType::Identifier)
 	{
 		CompilerNode* node = new CompilerNode("$identifier", currentToken.Value);
 		nodeParameters.push_back(node);
+
+		if (newIdentifier)
+		{
+			//std::unique_ptr<Subroutine> subroutine(compiler->GetSubroutine());
+
+			//TODO check if global or local
+
+			Symbol identifierSymbol = Symbol(currentToken.Value, currentToken.Type, SymbolKind::Global);
+
+			if (!compiler->HasSymbol(identifierSymbol.name))
+			{
+				compiler->AddSymbol(identifierSymbol);
+			}
+			else
+				throw std::runtime_error("Identifier name is already in use");
+		}
 	}
 	else
 	{

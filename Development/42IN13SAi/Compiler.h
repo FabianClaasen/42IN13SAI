@@ -30,6 +30,7 @@ public:
 	void SetSubroutine(Subroutine subroutine);
 	void AddSubroutine();
 	void AddSymbol(Symbol symbol);
+	bool HasSymbol(std::string symbolName);
 	void ParseGlobalStatement();
 	void ParseStatement();
 	void Match(TokenType type);

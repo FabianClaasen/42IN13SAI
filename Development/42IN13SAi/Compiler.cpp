@@ -16,7 +16,7 @@ void Compiler::Compile()
 	while (currentIndex != tokenizerTokens.size() - 1)
 	{
 		currentSubroutine = Subroutine();
-		ParseFunctionOrGlobal();
+		ParseStatement();
 	}
 }
 
@@ -80,6 +80,11 @@ void Compiler::AddSubroutine()
 void Compiler::AddSymbol(Symbol symbol)
 {
 	symbolTable.AddSymbol(symbol);
+}
+
+bool Compiler::HasSymbol(std::string symbolName)
+{
+	return symbolTable.HasSymbol(symbolName);
 }
 
 // Match the next token with the given type
