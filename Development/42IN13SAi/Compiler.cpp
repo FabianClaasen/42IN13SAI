@@ -1,12 +1,14 @@
 #include "Compiler.h"
+#include "InternalFunction.h"
+#include "Parser.h"
 
-Parser parser;
-
-Compiler::Compiler(){}
+// Constructors
+Compiler::Compiler()
+{
+}
 
 Compiler::Compiler(std::vector<Token> tokens) : tokenizerTokens(tokens)
 {
-	parser = Parser(tokenizerTokens);
 }
 
 Compiler::~Compiler()
@@ -16,11 +18,10 @@ Compiler::~Compiler()
 //keep parsing as long as there are tokens
 void Compiler::Compile()
 {
-	while (currentIndex != tokenizerTokens.size()-1)
+	while (currentIndex != tokenizerTokens.size() - 1)
 	{
 		currentSubroutine = Subroutine();
-		//ParseFunctionOrGlobal();
-		ParseStatement();
+		ParseFunctionOrGlobal();
 	}
 }
 
@@ -28,8 +29,8 @@ void Compiler::Compile()
 // Check what the next token is
 Token* Compiler::PeekNext()
 {
-	Token token = tokenizerTokens.at(currentIndex+1);
-    return &token;
+	Token token = tokenizerTokens.at(currentIndex + 1);
+	return &token;
 }
 
 
@@ -38,31 +39,68 @@ Token Compiler::GetNext()
 {
 	currentIndex++;
 	Token token;
-    if (currentIndex != tokenizerTokens.size()-1)
-    {
+	if (currentIndex != tokenizerTokens.size() - 1)
+	{
 		token = tokenizerTokens.at(currentIndex);
-    }
-    else
-    {
-        throw std::runtime_error("Token missing");
-    }
-    
-    return token;
+	}
+	else
+	{
+		throw std::runtime_error("Token missing");
+	}
+
+	return token;
 }
 
+// Set the tokenlist
+void Compiler::SetTokenList(std::vector<Token> tokens)
+{
+	tokenizerTokens = tokens;
+}
+
+// Get the currentSubroutine
+Subroutine* Compiler::GetSubroutine()
+{
+	return &currentSubroutine;
+}
+
+// Get a symbol
+Symbol* Compiler::GetSymbol(std::string name)
+{
+	return symbolTable.GetSymbol(name);
+}
+
+// Set the currentSubroutine
+void Compiler::SetSubroutine(Subroutine subroutine)
+{
+	currentSubroutine = subroutine;
+}
+
+// Add a subroutine
+void Compiler::AddSubroutine()
+{
+	subroutineTable.AddSubroutine(currentSubroutine);
+}
+
+// Add a symbol
+void Compiler::AddSymbol(Symbol symbol)
+{
+	symbolTable.AddSymbol(symbol);
+}
+
+// Match the next token with the given type
 void Compiler::Match(TokenType type)
 {
-    if (Compiler::PeekNext() == nullptr)
-    {
-        throw std::runtime_error(&"Expected: "[int(type)]);
-    }
-    
-    Token currentToken = GetNext(); // Bestaat al
-    
-    if (currentToken.Type != type)
-    {
-        throw std::runtime_error(&"Expected: "[int(type)]);
-    }
+	if (Compiler::PeekNext() == nullptr)
+	{
+		throw std::runtime_error(&"Expected: "[int(type)]);
+	}
+
+	Token currentToken = GetNext(); // Bestaat al
+
+	if (currentToken.Type != type)
+	{
+		throw std::runtime_error(&"Expected: "[int(type)]);
+	}
 }
 
 // Check if you need to parse a function or a global.
@@ -72,7 +110,7 @@ void Compiler::ParseFunctionOrGlobal()
 	switch (PeekNext()->Type)
 	{
 	case TokenType::Function:
-		parser.ParseFunction();
+		Parser(this).ParseFunction();
 		break;
 	default:
 		ParseGlobalStatement();
@@ -87,7 +125,7 @@ void Compiler::ParseGlobalStatement()
 	switch (PeekNext()->Type)
 	{
 	case TokenType::Var:
-		parser.ParseAssignmentStatement();
+		Parser(this).ParseAssignmentStatement();
 		break;
 	default:
 		throw std::runtime_error("No variable found");
@@ -101,19 +139,19 @@ void Compiler::ParseStatement()
 	switch (PeekNext()->Type)
 	{
 	case TokenType::If:
-		parser.ParseIfStatement();
+		Parser(this).ParseIfStatement();
 		break;
 	case TokenType::While:
-		parser.ParseLoopStatement();
+		Parser(this).ParseLoopStatement();
 		break;
 	case TokenType::Identifier:
-		parser.ParseAssignmentStatement();
+		Parser(this).ParseAssignmentStatement();
 		break;
 	case TokenType::Var:
-		parser.ParseAssignmentStatement();
+		Parser(this).ParseAssignmentStatement();
 		break;
 	case TokenType::Function:
-		parser.ParseFunction();
+		Parser(this).ParseFunction();
 		break;
 	default:
 		throw std::runtime_error("No statement found");

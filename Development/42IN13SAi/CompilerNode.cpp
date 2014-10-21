@@ -24,5 +24,5 @@ void CompilerNode::SetJumpTo(CompilerNode jump)
 
 CompilerNode::~CompilerNode()
 {
-	delete jumpTo;
+	//delete jumpTo;
 }

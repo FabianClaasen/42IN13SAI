@@ -5,13 +5,12 @@
 #include "Compiler.h"
 #include <vector>
 
-class Parser : public Compiler
+class Parser
 {
 public:
-	Parser();
-	Parser(std::vector<Token> tokens);
-	Parser& operator=(const Parser& other);
-    virtual ~Parser() throw();
+	Parser(Compiler* compiler);
+	Parser(Compiler* compiler, std::vector<Token> tokens);
+	virtual ~Parser() throw();
 
 	// Functions
 	void ParseFunction();
@@ -27,6 +26,8 @@ public:
 	CompilerNode ParseTerm();
 
 private:
+	Compiler* compiler;
+
 	bool IsNextTokenUniOp();
 	bool IsNextTokenMulOp();
 	bool IsNextTokenAddOp();

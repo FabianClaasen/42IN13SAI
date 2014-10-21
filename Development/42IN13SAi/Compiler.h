@@ -1,7 +1,10 @@
 #pragma once
+
 #include <list>
 #include <iterator>
 #include <string>
+#include <memory>
+
 #include "CompilerNode.h"
 #include "Token.h"
 #include "Symbol.h"
@@ -9,34 +12,39 @@
 #include "Subroutine.h"
 #include "SubroutineTable.h"
 
-
+class InternalFunction;
+class Parser;
 class Compiler
 {
 public:
 	Compiler();
 	Compiler(std::vector<Token> tokens);
-	void Compile();
 	virtual ~Compiler() throw();
 
-protected:
+	// Functions
+	void Compile();
+	Token* PeekNext();
+	Token  GetNext();
+	Subroutine* GetSubroutine();
+	Symbol* GetSymbol(std::string name);
+	void SetTokenList(std::vector<Token> tokens);
+	void SetSubroutine(Subroutine subroutine);
+	void AddSubroutine();
+	void AddSymbol(Symbol symbol);
+	void ParseGlobalStatement();
+	void ParseStatement();
+	void Match(TokenType type);
+
+private:
 	// Variables
+	//std::shared_ptr<InternalFunction> internalFunction;
+	//std::shared_ptr<Parser> parser;
 	std::vector<Token> tokenizerTokens;
 	std::list<CompilerNode> *compilerNodes;
 	SymbolTable symbolTable;
 	SubroutineTable subroutineTable;
 	Subroutine currentSubroutine;
-
-	// Functions
-	Token* PeekNext();
-	Token  GetNext();
-	void Match(TokenType type);
-	void ParseGlobalStatement();
-	void ParseStatement();
-
-private:
 	int currentToken = 0;
 	int currentIndex = -1;
 	void ParseFunctionOrGlobal();
 };
-
-#include "Parser.h"

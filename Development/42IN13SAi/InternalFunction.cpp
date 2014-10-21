@@ -1,14 +1,12 @@
 #include "InternalFunction.h"
-#include "Parser.h"
 
-InternalFunction::InternalFunction()
+InternalFunction::InternalFunction(Compiler* compiler) : compiler(compiler)
 {
-	// Do something?
 }
 
 InternalFunction::~InternalFunction()
 {
-	
+	delete(compiler);
 }
 
 CompilerNode InternalFunction::GetInternalFunction(Token identifier)
@@ -20,6 +18,7 @@ CompilerNode InternalFunction::GetInternalFunction(Token identifier)
 		return getCompilerNode("$stop", 1);
 	case  TokenType::PrintLine:
 		return getCompilerNode("$prnt", 1);
+
 		// Math functions
 	case TokenType::Cosine:
 		return getCompilerNode("$cos", 1);
@@ -52,7 +51,7 @@ CompilerNode InternalFunction::GetInternalFunction(Token identifier)
 	default:
 		break;
 	}
-    return CompilerNode();
+	return CompilerNode();
 }
 
 std::vector<CompilerNode> InternalFunction::parseParameters(int expectedParams)
@@ -61,10 +60,10 @@ std::vector<CompilerNode> InternalFunction::parseParameters(int expectedParams)
 	std::vector<CompilerNode> compiler_nodes;
 	/*Match(TokenType::OpenBracket);
 	while (expectedParams > 0) {
-		CompilerNode node = parser.ParseExpression();
-		compiler_nodes.push_back(node);
-		if (--expectedParams > 0)
-			Match(TokenType::Seperator);
+	CompilerNode node = parser.ParseExpression();
+	compiler_nodes.push_back(node);
+	if (--expectedParams > 0)
+	Match(TokenType::Seperator);
 	}
 	Match(TokenType::CloseBracket);*/
 
