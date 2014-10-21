@@ -554,7 +554,9 @@ CompilerNode* Parser::ParseAssignmentStatement()
 Symbol* Parser::GetSymbol(std::string identifier)
 {
 	Symbol* symbol;
-	std::unique_ptr<Subroutine> subroutine(compiler->GetSubroutine());
+	//std::unique_ptr<Subroutine> subroutine(compiler->GetSubroutine());
+	//unique_ptr gives a problem while deleting its own (normal pointer works)
+	Subroutine* subroutine = compiler->GetSubroutine();
 
 	if (!subroutine->isEmpty)
 	{
