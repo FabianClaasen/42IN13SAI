@@ -7,4 +7,9 @@ VirtualMachine::VirtualMachine(SymbolTable symboltable, SubroutineTable subrouti
 
 VirtualMachine::~VirtualMachine(){}
 
+void VirtualMachine::ExecuteCode()
+{
+
+}
+
 
