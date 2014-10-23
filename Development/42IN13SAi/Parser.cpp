@@ -361,38 +361,66 @@ CompilerNode* Parser::ParseTerm()
 
 bool Parser::IsNextTokenLogicalOp()
 {
-	std::vector<TokenType> operators{ TokenType::And, TokenType::Or };
-	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();
+	TokenType type = compiler->PeekNext()->Type;
+	return type == TokenType::And ||
+		type == TokenType::Or;
+
+	/*std::vector<TokenType> operators{ TokenType::And, TokenType::Or };
+	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 
 bool Parser::IsNextTokenRelationalOp()
 {
-	std::vector<TokenType> operators{ TokenType::GreaterThan, TokenType::GreaterOrEqThan, TokenType::LowerThan, TokenType::LowerOrEqThan };
-	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();
+	TokenType type = compiler->PeekNext()->Type;
+	return type == TokenType::GreaterThan ||
+		type == TokenType::GreaterOrEqThan ||
+		type == TokenType::LowerThan ||
+		type == TokenType::LowerOrEqThan;
+
+	/*std::vector<TokenType> operators{ TokenType::GreaterThan, TokenType::GreaterOrEqThan, TokenType::LowerThan, TokenType::LowerOrEqThan };
+	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 
 bool Parser::IsNextTokenAddOp()
 {
-	std::vector<TokenType> operators{ TokenType::OperatorPlus, TokenType::OperatorMinus };
-	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();
+	TokenType type = compiler->PeekNext()->Type;
+	return type == TokenType::OperatorMinus ||
+		type == TokenType::OperatorPlus;
+
+	/*std::vector<TokenType> operators{ TokenType::OperatorPlus, TokenType::OperatorMinus };
+	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 
 bool Parser::IsNextTokenMulOp()
 {
-	std::vector<TokenType> operators{ TokenType::OperatorMultiply, TokenType::OperatorDivide, TokenType::OperatorRaised };
-	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();
+	TokenType type = compiler->PeekNext()->Type;
+	return type == TokenType::OperatorMultiply ||
+		type == TokenType::OperatorDivide ||
+		type == TokenType::OperatorRaised;
+
+	/*std::vector<TokenType> operators{ TokenType::OperatorMultiply, TokenType::OperatorDivide, TokenType::OperatorRaised };
+	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 
 bool Parser::IsNextTokenUniOp()
 {
-	std::vector<TokenType> operators{ TokenType::UniOperatorPlus, TokenType::UniOperatorMinus };
-	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();
+	TokenType type = compiler->PeekNext()->Type;
+	return type == TokenType::UniOperatorPlus ||
+		type == TokenType::UniOperatorMinus;
+
+	/*std::vector<TokenType> operators{ TokenType::UniOperatorPlus, TokenType::UniOperatorMinus };
+	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 
 bool Parser::IsNextTokenReturnType()
 {
-	std::vector<TokenType> operators{ TokenType::Void, TokenType::None, TokenType::Float };
-	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();
+	TokenType type = compiler->PeekNext()->Type;
+	return type == TokenType::Void ||
+		type == TokenType::None ||
+		type == TokenType::Float;
+
+	/*std::vector<TokenType> operators{ TokenType::Void, TokenType::None, TokenType::Float };
+	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 
 /*
@@ -510,7 +538,6 @@ void Parser::ParseAssignmentStatement()
 	{
 		if (compiler->PeekNext()->Type == TokenType::OpenBracket)
 		{
-			//TODO fill nodeParameters
 			CompilerNode* node = new CompilerNode("$functionName", currentToken.Value);
 			nodeParameters.push_back(node);
 			currentToken = compiler->GetNext();
