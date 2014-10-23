@@ -7,16 +7,16 @@ std::list<TokenDefinition> Grammar::getGrammar()
     std::list<TokenDefinition> definitions;
     
     // Keywords
-    definitions.push_back(TokenDefinition("else if", TokenType::ElseIf));
-    definitions.push_back(TokenDefinition("if", TokenType::If));
-    definitions.push_back(TokenDefinition("else", TokenType::Else));
-    definitions.push_back(TokenDefinition("while", TokenType::While));
-    definitions.push_back(TokenDefinition("frl", TokenType::ForLoop));
+    definitions.push_back(TokenDefinition("else if\b", TokenType::ElseIf));
+    definitions.push_back(TokenDefinition("if\b", TokenType::If));
+    definitions.push_back(TokenDefinition("else\b", TokenType::Else));
+    definitions.push_back(TokenDefinition("while\b", TokenType::While));
+    definitions.push_back(TokenDefinition("frl\b", TokenType::ForLoop));
 
     // functions
-    definitions.push_back(TokenDefinition("func", TokenType::KeyIdentifier));
+    definitions.push_back(TokenDefinition("func\b", TokenType::KeyIdentifier));
     definitions.push_back(TokenDefinition("\\|", TokenType::Seperator));
-    definitions.push_back(TokenDefinition("var", TokenType::Var));
+    definitions.push_back(TokenDefinition("var\b", TokenType::Var));
     
     //internal functions
     definitions.push_back(TokenDefinition("prnt\b", TokenType::PrintLine));
@@ -36,11 +36,11 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("mod\b", TokenType::Modulo));
     
     // return
-    definitions.push_back(TokenDefinition("ret", TokenType::Return));
+    definitions.push_back(TokenDefinition("ret\b", TokenType::Return));
     
     // return types
-    definitions.push_back(TokenDefinition("void", TokenType::Void));
-    definitions.push_back(TokenDefinition("float", TokenType::FloatReturn));
+    definitions.push_back(TokenDefinition("void\b", TokenType::Void));
+    definitions.push_back(TokenDefinition("float\b", TokenType::FloatReturn));
     
     // types
     definitions.push_back(TokenDefinition("[0-9]{1,12}(?:\\.[0-9]{1,12}|(?:e|E)-?[1-9]{1,3})?", TokenType::Float));

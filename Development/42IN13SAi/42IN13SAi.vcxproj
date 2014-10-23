@@ -32,6 +32,7 @@
     <ClCompile Include="Subroutine.cpp" />
     <ClCompile Include="SubroutineTable.cpp" />
     <ClCompile Include="VirtualMachine.cpp" />
+    <ClCompile Include="FunctionCaller.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compiler.h" />
@@ -57,6 +58,7 @@
     <ClInclude Include="SubroutineKind.h" />
     <ClInclude Include="SubroutineTable.h" />
     <ClInclude Include="VirtualMachine.h" />
+    <ClInclude Include="FunctionCaller.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
