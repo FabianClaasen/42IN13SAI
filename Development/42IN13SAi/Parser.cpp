@@ -511,6 +511,21 @@ void Parser::ParseAssignmentStatement()
 		if (compiler->PeekNext()->Type == TokenType::OpenBracket)
 		{
 			//TODO fill nodeParameters
+			CompilerNode* node = new CompilerNode("$functionName", currentToken.Value);
+			nodeParameters.push_back(node);
+			currentToken = compiler->GetNext();
+
+			while (currentToken.Type != TokenType::CloseBracket)
+			{
+				currentToken = compiler->GetNext();
+				if (currentToken.Type == TokenType::Seperator)
+				{
+					currentToken = compiler->GetNext();
+				}
+
+				CompilerNode* node = new CompilerNode("$functionParameter", currentToken.Value);
+				nodeParameters.push_back(node);
+			}
 
 			endNode = new CompilerNode("$functionCall", nodeParameters, nullptr);
 			return;
