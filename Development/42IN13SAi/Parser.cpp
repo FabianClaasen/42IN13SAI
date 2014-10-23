@@ -508,10 +508,11 @@ void Parser::ParseAssignmentStatement()
 	}
 	if (currentToken.Type == TokenType::Identifier)
 	{
-		//TODO check if function or assignment
 		if (compiler->PeekNext()->Type == TokenType::OpenBracket)
 		{
-			ParseFunction();
+			//TODO fill nodeParameters
+
+			endNode = new CompilerNode("$functionCall", nodeParameters, nullptr);
 			return;
 		}
 
