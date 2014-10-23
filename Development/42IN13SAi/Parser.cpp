@@ -69,7 +69,7 @@ void Parser::ParseFunction()
 }
 
 // Also check and parse if-else statement
-CompilerNode* Parser::ParseIfStatement()
+void Parser::ParseIfStatement()
 {
 	Token currentToken = compiler->GetNext();
 	bool hasPartner = false;
@@ -107,13 +107,13 @@ CompilerNode* Parser::ParseIfStatement()
 		switch (currentToken.Type)
 		{
 		case TokenType::If:
-			innerIfStatementNodes.push_back(*ParseIfStatement());
+			ParseIfStatement();
 			break;
 		case TokenType::While:
 			ParseLoopStatement();
 			break;
 		case TokenType::Identifier:
-			innerIfStatementNodes.push_back(*ParseAssignmentStatement());
+			ParseAssignmentStatement();
 			break;
 		default:
 			throw std::runtime_error("No statement found");
@@ -131,13 +131,13 @@ CompilerNode* Parser::ParseIfStatement()
 			switch (currentToken.Type)
 			{
 			case TokenType::If:
-				innerElseStatementNodes.push_back(*ParseIfStatement());
+				ParseIfStatement();
 				break;
 			case TokenType::While:
 				ParseLoopStatement();
 				break;
 			case TokenType::Identifier:
-				innerElseStatementNodes.push_back(*ParseAssignmentStatement());
+				ParseAssignmentStatement();
 				break;
 			default:
 				throw std::runtime_error("No statement found");
@@ -170,8 +170,6 @@ CompilerNode* Parser::ParseIfStatement()
 	}
 
 	compilerNodes->push_back(jumpTo);
-
-	return nullptr;
 }
 
 CompilerNode* Parser::ParseExpression()
@@ -432,7 +430,7 @@ void Parser::ParseLoopStatement()
 
 	if (forLoop)
 	{
-		nodeParameters.push_back(*ParseAssignmentStatement());
+		ParseAssignmentStatement();
 		nodeParameters.push_back(*ParseExpression());
 		nodeParameters.push_back(*ParseAddExpression());
 
@@ -453,13 +451,13 @@ void Parser::ParseLoopStatement()
 		switch (currentToken.Type)
 		{
 		case TokenType::If:
-			innerStatementNodes.push_back(*ParseIfStatement());
+			ParseIfStatement();
 			break;
 		case TokenType::While:
 			ParseLoopStatement();
 			break;
 		case TokenType::Identifier:
-			innerStatementNodes.push_back(*ParseAssignmentStatement());
+			ParseAssignmentStatement();
 			break;
 		default:
 			throw std::runtime_error("No statement found");
@@ -492,11 +490,12 @@ void Parser::ParseLoopStatement()
 /*
 Also parse (standard) Arithmetical operations
 */
-CompilerNode* Parser::ParseAssignmentStatement()
+void Parser::ParseAssignmentStatement()
 {
 	std::string expression = "";
 	std::vector<CompilerNode*> nodeParameters;
-	CompilerNode endNode;
+
+	Subroutine* subroutine = compiler->GetSubroutine();
 
 	bool newIdentifier = false;
 
@@ -508,20 +507,40 @@ CompilerNode* Parser::ParseAssignmentStatement()
 	}
 	if (currentToken.Type == TokenType::Identifier)
 	{
+		//TODO check if function or assignment
+		if (compiler->PeekNext()->Type == TokenType::OpenBracket)
+		{
+			ParseFunction();
+			return;
+		}
+
+		if (!newIdentifier)
+		{
+			Symbol* symbol = GetSymbol(currentToken.Value);
+
+			if (symbol == nullptr)
+				throw SymbolNotFoundException("This identifier has not been made yet");
+		}
+
 		CompilerNode* node = new CompilerNode("$identifier", currentToken.Value);
 		nodeParameters.push_back(node);
 
 		if (newIdentifier)
 		{
-			//std::unique_ptr<Subroutine> subroutine(compiler->GetSubroutine());
+			Symbol* identifierSymbol;
 
-			//TODO check if global or local
-
-			Symbol identifierSymbol = Symbol(currentToken.Value, currentToken.Type, SymbolKind::Global);
-
-			if (!compiler->HasSymbol(identifierSymbol.name))
+			if (subroutine->isEmpty)
 			{
-				compiler->AddSymbol(identifierSymbol);
+				identifierSymbol = new Symbol(currentToken.Value, currentToken.Type, SymbolKind::Global);
+			}
+			else
+			{
+				identifierSymbol = new Symbol(currentToken.Value, currentToken.Type, SymbolKind::Local);
+			}
+
+			if (!compiler->HasSymbol(identifierSymbol->name))
+			{
+				compiler->AddSymbol(*identifierSymbol);
 			}
 			else
 				throw std::runtime_error("Identifier name is already in use");
@@ -542,10 +561,6 @@ CompilerNode* Parser::ParseAssignmentStatement()
 	}
 
 	compiler->Match(TokenType::EOL);
-
-	//endNode = CompilerNode(expression, nodeParameters, nullptr);
-
-	return &endNode;
 }
 
 // This function will return a symbol based on the identifier parameter.
