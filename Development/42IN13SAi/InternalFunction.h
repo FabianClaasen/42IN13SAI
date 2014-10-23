@@ -14,5 +14,5 @@ public:
 private:
 	Compiler*					compiler;
 	CompilerNode				getCompilerNode(std::string function, int params);
-	std::vector<CompilerNode>	parseParameters(int expectedParams);
+	std::vector<CompilerNode*>	parseParameters(int expectedParams);
 };

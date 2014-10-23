@@ -1,6 +1,6 @@
 #include "CompilerNode.h"
 
-CompilerNode::CompilerNode(std::string p_expression, std::vector<CompilerNode> p_nodeParameters, CompilerNode *p_jumpTo) : expression(p_expression), nodeParameters(p_nodeParameters), jumpTo(p_jumpTo)
+CompilerNode::CompilerNode(std::string p_expression, std::vector<CompilerNode*> p_nodeParameters, CompilerNode *p_jumpTo) : expression(p_expression), nodeParameters(p_nodeParameters), jumpTo(p_jumpTo)
 {
 }
 
