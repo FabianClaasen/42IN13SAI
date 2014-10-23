@@ -38,14 +38,14 @@ public:
 	//Info to send to VM
 	SymbolTable GetSymbolTable();
 	SubroutineTable GetSubroutineTable();
-	std::list<CompilerNode> GetCompilerNodes();
+	std::vector<CompilerNode> GetCompilerNodes();
 	
 private:
 	// Variables
 	//std::shared_ptr<InternalFunction> internalFunction;
 	//std::shared_ptr<Parser> parser;
 	std::vector<Token> tokenizerTokens;
-	std::list<CompilerNode> compilerNodes;
+	std::vector<CompilerNode> compilerNodes;
 	SymbolTable symbolTable;
 	SubroutineTable subroutineTable;
 	Subroutine currentSubroutine;

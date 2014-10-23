@@ -69,7 +69,7 @@ void Parser::ParseFunction()
 }
 
 // Also check and parse if-else statement
-CompilerNode* Parser::ParseIfStatement()
+void Parser::ParseIfStatement()
 {
 	Token currentToken = compiler->GetNext();
 	bool hasPartner = false;
@@ -107,13 +107,13 @@ CompilerNode* Parser::ParseIfStatement()
 		switch (currentToken.Type)
 		{
 		case TokenType::If:
-			innerIfStatementNodes.push_back(*ParseIfStatement());
+			ParseIfStatement();
 			break;
 		case TokenType::While:
 			ParseLoopStatement();
 			break;
 		case TokenType::Identifier:
-			innerIfStatementNodes.push_back(*ParseAssignmentStatement());
+			ParseAssignmentStatement();
 			break;
 		default:
 			throw std::runtime_error("No statement found");
@@ -131,13 +131,13 @@ CompilerNode* Parser::ParseIfStatement()
 			switch (currentToken.Type)
 			{
 			case TokenType::If:
-				innerElseStatementNodes.push_back(*ParseIfStatement());
+				ParseIfStatement();
 				break;
 			case TokenType::While:
 				ParseLoopStatement();
 				break;
 			case TokenType::Identifier:
-				innerElseStatementNodes.push_back(*ParseAssignmentStatement());
+				ParseAssignmentStatement();
 				break;
 			default:
 				throw std::runtime_error("No statement found");
@@ -170,8 +170,6 @@ CompilerNode* Parser::ParseIfStatement()
 	}
 
 	compilerNodes->push_back(jumpTo);
-
-	return nullptr;
 }
 
 CompilerNode* Parser::ParseExpression()
@@ -181,18 +179,18 @@ CompilerNode* Parser::ParseExpression()
 	{
 		Token logicalOp = compiler->GetNext();
 		CompilerNode* secondParsedExpr = ParseRelationalExpression();
-		std::vector<CompilerNode> parameters;
+		std::vector<CompilerNode*> parameters;
 
 		switch (logicalOp.Type)
 		{
 		case TokenType::And:
-			parameters.push_back(*parsedExpr);
-			parameters.push_back(*secondParsedExpr);
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$and", parameters, nullptr);
 			break;
 		case TokenType::Or:
-			parameters.push_back(*parsedExpr);
-			parameters.push_back(*secondParsedExpr);
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$or", parameters, nullptr);
 			break;
 		}
@@ -208,33 +206,33 @@ CompilerNode* Parser::ParseRelationalExpression()
 	{
 		Token relOp = compiler->GetNext();
 		CompilerNode* secondParsedExpr = ParseAddExpression();
-		std::vector<CompilerNode> parameters;
+		std::vector<CompilerNode*> parameters;
 
 		switch (relOp.Type)
 		{
 		case TokenType::LowerThan:
-			parameters.push_back(*parsedExpr);
-			parameters.push_back(*secondParsedExpr);
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$less", parameters, nullptr);
 			break;
 		case TokenType::LowerOrEqThan:
-			parameters.push_back(*parsedExpr);
-			parameters.push_back(*secondParsedExpr);
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$lessOrEq", parameters, nullptr);
 			break;
 		case TokenType::GreaterThan:
-			parameters.push_back(*parsedExpr);
-			parameters.push_back(*secondParsedExpr);
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$greater", parameters, nullptr);
 			break;
 		case TokenType::GreaterOrEqThan:
-			parameters.push_back(*parsedExpr);
-			parameters.push_back(*secondParsedExpr);
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$greaterOrEq", parameters, nullptr);
 			break;
 		case TokenType::Comparator:
-			parameters.push_back(*parsedExpr);
-			parameters.push_back(*secondParsedExpr);
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$equals", parameters, nullptr);
 			break;
 		}
@@ -250,18 +248,18 @@ CompilerNode* Parser::ParseAddExpression()
 	{
 		Token addOp = compiler->GetNext();
 		CompilerNode* secondParsedExpr = ParseMulExpression();
-		std::vector<CompilerNode> parameters;
+		std::vector<CompilerNode*> parameters;
 
 		switch (addOp.Type)
 		{
 		case TokenType::OperatorPlus:
-			parameters.push_back(*parsedExpr);
-			parameters.push_back(*secondParsedExpr);
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$add", parameters, nullptr);
 			break;
 		case TokenType::OperatorMinus:
-			parameters.push_back(*parsedExpr);
-			parameters.push_back(*secondParsedExpr);
+			parameters.push_back(parsedExpr);
+			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$min", parameters, nullptr);
 			break;
 		}
@@ -277,23 +275,23 @@ CompilerNode* Parser::ParseMulExpression()
 	{
 		Token mullOp = compiler->GetNext();
 		CompilerNode* secondTerm = ParseUniExpression();
-		std::vector<CompilerNode> parameters;
+		std::vector<CompilerNode*> parameters;
 
 		switch (mullOp.Type)
 		{
 		case TokenType::OperatorMultiply:
-			parameters.push_back(*term);
-			parameters.push_back(*secondTerm);
+			parameters.push_back(term);
+			parameters.push_back(secondTerm);
 			term = new CompilerNode("$mul", parameters, nullptr);
 			break;
 		case TokenType::OperatorDivide:
-			parameters.push_back(*term);
-			parameters.push_back(*secondTerm);
+			parameters.push_back(term);
+			parameters.push_back(secondTerm);
 			term = new CompilerNode("$div", parameters, nullptr);
 			break;
 		case TokenType::OperatorRaised:
-			parameters.push_back(*term);
-			parameters.push_back(*secondTerm);
+			parameters.push_back(term);
+			parameters.push_back(secondTerm);
 			term = new CompilerNode("$raise", parameters, nullptr);
 			break;
 		}
@@ -309,16 +307,16 @@ CompilerNode* Parser::ParseUniExpression()
 	while (IsNextTokenUniOp())
 	{
 		Token uniOp = compiler->GetNext();
-		std::vector<CompilerNode> parameters;
+		std::vector<CompilerNode *> parameters;
 
 		switch (uniOp.Type)
 		{
 		case TokenType::UniOperatorPlus:
-			parameters.push_back(*term);
+			parameters.push_back(term);
 			term = new CompilerNode("$uniPlus", parameters, nullptr);
 			compiler->Match(TokenType::EOL);
 			break;
-			parameters.push_back(*term);
+			parameters.push_back(term);
 			term = new CompilerNode("$uniMin", parameters, nullptr);
 			compiler->Match(TokenType::EOL);
 			break;
@@ -410,7 +408,7 @@ void Parser::ParseLoopStatement()
 	std::list<CompilerNode>* compilerNodes = subroutine->GetCompilerNodeCollection();
 	int compilerNodesPos = compilerNodes->size();
 
-	std::vector<CompilerNode> nodeParameters;
+	std::vector<CompilerNode*> nodeParameters;
 	std::string statementExpression;
 
 	CompilerNode statementNode;
@@ -432,15 +430,15 @@ void Parser::ParseLoopStatement()
 
 	if (forLoop)
 	{
-		nodeParameters.push_back(*ParseAssignmentStatement());
-		nodeParameters.push_back(*ParseExpression());
-		nodeParameters.push_back(*ParseAddExpression());
+		ParseAssignmentStatement();
+		nodeParameters.push_back(ParseExpression());
+		nodeParameters.push_back(ParseAddExpression());
 
 		statementExpression = "$forLoop";
 	}
 	else
 	{
-		nodeParameters.push_back(*ParseExpression());
+		nodeParameters.push_back(ParseExpression());
 
 		statementExpression = "$whileLoop";
 	}
@@ -453,13 +451,13 @@ void Parser::ParseLoopStatement()
 		switch (currentToken.Type)
 		{
 		case TokenType::If:
-			innerStatementNodes.push_back(*ParseIfStatement());
+			ParseIfStatement();
 			break;
 		case TokenType::While:
 			ParseLoopStatement();
 			break;
 		case TokenType::Identifier:
-			innerStatementNodes.push_back(*ParseAssignmentStatement());
+			ParseAssignmentStatement();
 			break;
 		default:
 			throw std::runtime_error("No statement found");
@@ -492,11 +490,13 @@ void Parser::ParseLoopStatement()
 /*
 Also parse (standard) Arithmetical operations
 */
-CompilerNode* Parser::ParseAssignmentStatement()
+void Parser::ParseAssignmentStatement()
 {
 	std::string expression = "";
 	std::vector<CompilerNode*> nodeParameters;
-	CompilerNode endNode;
+	CompilerNode* endNode;
+
+	Subroutine* subroutine = compiler->GetSubroutine();
 
 	bool newIdentifier = false;
 
@@ -508,20 +508,40 @@ CompilerNode* Parser::ParseAssignmentStatement()
 	}
 	if (currentToken.Type == TokenType::Identifier)
 	{
+		//TODO check if function or assignment
+		if (compiler->PeekNext()->Type == TokenType::OpenBracket)
+		{
+			ParseFunction();
+			return;
+		}
+
+		if (!newIdentifier)
+		{
+			Symbol* symbol = GetSymbol(currentToken.Value);
+
+			if (symbol == nullptr)
+				throw SymbolNotFoundException("This identifier has not been made yet");
+		}
+
 		CompilerNode* node = new CompilerNode("$identifier", currentToken.Value);
 		nodeParameters.push_back(node);
 
 		if (newIdentifier)
 		{
-			//std::unique_ptr<Subroutine> subroutine(compiler->GetSubroutine());
+			Symbol* identifierSymbol;
 
-			//TODO check if global or local
-
-			Symbol identifierSymbol = Symbol(currentToken.Value, currentToken.Type, SymbolKind::Global);
-
-			if (!compiler->HasSymbol(identifierSymbol.name))
+			if (subroutine->isEmpty)
 			{
-				compiler->AddSymbol(identifierSymbol);
+				identifierSymbol = new Symbol(currentToken.Value, currentToken.Type, SymbolKind::Global);
+			}
+			else
+			{
+				identifierSymbol = new Symbol(currentToken.Value, currentToken.Type, SymbolKind::Local);
+			}
+
+			if (!compiler->HasSymbol(identifierSymbol->name))
+			{
+				compiler->AddSymbol(*identifierSymbol);
 			}
 			else
 				throw std::runtime_error("Identifier name is already in use");
@@ -543,9 +563,7 @@ CompilerNode* Parser::ParseAssignmentStatement()
 
 	compiler->Match(TokenType::EOL);
 
-	//endNode = CompilerNode(expression, nodeParameters, nullptr);
-
-	return &endNode;
+	endNode = new CompilerNode(expression, nodeParameters, nullptr);
 }
 
 // This function will return a symbol based on the identifier parameter.
