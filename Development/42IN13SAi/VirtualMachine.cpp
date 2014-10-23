@@ -19,7 +19,7 @@ CompilerNode VirtualMachine::GetNext()
 {
 	currentIndex++;
 	CompilerNode node;
-	if (currentIndex != _compilernodes.size() - 1)
+	if (currentIndex <= _compilernodes.size()-1 && _compilernodes.size() > 0)
 	{
 		node = _compilernodes.at(currentIndex);
 	}
@@ -36,11 +36,15 @@ void VirtualMachine::ExecuteCode()
 	// First check all compilernodes for global variables
 	//while (currentIndex <= _compilernodes.size() - 1)
 	//{
-	//	CompilerNode node = VirtualMachine::GetNext();
-	//	std::string function_call = node.get_expression();
+	//	if (PeekNext() != nullptr)
+	//	{
+	//		CompilerNode node = VirtualMachine::GetNext();
+	//		std::string function_call = node.get_expression();
+	//		// push received node in array
+	//		received_compilernodes.push_back(function_caller->Call(function_call, node));
 
-	//	// push received node in array
-	//	received_compilernodes.push_back(function_caller->Call(function_call, node));
+	//		
+	//	}
 	//}
 
 	// Find main subroutine
