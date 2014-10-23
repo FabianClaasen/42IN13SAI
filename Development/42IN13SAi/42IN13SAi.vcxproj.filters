@@ -64,6 +64,9 @@
     <ClCompile Include="VirtualMachine.cpp">
       <Filter>Source Files\Virtual Machine</Filter>
     </ClCompile>
+    <ClCompile Include="FunctionCaller.cpp">
+        <Filter>Source Files\Virtual Machine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CompilerNode.h">
@@ -134,6 +137,9 @@
     </ClInclude>
     <ClInclude Include="VirtualMachine.h">
       <Filter>Header Files\Virtual Machine</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionCaller.h">
+        <Filter>Header Files\Virtual Machine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
