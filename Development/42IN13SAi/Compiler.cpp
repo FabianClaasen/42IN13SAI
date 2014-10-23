@@ -172,7 +172,7 @@ SubroutineTable Compiler::GetSubroutineTable()
 }
 
 // Get the Compiler nodes (list) for the VM
-std::list<CompilerNode> Compiler::GetCompilerNodes()
+std::vector<CompilerNode> Compiler::GetCompilerNodes()
 {
 	return compilerNodes;
 }

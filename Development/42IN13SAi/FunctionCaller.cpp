@@ -7,6 +7,7 @@
 
 #include "FunctionCaller.h"
 
+FunctionCaller::FunctionCaller() {}
 FunctionCaller::FunctionCaller(VirtualMachine* virtualMachine)
 {
     this->virtualMachine = virtualMachine;
