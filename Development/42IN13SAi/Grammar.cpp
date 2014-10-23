@@ -5,42 +5,42 @@
 std::list<TokenDefinition> Grammar::getGrammar()
 {
     std::list<TokenDefinition> definitions;
+    definitions.push_back(TokenDefinition("var\\b", TokenType::Var));
     
     // Keywords
-    definitions.push_back(TokenDefinition("else if\b", TokenType::ElseIf));
-    definitions.push_back(TokenDefinition("if\b", TokenType::If));
-    definitions.push_back(TokenDefinition("else\b", TokenType::Else));
-    definitions.push_back(TokenDefinition("while\b", TokenType::While));
-    definitions.push_back(TokenDefinition("frl\b", TokenType::ForLoop));
+    definitions.push_back(TokenDefinition("else if\\b", TokenType::ElseIf));
+    definitions.push_back(TokenDefinition("if\\b", TokenType::If));
+    definitions.push_back(TokenDefinition("else\\b", TokenType::Else));
+    definitions.push_back(TokenDefinition("while\\b", TokenType::While));
+    definitions.push_back(TokenDefinition("frl\\b", TokenType::ForLoop));
 
     // functions
-    definitions.push_back(TokenDefinition("func\b", TokenType::KeyIdentifier));
+    definitions.push_back(TokenDefinition("func\\b", TokenType::KeyIdentifier));
     definitions.push_back(TokenDefinition("\\|", TokenType::Seperator));
-    definitions.push_back(TokenDefinition("var\b", TokenType::Var));
-    
+
     //internal functions
-    definitions.push_back(TokenDefinition("prnt\b", TokenType::PrintLine));
-    definitions.push_back(TokenDefinition("stop\b", TokenType::Stop));
-    definitions.push_back(TokenDefinition("sqr\b", TokenType::Square));
-    definitions.push_back(TokenDefinition("sqrt\b", TokenType::SquareRoot));
-    definitions.push_back(TokenDefinition("cbrt\b", TokenType::CubeRoot));
-    definitions.push_back(TokenDefinition("sin\b", TokenType::Sine));
-    definitions.push_back(TokenDefinition("cos\b", TokenType::Cosine));
-    definitions.push_back(TokenDefinition("tan\b", TokenType::Tangent));
-    definitions.push_back(TokenDefinition("deg\b", TokenType::Degree));
-    definitions.push_back(TokenDefinition("rad\b", TokenType::Radiant));
-    definitions.push_back(TokenDefinition("perc\b", TokenType::Percent));
-    definitions.push_back(TokenDefinition("prom\b", TokenType::PerMillage));
-    definitions.push_back(TokenDefinition("log\b", TokenType::NormalLog));
-    definitions.push_back(TokenDefinition("ln\b", TokenType::Nlog));
-    definitions.push_back(TokenDefinition("mod\b", TokenType::Modulo));
+    definitions.push_back(TokenDefinition("prnt\\b", TokenType::PrintLine));
+    definitions.push_back(TokenDefinition("stop\\b", TokenType::Stop));
+    definitions.push_back(TokenDefinition("sqr\\b", TokenType::Square));
+    definitions.push_back(TokenDefinition("sqrt\\b", TokenType::SquareRoot));
+    definitions.push_back(TokenDefinition("cbrt\\b", TokenType::CubeRoot));
+    definitions.push_back(TokenDefinition("sin\\b", TokenType::Sine));
+    definitions.push_back(TokenDefinition("cos\\b", TokenType::Cosine));
+    definitions.push_back(TokenDefinition("tan\\b", TokenType::Tangent));
+    definitions.push_back(TokenDefinition("deg\\b", TokenType::Degree));
+    definitions.push_back(TokenDefinition("rad\\b", TokenType::Radiant));
+    definitions.push_back(TokenDefinition("perc\\b", TokenType::Percent));
+    definitions.push_back(TokenDefinition("prom\\b", TokenType::PerMillage));
+    definitions.push_back(TokenDefinition("log\\b", TokenType::NormalLog));
+    definitions.push_back(TokenDefinition("ln\\b", TokenType::Nlog));
+    definitions.push_back(TokenDefinition("mod\\b", TokenType::Modulo));
     
     // return
-    definitions.push_back(TokenDefinition("ret\b", TokenType::Return));
+    definitions.push_back(TokenDefinition("ret\\b", TokenType::Return));
     
     // return types
-    definitions.push_back(TokenDefinition("void\b", TokenType::Void));
-    definitions.push_back(TokenDefinition("float\b", TokenType::FloatReturn));
+    definitions.push_back(TokenDefinition("void\\b", TokenType::Void));
+    definitions.push_back(TokenDefinition("float", TokenType::FloatReturn));
     
     // types
     definitions.push_back(TokenDefinition("[0-9]{1,12}(?:\\.[0-9]{1,12}|(?:e|E)-?[1-9]{1,3})?", TokenType::Float));
