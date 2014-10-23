@@ -23,6 +23,7 @@ private:
     void fillFunctionMap();
     
 public:
+	FunctionCaller();
     FunctionCaller(VirtualMachine* virtualMachine);
     virtual ~FunctionCaller();
     
