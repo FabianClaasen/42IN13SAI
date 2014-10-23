@@ -3,7 +3,7 @@
 VirtualMachine::VirtualMachine(SymbolTable symboltable, SubroutineTable subroutine, std::vector<CompilerNode> compiler_nodes)
 	: _symboltable(symboltable), _subroutine(subroutine), _compilernodes(compiler_nodes)
 {
-	function_caller = FunctionCaller(this);
+	function_caller = new FunctionCaller(this);
 }
 
 
@@ -19,7 +19,7 @@ CompilerNode VirtualMachine::GetNext()
 {
 	currentIndex++;
 	CompilerNode node;
-	if (currentIndex != _compilernodes.size - 1)
+	if (currentIndex != _compilernodes.size() - 1)
 	{
 		node = _compilernodes.at(currentIndex);
 	}
@@ -34,16 +34,14 @@ CompilerNode VirtualMachine::GetNext()
 void VirtualMachine::ExecuteCode()
 {
 	// First check all compilernodes for global variables
-	while (currentIndex <= _compilernodes.size - 1)
-	{
-		CompilerNode node = VirtualMachine::GetNext();
-		std::string function_call = node.get_expression;
+	//while (currentIndex <= _compilernodes.size() - 1)
+	//{
+	//	CompilerNode node = VirtualMachine::GetNext();
+	//	std::string function_call = node.get_expression();
 
-		// push received node in array
-		received_compilernodes.push_back(function_caller.Call(function_call, node));
-
-
-	}
+	//	// push received node in array
+	//	received_compilernodes.push_back(function_caller->Call(function_call, node));
+	//}
 
 	// Find main subroutine
 	//_subroutine.

@@ -17,7 +17,7 @@ private:
 	SubroutineTable _subroutine;
 	CompilerNode* PeekNext();
 	CompilerNode GetNext();
-	FunctionCaller function_caller;
+	FunctionCaller* function_caller;
 
 	std::vector<CompilerNode> _compilernodes;
 	std::vector<CompilerNode> received_compilernodes;

@@ -10,7 +10,7 @@
 #include <map>
 #include <string>
 #include "CompilerNode.h"
-#include "VirtualMachine.h"
+class VirtualMachine;
 
 class FunctionCaller {
 private:
