@@ -8,10 +8,13 @@ class CompilerNode
 private:
 	std::string	expression;
 	std::string value;
-	std::vector<CompilerNode> nodeParameters;
+	std::vector<CompilerNode*> nodeParameters;
 	CompilerNode *jumpTo;
 
 public:
+<<<<<<< HEAD
+	CompilerNode(std::string expression, std::vector<CompilerNode*> nodeParameters, CompilerNode *jumpTo);
+=======
 
 	//properties of compilernode
 	std::string get_expression() { return expression; }
@@ -19,6 +22,7 @@ public:
 	std::vector<CompilerNode> get_nodeparamters() { return nodeParameters; }
 
 	CompilerNode(std::string expression, std::vector<CompilerNode> nodeParameters, CompilerNode *jumpTo);
+>>>>>>> e1beed75187754761423ee90210e412522d552a8
 	CompilerNode(std::string expression, std::string value);
 	void SetJumpTo(CompilerNode jump);
 	CompilerNode();

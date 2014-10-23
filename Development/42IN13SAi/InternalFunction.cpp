@@ -54,10 +54,10 @@ CompilerNode InternalFunction::GetInternalFunction(Token identifier)
 	return CompilerNode();
 }
 
-std::vector<CompilerNode> InternalFunction::parseParameters(int expectedParams)
+std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
 {
 	// Check and parse all the parameters
-	std::vector<CompilerNode> compiler_nodes;
+	std::vector<CompilerNode*> compiler_nodes;
 	/*Match(TokenType::OpenBracket);
 	while (expectedParams > 0) {
 	CompilerNode node = parser.ParseExpression();
@@ -71,6 +71,6 @@ std::vector<CompilerNode> InternalFunction::parseParameters(int expectedParams)
 }
 
 CompilerNode InternalFunction::getCompilerNode(std::string functionName, int params) {
-	std::vector<CompilerNode> compiler_nodes = parseParameters(params);
+	std::vector<CompilerNode*> compiler_nodes = parseParameters(params);
 	return CompilerNode(functionName, compiler_nodes, nullptr);
 }
