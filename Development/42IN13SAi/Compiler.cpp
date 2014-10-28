@@ -34,7 +34,7 @@ Token Compiler::GetNext()
 {
 	currentIndex++;
 	Token token;
-	if (currentIndex != tokenizerTokens.size() - 1)
+	if (currentIndex != tokenizerTokens.size())
 	{
 		token = tokenizerTokens.at(currentIndex);
 	}

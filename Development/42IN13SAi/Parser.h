@@ -14,10 +14,10 @@ public:
 
 	// Functions
 	void ParseFunction();
-	void ParseLoopStatement();
-	void ParseIfStatement();
 	void ParseAssignmentStatement();
-
+	void ParseIfStatement();
+	void ParseLoopStatement();
+	
 	CompilerNode* ParseExpression();
 	CompilerNode* ParseRelationalExpression();
 	CompilerNode* ParseAddExpression();
