@@ -33,22 +33,27 @@ CompilerNode VirtualMachine::GetNext()
 
 void VirtualMachine::ExecuteCode()
 {
-	// First check all compilernodes for global variables
-	//while (currentIndex <= _compilernodes.size() - 1)
-	//{
-	//	if (PeekNext() != nullptr)
-	//	{
-	//		CompilerNode node = VirtualMachine::GetNext();
-	//		std::string function_call = node.get_expression();
-	//		// push received node in array
-	//		received_compilernodes.push_back(function_caller->Call(function_call, node));
+	// Only when there are compilernodes
+	if (_compilernodes.size() > 0)
+	{
+		// First check all compilernodes for global variables
+		while (currentIndex <= _compilernodes.size() - 1)
+		{
+			if (PeekNext() != nullptr)
+			{
+				// TODO : function name & params from compilernode
+				// Check for actions / functions
+				// get main subroutine as first
+				CompilerNode node = VirtualMachine::GetNext();
+				std::string function_call = node.get_expression();
+				// push received node in array
+				_received_compilernodes.push_back(function_caller->Call(function_call, node));
+			}
+		}
 
-	//		
-	//	}
-	//}
-
-	// Find main subroutine
-	//_subroutine.
+		// Find main subroutine
+		//_subroutine.
+	}
 }
 
 

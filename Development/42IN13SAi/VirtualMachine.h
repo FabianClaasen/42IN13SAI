@@ -20,7 +20,7 @@ private:
 	FunctionCaller* function_caller;
 
 	std::vector<CompilerNode> _compilernodes;
-	std::vector<CompilerNode> received_compilernodes;
+	std::vector<CompilerNode> _received_compilernodes;
 
 	int currentIndex = -1;
 	//typedef CompilerNode(VirtualMachine::*MFP)(CompilerNode);
