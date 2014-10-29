@@ -16,7 +16,9 @@ CompilerNode* VirtualMachine::PeekNext()
 
 CompilerNode VirtualMachine::GetNext()
 {
-	currentIndex++;
+	if (currentIndex != 0)
+		currentIndex++;
+
 	CompilerNode node;
 	if (currentIndex <= _compilernodes.size()-1 && _compilernodes.size() > 0)
 	{
@@ -36,7 +38,7 @@ void VirtualMachine::ExecuteCode()
 	if (_compilernodes.size() > 0)
 	{
 		// First check all compilernodes for global variables
-		while (currentIndex <= _compilernodes.size() - 1)
+		while (currentIndex <= _compilernodes.size())
 		{
 			if (PeekNext() != nullptr)
 			{
@@ -45,10 +47,13 @@ void VirtualMachine::ExecuteCode()
 				// get main subroutine as first
 				CompilerNode node = VirtualMachine::GetNext();
 				std::string function_call = node.get_expression();
+				std::vector<CompilerNode*> params;
+				std::string value;
 				if (node.get_nodeparamters().size() > 0)
-					std::vector<CompilerNode*> params = node.get_nodeparamters();
+					params = node.get_nodeparamters();
 				else 
 					std::string value = node.get_value();
+
 				// push received node in array
 				_received_compilernodes.push_back(function_caller->Call(function_call, node));
 			}

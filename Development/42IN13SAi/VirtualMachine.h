@@ -22,7 +22,7 @@ private:
 	std::vector<CompilerNode> _compilernodes;
 	std::vector<CompilerNode> _received_compilernodes;
 
-	int currentIndex = -1;
+	int currentIndex = 0;
 	//typedef CompilerNode(VirtualMachine::*MFP)(CompilerNode);
 
 	//bool isAction(MFP);
