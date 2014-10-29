@@ -9,9 +9,10 @@ class VirtualMachine
 public:
 	VirtualMachine(SymbolTable symboltable, SubroutineTable subroutine, std::vector<CompilerNode> compiler_nodes);
 	virtual ~VirtualMachine();
-
+	typedef CompilerNode(VirtualMachine::*MFP)(CompilerNode);
 	void ExecuteCode();
-
+	static VirtualMachine::MFP ExecuteAddOperation(CompilerNode compilerNode);
+	
 private:
 	SymbolTable _symboltable;
 	SubroutineTable _subroutine;
@@ -23,7 +24,6 @@ private:
 	std::vector<CompilerNode> _received_compilernodes;
 
 	int currentIndex = 0;
-	//typedef CompilerNode(VirtualMachine::*MFP)(CompilerNode);
 
 	//bool isAction(MFP);
 };

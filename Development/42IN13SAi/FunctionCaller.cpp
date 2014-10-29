@@ -6,6 +6,7 @@
 //
 
 #include "FunctionCaller.h"
+#include "VirtualMachine.h"
 
 FunctionCaller::FunctionCaller() {}
 FunctionCaller::FunctionCaller(VirtualMachine* virtualMachine)
@@ -21,7 +22,7 @@ CompilerNode FunctionCaller::Call(const std::string& functionName, CompilerNode 
 
 void FunctionCaller::fillFunctionMap()
 {
-    //functions.insert(functionMap::value_type("$add", &VirtualMachine::Add));
+	functions.insert(functionMap::value_type("$add", VirtualMachine::ExecuteAddOperation(compilerNode)));
 }
 
 FunctionCaller::~FunctionCaller()
