@@ -148,7 +148,7 @@ void Compiler::ParseStatement()
 		Parser(this).ParseAssignmentStatement();
 		break;
 	case TokenType::Var:
-		Parser(this).ParseAssignmentStatement();
+		/*compilerNodes.push_back(*/ Parser(this).ParseAssignmentStatement();/*);*/
 		break;
 	case TokenType::Function:
 		Parser(this).ParseFunction();

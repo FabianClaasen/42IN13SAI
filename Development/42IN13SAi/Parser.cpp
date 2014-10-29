@@ -70,7 +70,7 @@ void Parser::ParseFunction()
 }
 
 //Also parse (standard) Arithmetical operations
-void Parser::ParseAssignmentStatement()
+CompilerNode Parser::ParseAssignmentStatement()
 {
 	std::string expression = "";
 	std::vector<CompilerNode*> nodeParameters;
@@ -107,7 +107,7 @@ void Parser::ParseAssignmentStatement()
 			}
 
 			endNode = new CompilerNode("$functionCall", nodeParameters, nullptr);
-			return;
+			return *endNode;
 		}
 
 		if (!newIdentifier)
@@ -161,6 +161,7 @@ void Parser::ParseAssignmentStatement()
 	endNode = new CompilerNode(expression, nodeParameters, nullptr);
 
 	compiler->GetSubroutine()->AddCompilerNode(*endNode);
+	return *endNode;
 }
 
 // Also check and parse if-else statement
