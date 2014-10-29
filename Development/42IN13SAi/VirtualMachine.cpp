@@ -6,7 +6,6 @@ VirtualMachine::VirtualMachine(SymbolTable symboltable, SubroutineTable subrouti
 	function_caller = new FunctionCaller(this);
 }
 
-
 VirtualMachine::~VirtualMachine(){}
 
 CompilerNode* VirtualMachine::PeekNext()
@@ -46,13 +45,18 @@ void VirtualMachine::ExecuteCode()
 				// get main subroutine as first
 				CompilerNode node = VirtualMachine::GetNext();
 				std::string function_call = node.get_expression();
+				if (node.get_nodeparamters().size() > 0)
+					std::vector<CompilerNode*> params = node.get_nodeparamters();
+				else 
+					std::string value = node.get_value();
 				// push received node in array
 				_received_compilernodes.push_back(function_caller->Call(function_call, node));
 			}
 		}
+		// after all compilernodes pushed in array do all subroutines
 
 		// Find main subroutine
-		//_subroutine.
+		_subroutine.GetSubroutine("main");
 	}
 }
 
