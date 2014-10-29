@@ -50,8 +50,8 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("<=", TokenType::LowerOrEqThan));
     definitions.push_back(TokenDefinition(">", TokenType::GreaterThan));
     definitions.push_back(TokenDefinition("<", TokenType::LowerThan));
-    definitions.push_back(TokenDefinition("=", TokenType::Equals));
     definitions.push_back(TokenDefinition("==|!=", TokenType::Comparator));
+    definitions.push_back(TokenDefinition("=", TokenType::Equals));
     
     // operators
     definitions.push_back(TokenDefinition("\\+{2}", TokenType::UniOperatorPlus));
