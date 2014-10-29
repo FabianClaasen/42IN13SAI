@@ -290,16 +290,16 @@ void Parser::ParseLoopStatement()
 	CompilerNode statementNode;
 	std::list<CompilerNode> innerStatementNodes;
 
-	if (currentToken.Type != TokenType::While || currentToken.Type != TokenType::ForLoop)
-	{
-		throw std::runtime_error("Expected a loop keyword");
-	}
-	else
+	if (currentToken.Type == TokenType::While || currentToken.Type == TokenType::ForLoop)
 	{
 		if (currentToken.Type == TokenType::ForLoop)
 		{
 			forLoop = true;
 		}
+	}
+	else
+	{
+		throw std::runtime_error("Expected a loop keyword");
 	}
 
 	compiler->Match(TokenType::OpenBracket);
@@ -320,25 +320,12 @@ void Parser::ParseLoopStatement()
 	}
 
 	compiler->Match(TokenType::CloseBracket);
-	compiler->Match(TokenType::OpenCurlyBracket);
+	Token* openMethod = compiler->PeekNext();
+	compiler->Match(TokenType::OpenMethod);
 
-	while ((currentToken = compiler->GetNext()).Type != TokenType::CloseCurlyBracket)
+	while (compiler->PeekNext()->Type != TokenType::CloseMethod && compiler->PeekNext()->Level == openMethod->Level)
 	{
-		switch (currentToken.Type)
-		{
-		case TokenType::If:
-			ParseIfStatement();
-			break;
-		case TokenType::While:
-			ParseLoopStatement();
-			break;
-		case TokenType::Identifier:
-			ParseAssignmentStatement();
-			break;
-		default:
-			throw std::runtime_error("No statement found");
-			break;
-		}
+		compiler->ParseStatement();
 	}
 
 	std::vector<std::string> doNothing;
