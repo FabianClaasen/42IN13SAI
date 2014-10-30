@@ -9,9 +9,9 @@ InternalFunction::~InternalFunction()
 	delete(compiler);
 }
 
-CompilerNode InternalFunction::GetInternalFunction(Token identifier)
+CompilerNode InternalFunction::GetInternalFunction(TokenType type)
 {
-	switch (identifier.Type)
+	switch (type)
 	{
 		// Default functions
 	case TokenType::Stop:
@@ -58,14 +58,18 @@ std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
 {
 	// Check and parse all the parameters
 	std::vector<CompilerNode*> compiler_nodes;
-	/*Match(TokenType::OpenBracket);
+	//Match(TokenType::OpenBracket);
 	while (expectedParams > 0) {
-	CompilerNode node = parser.ParseExpression();
-	compiler_nodes.push_back(node);
-	if (--expectedParams > 0)
-	Match(TokenType::Seperator);
+
+
+		compiler_nodes.push_back(Parser(compiler).ParseExpression());
+
+		expectedParams--;
 	}
-	Match(TokenType::CloseBracket);*/
+	//if (--expectedParams > 0)
+	//Match(TokenType::Seperator);
+	//}
+	//Match(TokenType::CloseBracket);
 
 	return compiler_nodes;
 }

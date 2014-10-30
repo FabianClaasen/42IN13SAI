@@ -153,11 +153,50 @@ void Compiler::ParseStatement()
 	case TokenType::Function:
 		Parser(this).ParseFunction();
 		break;
+
 	default:
 		throw std::runtime_error("No statement found");
 		break;
 	}
 }
+
+// Internal functios
+bool Compiler::IsInternalFunction(TokenType type)
+{
+	//check if type is an internal function
+	switch (type)
+	{
+		// Default functions
+		case TokenType::Stop:
+		case TokenType::PrintLine:
+		// Math functions
+		case TokenType::Cosine:
+		case TokenType::Sine:
+		case TokenType::Tangent:
+		case TokenType::Square:
+		case TokenType::Power:
+		case TokenType::SquareRoot:
+		case TokenType::CubeRoot:
+		case TokenType::Degree:
+		case TokenType::Radiant:
+		case TokenType::Percent:
+		case TokenType::PerMillage:
+		case TokenType::NormalLog:
+		case TokenType::NormaltwoLog:
+		case TokenType::Nlog:
+		case TokenType::Modulo:
+			return true;
+		default:
+			return false;
+	}
+}
+
+CompilerNode Compiler::ParseInternalFunction()
+{
+	return InternalFunction(this).GetInternalFunction(PeekNext()->Type);
+}
+
+
 
 //Get symbol table for the VM
 SymbolTable* Compiler::GetSymbolTable()
