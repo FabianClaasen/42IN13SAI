@@ -11,6 +11,7 @@
 FunctionCaller::FunctionCaller() {}
 FunctionCaller::FunctionCaller(VirtualMachine* virtualMachine)
 {
+	fillFunctionMap();
     this->virtualMachine = virtualMachine;
 }
 
@@ -22,7 +23,9 @@ CompilerNode FunctionCaller::Call(const std::string& functionName, CompilerNode 
 
 void FunctionCaller::fillFunctionMap()
 {
+	functions.insert(functionMap::value_type("$assignment", &VirtualMachine::ExecuteAssignment));
 	functions.insert(functionMap::value_type("$add", &VirtualMachine::ExecuteAddOperation));
+	functions.insert(functionMap::value_type("$minus", &VirtualMachine::ExecuteMinusOperation));
 }
 
 FunctionCaller::~FunctionCaller()

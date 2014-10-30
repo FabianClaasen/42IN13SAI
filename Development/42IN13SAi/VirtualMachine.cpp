@@ -65,9 +65,19 @@ void VirtualMachine::ExecuteCode()
 	}
 }
 
+CompilerNode VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
+{
+	return compilerNode;
+}
+
 CompilerNode VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
 {
-	
+	return compilerNode;
+}
+
+CompilerNode VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
+{
+	return compilerNode;
 }
 
 
