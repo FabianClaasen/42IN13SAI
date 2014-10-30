@@ -148,7 +148,7 @@ void Compiler::ParseStatement()
 		Parser(this).ParseAssignmentStatement();
 		break;
 	case TokenType::Var:
-		/*compilerNodes.push_back(*/Parser(this).ParseAssignmentStatement();/*);*/
+		compilerNodes.push_back(Parser(this).ParseAssignmentStatement());
 		break;
 	case TokenType::Function:
 		Parser(this).ParseFunction();
@@ -160,15 +160,15 @@ void Compiler::ParseStatement()
 }
 
 //Get symbol table for the VM
-SymbolTable Compiler::GetSymbolTable()
+SymbolTable* Compiler::GetSymbolTable()
 {
-	return symbolTable;
+	return &symbolTable;
 }
 
 //Get Subroutine table for the VM
-SubroutineTable Compiler::GetSubroutineTable()
+SubroutineTable* Compiler::GetSubroutineTable()
 {
-	return subroutineTable;
+	return &subroutineTable;
 }
 
 // Get the Compiler nodes (list) for the VM

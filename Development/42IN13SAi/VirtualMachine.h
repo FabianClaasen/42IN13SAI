@@ -7,9 +7,9 @@
 class VirtualMachine
 {
 public:
-	VirtualMachine(SymbolTable symboltable, SubroutineTable subroutine, std::vector<CompilerNode> compiler_nodes);
+	VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::vector<CompilerNode> compiler_nodes);
 	virtual ~VirtualMachine();
-	typedef CompilerNode(VirtualMachine::*MFP)(CompilerNode);
+
 	void ExecuteCode();
 
 	CompilerNode ExecuteAssignment(CompilerNode compilerNode);
@@ -17,8 +17,8 @@ public:
 	CompilerNode ExecuteMinusOperation(CompilerNode compilerNode);
 	
 private:
-	SymbolTable _symboltable;
-	SubroutineTable _subroutine;
+	SymbolTable* _symboltable;
+	SubroutineTable* _subroutine;
 	CompilerNode* PeekNext();
 	CompilerNode GetNext();
 	FunctionCaller* function_caller;

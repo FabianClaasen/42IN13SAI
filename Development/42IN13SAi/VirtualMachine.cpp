@@ -1,6 +1,6 @@
 #include "VirtualMachine.h"
 
-VirtualMachine::VirtualMachine(SymbolTable symboltable, SubroutineTable subroutine, std::vector<CompilerNode> compiler_nodes)
+VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::vector<CompilerNode> compiler_nodes)
 	: _symboltable(symboltable), _subroutine(subroutine), _compilernodes(compiler_nodes)
 {
 	function_caller = new FunctionCaller(this);
@@ -10,8 +10,10 @@ VirtualMachine::~VirtualMachine(){}
 
 CompilerNode* VirtualMachine::PeekNext()
 {
-	CompilerNode *node = &_compilernodes.at(currentIndex + 1);
-	return node;
+	if (currentIndex != 0)
+		return &_compilernodes.at(currentIndex + 1);
+	else
+		return &_compilernodes.at(currentIndex);
 }
 
 CompilerNode VirtualMachine::GetNext()
@@ -61,12 +63,20 @@ void VirtualMachine::ExecuteCode()
 		// after all compilernodes pushed in array do all subroutines
 
 		// Find main subroutine
-		_subroutine.GetSubroutine("main");
+		_subroutine->GetSubroutine("main");
 	}
 }
 
 CompilerNode VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
 {
+	// Check if params is not empty
+	if (compilerNode.get_nodeparamters().empty())
+		throw std::runtime_error("Function needs at least 1 parameter");
+	
+	// Get the value of the node -> variable
+	std::string new_node = compilerNode.get_nodeparamters().at(0)->get_value();
+	Symbol* symbol = _symboltable->GetSymbol(new_node);
+	symbol->SetValue(1);
 	return compilerNode;
 }
 

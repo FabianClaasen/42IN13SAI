@@ -37,8 +37,8 @@ public:
 	void Match(TokenType type);
 
 	//Info to send to VM
-	SymbolTable GetSymbolTable();
-	SubroutineTable GetSubroutineTable();
+	SymbolTable* GetSymbolTable();
+	SubroutineTable* GetSubroutineTable();
 	std::vector<CompilerNode> GetCompilerNodes();
 	
 private:
