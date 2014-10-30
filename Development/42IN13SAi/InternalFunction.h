@@ -3,13 +3,14 @@
 #include <string>
 
 #include "Compiler.h"
+#include "Parser.h"
 
 class InternalFunction
 {
 public:
 	InternalFunction(Compiler* compiler);
 	virtual ~InternalFunction();
-	CompilerNode GetInternalFunction(Token id);
+	CompilerNode GetInternalFunction(TokenType type);
 
 private:
 	Compiler*					compiler;

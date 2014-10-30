@@ -34,6 +34,9 @@ public:
 	bool HasSymbol(std::string symbolName);
 	void ParseGlobalStatement();
 	void ParseStatement();
+	bool IsInternalFunction(TokenType type);
+	CompilerNode ParseInternalFunction();
+
 	void Match(TokenType type);
 
 	//Info to send to VM
