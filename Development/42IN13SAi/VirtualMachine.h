@@ -1,9 +1,11 @@
 #pragma once
+#include <stdlib.h>
+#include <math.h>
+
 #include "SymbolTable.h"
 #include "SubroutineTable.h"
 #include "CompilerNode.h"
 #include "FunctionCaller.h"
-#include <stdlib.h> 
 
 class VirtualMachine
 {
@@ -14,8 +16,17 @@ public:
 	void ExecuteCode();
 
 	CompilerNode* ExecuteAssignment(CompilerNode compilerNode);
-	CompilerNode* ExecuteAddOperation(CompilerNode compilerNode);
+	
+    // Simple math operations
+    CompilerNode* ExecuteAddOperation(CompilerNode compilerNode);
 	CompilerNode* ExecuteMinusOperation(CompilerNode compilerNode);
+    CompilerNode* ExecuteMultiplyOperation(CompilerNode compilerNode);
+    CompilerNode* ExecuteDivideOperation(CompilerNode compilerNode);
+    
+    // Complexer math operations
+    CompilerNode* ExecuteSinOperation(CompilerNode compilerNode);
+    CompilerNode* ExecuteCosOperation(CompilerNode compilerNode);
+    CompilerNode* ExecuteTanOperation(CompilerNode compilerNode);
 	
 private:
 	SymbolTable* _symboltable;

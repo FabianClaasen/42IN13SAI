@@ -24,8 +24,17 @@ CompilerNode* FunctionCaller::Call(const std::string& functionName, CompilerNode
 void FunctionCaller::fillFunctionMap()
 {
 	functions.insert(functionMap::value_type("$assignment", &VirtualMachine::ExecuteAssignment));
+    
+    // Simple Math Operations
 	functions.insert(functionMap::value_type("$add", &VirtualMachine::ExecuteAddOperation));
-	//functions.insert(functionMap::value_type("$minus", &VirtualMachine::ExecuteMinusOperation));
+	functions.insert(functionMap::value_type("$min", &VirtualMachine::ExecuteMinusOperation));
+    functions.insert(functionMap::value_type("$mul", &VirtualMachine::ExecuteMinusOperation));
+    functions.insert(functionMap::value_type("$div", &VirtualMachine::ExecuteDivideOperation));
+    
+    // Complex Math Operations
+    functions.insert(functionMap::value_type("$sin", &VirtualMachine::ExecuteSinOperation));
+    functions.insert(functionMap::value_type("$cos", &VirtualMachine::ExecuteCosOperation));
+    functions.insert(functionMap::value_type("$tan", &VirtualMachine::ExecuteTanOperation));
 }
 
 FunctionCaller::~FunctionCaller()

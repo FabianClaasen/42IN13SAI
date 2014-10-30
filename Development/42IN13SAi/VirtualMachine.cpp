@@ -85,32 +85,230 @@ CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
 	}
 }
 
+#pragma region SimpleMath
 CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
 {
     if (compilerNode.get_nodeparamters().empty())
         throw std::runtime_error("Function expects 2 parameters");
     
+    // Get the Node parameters
     std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    
+    // Check if there aren't more than two parameters
+    if (parameters.size() > 2)
+        throw std::runtime_error("Function expects exactly 2 parameters");
+    
     CompilerNode* param1 = parameters.at(0);
     CompilerNode* param2 = parameters.at(1);
     
+    // Check if the parameters are a value or another function call
+    // if function call, execute function
     if (param1->get_expression() != "$value")
         param1 = CallFunction(*param1);
     if (param2->get_expression() != "$value")
         param2 = CallFunction(*param2);
     
+    // Parse the parameters to a float for mathmatic operation
     float num1 = atof(param1->get_value().c_str());
     float num2 = atof(param2->get_value().c_str());
-    float addition = num1 + num2;
+    float sum = num1 + num2;
     
-    CompilerNode* rNode = new CompilerNode("$value", std::to_string(addition));
+    // Create a new value compilernode to return
+    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
      
 	return rNode;
 }
 
 CompilerNode* VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
 {
-	return &compilerNode;
+    if (compilerNode.get_nodeparamters().empty())
+        throw std::runtime_error("Function expects 2 parameters");
+    
+    // Get the Node parameters
+    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    
+    // Check if there aren't more than two parameters
+    if (parameters.size() > 2)
+        throw std::runtime_error("Function expects exactly 2 parameters");
+    
+    CompilerNode* param1 = parameters.at(0);
+    CompilerNode* param2 = parameters.at(1);
+    
+    // Check if the parameters are a value or another function call
+    // if function call, execute function
+    if (param1->get_expression() != "$value")
+        param1 = CallFunction(*param1);
+    if (param2->get_expression() != "$value")
+        param2 = CallFunction(*param2);
+    
+    // Parse the parameters to a float for mathmatic operation
+    float num1 = atof(param1->get_value().c_str());
+    float num2 = atof(param2->get_value().c_str());
+    float sum  = num1 - num2;
+    
+    // Create a new value compilernode to return
+    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+    
+    return rNode;
 }
+
+CompilerNode* VirtualMachine::ExecuteMultiplyOperation(CompilerNode compilerNode)
+{
+    if (compilerNode.get_nodeparamters().empty())
+        throw std::runtime_error("Function expects 2 parameters");
+    
+    // Get the Node parameters
+    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    
+    // Check if there aren't more than two parameters
+    if (parameters.size() > 2)
+        throw std::runtime_error("Function expects exactly 2 parameters");
+    
+    CompilerNode* param1 = parameters.at(0);
+    CompilerNode* param2 = parameters.at(1);
+    
+    // Check if the parameters are a value or another function call
+    // if function call, execute function
+    if (param1->get_expression() != "$value")
+        param1 = CallFunction(*param1);
+    if (param2->get_expression() != "$value")
+        param2 = CallFunction(*param2);
+    
+    // Parse the parameters to a float for mathmatic operation
+    float num1 = atof(param1->get_value().c_str());
+    float num2 = atof(param2->get_value().c_str());
+    float sum = num1 * num2;
+    
+    // Create a new value compilernode to return
+    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+    
+    return rNode;
+}
+
+CompilerNode* VirtualMachine::ExecuteDivideOperation(CompilerNode compilerNode)
+{
+    if (compilerNode.get_nodeparamters().empty())
+        throw std::runtime_error("Function expects 2 parameters");
+    
+    // Get the Node parameters
+    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    
+    // Check if there aren't more than two parameters
+    if (parameters.size() > 2)
+        throw std::runtime_error("Function expects exactly 2 parameters");
+    
+    CompilerNode* param1 = parameters.at(0);
+    CompilerNode* param2 = parameters.at(1);
+    
+    // Check if the parameters are a value or another function call
+    // if function call, execute function
+    if (param1->get_expression() != "$value")
+        param1 = CallFunction(*param1);
+    if (param2->get_expression() != "$value")
+        param2 = CallFunction(*param2);
+    
+    // Parse the parameters to a float for mathmatic operation
+    float num1 = atof(param1->get_value().c_str());
+    float num2 = atof(param2->get_value().c_str());
+    float sum = num1 / num2;
+    
+    // Create a new value compilernode to return
+    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+    
+    return rNode;
+}
+
+#pragma endregion SimpleMath
+
+#pragma region ComplexMath
+
+CompilerNode* VirtualMachine::ExecuteSinOperation(CompilerNode compilerNode)
+{
+    if (compilerNode.get_nodeparamters().empty())
+        throw std::runtime_error("Function expects 1 parameter");
+    
+    // Get the Node parameters
+    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    
+    // Check if there aren't more than one parameter
+    if (parameters.size() > 1)
+        throw std::runtime_error("Function expects exactly 1 parameter");
+    
+    CompilerNode* param1 = parameters.at(0);
+    
+    // Check if the parameters are a value or another function call
+    // if function call, execute function
+    if (param1->get_expression() != "$value")
+        param1 = CallFunction(*param1);
+    
+    // Parse the parameters to a float for mathmatic operation
+    float num1 = atof(param1->get_value().c_str());
+    float sum = std::sin(num1);
+    
+    // Create a new value compilernode to return
+    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+    
+    return rNode;
+}
+
+CompilerNode* VirtualMachine::ExecuteCosOperation(CompilerNode compilerNode)
+{
+    if (compilerNode.get_nodeparamters().empty())
+        throw std::runtime_error("Function expects 1 parameter");
+    
+    // Get the Node parameters
+    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    
+    // Check if there aren't more than one parameter
+    if (parameters.size() > 1)
+        throw std::runtime_error("Function expects exactly 1 parameter");
+    
+    CompilerNode* param1 = parameters.at(0);
+    
+    // Check if the parameters are a value or another function call
+    // if function call, execute function
+    if (param1->get_expression() != "$value")
+        param1 = CallFunction(*param1);
+    
+    // Parse the parameters to a float for mathmatic operation
+    float num1 = atof(param1->get_value().c_str());
+    float sum = std::cos(num1);
+    
+    // Create a new value compilernode to return
+    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+    
+    return rNode;
+}
+
+CompilerNode* VirtualMachine::ExecuteTanOperation(CompilerNode compilerNode)
+{
+    if (compilerNode.get_nodeparamters().empty())
+        throw std::runtime_error("Function expects 1 parameter");
+    
+    // Get the Node parameters
+    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    
+    // Check if there aren't more than one parameter
+    if (parameters.size() > 1)
+        throw std::runtime_error("Function expects exactly 1 parameter");
+    
+    CompilerNode* param1 = parameters.at(0);
+    
+    // Check if the parameters are a value or another function call
+    // if function call, execute function
+    if (param1->get_expression() != "$value")
+        param1 = CallFunction(*param1);
+    
+    // Parse the parameters to a float for mathmatic operation
+    float num1 = atof(param1->get_value().c_str());
+    float sum = std::tan(num1);
+    
+    // Create a new value compilernode to return
+    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+    
+    return rNode;
+}
+
+#pragma endregion ComplexMath
 
 
