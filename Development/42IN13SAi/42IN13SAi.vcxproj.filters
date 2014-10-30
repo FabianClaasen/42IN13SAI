@@ -55,11 +55,14 @@
     <ClCompile Include="SymbolNotFoundException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="ParameterException.cpp">
+        <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
     <ClCompile Include="Subroutine.cpp">
-      <Filter>Source Files\Exceptions</Filter>
+      <Filter>Source Files\Compiler</Filter>
     </ClCompile>
     <ClCompile Include="SubroutineTable.cpp">
-      <Filter>Source Files\Exceptions</Filter>
+      <Filter>Source Files\Compiler</Filter>
     </ClCompile>
     <ClCompile Include="VirtualMachine.cpp">
       <Filter>Source Files\Virtual Machine</Filter>
@@ -104,6 +107,12 @@
     </ClInclude>
     <ClInclude Include="PartnerNotFoundException.h">
       <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="ParameterException.h">
+        <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="ParameterExceptionType.h">
+        <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="LabelStack.h">
       <Filter>Header Files\Compiler</Filter>

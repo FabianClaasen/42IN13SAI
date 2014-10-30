@@ -33,6 +33,7 @@
     <ClCompile Include="SubroutineTable.cpp" />
     <ClCompile Include="VirtualMachine.cpp" />
     <ClCompile Include="FunctionCaller.cpp" />
+    <ClCompile Include="ParameterException.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compiler.h" />
@@ -59,6 +60,8 @@
     <ClInclude Include="SubroutineTable.h" />
     <ClInclude Include="VirtualMachine.h" />
     <ClInclude Include="FunctionCaller.h" />
+    <ClInclude Include="ParameterException.h" />
+    <ClInclude Include="ParameterExceptionType.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
