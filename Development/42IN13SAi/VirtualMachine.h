@@ -11,7 +11,7 @@ public:
 	virtual ~VirtualMachine();
 
 	void ExecuteCode();
-
+    CompilerNode Add(CompilerNode node);
 private:
 	SymbolTable _symboltable;
 	SubroutineTable _subroutine;
@@ -27,4 +27,3 @@ private:
 
 	//bool isAction(MFP);
 };
-

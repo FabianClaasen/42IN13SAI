@@ -10,7 +10,7 @@ class Parser
 public:
 	Parser(Compiler* compiler);
 	Parser(Compiler* compiler, std::vector<Token> tokens);
-	virtual ~Parser() throw();
+	virtual ~Parser();
 
 	// Functions
 	void ParseFunction();

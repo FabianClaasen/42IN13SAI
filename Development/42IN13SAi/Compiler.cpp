@@ -24,8 +24,8 @@ void Compiler::Compile()
 // Check what the next token is
 Token* Compiler::PeekNext()
 {
-	Token token = tokenizerTokens.at(currentIndex + 1);
-	return &token;
+    Token* token = &tokenizerTokens.at(currentIndex + 1);
+	return token;
 }
 
 

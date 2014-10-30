@@ -10,8 +10,8 @@ VirtualMachine::~VirtualMachine(){}
 
 CompilerNode* VirtualMachine::PeekNext()
 {
-	CompilerNode node = _compilernodes.at(currentIndex + 1);
-	return &node;
+	CompilerNode *node = &_compilernodes.at(currentIndex + 1);
+	return node;
 }
 
 CompilerNode VirtualMachine::GetNext()

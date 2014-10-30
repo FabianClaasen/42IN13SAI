@@ -12,13 +12,14 @@
 #include "Subroutine.h"
 #include "SubroutineTable.h"
 
+
 class InternalFunction;
 class Parser;
 class Compiler
 {
 public:
 	Compiler(std::vector<Token> tokens);
-	virtual ~Compiler() throw();
+	virtual ~Compiler();
 
 	// Functions
 	void Compile();
