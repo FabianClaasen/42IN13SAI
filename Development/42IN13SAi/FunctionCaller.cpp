@@ -15,7 +15,7 @@ FunctionCaller::FunctionCaller(VirtualMachine* virtualMachine)
     this->virtualMachine = virtualMachine;
 }
 
-CompilerNode FunctionCaller::Call(const std::string& functionName, CompilerNode compilerNode)
+CompilerNode* FunctionCaller::Call(const std::string& functionName, CompilerNode compilerNode)
 {
     MFP functionPointer = functions[functionName];
     return (virtualMachine->*functionPointer)(compilerNode);
@@ -25,7 +25,7 @@ void FunctionCaller::fillFunctionMap()
 {
 	functions.insert(functionMap::value_type("$assignment", &VirtualMachine::ExecuteAssignment));
 	functions.insert(functionMap::value_type("$add", &VirtualMachine::ExecuteAddOperation));
-	functions.insert(functionMap::value_type("$minus", &VirtualMachine::ExecuteMinusOperation));
+	//functions.insert(functionMap::value_type("$minus", &VirtualMachine::ExecuteMinusOperation));
 }
 
 FunctionCaller::~FunctionCaller()
