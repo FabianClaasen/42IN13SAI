@@ -64,11 +64,18 @@ CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
 {
 	// Check if params is not empty
 	if (compilerNode.get_nodeparamters().empty())
-		throw std::runtime_error("Function needs at least 1 parameter");
+		throw ParameterException(2, ParameterExceptionType::NoParameters);
 	
+    // Get the Node parameters
 	std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    
+    // Check if there aren't more than two parameters
+    if (parameters.size() > 2)
+        throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
+    
 	CompilerNode* param1 = parameters.at(0);
 	CompilerNode* param2 = parameters.at(1);
+    
 	// Only go through when param is identifier
 	if (param1->get_expression() == "$identifier")
 	{
@@ -79,24 +86,23 @@ CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
 
 		Symbol* current_symbol = _symboltable->GetSymbol(new_value);
 		current_symbol->SetValue(atof(param2->get_value().c_str()));
-
-		CompilerNode* rNode = new CompilerNode("$value", param2->get_value().c_str());
-		return rNode;
 	}
+    
+    return nullptr;
 }
 
 #pragma region SimpleMath
 CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
 {
     if (compilerNode.get_nodeparamters().empty())
-        throw std::runtime_error("Function expects 2 parameters");
+        throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
     std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
-        throw std::runtime_error("Function expects exactly 2 parameters");
+        throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
     CompilerNode* param1 = parameters.at(0);
     CompilerNode* param2 = parameters.at(1);
@@ -122,14 +128,14 @@ CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
 CompilerNode* VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
 {
     if (compilerNode.get_nodeparamters().empty())
-        throw std::runtime_error("Function expects 2 parameters");
+        throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
     std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
-        throw std::runtime_error("Function expects exactly 2 parameters");
+        throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
     CompilerNode* param1 = parameters.at(0);
     CompilerNode* param2 = parameters.at(1);
@@ -155,14 +161,14 @@ CompilerNode* VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
 CompilerNode* VirtualMachine::ExecuteMultiplyOperation(CompilerNode compilerNode)
 {
     if (compilerNode.get_nodeparamters().empty())
-        throw std::runtime_error("Function expects 2 parameters");
+        throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
     std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
-        throw std::runtime_error("Function expects exactly 2 parameters");
+        throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
     CompilerNode* param1 = parameters.at(0);
     CompilerNode* param2 = parameters.at(1);
@@ -188,14 +194,14 @@ CompilerNode* VirtualMachine::ExecuteMultiplyOperation(CompilerNode compilerNode
 CompilerNode* VirtualMachine::ExecuteDivideOperation(CompilerNode compilerNode)
 {
     if (compilerNode.get_nodeparamters().empty())
-        throw std::runtime_error("Function expects 2 parameters");
+        throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
     std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
-        throw std::runtime_error("Function expects exactly 2 parameters");
+        throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
     CompilerNode* param1 = parameters.at(0);
     CompilerNode* param2 = parameters.at(1);
@@ -225,14 +231,14 @@ CompilerNode* VirtualMachine::ExecuteDivideOperation(CompilerNode compilerNode)
 CompilerNode* VirtualMachine::ExecuteSinOperation(CompilerNode compilerNode)
 {
     if (compilerNode.get_nodeparamters().empty())
-        throw std::runtime_error("Function expects 1 parameter");
+        throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
     std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
     
     // Check if there aren't more than one parameter
     if (parameters.size() > 1)
-        throw std::runtime_error("Function expects exactly 1 parameter");
+        throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
     CompilerNode* param1 = parameters.at(0);
     
@@ -254,14 +260,14 @@ CompilerNode* VirtualMachine::ExecuteSinOperation(CompilerNode compilerNode)
 CompilerNode* VirtualMachine::ExecuteCosOperation(CompilerNode compilerNode)
 {
     if (compilerNode.get_nodeparamters().empty())
-        throw std::runtime_error("Function expects 1 parameter");
+        throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
     std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
     
     // Check if there aren't more than one parameter
     if (parameters.size() > 1)
-        throw std::runtime_error("Function expects exactly 1 parameter");
+        throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
     CompilerNode* param1 = parameters.at(0);
     
@@ -283,14 +289,14 @@ CompilerNode* VirtualMachine::ExecuteCosOperation(CompilerNode compilerNode)
 CompilerNode* VirtualMachine::ExecuteTanOperation(CompilerNode compilerNode)
 {
     if (compilerNode.get_nodeparamters().empty())
-        throw std::runtime_error("Function expects 1 parameter");
+        throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
     std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
     
     // Check if there aren't more than one parameter
     if (parameters.size() > 1)
-        throw std::runtime_error("Function expects exactly 1 parameter");
+        throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
     CompilerNode* param1 = parameters.at(0);
     

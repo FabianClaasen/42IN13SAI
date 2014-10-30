@@ -6,6 +6,7 @@
 #include "SubroutineTable.h"
 #include "CompilerNode.h"
 #include "FunctionCaller.h"
+#include "ParameterException.h"
 
 class VirtualMachine
 {
