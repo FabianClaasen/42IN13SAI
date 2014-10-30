@@ -10,7 +10,8 @@ VirtualMachine::~VirtualMachine(){}
 
 CompilerNode* VirtualMachine::PeekNext()
 {
-	CompilerNode *node = &_compilernodes.at(currentIndex + 1);
+    int peekIndex = (currentIndex != 0) ? currentIndex + 1 : 0;
+	CompilerNode *node = &_compilernodes.at(peekIndex);
 	return node;
 }
 
@@ -55,7 +56,7 @@ void VirtualMachine::ExecuteCode()
 					std::string value = node.get_value();*/
 
 				// push received node in array
-				_received_compilernodes.push_back(function_caller->Call(function_call, node));
+				function_caller->Call(function_call, node);
 			}
 		}
 		// after all compilernodes pushed in array do all subroutines
@@ -65,9 +66,44 @@ void VirtualMachine::ExecuteCode()
 	}
 }
 
-CompilerNode VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
+CompilerNode* VirtualMachine::CallFunction(CompilerNode node)
 {
-	
+    std::string function_call = node.get_expression();
+    // call the compilernode function
+    return function_caller->Call(function_call, node);
+}
+
+CompilerNode VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
+{
+	return compilerNode;
+}
+
+CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
+{
+    if (compilerNode.get_nodeparamters().empty())
+        throw std::runtime_error("Function expects 2 parameters");
+    
+    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    CompilerNode* param1 = parameters.at(0);
+    CompilerNode* param2 = parameters.at(1);
+    
+    if (param1->get_expression() != "$value")
+        param1 = CallFunction(*param1);
+    if (param2->get_expression() != "$value")
+        param2 = CallFunction(*param2);
+    
+    float num1 = atof(param1->get_value().c_str());
+    float num2 = atof(param2->get_value().c_str());
+    float addition = num1 + num2;
+    
+    CompilerNode* rNode = new CompilerNode("$value", std::to_string(addition));
+     
+	return rNode;
+}
+
+CompilerNode VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
+{
+	return compilerNode;
 }
 
 

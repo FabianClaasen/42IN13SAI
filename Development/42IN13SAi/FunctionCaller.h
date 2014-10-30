@@ -16,7 +16,7 @@ class FunctionCaller {
 private:
     VirtualMachine* virtualMachine;
     
-    typedef CompilerNode (VirtualMachine::*MFP)(CompilerNode);
+    typedef CompilerNode* (VirtualMachine::*MFP)(CompilerNode);
     typedef std::map<std::string, MFP> functionMap;
     functionMap functions;
     
@@ -27,5 +27,5 @@ public:
     FunctionCaller(VirtualMachine* virtualMachine);
     virtual ~FunctionCaller();
 	CompilerNode compilerNode;
-    CompilerNode Call(const std::string& functionName, CompilerNode compilerNode);
+    CompilerNode* Call(const std::string& functionName, CompilerNode compilerNode);
 };

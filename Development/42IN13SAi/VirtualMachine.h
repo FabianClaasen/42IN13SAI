@@ -3,6 +3,7 @@
 #include "SubroutineTable.h"
 #include "CompilerNode.h"
 #include "FunctionCaller.h"
+#include <stdlib.h> 
 
 class VirtualMachine
 {
@@ -11,13 +12,17 @@ public:
 	virtual ~VirtualMachine();
 	typedef CompilerNode(VirtualMachine::*MFP)(CompilerNode);
 	void ExecuteCode();
-	CompilerNode ExecuteAddOperation(CompilerNode compilerNode);
+
+	CompilerNode ExecuteAssignment(CompilerNode compilerNode);
+	CompilerNode* ExecuteAddOperation(CompilerNode compilerNode);
+	CompilerNode ExecuteMinusOperation(CompilerNode compilerNode);
 	
 private:
 	SymbolTable _symboltable;
 	SubroutineTable _subroutine;
 	CompilerNode* PeekNext();
 	CompilerNode GetNext();
+    CompilerNode* CallFunction(CompilerNode node);
 	FunctionCaller* function_caller;
 
 	std::vector<CompilerNode> _compilernodes;

@@ -24,9 +24,19 @@ int main(int argc, const char * argv[])
 
 	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
 	compiler.Compile();
-
+    
+    std::vector<CompilerNode> nodes;
+    std::vector<CompilerNode*> compile2;
+    compile2.push_back(new CompilerNode("$value", "3"));
+    compile2.push_back(new CompilerNode("$value", "2"));
+    
+    std::vector<CompilerNode*> compile;
+    compile.push_back(new CompilerNode("$value", "3"));
+    compile.push_back(new CompilerNode("$add", compile2, nullptr));
+    nodes.push_back(*new CompilerNode("$add", compile, nullptr));
+    
 	VirtualMachine virtual_machine = 
-		VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), compiler.GetCompilerNodes());
+		VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), nodes);
 	virtual_machine.ExecuteCode();
 
     // Show tokenized items
