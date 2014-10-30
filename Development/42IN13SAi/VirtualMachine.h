@@ -11,7 +11,7 @@ public:
 	virtual ~VirtualMachine();
 	typedef CompilerNode(VirtualMachine::*MFP)(CompilerNode);
 	void ExecuteCode();
-	static VirtualMachine::MFP ExecuteAddOperation(CompilerNode compilerNode);
+	CompilerNode ExecuteAddOperation(CompilerNode compilerNode);
 	
 private:
 	SymbolTable _symboltable;

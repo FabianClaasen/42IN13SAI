@@ -47,12 +47,12 @@ void VirtualMachine::ExecuteCode()
 				// get main subroutine as first
 				CompilerNode node = VirtualMachine::GetNext();
 				std::string function_call = node.get_expression();
-				std::vector<CompilerNode*> params;
+				/*std::vector<CompilerNode*> params;
 				std::string value;
 				if (node.get_nodeparamters().size() > 0)
 					params = node.get_nodeparamters();
 				else 
-					std::string value = node.get_value();
+					std::string value = node.get_value();*/
 
 				// push received node in array
 				_received_compilernodes.push_back(function_caller->Call(function_call, node));
@@ -65,7 +65,7 @@ void VirtualMachine::ExecuteCode()
 	}
 }
 
-VirtualMachine::MFP VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
+CompilerNode VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
 {
 	
 }

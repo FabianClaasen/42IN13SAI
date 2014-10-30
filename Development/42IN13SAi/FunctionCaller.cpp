@@ -22,7 +22,7 @@ CompilerNode FunctionCaller::Call(const std::string& functionName, CompilerNode 
 
 void FunctionCaller::fillFunctionMap()
 {
-	functions.insert(functionMap::value_type("$add", VirtualMachine::ExecuteAddOperation(compilerNode)));
+	functions.insert(functionMap::value_type("$add", &VirtualMachine::ExecuteAddOperation));
 }
 
 FunctionCaller::~FunctionCaller()
