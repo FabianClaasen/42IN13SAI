@@ -172,7 +172,7 @@ void Parser::ParseIfStatement()
 
 	Subroutine* subroutine = compiler->GetSubroutine();
 	std::list<CompilerNode>* compilerNodes = subroutine->GetCompilerNodeCollection();
-	int compilerNodesPos = compilerNodes->size();
+	long compilerNodesPos = compilerNodes->size();
 
 	std::list<CompilerNode> innerIfStatementNodes;
 	std::list<CompilerNode> innerElseStatementNodes;
@@ -283,7 +283,7 @@ void Parser::ParseLoopStatement()
 
 	Subroutine* subroutine(compiler->GetSubroutine());
 	std::list<CompilerNode>* compilerNodes = subroutine->GetCompilerNodeCollection();
-	int compilerNodesPos = compilerNodes->size();
+	long compilerNodesPos = compilerNodes->size();
 
 	std::vector<CompilerNode*> nodeParameters;
 	std::string statementExpression;
@@ -500,6 +500,7 @@ CompilerNode* Parser::ParseUniExpression()
 			term = new CompilerNode("$uniPlus", parameters, nullptr);
 			compiler->Match(TokenType::EOL);
 			break;
+        case TokenType::UniOperatorMinus:
 			parameters.push_back(term);
 			term = new CompilerNode("$uniMin", parameters, nullptr);
 			compiler->Match(TokenType::EOL);

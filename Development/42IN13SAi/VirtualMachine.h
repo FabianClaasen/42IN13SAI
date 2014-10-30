@@ -16,7 +16,9 @@ public:
 
 	void ExecuteCode();
 
+    // Variable operations
 	CompilerNode* ExecuteAssignment(CompilerNode compilerNode);
+    CompilerNode* ExecuteGetVariable(CompilerNode compilerNode);
 	
     // Simple math operations
     CompilerNode* ExecuteAddOperation(CompilerNode compilerNode);
@@ -39,7 +41,6 @@ private:
 
 	std::vector<CompilerNode> _compilernodes;
 	std::vector<CompilerNode> _received_compilernodes;
-
 	int currentIndex = -1;
 
 	//bool isAction(MFP);

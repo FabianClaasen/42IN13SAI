@@ -10,15 +10,14 @@ VirtualMachine::~VirtualMachine(){}
 
 CompilerNode* VirtualMachine::PeekNext()
 {
-    int peekIndex = (currentIndex != 0) ? currentIndex + 1 : 0;
-	CompilerNode *node = &_compilernodes.at(peekIndex);
+	CompilerNode *node = &_compilernodes.at(currentIndex + 1);
 	return node;
 }
 
 CompilerNode VirtualMachine::GetNext()
 {
-
 	CompilerNode node;
+    currentIndex++;
 	if (currentIndex <= _compilernodes.size()-1 && _compilernodes.size() > 0)
 	{
 		node = _compilernodes.at(currentIndex);
@@ -41,7 +40,6 @@ void VirtualMachine::ExecuteCode()
 		{
 			if (PeekNext() != nullptr)
 			{
-				currentIndex++;
 				CompilerNode node = VirtualMachine::GetNext();
 				std::string function_call = node.get_expression();
 				function_caller->Call(function_call, node);
@@ -60,6 +58,7 @@ CompilerNode* VirtualMachine::CallFunction(CompilerNode node)
     return function_caller->Call(function_call, node);
 }
 
+#pragma region VariableOperations
 CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
 {
 	// Check if params is not empty
@@ -80,16 +79,39 @@ CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
 	if (param1->get_expression() == "$identifier")
 	{
 		// Get the value of the node -> variable
-		std::string new_value = param1->get_value();
+		std::string variableName = param1->get_value();
 		if (param2->get_expression() != "$value")
 			param2 = CallFunction(*param2);
-
-		Symbol* current_symbol = _symboltable->GetSymbol(new_value);
-		current_symbol->SetValue(atof(param2->get_value().c_str()));
+        
+        // Get the variable from symboltable
+		Symbol* current_symbol = _symboltable->GetSymbol(variableName);
+        
+        // Get the param value and set in temp var
+        float valueToSet = atof(param2->get_value().c_str());
+		current_symbol->SetValue(valueToSet);
 	}
     
     return nullptr;
 }
+
+CompilerNode* VirtualMachine::ExecuteGetVariable(CompilerNode compilerNode)
+{
+    // Check if params is not empty
+    if (compilerNode.get_value().empty())
+        throw ParameterException(1, ParameterExceptionType::NoParameters);
+    
+    // Get the Node parameter
+    std::string parameter = compilerNode.get_value();
+    
+    // Get the symbol
+    Symbol* current_symbol = _symboltable->GetSymbol(parameter);
+    
+    // Create the return node
+    CompilerNode* returnNode = new CompilerNode("$value", std::to_string(current_symbol->GetValue()));
+    
+    return returnNode;
+}
+#pragma endregion VariableOperations
 
 #pragma region SimpleMath
 CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
