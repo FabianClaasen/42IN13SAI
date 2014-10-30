@@ -26,6 +26,6 @@ public:
 	FunctionCaller();
     FunctionCaller(VirtualMachine* virtualMachine);
     virtual ~FunctionCaller();
-    
+	CompilerNode compilerNode;
     CompilerNode Call(const std::string& functionName, CompilerNode compilerNode);
 };

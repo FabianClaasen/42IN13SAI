@@ -281,7 +281,7 @@ void Parser::ParseLoopStatement()
 	Token currentToken = compiler->GetNext();
 	bool forLoop = false;
 
-	std::unique_ptr<Subroutine> subroutine(compiler->GetSubroutine());
+	Subroutine* subroutine(compiler->GetSubroutine());
 	std::list<CompilerNode>* compilerNodes = subroutine->GetCompilerNodeCollection();
 	int compilerNodesPos = compilerNodes->size();
 
@@ -329,6 +329,9 @@ void Parser::ParseLoopStatement()
 		compiler->ParseStatement();
 	}
 
+	compiler->Match(TokenType::CloseMethod);
+
+	// Create a do nothing, so you can jump to this when the statement is false
 	std::vector<std::string> doNothing;
 	CompilerNode jumpTo = CompilerNode("$doNothing", "");
 

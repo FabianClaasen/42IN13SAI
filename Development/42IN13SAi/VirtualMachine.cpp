@@ -65,4 +65,9 @@ void VirtualMachine::ExecuteCode()
 	}
 }
 
+VirtualMachine::MFP VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
+{
+	
+}
+
 
