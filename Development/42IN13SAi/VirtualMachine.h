@@ -31,6 +31,12 @@ public:
     CompilerNode* ExecuteDivideOperation(CompilerNode compilerNode);
 	CompilerNode* ExecuteModuloOperation(CompilerNode compilerNode);
     
+	//Conditional statements
+	CompilerNode* ExecuteLessCondition(CompilerNode compilerNode);
+	CompilerNode* ExecuteGreaterCondition(CompilerNode compilerNode);
+	CompilerNode* ExecuteEqualCondition(CompilerNode compilerNode);
+	CompilerNode* ExecuteNotEqualCondition(CompilerNode compilerNode);
+
     // Complexer math operations
     CompilerNode* ExecuteSinOperation(CompilerNode compilerNode);
     CompilerNode* ExecuteCosOperation(CompilerNode compilerNode);

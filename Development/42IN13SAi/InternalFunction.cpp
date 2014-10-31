@@ -15,7 +15,7 @@ CompilerNode InternalFunction::GetInternalFunction(TokenType type)
 	{
 		// Default functions
 	case TokenType::Stop:
-		return getCompilerNode("$stop", 1);
+		return getCompilerNode("$stop", 0);
 	case  TokenType::PrintLine:
 		return getCompilerNode("$prnt", 1);
 
@@ -76,5 +76,5 @@ std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
 
 CompilerNode InternalFunction::getCompilerNode(std::string functionName, int params) {
 	std::vector<CompilerNode*> compiler_nodes = parseParameters(params);
-	return CompilerNode(functionName, compiler_nodes, nullptr);
+	return CompilerNode(functionName, compiler_nodes, nullptr, false);
 }

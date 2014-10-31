@@ -90,7 +90,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 	{
 		if (compiler->PeekNext()->Type == TokenType::OpenBracket)
 		{
-			CompilerNode* node = new CompilerNode("$functionName", currentToken.Value);
+			CompilerNode* node = new CompilerNode("$functionName", currentToken.Value, false);
 			nodeParameters.push_back(node);
 			currentToken = compiler->GetNext();
 
@@ -102,11 +102,11 @@ CompilerNode Parser::ParseAssignmentStatement()
 					currentToken = compiler->GetNext();
 				}
 
-				CompilerNode* node = new CompilerNode("$functionParameter", currentToken.Value);
+				CompilerNode* node = new CompilerNode("$functionParameter", currentToken.Value, false);
 				nodeParameters.push_back(node);
 			}
 
-			endNode = new CompilerNode("$functionCall", nodeParameters, nullptr);
+			endNode = new CompilerNode("$functionCall", nodeParameters, nullptr, false);
 			return *endNode;
 		}
 
@@ -118,7 +118,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 				throw SymbolNotFoundException("This identifier has not been made yet");
 		}
 
-		CompilerNode* node = new CompilerNode("$identifier", currentToken.Value);
+		CompilerNode* node = new CompilerNode("$identifier", currentToken.Value, false);
 		nodeParameters.push_back(node);
 
 		if (newIdentifier)
@@ -158,7 +158,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 
 	compiler->Match(TokenType::EOL);
 
-	endNode = new CompilerNode(expression, nodeParameters, nullptr);
+	endNode = new CompilerNode(expression, nodeParameters, nullptr,false);
 
 	compiler->GetSubroutine()->AddCompilerNode(*endNode);
 	return *endNode;
@@ -247,7 +247,7 @@ void Parser::ParseIfStatement()
 	}
 
 	std::vector<std::string> doNothing;
-	CompilerNode jumpTo = CompilerNode("$doNothing", "");
+	CompilerNode jumpTo = CompilerNode("$doNothing", "", false);
 
 	statementNode->SetJumpTo(jumpTo);
 
@@ -333,9 +333,9 @@ void Parser::ParseLoopStatement()
 
 	// Create a do nothing, so you can jump to this when the statement is false
 	std::vector<std::string> doNothing;
-	CompilerNode jumpTo = CompilerNode("$doNothing", "");
+	CompilerNode jumpTo = CompilerNode("$doNothing", "", false);
 
-	statementNode = CompilerNode(statementExpression, nodeParameters, &jumpTo);
+	statementNode = CompilerNode(statementExpression, nodeParameters, &jumpTo, false);
 
 	std::list<CompilerNode>::iterator it;
 	it = compilerNodes->begin();
@@ -370,12 +370,12 @@ CompilerNode* Parser::ParseExpression()
 		case TokenType::And:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$and", parameters, nullptr);
+			parsedExpr = new CompilerNode("$and", parameters, nullptr, false);
 			break;
 		case TokenType::Or:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$or", parameters, nullptr);
+			parsedExpr = new CompilerNode("$or", parameters, nullptr, false);
 			break;
 		}
 	}
@@ -397,27 +397,27 @@ CompilerNode* Parser::ParseRelationalExpression()
 		case TokenType::LowerThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$less", parameters, nullptr);
+			parsedExpr = new CompilerNode("$less", parameters, nullptr, false);
 			break;
 		case TokenType::LowerOrEqThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$lessOrEq", parameters, nullptr);
+			parsedExpr = new CompilerNode("$lessOrEq", parameters, nullptr, false);
 			break;
 		case TokenType::GreaterThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$greater", parameters, nullptr);
+			parsedExpr = new CompilerNode("$greater", parameters, nullptr, false);
 			break;
 		case TokenType::GreaterOrEqThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$greaterOrEq", parameters, nullptr);
+			parsedExpr = new CompilerNode("$greaterOrEq", parameters, nullptr, false);
 			break;
 		case TokenType::Comparator:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$equals", parameters, nullptr);
+			parsedExpr = new CompilerNode("$equals", parameters, nullptr, false);
 			break;
 		}
 	}
@@ -439,12 +439,12 @@ CompilerNode* Parser::ParseAddExpression()
 		case TokenType::OperatorPlus:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$add", parameters, nullptr);
+			parsedExpr = new CompilerNode("$add", parameters, nullptr, false);
 			break;
 		case TokenType::OperatorMinus:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$min", parameters, nullptr);
+			parsedExpr = new CompilerNode("$min", parameters, nullptr, false);
 			break;
 		}
 	}
@@ -466,17 +466,17 @@ CompilerNode* Parser::ParseMulExpression()
 		case TokenType::OperatorMultiply:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
-			term = new CompilerNode("$mul", parameters, nullptr);
+			term = new CompilerNode("$mul", parameters, nullptr, false);
 			break;
 		case TokenType::OperatorDivide:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
-			term = new CompilerNode("$div", parameters, nullptr);
+			term = new CompilerNode("$div", parameters, nullptr, false);
 			break;
 		case TokenType::OperatorRaised:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
-			term = new CompilerNode("$raise", parameters, nullptr);
+			term = new CompilerNode("$raise", parameters, nullptr, false);
 			break;
 		}
 	}
@@ -497,12 +497,12 @@ CompilerNode* Parser::ParseUniExpression()
 		{
 		case TokenType::UniOperatorPlus:
 			parameters.push_back(term);
-			term = new CompilerNode("$uniPlus", parameters, nullptr);
+			term = new CompilerNode("$uniPlus", parameters, nullptr, false);
 			compiler->Match(TokenType::EOL);
 			break;
         case TokenType::UniOperatorMinus:
 			parameters.push_back(term);
-			term = new CompilerNode("$uniMin", parameters, nullptr);
+			term = new CompilerNode("$uniMin", parameters, nullptr, false);
 			compiler->Match(TokenType::EOL);
 			break;
 		}
@@ -519,7 +519,7 @@ CompilerNode* Parser::ParseTerm()
 
 	if (token.Type == TokenType::Float)
 	{
-		node = new CompilerNode("$value", token.Value);
+		node = new CompilerNode("$value", token.Value, false);
 		return node;
 	}
 	else if (token.Type == TokenType::Identifier)
@@ -531,7 +531,7 @@ CompilerNode* Parser::ParseTerm()
 		if (symbol == nullptr)
 			throw SymbolNotFoundException("");
 
-		node = new CompilerNode("$getVariable", symbol->name);
+		node = new CompilerNode("$getVariable", symbol->name, false);
 		return node;
 	}
 	else if (token.Type == TokenType::OpenBracket)

@@ -31,6 +31,11 @@ void FunctionCaller::fillFunctionMap()
 	functions.insert(functionMap::value_type("$prnt", &VirtualMachine::ExecutePrint));
 	functions.insert(functionMap::value_type("$stop", &VirtualMachine::ExecuteStop));
 
+	// Conditional statements
+	functions.insert(functionMap::value_type("$less", &VirtualMachine::ExecuteLessCondition));
+	functions.insert(functionMap::value_type("$greater", &VirtualMachine::ExecuteGreaterCondition));
+	functions.insert(functionMap::value_type("$equals", &VirtualMachine::ExecuteEqualCondition));
+	functions.insert(functionMap::value_type("$equals", &VirtualMachine::ExecuteNotEqualCondition));
     // Simple Math Operations
 	functions.insert(functionMap::value_type("$add", &VirtualMachine::ExecuteAddOperation));
 	functions.insert(functionMap::value_type("$min", &VirtualMachine::ExecuteMinusOperation));
