@@ -1,4 +1,5 @@
 #include "VirtualMachine.h"
+#include <iostream>
 
 VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::vector<CompilerNode> compiler_nodes)
 	: _symboltable(symboltable), _subroutine(subroutine), _compilernodes(compiler_nodes)
@@ -113,6 +114,47 @@ CompilerNode* VirtualMachine::ExecuteGetVariable(CompilerNode compilerNode)
 }
 #pragma endregion VariableOperations
 
+#pragma region DefaultOperations
+CompilerNode* VirtualMachine::ExecutePrint(CompilerNode compilerNode)
+{
+	if (compilerNode.get_nodeparamters().empty())
+		throw ParameterException(1, ParameterExceptionType::NoParameters);
+
+	std::vector<CompilerNode*> parameters = compilerNode.get_nodeparamters();
+	if (parameters.size() > 1)
+		throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
+
+	// Get first and only parameter
+	CompilerNode* param1 = parameters.at(0);
+
+	// Check if expression is not value
+	if (param1->get_expression() != "$value")
+		param1 = CallFunction(*param1);
+
+	// Get the new value
+	std::string valueToPrint = param1->get_value();
+
+	// Print te new value
+	std::cout << valueToPrint << std::endl;
+
+	return nullptr;
+}
+
+CompilerNode* VirtualMachine::ExecuteStop(CompilerNode compilerNode)
+{
+	if (compilerNode.get_nodeparamters().empty())
+	{
+		if (compilerNode.get_expression() == "$stop")
+			std::exit(1);
+		else
+			throw std::runtime_error("Unknown expression type");
+	}
+	else
+		throw new ParameterException(0, ParameterExceptionType::IncorrectParameters);
+}
+
+#pragma endregion DefaultOperations
+
 #pragma region SimpleMath
 CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
 {
@@ -139,10 +181,10 @@ CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
     // Parse the parameters to a float for mathmatic operation
     float num1 = atof(param1->get_value().c_str());
     float num2 = atof(param2->get_value().c_str());
-    float sum = num1 + num2;
+    float output = num1 + num2;
     
     // Create a new value compilernode to return
-    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output));
      
 	return rNode;
 }
@@ -172,10 +214,10 @@ CompilerNode* VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
     // Parse the parameters to a float for mathmatic operation
     float num1 = atof(param1->get_value().c_str());
     float num2 = atof(param2->get_value().c_str());
-    float sum  = num1 - num2;
+	float output = num1 - num2;
     
     // Create a new value compilernode to return
-    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output));
     
     return rNode;
 }
@@ -205,10 +247,10 @@ CompilerNode* VirtualMachine::ExecuteMultiplyOperation(CompilerNode compilerNode
     // Parse the parameters to a float for mathmatic operation
     float num1 = atof(param1->get_value().c_str());
     float num2 = atof(param2->get_value().c_str());
-    float sum = num1 * num2;
+	float output = num1 * num2;
     
     // Create a new value compilernode to return
-    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output));
     
     return rNode;
 }
@@ -238,12 +280,45 @@ CompilerNode* VirtualMachine::ExecuteDivideOperation(CompilerNode compilerNode)
     // Parse the parameters to a float for mathmatic operation
     float num1 = atof(param1->get_value().c_str());
     float num2 = atof(param2->get_value().c_str());
-    float sum = num1 / num2;
+	float output = num1 / num2;
     
     // Create a new value compilernode to return
-    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output));
     
     return rNode;
+}
+
+CompilerNode* VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
+{
+	if (compilerNode.get_nodeparamters().empty())
+		throw ParameterException(2, ParameterExceptionType::NoParameters);
+
+	// Get the Node parameters
+	std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+
+	// Check if there aren't more than two parameters
+	if (parameters.size() > 2)
+		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
+
+	CompilerNode* param1 = parameters.at(0);
+	CompilerNode* param2 = parameters.at(1);
+
+	// Check if the parameters are a value or another function call
+	// if function call, execute function
+	if (param1->get_expression() != "$value")
+		param1 = CallFunction(*param1);
+	if (param2->get_expression() != "$value")
+		param2 = CallFunction(*param2);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->get_value().c_str());
+	float num2 = atof(param2->get_value().c_str());
+	float output = (int)num1 % (int)num2;
+
+	// Create a new value compilernode to return
+	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output));
+
+	return rNode;
 }
 
 #pragma endregion SimpleMath
@@ -271,10 +346,10 @@ CompilerNode* VirtualMachine::ExecuteSinOperation(CompilerNode compilerNode)
     
     // Parse the parameters to a float for mathmatic operation
     float num1 = atof(param1->get_value().c_str());
-    float sum = std::sin(num1);
+    float output = std::sin(num1);
     
     // Create a new value compilernode to return
-    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output));
     
     return rNode;
 }
@@ -300,10 +375,10 @@ CompilerNode* VirtualMachine::ExecuteCosOperation(CompilerNode compilerNode)
     
     // Parse the parameters to a float for mathmatic operation
     float num1 = atof(param1->get_value().c_str());
-    float sum = std::cos(num1);
+	float output = std::cos(num1);
     
     // Create a new value compilernode to return
-    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output);
     
     return rNode;
 }
@@ -329,14 +404,16 @@ CompilerNode* VirtualMachine::ExecuteTanOperation(CompilerNode compilerNode)
     
     // Parse the parameters to a float for mathmatic operation
     float num1 = atof(param1->get_value().c_str());
-    float sum = std::tan(num1);
+	float output = std::tan(num1);
     
     // Create a new value compilernode to return
-    CompilerNode* rNode = new CompilerNode("$value", std::to_string(sum));
+	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output));
     
     return rNode;
 }
 
 #pragma endregion ComplexMath
+
+
 
 

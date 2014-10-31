@@ -27,12 +27,17 @@ void FunctionCaller::fillFunctionMap()
 	functions.insert(functionMap::value_type("$assignment", &VirtualMachine::ExecuteAssignment));
     functions.insert(functionMap::value_type("$getVariable", &VirtualMachine::ExecuteGetVariable));
     
+	// Default operations
+	functions.insert(functionMap::value_type("$prnt", &VirtualMachine::ExecutePrint));
+	functions.insert(functionMap::value_type("$stop", &VirtualMachine::ExecuteStop));
+
     // Simple Math Operations
 	functions.insert(functionMap::value_type("$add", &VirtualMachine::ExecuteAddOperation));
 	functions.insert(functionMap::value_type("$min", &VirtualMachine::ExecuteMinusOperation));
-    functions.insert(functionMap::value_type("$mul", &VirtualMachine::ExecuteMinusOperation));
+    functions.insert(functionMap::value_type("$mul", &VirtualMachine::ExecuteMultiplyOperation));
     functions.insert(functionMap::value_type("$div", &VirtualMachine::ExecuteDivideOperation));
-    
+	functions.insert(functionMap::value_type("$mod", &VirtualMachine::ExecuteModuloOperation));
+
     // Complex Math Operations
     functions.insert(functionMap::value_type("$sin", &VirtualMachine::ExecuteSinOperation));
     functions.insert(functionMap::value_type("$cos", &VirtualMachine::ExecuteCosOperation));

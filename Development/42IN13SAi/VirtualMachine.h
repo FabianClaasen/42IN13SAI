@@ -19,12 +19,17 @@ public:
     // Variable operations
 	CompilerNode* ExecuteAssignment(CompilerNode compilerNode);
     CompilerNode* ExecuteGetVariable(CompilerNode compilerNode);
-	
+
+	//Default operations
+	CompilerNode* ExecutePrint(CompilerNode compilerNode);
+	CompilerNode* ExecuteStop(CompilerNode compilerNode);
+
     // Simple math operations
     CompilerNode* ExecuteAddOperation(CompilerNode compilerNode);
 	CompilerNode* ExecuteMinusOperation(CompilerNode compilerNode);
     CompilerNode* ExecuteMultiplyOperation(CompilerNode compilerNode);
     CompilerNode* ExecuteDivideOperation(CompilerNode compilerNode);
+	CompilerNode* ExecuteModuloOperation(CompilerNode compilerNode);
     
     // Complexer math operations
     CompilerNode* ExecuteSinOperation(CompilerNode compilerNode);
