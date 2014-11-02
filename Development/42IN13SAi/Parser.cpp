@@ -615,7 +615,8 @@ bool Parser::IsNextTokenRelationalOp()
 	return type == TokenType::GreaterThan ||
 		type == TokenType::GreaterOrEqThan ||
 		type == TokenType::LowerThan ||
-		type == TokenType::LowerOrEqThan;
+		type == TokenType::LowerOrEqThan ||
+		type == TokenType::Comparator;
 
 	/*std::vector<TokenType> operators{ TokenType::GreaterThan, TokenType::GreaterOrEqThan, TokenType::LowerThan, TokenType::LowerOrEqThan };
 	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
