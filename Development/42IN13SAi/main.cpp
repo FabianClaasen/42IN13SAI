@@ -9,10 +9,10 @@
 
 int main(int argc, const char * argv[])
 {
-	//std::string fileName("C:\\Users\\Sjoerd\\Dropbox\\42IN13SAI\\Testen\\Compiler\\while_loop.txt");
+	std::string fileName("C:\\Users\\Sjoerd\\Dropbox\\42IN13SAI\\Testen\\Compiler\\assignment.txt");
 	//std::string fileName("C:\\Users\\stefan\\Dropbox\\42IN13SAI\\Testen\\Tokenizer\\test.txt");
 	//std::string fileName("C:\\Users\\Fabian Claasen\\Dropbox\\42IN13SAI\\Testen\\Tokenizer\\test.txt");
-	std::string fileName("C:\\Users\\stefan\\Dropbox\\42IN13SAI\\Testen\\Tokenizer\\testvar.txt");
+	//std::string fileName("C:\\Users\\stefan\\Dropbox\\42IN13SAI\\Testen\\Tokenizer\\testvar.txt");
 	//std::string fileName("C:\\Users\\Fabian Claasen\\Dropbox\\42IN13SAI\\Testen\\test.txt");
     
 #ifndef _WIN32
@@ -25,9 +25,9 @@ int main(int argc, const char * argv[])
 	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
 	compiler.Compile();
 
-	VirtualMachine virtual_machine = 
+	/*VirtualMachine virtual_machine = 
 		VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), compiler.GetCompilerNodes());
-	virtual_machine.ExecuteCode();
+	virtual_machine.ExecuteCode();*/
 
 	/*std::vector<CompilerNode> nodes;
     std::vector<CompilerNode*> compile2;
@@ -44,7 +44,7 @@ int main(int argc, const char * argv[])
 	virtual_machine.ExecuteCode();*/
 
     // Show tokenized items
-	std::vector<Token> tokens = tokenizer_controller->GetCompilerTokens();
+	/*std::vector<Token> tokens = tokenizer_controller->GetCompilerTokens();
     std::vector<Token>::iterator tokenIt;
     for (tokenIt = tokens.begin(); tokenIt != tokens.end(); ++tokenIt)
     {
@@ -62,7 +62,7 @@ int main(int argc, const char * argv[])
 #endif
         
         std::cout << buffer << std::endl;
-    }
+    }*/
 
     return 0;
 }

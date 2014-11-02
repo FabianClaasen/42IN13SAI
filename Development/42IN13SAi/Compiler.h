@@ -31,6 +31,7 @@ public:
 	void SetSubroutine(Subroutine subroutine);
 	void AddSubroutine();
 	void AddSymbol(Symbol symbol);
+	void AddCompilerNode(CompilerNode node);
 	bool HasSymbol(std::string symbolName);
 	void ParseGlobalStatement();
 	void ParseStatement();
@@ -56,4 +57,5 @@ private:
 	int currentToken = 0;
 	int currentIndex = -1;
 	void ParseFunctionOrGlobal();
+	void ParseFunctionOrAssignment();
 };

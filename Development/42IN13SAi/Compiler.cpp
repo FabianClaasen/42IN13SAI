@@ -82,6 +82,12 @@ void Compiler::AddSymbol(Symbol symbol)
 	symbolTable.AddSymbol(symbol);
 }
 
+// Add a compiler node
+void Compiler::AddCompilerNode(CompilerNode node)
+{
+	compilerNodes.push_back(node);
+}
+
 bool Compiler::HasSymbol(std::string symbolName)
 {
 	return symbolTable.HasSymbol(symbolName);
@@ -145,7 +151,7 @@ void Compiler::ParseStatement()
 		Parser(this).ParseLoopStatement();
 		break;
 	case TokenType::Identifier:
-		Parser(this).ParseAssignmentStatement();
+		ParseFunctionOrAssignment();
 		break;
 	case TokenType::Var:
 		/*compilerNodes.push_back(*/Parser(this).ParseAssignmentStatement();/*);*/
@@ -157,6 +163,21 @@ void Compiler::ParseStatement()
 	default:
 		throw std::runtime_error("No statement found");
 		break;
+	}
+}
+
+void Compiler::ParseFunctionOrAssignment()
+{
+	Token temp = GetNext();
+	if (PeekNext()->Type == TokenType::OpenBracket)
+	{
+		tokenizerTokens.insert(tokenizerTokens.begin(), temp);
+		Parser(this).ParseFunctionCall();
+	}
+	else
+	{
+		tokenizerTokens.insert(tokenizerTokens.begin(), temp);
+		Parser(this).ParseAssignmentStatement();
 	}
 }
 

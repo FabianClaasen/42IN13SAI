@@ -75,93 +75,110 @@ CompilerNode Parser::ParseAssignmentStatement()
 	std::string expression = "";
 	std::vector<CompilerNode*> nodeParameters;
 	CompilerNode* endNode;
-
 	Subroutine* subroutine = compiler->GetSubroutine();
 
 	bool newIdentifier = false;
 
+	Token identifier;
 	Token currentToken = compiler->GetNext();
 	if (currentToken.Type == TokenType::Var)
 	{
 		newIdentifier = true;
-		currentToken = compiler->GetNext();
-	}
-	if (currentToken.Type == TokenType::Identifier)
-	{
-		if (compiler->PeekNext()->Type == TokenType::OpenBracket)
-		{
-			CompilerNode* node = new CompilerNode("$functionName", currentToken.Value, false);
-			nodeParameters.push_back(node);
-			currentToken = compiler->GetNext();
-
-			while (currentToken.Type != TokenType::CloseBracket)
-			{
-				currentToken = compiler->GetNext();
-				if (currentToken.Type == TokenType::Seperator)
-				{
-					currentToken = compiler->GetNext();
-				}
-
-				CompilerNode* node = new CompilerNode("$functionParameter", currentToken.Value, false);
-				nodeParameters.push_back(node);
-			}
-
-			endNode = new CompilerNode("$functionCall", nodeParameters, nullptr, false);
-			return *endNode;
-		}
-
-		if (!newIdentifier)
-		{
-			Symbol* symbol = GetSymbol(currentToken.Value);
-
-			if (symbol == nullptr)
-				throw SymbolNotFoundException("This identifier has not been made yet");
-		}
-
-		CompilerNode* node = new CompilerNode("$identifier", currentToken.Value, false);
-		nodeParameters.push_back(node);
-
-		if (newIdentifier)
-		{
-			Symbol* identifierSymbol;
-
-			if (subroutine->isEmpty)
-			{
-				identifierSymbol = new Symbol(currentToken.Value, currentToken.Type, SymbolKind::Global);
-			}
-			else
-			{
-				identifierSymbol = new Symbol(currentToken.Value, currentToken.Type, SymbolKind::Local);
-			}
-
-			if (!compiler->HasSymbol(identifierSymbol->name))
-			{
-				compiler->AddSymbol(*identifierSymbol);
-			}
-			else
-				throw std::runtime_error("Identifier name is already in use");
-		}
+		identifier = compiler->GetNext();
 	}
 	else
 	{
-		throw std::runtime_error("Identifier expected");
+		identifier = currentToken;
 	}
 
-	currentToken = compiler->GetNext();
+	// Check if the identifier is a identifier
+	if (identifier.Type != TokenType::Identifier)
+		throw std::runtime_error("Identifier expected");
 
-	if (currentToken.Type == TokenType::Equals)
+	// Check if the identifier exists
+	if (!newIdentifier)
 	{
+		Symbol* symbol = GetSymbol(identifier.Value);
+
+		if (symbol == nullptr)
+			throw SymbolNotFoundException("This identifier has not been made yet");
+	}
+	else
+	{
+		Symbol* identifierSymbol;
+
+		if (subroutine->isEmpty)
+		{
+			identifierSymbol = new Symbol(identifier.Value, identifier.Type, SymbolKind::Global);
+		}
+		else
+		{
+			identifierSymbol = new Symbol(identifier.Value, identifier.Type, SymbolKind::Local);
+		}
+
+		if (!compiler->HasSymbol(identifierSymbol->name))
+		{
+			compiler->AddSymbol(*identifierSymbol);
+		}
+		else
+			throw std::runtime_error("Identifier name is already in use");
+	}
+
+	// Check if it is an assignment or only a decleration.
+	if (compiler->PeekNext()->Type == TokenType::Equals)
+	{
+		compiler->GetNext(); // remove the '=' token
 		expression = "$assignment";
 		CompilerNode* node = ParseExpression();
 		nodeParameters.push_back(node);
 	}
 
+	// Check if the code is closed
 	compiler->Match(TokenType::EOL);
 
-	endNode = new CompilerNode(expression, nodeParameters, nullptr,false);
+	// Set the final node
+	endNode = new CompilerNode(expression, nodeParameters, nullptr, false);
 
-	compiler->GetSubroutine()->AddCompilerNode(*endNode);
+	if (compiler->GetSubroutine()->isEmpty)
+		compiler->AddCompilerNode(*endNode);
+	else
+		compiler->GetSubroutine()->AddCompilerNode(*endNode);
+
 	return *endNode;
+}
+
+// This function is only called when a function is called without it being in a assignment.
+void Parser::ParseFunctionCall()
+{
+	std::vector<CompilerNode*> nodeParameters;
+	Token currentToken = compiler->GetNext();
+
+	CompilerNode* node = new CompilerNode("$functionName", currentToken.Value, false);
+	nodeParameters.push_back(node);
+
+	while (compiler->PeekNext()->Type != TokenType::CloseBracket)
+	{
+		currentToken = compiler->GetNext();
+		if (currentToken.Type == TokenType::Seperator)
+		{
+			currentToken = compiler->GetNext();
+		}
+
+		CompilerNode* node = ParseExpression();
+		nodeParameters.push_back(node);
+	}
+
+	compiler->Match(TokenType::CloseBracket);
+	compiler->Match(TokenType::EOL);
+
+	// Create the finall node
+	CompilerNode endNode = CompilerNode("$functionCall", nodeParameters, nullptr, false);
+
+	// Add the final node
+	if (compiler->GetSubroutine()->isEmpty)
+		compiler->AddCompilerNode(endNode);
+	else
+		compiler->GetSubroutine()->AddCompilerNode(endNode);
 }
 
 // Also check and parse if-else statement
@@ -524,15 +541,22 @@ CompilerNode* Parser::ParseTerm()
 	}
 	else if (token.Type == TokenType::Identifier)
 	{
-		std::string identifier = token.Value;
+		if (compiler->PeekNext()->Type == TokenType::OpenBracket)
+		{
+			return ParseFunctionCall(token);
+		}
+		else
+		{
+			std::string identifier = token.Value;
 
-		Symbol* symbol = GetSymbol(identifier);
+			Symbol* symbol = GetSymbol(identifier);
 
-		if (symbol == nullptr)
-			throw SymbolNotFoundException("");
+			if (symbol == nullptr)
+				throw SymbolNotFoundException("");
 
-		node = new CompilerNode("$getVariable", symbol->name, false);
-		return node;
+			node = new CompilerNode("$getVariable", symbol->name, false);
+			return node;
+		}
 	}
 	else if (token.Type == TokenType::OpenBracket)
 	{
@@ -540,8 +564,37 @@ CompilerNode* Parser::ParseTerm()
 		compiler->Match(TokenType::CloseBracket);
 		return node;
 	}
+	else if (compiler->PeekNext()->Type == TokenType::OpenBracket)
+	{
+		return ParseFunctionCall(token);
+	}
 
 	return node;
+}
+
+// This function is called when there is a function inside a expression
+CompilerNode* Parser::ParseFunctionCall(Token token)
+{
+	std::vector<CompilerNode*> nodeParameters;
+	CompilerNode* node = new CompilerNode("$functionName", token.Value, false);
+	nodeParameters.push_back(node);
+	Token currentToken = compiler->GetNext();
+
+	while (compiler->PeekNext()->Type != TokenType::CloseBracket)
+	{
+		if (compiler->PeekNext()->Type == TokenType::Seperator)
+		{
+			currentToken = compiler->GetNext();
+		}
+
+		CompilerNode* node = ParseExpression();
+		nodeParameters.push_back(node);
+	}
+
+	compiler->Match(TokenType::CloseBracket);
+
+	CompilerNode* finalNode = new CompilerNode("$functionCall", nodeParameters, nullptr, false);
+	return finalNode;
 }
 #pragma endregion ParseExpressionMethods
 
