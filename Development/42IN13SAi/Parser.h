@@ -17,13 +17,15 @@ public:
 	CompilerNode ParseAssignmentStatement();
 	void ParseIfStatement();
 	void ParseLoopStatement();
-	
+	void ParseFunctionCall();
+
 	CompilerNode* ParseExpression();
 	CompilerNode* ParseRelationalExpression();
 	CompilerNode* ParseAddExpression();
 	CompilerNode* ParseMulExpression();
 	CompilerNode* ParseUniExpression();
 	CompilerNode* ParseTerm();
+	CompilerNode* ParseFunctionCall(Token token);
 
 private:
 	Compiler* compiler;
