@@ -15,7 +15,8 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("frl\\b", TokenType::ForLoop));
 
     // functions
-    definitions.push_back(TokenDefinition("func\\b", TokenType::KeyIdentifier));
+    definitions.push_back(TokenDefinition("func\\sMain\\b", TokenType::MainFunction));
+    definitions.push_back(TokenDefinition("func\\b", TokenType::Function));
     definitions.push_back(TokenDefinition("\\|", TokenType::Seperator));
 
     //internal functions
@@ -40,7 +41,7 @@ std::list<TokenDefinition> Grammar::getGrammar()
     
     // return types
     definitions.push_back(TokenDefinition("void\\b", TokenType::Void));
-    definitions.push_back(TokenDefinition("float", TokenType::FloatReturn));
+    definitions.push_back(TokenDefinition("float\\b", TokenType::FloatReturn));
     
     // types
     definitions.push_back(TokenDefinition("[0-9]{1,12}(?:\\.[0-9]{1,12}|(?:e|E)-?[1-9]{1,3})?", TokenType::Float));

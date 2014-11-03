@@ -17,7 +17,7 @@ SubroutineTable::~SubroutineTable()
 
 void SubroutineTable::AddSubroutine(Subroutine subroutine)
 {
-    if (HasSubroutine(subroutine.name)) {
+    if (!HasSubroutine(subroutine.name)) {
         subroutines.insert(std::make_pair(subroutine.name, subroutine));
     }
 }

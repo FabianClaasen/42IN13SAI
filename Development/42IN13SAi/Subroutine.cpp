@@ -46,6 +46,11 @@ void Subroutine::AddLocal(Symbol symbol)
     }
 }
 
+SymbolTable* Subroutine::GetSymbolTable()
+{
+    return &symbolTable;
+}
+
 Symbol* Subroutine::GetLocal(std::string name)
 {
     if (HasLocal(name))
@@ -62,5 +67,11 @@ void Subroutine::AddCompilerNode(CompilerNode node)
 
 std::list<CompilerNode>* Subroutine::GetCompilerNodeCollection()
 {
-	return &subroutineCompilerNodes;
+    return &subroutineCompilerNodes;
+}
+
+std::vector<CompilerNode>* Subroutine::GetCompilerNodeVector()
+{
+    std::vector<CompilerNode>* nodeVector = new std::vector<CompilerNode>{ std::begin(subroutineCompilerNodes), std::end(subroutineCompilerNodes) };
+	return nodeVector;
 }

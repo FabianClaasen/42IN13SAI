@@ -28,7 +28,7 @@ void ParameterException::SetErrorMessage()
             message = "Expected " + std::to_string(amount) + " parameters but " + std::to_string(amountGiven) + " parameters were given";
             break;
         case NoParameters:
-            message = "Function expects " + std::to_string(amount) + " parameters but none given";
+            message = "Function expects at least " + std::to_string(amount) + " parameters but none given";
         default:
             message = "";
             break;

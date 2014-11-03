@@ -25,9 +25,9 @@ int main(int argc, const char * argv[])
 	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
 	compiler.Compile();
 
-	/*VirtualMachine virtual_machine = 
+	VirtualMachine virtual_machine =
 		VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), compiler.GetCompilerNodes());
-	virtual_machine.ExecuteCode();*/
+	virtual_machine.ExecuteCode();
 
     // Show tokenized items
 	/*std::vector<Token> tokens = tokenizer_controller->GetCompilerTokens();

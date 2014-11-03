@@ -9,6 +9,7 @@ enum class TokenType : int {
 	// Normal tokens
     KeyIdentifier,
     Var,
+    MainFunction,
     Function,
     Identifier,
     If,

@@ -18,7 +18,8 @@ public:
 	void ParseIfStatement();
 	void ParseLoopStatement();
 	void ParseFunctionCall();
-
+    CompilerNode* ParseReturn();
+    
 	CompilerNode* ParseExpression();
 	CompilerNode* ParseRelationalExpression();
 	CompilerNode* ParseAddExpression();

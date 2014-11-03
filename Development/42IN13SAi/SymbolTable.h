@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <vector>
 #include "Symbol.h"
 
 class SymbolTable {
@@ -16,4 +17,6 @@ public:
     bool HasSymbol(std::string symbolName);
     void AddSymbol(Symbol symbol);
     Symbol* GetSymbol(std::string symbolName);
+    std::vector<Symbol*> GetSymbolVector();
+    int Size();
 };

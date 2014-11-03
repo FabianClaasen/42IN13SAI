@@ -23,6 +23,9 @@ CompilerNode* FunctionCaller::Call(const std::string& functionName, CompilerNode
 
 void FunctionCaller::fillFunctionMap()
 {
+    // Function Operations
+    functions.insert(functionMap::value_type("$functionCall", &VirtualMachine::ExecuteFunction));
+    
     // Variable Operations
 	functions.insert(functionMap::value_type("$assignment", &VirtualMachine::ExecuteAssignment));
     functions.insert(functionMap::value_type("$getVariable", &VirtualMachine::ExecuteGetVariable));

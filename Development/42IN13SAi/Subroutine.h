@@ -35,8 +35,10 @@ public:
     void AddLocal(Symbol symbol);
     bool HasLocal(std::string name);
     Symbol* GetLocal(std::string name);
+    SymbolTable* GetSymbolTable();
 
 	std::list<CompilerNode>* GetCompilerNodeCollection();
+    std::vector<CompilerNode>* GetCompilerNodeVector();
 	void AddCompilerNode(CompilerNode node);
 };
 

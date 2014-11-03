@@ -27,6 +27,20 @@ Symbol* SymbolTable::GetSymbol(std::string symbolName)
     return nullptr;
 }
 
+std::vector<Symbol*> SymbolTable::GetSymbolVector()
+{
+    std::vector<Symbol*> vSymbols;
+    for( symbolMap::iterator it = symbols.begin(); it != symbols.end(); ++it ) {
+        vSymbols.push_back( &it->second );
+    }
+    return vSymbols;
+}
+
+int SymbolTable::Size()
+{
+    return (int)symbols.size();
+}
+
 SymbolTable::~SymbolTable()
 {
     

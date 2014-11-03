@@ -2,7 +2,7 @@
 #include <iostream>
 
 VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::vector<CompilerNode> compiler_nodes)
-	: _symboltable(symboltable), _subroutine(subroutine), _compilernodes(compiler_nodes)
+	: mainSymboltable(symboltable), subroutineTable(subroutine), _compilernodes(compiler_nodes)
 {
 	function_caller = new FunctionCaller(this);
 }
@@ -33,7 +33,7 @@ CompilerNode VirtualMachine::GetNext()
 
 void VirtualMachine::ExecuteCode()
 {
-	// Only when there are compilernodes
+	// Only when there are compilernodes for gloval vars
 	if (_compilernodes.size() > 0)
 	{
 		// First check all compilernodes for global variables
@@ -46,10 +46,34 @@ void VirtualMachine::ExecuteCode()
 				function_caller->Call(function_call, node);
 			}
 		} while (currentIndex < _compilernodes.size()-1);
-
-		// Find main subroutine
-		_subroutine->GetSubroutine("main");
 	}
+    // Find main subroutine
+    Subroutine* mainRoutine = subroutineTable->GetSubroutine("main");
+    if (mainRoutine == nullptr)
+        throw std::runtime_error("No main function found");
+    subSymbolTable = mainRoutine->GetSymbolTable();
+    ExecuteNodes(*mainRoutine->GetCompilerNodeVector());
+}
+
+CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes)
+{
+    currentIndex = -1;
+    _compilernodes = nodes;
+    do
+    {
+        if (PeekNext() != nullptr)
+        {
+            CompilerNode node = VirtualMachine::GetNext();
+            std::string function_call = node.get_expression();
+            
+            if (function_call == "$ret")
+                return function_caller->Call(function_call, node);
+            else
+                function_caller->Call(function_call, node);
+        }
+    } while (currentIndex < _compilernodes.size()-1);
+    
+    return nullptr;
 }
 
 CompilerNode* VirtualMachine::CallFunction(CompilerNode node)
@@ -58,6 +82,51 @@ CompilerNode* VirtualMachine::CallFunction(CompilerNode node)
     // call the compilernode function
     return function_caller->Call(function_call, node);
 }
+
+#pragma region FunctionOperations
+
+CompilerNode* VirtualMachine::ExecuteFunction(CompilerNode compilerNode)
+{
+    // Check if params is not empty
+    if (compilerNode.get_nodeparamters().empty())
+        throw ParameterException(1, ParameterExceptionType::NoParameters);
+    
+    // Get the Node parameters
+    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    CompilerNode* functionNode = parameters.at(0);
+
+    // Check if node contains the functionname
+    if (functionNode->get_expression() != "$functionName")
+        throw std::runtime_error("Expected function name");
+    
+    // Get the subroutine table and check if exists
+    Subroutine* functionRoutine = subroutineTable->GetSubroutine(functionNode->get_value());
+    if (functionRoutine == nullptr)
+        throw std::runtime_error("Subroutine for function " + functionNode->get_value() + " not found");
+    
+    // Set the subSymbolTable
+    subSymbolTable = functionRoutine->GetSymbolTable();
+    
+    // Get parameter count and check if enough parameters are given
+    int parameterCount = subSymbolTable->Size();
+    if (parameters.size() - 1 != parameterCount)
+        throw ParameterException((int)parameters.size() - 1, parameterCount, ParameterExceptionType::IncorrectParameters);
+    
+    // Set the subSymbolTable symbol values
+    int paramNum = 1;
+    std::vector<Symbol*> vSymbols = subSymbolTable->GetSymbolVector();
+    for (Symbol* symbol : vSymbols)
+    {
+        float param = atof(parameters.at(paramNum)->get_value().c_str());
+        symbol->SetValue(param);
+        paramNum++;
+    }
+    
+    VirtualMachine::ExecuteNodes(*functionRoutine->GetCompilerNodeVector());
+    return nullptr;
+}
+
+#pragma endregion FunctionOperations
 
 #pragma region VariableOperations
 CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
@@ -85,7 +154,14 @@ CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
 			param2 = CallFunction(*param2);
         
         // Get the variable from symboltable
-		Symbol* current_symbol = _symboltable->GetSymbol(variableName);
+        // first check subSymbolTable
+        Symbol* current_symbol = nullptr;
+        if (subSymbolTable != nullptr)
+            current_symbol = subSymbolTable->GetSymbol(variableName);
+        
+        // if not in the subSymbolTable get from main symboltable
+        if (current_symbol == nullptr)
+            current_symbol = mainSymboltable->GetSymbol(variableName);
         
         // Get the param value and set in temp var
         float valueToSet = atof(param2->get_value().c_str());
@@ -104,8 +180,15 @@ CompilerNode* VirtualMachine::ExecuteGetVariable(CompilerNode compilerNode)
     // Get the Node parameter
     std::string parameter = compilerNode.get_value();
     
-    // Get the symbol
-    Symbol* current_symbol = _symboltable->GetSymbol(parameter);
+    // Get the variable from symboltable
+    // first check subSymbolTable
+    Symbol* current_symbol = nullptr;
+    if (subSymbolTable != nullptr)
+        current_symbol = subSymbolTable->GetSymbol(parameter);
+    
+    // if not in the subSymbolTable get from main symboltable
+    if (current_symbol == nullptr)
+        current_symbol = mainSymboltable->GetSymbol(parameter);
     
     // Create the return node
 	CompilerNode* returnNode = new CompilerNode("$value", std::to_string(current_symbol->GetValue()), false);

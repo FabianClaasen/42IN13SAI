@@ -16,7 +16,11 @@ public:
 	virtual ~VirtualMachine();
 
 	void ExecuteCode();
+    CompilerNode* ExecuteNodes(std::vector<CompilerNode> nodes);
 
+    // Function Operations
+    CompilerNode* ExecuteFunction(CompilerNode compilerNode);
+    
     // Variable operations
 	CompilerNode* ExecuteAssignment(CompilerNode compilerNode);
     CompilerNode* ExecuteGetVariable(CompilerNode compilerNode);
@@ -44,8 +48,9 @@ public:
     CompilerNode* ExecuteTanOperation(CompilerNode compilerNode);
 	
 private:
-	SymbolTable* _symboltable;
-	SubroutineTable* _subroutine;
+	SymbolTable* mainSymboltable;
+    SymbolTable* subSymbolTable;
+	SubroutineTable* subroutineTable;
 	CompilerNode* PeekNext();
 	CompilerNode GetNext();
     CompilerNode* CallFunction(CompilerNode node);

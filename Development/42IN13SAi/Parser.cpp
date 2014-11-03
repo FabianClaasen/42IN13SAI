@@ -21,10 +21,20 @@ void Parser::ParseFunction()
 
 	SymbolTable symbolTable;
 
-	if (IsNextTokenReturnType())
+    if (currentToken.Type == TokenType::MainFunction || IsNextTokenReturnType())
 	{
-		Token returnType = compiler->GetNext();
-		Token functionName = compiler->GetNext();
+        Token returnType;
+        Token functionName;
+        if (currentToken.Type == TokenType::MainFunction)
+        {
+            returnType = Token(0,0,0, "", TokenType::Void, nullptr);
+            functionName = Token(0,0,0, "main", TokenType::MainFunction, nullptr);
+        }
+        else
+        {
+            returnType = compiler->GetNext();
+            functionName = compiler->GetNext();
+        }
 
 		compiler->Match(TokenType::OpenBracket);
 
@@ -49,24 +59,39 @@ void Parser::ParseFunction()
 					throw std::runtime_error("Parameter name is already in use");
 			}
 		}
+        
+        if (compiler->PeekNext()->Type == TokenType::CloseBracket)
+            compiler->GetNext();
 
 		// Check if the functions starts and create a subroutine
-		compiler->Match(TokenType::OpenCurlyBracket);
+		compiler->Match(TokenType::OpenMethod);
 		compiler->SetSubroutine(Subroutine(functionName.Value, returnType.Type, SubroutineKind::Function, symbolTable));
 
 		// Set all the statements inside this subroutine
-		while (compiler->PeekNext()->Type != TokenType::CloseCurlyBracket && compiler->PeekNext()->Level > 1)
+		while (compiler->PeekNext()->Type != TokenType::CloseMethod && compiler->PeekNext()->Level > 1)
 		{
 			compiler->ParseStatement();
 		}
 
 		// Check if the subroutine is closed correctly
 		// And add the subroutine to the subroutine table
-		compiler->Match(TokenType::CloseCurlyBracket);
+		compiler->Match(TokenType::CloseMethod);
 		compiler->AddSubroutine();
 	}
 	else
 		throw std::runtime_error("Expected return type");
+}
+
+CompilerNode* Parser::ParseReturn()
+{
+    compiler->Match(TokenType::Return);
+    
+    Token returnToken = compiler->GetNext();
+    
+    std::vector<CompilerNode*> nodeParameters;
+    nodeParameters.push_back(ParseExpression());
+    
+    return new CompilerNode("$ret", nodeParameters, nullptr, false);
 }
 
 //Also parse (standard) Arithmetical operations
@@ -156,6 +181,7 @@ void Parser::ParseFunctionCall()
 	CompilerNode* node = new CompilerNode("$functionName", currentToken.Value, false);
 	nodeParameters.push_back(node);
 
+    compiler->Match(TokenType::OpenBracket);
 	while (compiler->PeekNext()->Type != TokenType::CloseBracket)
 	{
 		currentToken = compiler->GetNext();
@@ -165,7 +191,8 @@ void Parser::ParseFunctionCall()
 		}
 
 		CompilerNode* node = ParseExpression();
-		nodeParameters.push_back(node);
+        if (node != nullptr)
+            nodeParameters.push_back(node);
 	}
 
 	compiler->Match(TokenType::CloseBracket);

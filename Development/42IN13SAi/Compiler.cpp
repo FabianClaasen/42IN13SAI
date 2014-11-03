@@ -154,12 +154,15 @@ void Compiler::ParseStatement()
 		ParseFunctionOrAssignment();
 		break;
 	case TokenType::Var:
-		/*compilerNodes.push_back(*/Parser(this).ParseAssignmentStatement();/*);*/
+		Parser(this).ParseAssignmentStatement();
 		break;
+    case TokenType::MainFunction:
 	case TokenType::Function:
 		Parser(this).ParseFunction();
 		break;
-
+    case TokenType::Return:
+        Parser(this).ParseReturn();
+        break;
 	default:
 		throw std::runtime_error("No statement found");
 		break;
