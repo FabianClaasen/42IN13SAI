@@ -279,8 +279,8 @@ CompilerNode* VirtualMachine::ExecuteNotEqualCondition(CompilerNode compilerNode
 
 	return rNode;
 }
-
 #pragma endregion ConditionalStatements
+
 #pragma region SimpleMath
 CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
 {
@@ -439,7 +439,7 @@ CompilerNode* VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
 	// Parse the parameters to a float for mathmatic operation
 	float num1 = atof(param1->get_value().c_str());
 	float num2 = atof(param2->get_value().c_str());
-	float output = (int)num1 % (int)num2;
+	float output = fmod(num1, num2);
 
 	// Create a new value compilernode to return
 	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
