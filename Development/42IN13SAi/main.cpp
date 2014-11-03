@@ -17,7 +17,7 @@ int main(int argc, const char * argv[])
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
 	// Load the file
-	std::string fileName("C:\\Users\\Sjoerd\\Dropbox\\42IN13SAI\\Testen\\Compiler\\assignment.txt");
+	std::string fileName("C:\\Users\\Sjoerd\\Dropbox\\42IN13SAI\\Testen\\Compiler\\decleration.txt");
 	//std::string fileName("C:\\Users\\stefan\\Dropbox\\42IN13SAI\\Testen\\Tokenizer\\test.txt");
 	//std::string fileName("C:\\Users\\Fabian Claasen\\Dropbox\\42IN13SAI\\Testen\\Tokenizer\\test.txt");
 	//std::string fileName("C:\\Users\\stefan\\Dropbox\\42IN13SAI\\Testen\\Tokenizer\\testvar.txt");
@@ -27,14 +27,18 @@ int main(int argc, const char * argv[])
     fileName = "/Users/Alex/Documents/test.txt";
 #endif
     
+	// Tokenize the code
 	TokenizerController *tokenizer_controller = new TokenizerController(fileName);
 	tokenizer_controller->Tokenize();
-	/*Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
-	compiler.Compile();*/
+
+	// Run the compiler
+	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
+	compiler.Compile();
 
 	// Delete the tokenizer controller
 	delete(tokenizer_controller);
 
+	// Run the virtual machine with the compilernodes
 	/*VirtualMachine virtual_machine = 
 		VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), compiler.GetCompilerNodes());
 	virtual_machine.ExecuteCode();*/

@@ -17,12 +17,27 @@ CompilerNode::CompilerNode(const CompilerNode& toCopy) : expression(toCopy.expre
     
 }
 
+CompilerNode::~CompilerNode()
+{
+	//delete jumpTo;
+}
+
 void CompilerNode::SetJumpTo(CompilerNode jump)
 {
 	jumpTo = &jump;
 }
 
-CompilerNode::~CompilerNode()
+std::string CompilerNode::GetExpression()
 {
-	//delete jumpTo;
+	return expression;
+}
+
+std::string CompilerNode::GetValue()
+{
+	return value;
+}
+
+std::vector<CompilerNode*> CompilerNode::GetNodeparameters()
+{
+	return nodeParameters;
 }
