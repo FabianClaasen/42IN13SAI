@@ -160,9 +160,24 @@ void Compiler::ParseStatement()
 	case TokenType::Function:
 		Parser(this).ParseFunction();
 		break;
+<<<<<<< HEAD
     case TokenType::Return:
         Parser(this).ParseReturn();
         break;
+=======
+	case TokenType::PrintLine:
+		if (!currentSubroutine.isEmpty)
+			currentSubroutine.AddCompilerNode(InternalFunction(this).GetInternalFunction(TokenType::PrintLine));
+		//else
+			//std::runtime_error("");
+		break;
+	case TokenType::Stop:
+		if (!currentSubroutine.isEmpty)
+			currentSubroutine.AddCompilerNode(InternalFunction(this).GetInternalFunction(TokenType::Stop));
+		//else
+		//std::runtime_error("");
+		break;
+>>>>>>> 519dc9aa1f534619c0d788e38dbcd6ccf36e535d
 	default:
 		throw std::runtime_error("No statement found");
 		break;
@@ -184,7 +199,7 @@ void Compiler::ParseFunctionOrAssignment()
 	}
 }
 
-// Internal functios
+// Internal functions
 bool Compiler::IsInternalFunction(TokenType type)
 {
 	//check if type is an internal function

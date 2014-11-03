@@ -1,10 +1,3 @@
-#include <stdio.h>
-#include <iostream>
-#include <algorithm>
-#include <cctype>
-#include <functional>
-#include <iostream>
-
 #include "Tokenizer.h"
 
 Tokenizer::Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::vector<TokenPartner> partners)
@@ -30,7 +23,7 @@ void Tokenizer::Tokenize()
 	while (lineRemaining.length() != 0)
 	{
 		bool match = false;
-		lineRemaining = trim(lineRemaining);
+		boost::algorithm::trim(lineRemaining);
 		if (lineRemaining.length() == 0)
 		{
 			NextLine();
@@ -42,7 +35,7 @@ void Tokenizer::Tokenize()
 		for (definitionIterator = tokenDefinitions.begin(); definitionIterator != tokenDefinitions.end(); ++definitionIterator)
 		{
 			TokenDefinition definition = *definitionIterator;
-			int matched = definition.matcher->Match(lineRemaining);
+			int matched = definition.matcher.Match(lineRemaining);
 
 			if (matched > 0)
 			{
@@ -53,7 +46,7 @@ void Tokenizer::Tokenize()
 					level++;
 
 				// Find a partner
-				Token *partner = nullptr;
+				Token* partner = nullptr;
 				if (ShouldFindPartner(definition.tokenType))
 				{
 					try {
@@ -83,7 +76,7 @@ void Tokenizer::Tokenize()
 				lineRemaining = lineRemaining.substr(matched);
 				if (lineRemaining.length() == 0)
 					NextLine();
-
+				
 				break;
 			}
 		}
@@ -149,25 +142,6 @@ void Tokenizer::NextLine()
 std::vector<Token> Tokenizer::GetTokenList()
 {
     return tokenVector;
-}
-
-// From Stackoverflow http://stackoverflow.com/a/217605
-// trim from start
-std::string Tokenizer::ltrim(std::string &s) {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
-    return s;
-}
-
-// trim from end
-std::string Tokenizer::rtrim(std::string &s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
-    return s;
-}
-
-// trim from both ends
-std::string Tokenizer::trim(std::string &s) {
-    std::string temp = rtrim(s);
-    return ltrim(temp);
 }
 
 Tokenizer::~Tokenizer()
