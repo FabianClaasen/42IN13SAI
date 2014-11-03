@@ -3,6 +3,7 @@
 #include <string>
 #include "TokenType.h"
 
+
 class Token
 {
 public:
@@ -11,8 +12,9 @@ public:
     int Level;
     std::string Value;
     TokenType Type;
-    Token *Partner;
+	Token* Partner;
     
-    Token(int lineNumber, int linePosition, int level, std::string value, TokenType tokenType, Token *partner);
+    Token(int lineNumber, int linePosition, int level, std::string value, TokenType tokenType, Token* partner);
     Token();
+	~Token();
 };

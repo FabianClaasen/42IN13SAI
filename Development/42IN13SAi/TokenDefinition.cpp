@@ -2,8 +2,10 @@
 
 #include "TokenDefinition.h"
 
-TokenDefinition::TokenDefinition(std::string regexString, TokenType type)
+TokenDefinition::TokenDefinition(std::string regexString, TokenType type) : matcher(RegexMatcher(regexString)), tokenType(type)
 {
-    matcher = new RegexMatcher(regexString);
-    tokenType = type;
+}
+
+TokenDefinition::~TokenDefinition()
+{
 }

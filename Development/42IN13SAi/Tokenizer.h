@@ -1,9 +1,16 @@
 #pragma once
 
+#include <boost/algorithm/string.hpp>
 #include <fstream>
 #include <list>
 #include <vector>
 #include <string>
+#include <stdio.h>
+#include <iostream>
+#include <algorithm>
+#include <cctype>
+#include <functional>
+#include <iostream>
 
 #include "TokenDefinition.h"
 #include "Token.h"
@@ -28,9 +35,6 @@ private:
     void NextLine();
     Token* FindPartner(TokenType &tokenType, int level);
 	bool ShouldFindPartner(TokenType type);
-    std::string ltrim(std::string &s);
-    std::string rtrim(std::string &s);
-    std::string trim(std::string &s);
     
 public:
     Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::vector<TokenPartner> partners);
