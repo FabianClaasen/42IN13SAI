@@ -165,14 +165,14 @@ void Compiler::ParseStatement()
         break;
 	case TokenType::PrintLine:
 		if (!currentSubroutine.isEmpty)
-			currentSubroutine.AddCompilerNode(InternalFunction(this).GetInternalFunction(TokenType::PrintLine));
+			currentSubroutine.AddCompilerNode(*InternalFunction(this).GetInternalFunction(TokenType::PrintLine));
             Match(TokenType::EOL);
 		//else
 			//std::runtime_error("");
 		break;
 	case TokenType::Stop:
 		if (!currentSubroutine.isEmpty)
-			currentSubroutine.AddCompilerNode(InternalFunction(this).GetInternalFunction(TokenType::Stop));
+			currentSubroutine.AddCompilerNode(*InternalFunction(this).GetInternalFunction(TokenType::Stop));
             Match(TokenType::EOL);
 		//else
 		//std::runtime_error("");
@@ -231,7 +231,7 @@ bool Compiler::IsInternalFunction(TokenType type)
 
 CompilerNode Compiler::ParseInternalFunction()
 {
-	return InternalFunction(this).GetInternalFunction(PeekNext()->Type);
+	return *InternalFunction(this).GetInternalFunction(PeekNext()->Type);
 }
 
 

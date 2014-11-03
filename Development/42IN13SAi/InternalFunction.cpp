@@ -9,7 +9,7 @@ InternalFunction::~InternalFunction()
 	//delete(compiler);
 }
 
-CompilerNode InternalFunction::GetInternalFunction(TokenType type)
+CompilerNode* InternalFunction::GetInternalFunction(TokenType type)
 {
 	switch (type)
 	{
@@ -53,7 +53,7 @@ CompilerNode InternalFunction::GetInternalFunction(TokenType type)
 	default:
 		break;
 	}
-	return CompilerNode();
+	return new CompilerNode();
 }
 
 std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
@@ -75,7 +75,7 @@ std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
 	return *compiler_nodes;
 }
 
-CompilerNode InternalFunction::getCompilerNode(std::string functionName, int params) {
+CompilerNode* InternalFunction::getCompilerNode(std::string functionName, int params) {
 	std::vector<CompilerNode*> compiler_nodes = parseParameters(params);
-	return CompilerNode(functionName, compiler_nodes, nullptr, false);
+	return new CompilerNode(functionName, compiler_nodes, nullptr, false);
 }

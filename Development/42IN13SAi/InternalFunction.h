@@ -10,10 +10,10 @@ class InternalFunction
 public:
 	InternalFunction(Compiler* compiler);
 	virtual ~InternalFunction();
-	CompilerNode GetInternalFunction(TokenType type);
+	CompilerNode* GetInternalFunction(TokenType type);
 
 private:
 	Compiler*					compiler;
-	CompilerNode				getCompilerNode(std::string function, int params);
+	CompilerNode*				getCompilerNode(std::string function, int params);
 	std::vector<CompilerNode*>	parseParameters(int expectedParams);
 };

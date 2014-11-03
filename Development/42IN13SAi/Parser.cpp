@@ -594,15 +594,15 @@ CompilerNode* Parser::ParseTerm()
 		compiler->Match(TokenType::CloseBracket);
 		return node;
 	}
-	else if (compiler->PeekNext()->Type == TokenType::OpenBracket)
-	{
-		return ParseFunctionCall(token);
-	}
 	else if (compiler->IsInternalFunction(token.Type) && !(token.Type==TokenType::PrintLine || token.Type==TokenType::Stop))
 	{
-			*node = InternalFunction(compiler).GetInternalFunction(token.Type);	
+			node = InternalFunction(compiler).GetInternalFunction(token.Type);
 			return node;
 	}
+    else if (compiler->PeekNext()->Type == TokenType::OpenBracket)
+    {
+        return ParseFunctionCall(token);
+    }
 	return node;
 }
 
