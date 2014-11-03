@@ -6,10 +6,11 @@
 class RegexMatcher
 {
 private:
-    const boost::regex Regex;
+    boost::regex Regex;
     
 public:
 	RegexMatcher();
+    RegexMatcher(const RegexMatcher& other);
     RegexMatcher(std::string regexString);
     int Match(std::string text);
 };

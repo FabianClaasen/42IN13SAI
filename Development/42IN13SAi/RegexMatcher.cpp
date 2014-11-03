@@ -7,6 +7,10 @@ RegexMatcher::RegexMatcher(std::string regexString) : Regex("^(" + regexString +
 {
 }
 
+RegexMatcher::RegexMatcher(const RegexMatcher& other) :Regex(other.Regex)
+{
+}
+
 int RegexMatcher::Match(std::string text)
 {
     boost::cmatch item;

@@ -4,7 +4,10 @@
 //
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
+
+#ifdef _WIN32
 #include <crtdbg.h>
+#endif
 
 #include <iostream>
 #include "TokenizerController.h"
@@ -14,7 +17,9 @@
 int main(int argc, const char * argv[])
 {
 	// Memory leaks notifier
-	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#ifdef _WIN32
+    _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
 
 	// Load the file
 	std::string fileName("C:\\Users\\Sjoerd\\Dropbox\\42IN13SAI\\Testen\\Compiler\\assignment.txt");
@@ -29,8 +34,8 @@ int main(int argc, const char * argv[])
     
 	TokenizerController *tokenizer_controller = new TokenizerController(fileName);
 	tokenizer_controller->Tokenize();
-	/*Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
-	compiler.Compile();*/
+	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
+	compiler.Compile();
 
 	// Delete the tokenizer controller
 	delete(tokenizer_controller);

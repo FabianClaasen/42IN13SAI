@@ -6,7 +6,7 @@ InternalFunction::InternalFunction(Compiler* compiler) : compiler(compiler)
 
 InternalFunction::~InternalFunction()
 {
-	delete(compiler);
+	//delete(compiler);
 }
 
 CompilerNode InternalFunction::GetInternalFunction(TokenType type)
@@ -15,8 +15,10 @@ CompilerNode InternalFunction::GetInternalFunction(TokenType type)
 	{
 		// Default functions
 	case TokenType::Stop:
+        compiler->Match(TokenType::Stop);
 		return getCompilerNode("$stop", 0);
 	case  TokenType::PrintLine:
+        compiler->Match(TokenType::PrintLine);
 		return getCompilerNode("$prnt", 1);
 
 		// Math functions
@@ -57,18 +59,20 @@ CompilerNode InternalFunction::GetInternalFunction(TokenType type)
 std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
 {
 	// Check and parse all the parameters
-	std::vector<CompilerNode*> compiler_nodes;
-	//Match(TokenType::OpenBracket);
+	std::vector<CompilerNode*>* compiler_nodes = new std::vector<CompilerNode*>;
+	compiler->Match(TokenType::OpenBracket);
 	while (expectedParams > 0) {
-		compiler_nodes.push_back(Parser(compiler).ParseExpression());
+        CompilerNode* node = Parser(compiler).ParseExpression();
+		compiler_nodes->push_back(node);
 		expectedParams--;
+        if (expectedParams > 0)
+        {
+            compiler->Match(TokenType::Seperator);
+        }
 	}
-	//if (--expectedParams > 0)
-	//Match(TokenType::Seperator);
-	//}
-	//Match(TokenType::CloseBracket);
+	compiler->Match(TokenType::CloseBracket);
 
-	return compiler_nodes;
+	return *compiler_nodes;
 }
 
 CompilerNode InternalFunction::getCompilerNode(std::string functionName, int params) {
