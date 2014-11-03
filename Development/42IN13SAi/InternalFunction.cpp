@@ -60,10 +60,7 @@ std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
 	std::vector<CompilerNode*> compiler_nodes;
 	//Match(TokenType::OpenBracket);
 	while (expectedParams > 0) {
-
-
 		compiler_nodes.push_back(Parser(compiler).ParseExpression());
-
 		expectedParams--;
 	}
 	//if (--expectedParams > 0)

@@ -124,6 +124,9 @@ CompilerNode Parser::ParseAssignmentStatement()
 			throw std::runtime_error("Identifier name is already in use");
 	}
 
+	CompilerNode* id = new CompilerNode("$identifier", identifier.Value, nullptr);
+	nodeParameters.push_back(id);
+
 	// Check if it is an assignment or only a decleration.
 	if (compiler->PeekNext()->Type == TokenType::Equals)
 	{
@@ -568,7 +571,11 @@ CompilerNode* Parser::ParseTerm()
 	{
 		return ParseFunctionCall(token);
 	}
-
+	else if (compiler->IsInternalFunction(token.Type) && !(token.Type==TokenType::PrintLine || token.Type==TokenType::Stop))
+	{
+			*node = InternalFunction(compiler).GetInternalFunction(token.Type);	
+			return node;
+	}
 	return node;
 }
 
