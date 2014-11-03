@@ -9,6 +9,7 @@ class TokenDefinition
 {
 public:
     TokenDefinition(std::string regexString, TokenType type);
-    RegexMatcher *matcher;
+	~TokenDefinition();
+    RegexMatcher matcher;
     TokenType tokenType;
 };

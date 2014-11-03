@@ -9,6 +9,7 @@ private:
     const boost::regex Regex;
     
 public:
+	RegexMatcher();
     RegexMatcher(std::string regexString);
-    int Match(std::string &text);
+    int Match(std::string text);
 };
