@@ -2,6 +2,7 @@
 
 #include <QMainWindow>
 #include <QObject>
+
 class CodeEditor;
 
 class MainWindow : public QMainWindow
@@ -19,4 +20,5 @@ class MainWindow : public QMainWindow
 	private:
 		CodeEditor* codeEditor;
 		QString getFileFromStream();
+		void showMenuBar();
 };

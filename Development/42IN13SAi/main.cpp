@@ -29,7 +29,7 @@ int main(int argc, const char * argv[])
 
 	MainWindow mainWindow;
 
-	mainWindow.setWindowTitle(QObject::tr("Compiler | Press F5 to run"));
+	mainWindow.setWindowTitle(QObject::tr("Short C Editor"));
 
 	mainWindow.resize(640, 360);
 

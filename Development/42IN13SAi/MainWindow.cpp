@@ -2,12 +2,10 @@
 #include <QShortcut>
 #include <qstring.h>
 #include <QMessageBox>
+#include <QMenu>
 
 #include "MainWindow.h"
 #include "CodeEditor.h"
-
-
-
 
 #include <iostream>
 #include "TokenizerController.h"
@@ -16,6 +14,8 @@
 
 MainWindow::MainWindow(QWidget *parent)
 {
+	showMenuBar();
+
 	QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_F5), this);
 	codeEditor = new CodeEditor();
 	connect(shortcut, SIGNAL(activated()), this, SLOT(execute()));
@@ -78,6 +78,20 @@ QString MainWindow::getFileFromStream()
 
 	//Return the filePath
 	return filepath;
+}
+
+void MainWindow::showMenuBar()
+{
+	// Create menu bar
+	QMenuBar* menu = new QMenuBar();
+
+	// Create action and connect
+	QAction *runAction = menu->addAction("Run");
+	connect(runAction, SIGNAL(triggered()), this, SLOT(execute()));
+
+	// Set the menu bar on ui from left to right
+	this->setMenuBar(menu);
+	menu->setLayoutDirection(Qt::LeftToRight);
 }
 
 MainWindow::~MainWindow()
