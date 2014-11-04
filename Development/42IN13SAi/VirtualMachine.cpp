@@ -5,6 +5,7 @@ VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subrou
 	: mainSymboltable(symboltable), subroutineTable(subroutine), _compilernodes(compiler_nodes)
 {
 	function_caller = new FunctionCaller(this);
+	subSymbolTable = nullptr;
 }
 
 VirtualMachine::~VirtualMachine(){}

@@ -1,6 +1,0 @@
-var x = 3;
-
-func main()
-[
-	x = 6;
-]
