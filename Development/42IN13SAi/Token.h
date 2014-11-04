@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "TokenType.h"
+#include "MyTokenType.h"
 
 
 class Token
@@ -11,10 +11,10 @@ public:
     int LinePosition;
     int Level;
     std::string Value;
-    TokenType Type;
+    MyTokenType Type;
 	Token* Partner;
     
-    Token(int lineNumber, int linePosition, int level, std::string value, TokenType tokenType, Token* partner);
+    Token(int lineNumber, int linePosition, int level, std::string value, MyTokenType myTokenType, Token* partner);
     Token();
 	~Token();
 };

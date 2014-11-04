@@ -3,15 +3,15 @@
 #include <string>
 
 #include "RegexMatcher.h"
-#include "TokenType.h"
+#include "MyTokenType.h"
 
 class TokenDefinition
 {
 public:
     TokenDefinition();
-    TokenDefinition(std::string regexString, TokenType type);
+    TokenDefinition(std::string regexString, MyTokenType type);
     TokenDefinition(const TokenDefinition& other);
 	~TokenDefinition();
     RegexMatcher matcher;
-    TokenType tokenType;
+    MyTokenType myTokenType;
 };

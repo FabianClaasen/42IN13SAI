@@ -35,10 +35,10 @@ public:
 	bool HasSymbol(std::string symbolName);
 	void ParseGlobalStatement();
 	void ParseStatement();
-	bool IsInternalFunction(TokenType type);
+	bool IsInternalFunction(MyTokenType type);
 	CompilerNode ParseInternalFunction();
 
-	void Match(TokenType type);
+	void Match(MyTokenType type);
 
 	//Info to send to VM
 	SymbolTable* GetSymbolTable();

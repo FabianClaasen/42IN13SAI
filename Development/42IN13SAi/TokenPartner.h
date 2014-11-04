@@ -2,12 +2,12 @@
 
 #include <string>
 
-#include "TokenType.h"
+#include "MyTokenType.h"
 
 class TokenPartner
 {
 public:
-    TokenType token; 
-    TokenType partner;
-    TokenPartner(TokenType tokenStr, TokenType partnerStr);
+    MyTokenType token; 
+    MyTokenType partner;
+    TokenPartner(MyTokenType tokenStr, MyTokenType partnerStr);
 };

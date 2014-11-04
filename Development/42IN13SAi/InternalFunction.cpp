@@ -9,46 +9,46 @@ InternalFunction::~InternalFunction()
 	//delete(compiler);
 }
 
-CompilerNode* InternalFunction::GetInternalFunction(TokenType type)
+CompilerNode* InternalFunction::GetInternalFunction(MyTokenType type)
 {
 	switch (type)
 	{
 		// Default functions
-	case TokenType::Stop:
-        compiler->Match(TokenType::Stop);
+	case MyTokenType::Stop:
+        compiler->Match(MyTokenType::Stop);
 		return getCompilerNode("$stop", 0);
-	case  TokenType::PrintLine:
-        compiler->Match(TokenType::PrintLine);
+	case  MyTokenType::PrintLine:
+        compiler->Match(MyTokenType::PrintLine);
 		return getCompilerNode("$prnt", 1);
 
 		// Math functions
-	case TokenType::Cosine:
+	case MyTokenType::Cosine:
 		return getCompilerNode("$cos", 1);
-	case TokenType::Sine:
+	case MyTokenType::Sine:
 		return getCompilerNode("$sin", 1);
-	case TokenType::Tangent:
+	case MyTokenType::Tangent:
 		return getCompilerNode("$tan", 1);
-	case TokenType::Square:
+	case MyTokenType::Square:
 		return getCompilerNode("$sqr", 1);
-	case TokenType::Power:
+	case MyTokenType::Power:
 		return getCompilerNode("$pow", 2);
-	case TokenType::SquareRoot:
+	case MyTokenType::SquareRoot:
 		return getCompilerNode("$sqrt", 1);
-	case TokenType::CubeRoot:
+	case MyTokenType::CubeRoot:
 		return getCompilerNode("$cbrt", 1);
-	case TokenType::Degree:
+	case MyTokenType::Degree:
 		return getCompilerNode("$deg", 1);
-	case TokenType::Radiant:
+	case MyTokenType::Radiant:
 		return getCompilerNode("$rad", 1);
-	case TokenType::Percent:
+	case MyTokenType::Percent:
 		return getCompilerNode("$perc", 2);
-	case  TokenType::PerMillage:
+	case  MyTokenType::PerMillage:
 		return getCompilerNode("$prom", 2);
-	case TokenType::NormalLog:
+	case MyTokenType::NormalLog:
 		return getCompilerNode("$log", 2); // or 1
-	case TokenType::Nlog:
+	case MyTokenType::Nlog:
 		return getCompilerNode("$ln", 1);
-	case TokenType::Modulo:
+	case MyTokenType::Modulo:
 		return getCompilerNode("$mod", 2);
 	default:
 		break;
@@ -60,17 +60,17 @@ std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
 {
 	// Check and parse all the parameters
 	std::vector<CompilerNode*>* compiler_nodes = new std::vector<CompilerNode*>;
-	compiler->Match(TokenType::OpenBracket);
+	compiler->Match(MyTokenType::OpenBracket);
 	while (expectedParams > 0) {
         CompilerNode* node = Parser(compiler).ParseExpression();
 		compiler_nodes->push_back(node);
 		expectedParams--;
         if (expectedParams > 0)
         {
-            compiler->Match(TokenType::Seperator);
+            compiler->Match(MyTokenType::Seperator);
         }
 	}
-	compiler->Match(TokenType::CloseBracket);
+	compiler->Match(MyTokenType::CloseBracket);
 
 	return *compiler_nodes;
 }

@@ -1,11 +1,11 @@
 //
-//  TokenType.h
+//  MyTokenType.h
 //  part of tokenizer
 //  Contains all the possible token types
 //
 #pragma once
 
-enum class TokenType : int {
+enum class MyTokenType : int {
 	// Normal tokens
     KeyIdentifier,
     Var,
