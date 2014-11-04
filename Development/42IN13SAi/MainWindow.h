@@ -18,4 +18,5 @@ class MainWindow : public QMainWindow
 
 	private:
 		CodeEditor* codeEditor;
+		QString getFileFromStream();
 };
