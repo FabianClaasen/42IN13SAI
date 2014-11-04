@@ -7,12 +7,15 @@
 #include "MainWindow.h" //qt
 #include <QShortcut> //qt
 #include <QtWidgets>
+#include <iostream>
 
 #ifdef _WIN32
 #define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
 #endif
 
+#ifdef _WIN32
+#include <crtdbg.h>
+#endif
 
 int main(int argc, const char * argv[])
 {

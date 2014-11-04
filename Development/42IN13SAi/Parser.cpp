@@ -95,7 +95,7 @@ CompilerNode* Parser::ParseReturn()
 }
 
 //Also parse (standard) Arithmetical operations
-CompilerNode Parser::ParseAssignmentStatement()
+void Parser::ParseAssignmentStatement()
 {
 	std::string expression = "";
 	std::vector<CompilerNode*> nodeParameters;
@@ -171,8 +171,6 @@ CompilerNode Parser::ParseAssignmentStatement()
 		compiler->AddCompilerNode(*endNode);
 	else
 		compiler->GetSubroutine()->AddCompilerNode(*endNode);
-
-	return *endNode;
 }
 
 // This function is only called when a function is called without it being in a assignment.
@@ -217,14 +215,10 @@ void Parser::ParseIfStatement()
 	Token currentToken = compiler->GetNext();
 	bool hasPartner = false;
 
-	Subroutine* subroutine = compiler->GetSubroutine();
-	std::list<CompilerNode>* compilerNodes = subroutine->GetCompilerNodeCollection();
-	long compilerNodesPos = compilerNodes->size();
-
 	std::list<CompilerNode> innerIfStatementNodes;
 	std::list<CompilerNode> innerElseStatementNodes;
 	CompilerNode* statementNode;
-	CompilerNode* endNode;
+	CompilerNode endNode;
 
 	if (currentToken.Type == MyTokenType::If)
 	{
@@ -245,23 +239,20 @@ void Parser::ParseIfStatement()
 	compiler->Match(MyTokenType::CloseBracket);
 	compiler->Match(MyTokenType::OpenMethod);
 
+	//Make a do nothing compilerNode to jump to if the statement is false
+	std::vector<std::string> doNothing;
+	CompilerNode jumpTo = CompilerNode("$doNothing", "", false);
+	statementNode->SetJumpTo(jumpTo);
+
+	//Create the endNode before parsing the statements in the if/else
+	std::vector<CompilerNode*> params;
+	params.push_back(statementNode);
+	endNode = CompilerNode("$if", params, nullptr, false);
+	compiler->AddCompilerNode(endNode);
+
 	while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
 	{
-		switch (compiler->PeekNext()->Type)
-		{
-		case MyTokenType::If:
-			ParseIfStatement();
-			break;
-		case MyTokenType::While:
-			ParseLoopStatement();
-			break;
-		case MyTokenType::Identifier:
-			ParseAssignmentStatement();
-			break;
-		default:
-			throw std::runtime_error("No statement found");
-			break;
-		}
+		compiler->ParseStatement();
 	}
 
 	compiler->Match(MyTokenType::CloseMethod);
@@ -273,69 +264,28 @@ void Parser::ParseIfStatement()
 
 		while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
 		{
-			switch (compiler->PeekNext()->Type)
-			{
-			case MyTokenType::If:
-				ParseIfStatement();
-				break;
-			case MyTokenType::While:
-				ParseLoopStatement();
-				break;
-			case MyTokenType::Identifier : case MyTokenType::Var:
-				ParseAssignmentStatement();
-				break;
-			default:
-				throw std::runtime_error("No statement found");
-				break;
-			}
+			compiler->ParseStatement();
 		}
 
 		compiler->Match(MyTokenType::CloseMethod);
 	}
 
-	std::vector<std::string> doNothing;
-	CompilerNode jumpTo = CompilerNode("$doNothing", "", false);
-
-	statementNode->SetJumpTo(jumpTo);
-
-	std::list<CompilerNode>::iterator it;
-	it = compilerNodes->begin();
-	//make it point to the correct compilernode
-	for (int i = 0; i < compilerNodesPos; i++)
-	{
-		it++;
-	}
-	compilerNodes->insert(it, *statementNode);
-
-	std::list<CompilerNode>::const_iterator iterator;
-	for (iterator = innerIfStatementNodes.begin(); iterator != innerIfStatementNodes.end(); ++iterator) {
-		compilerNodes->insert(it, *iterator);
-	}
-
-	for (iterator = innerElseStatementNodes.begin(); iterator != innerElseStatementNodes.end(); ++iterator) {
-		compilerNodes->insert(it, *iterator);
-	}
-
-	compilerNodes->push_back(jumpTo);
+	//Finally add the do nothing CompilerNode to jump to if the statement is false
+	compiler->AddCompilerNode(jumpTo);
 }
 
 /*
 Parse while and for loops
-@param standard compilerNodes.size()
 */
 void Parser::ParseLoopStatement()
 {
 	Token currentToken = compiler->GetNext();
 	bool forLoop = false;
 
-	Subroutine* subroutine(compiler->GetSubroutine());
-	std::list<CompilerNode>* compilerNodes = subroutine->GetCompilerNodeCollection();
-	long compilerNodesPos = compilerNodes->size();
-
 	std::vector<CompilerNode*> nodeParameters;
 	std::string statementExpression;
 
-	CompilerNode statementNode;
+	CompilerNode endNode;
 	std::list<CompilerNode> innerStatementNodes;
 
 	if (currentToken.Type == MyTokenType::While || currentToken.Type == MyTokenType::ForLoop)
@@ -367,38 +317,27 @@ void Parser::ParseLoopStatement()
 		statementExpression = "$whileLoop";
 	}
 
+	// Create a do nothing, so you can jump to this when the statement is false
+	std::vector<std::string> doNothing;
+	CompilerNode jumpTo = CompilerNode("$doNothing", "", false);
+
+	//Make the endNode before parsing the statements in the loop
+	endNode = CompilerNode(statementExpression, nodeParameters, &jumpTo, false);
+	compiler->AddCompilerNode(endNode);
+
 	compiler->Match(MyTokenType::CloseBracket);
 	Token* openMethod = compiler->PeekNext();
 	compiler->Match(MyTokenType::OpenMethod);
 
-	while (compiler->PeekNext()->Type != MyTokenType::CloseMethod && compiler->PeekNext()->Level == openMethod->Level)
+	while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
 	{
 		compiler->ParseStatement();
 	}
 
 	compiler->Match(MyTokenType::CloseMethod);
 
-	// Create a do nothing, so you can jump to this when the statement is false
-	std::vector<std::string> doNothing;
-	CompilerNode jumpTo = CompilerNode("$doNothing", "", false);
-
-	statementNode = CompilerNode(statementExpression, nodeParameters, &jumpTo, false);
-
-	std::list<CompilerNode>::iterator it;
-	it = compilerNodes->begin();
-	//make it point to the correct compilernode
-	for (int i = 0; i < compilerNodesPos; i++)
-	{
-		it++;
-	}
-	compilerNodes->insert(it, statementNode);
-
-	std::list<CompilerNode>::const_iterator iterator;
-	for (iterator = innerStatementNodes.begin(); iterator != innerStatementNodes.end(); ++iterator) {
-		compilerNodes->insert(it, *iterator);
-	}
-
-	compilerNodes->push_back(jumpTo);
+	//Finally add the jumpTo compilerNode
+	compiler->AddCompilerNode(jumpTo);
 }
 #pragma endregion ParseStatementMethods
 

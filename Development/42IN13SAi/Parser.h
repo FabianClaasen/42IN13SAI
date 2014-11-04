@@ -14,7 +14,7 @@ public:
 
 	// Functions
 	void ParseFunction();
-	CompilerNode ParseAssignmentStatement();
+	void ParseAssignmentStatement();
 	void ParseIfStatement();
 	void ParseLoopStatement();
 	void ParseFunctionCall();
