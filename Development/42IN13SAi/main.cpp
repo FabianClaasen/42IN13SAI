@@ -4,22 +4,24 @@
 //
 
 #include <QtWidgets\QApplication> //qt
-#include "MainWindow.h" //qt
+#include <QShortcut> //qt
+#include <QtWidgets>
+#include <iostream>
+
+#ifdef _WIN32
+#define _CRTDBG_MAP_ALLOC
+#endif
 
 #include <stdlib.h>
 
 #ifdef _WIN32
-#define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #endif
 
-#include <iostream>
+#include "MainWindow.h" //qt
 #include "TokenizerController.h"
 #include "Compiler.h"
 #include "VirtualMachine.h"
-#include <QShortcut> //qt
-#include <QtWidgets>
-
 
 int main(int argc, const char * argv[])
 {
