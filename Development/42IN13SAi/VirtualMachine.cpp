@@ -42,7 +42,7 @@ void VirtualMachine::ExecuteCode()
 			if (PeekNext() != nullptr)
 			{
 				CompilerNode node = VirtualMachine::GetNext();
-				std::string function_call = node.get_expression();
+				std::string function_call = node.GetExpression();
 				function_caller->Call(function_call, node);
 			}
 		} while (currentIndex < _compilernodes.size()-1);
@@ -64,7 +64,7 @@ CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes)
         if (PeekNext() != nullptr)
         {
             CompilerNode node = VirtualMachine::GetNext();
-            std::string function_call = node.get_expression();
+            std::string function_call = node.GetExpression();
             
             if (function_call == "$ret")
                 return function_caller->Call(function_call, node);
@@ -78,7 +78,7 @@ CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes)
 
 CompilerNode* VirtualMachine::CallFunction(CompilerNode node)
 {
-    std::string function_call = node.get_expression();
+    std::string function_call = node.GetExpression();
     // call the compilernode function
     return function_caller->Call(function_call, node);
 }
@@ -88,21 +88,21 @@ CompilerNode* VirtualMachine::CallFunction(CompilerNode node)
 CompilerNode* VirtualMachine::ExecuteFunction(CompilerNode compilerNode)
 {
     // Check if params is not empty
-    if (compilerNode.get_nodeparamters().empty())
+    if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
     CompilerNode* functionNode = parameters.at(0);
 
     // Check if node contains the functionname
-    if (functionNode->get_expression() != "$functionName")
+    if (functionNode->GetExpression() != "$functionName")
         throw std::runtime_error("Expected function name");
     
     // Get the subroutine table and check if exists
-    Subroutine* functionRoutine = subroutineTable->GetSubroutine(functionNode->get_value());
+    Subroutine* functionRoutine = subroutineTable->GetSubroutine(functionNode->GetValue());
     if (functionRoutine == nullptr)
-        throw std::runtime_error("Subroutine for function " + functionNode->get_value() + " not found");
+        throw std::runtime_error("Subroutine for function " + functionNode->GetValue() + " not found");
     
     // Set the subSymbolTable
     subSymbolTable = functionRoutine->GetSymbolTable();
@@ -117,7 +117,7 @@ CompilerNode* VirtualMachine::ExecuteFunction(CompilerNode compilerNode)
     std::vector<Symbol*> vSymbols = subSymbolTable->GetSymbolVector();
     for (Symbol* symbol : vSymbols)
     {
-        float param = atof(parameters.at(paramNum)->get_value().c_str());
+        float param = atof(parameters.at(paramNum)->GetValue().c_str());
         symbol->SetValue(param);
         paramNum++;
     }
@@ -132,11 +132,11 @@ CompilerNode* VirtualMachine::ExecuteFunction(CompilerNode compilerNode)
 CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
 {
 	// Check if params is not empty
-	if (compilerNode.get_nodeparamters().empty())
+	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 	
     // Get the Node parameters
-	std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+	std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
@@ -146,11 +146,11 @@ CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
 	CompilerNode* param2 = parameters.at(1);
     
 	// Only go through when param is identifier
-	if (param1->get_expression() == "$identifier")
+	if (param1->GetExpression() == "$identifier")
 	{
 		// Get the value of the node -> variable
-		std::string variableName = param1->get_value();
-		if (param2->get_expression() != "$value")
+		std::string variableName = param1->GetValue();
+		if (param2->GetExpression() != "$value")
 			param2 = CallFunction(*param2);
         
         // Get the variable from symboltable
@@ -164,7 +164,7 @@ CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
             current_symbol = mainSymboltable->GetSymbol(variableName);
         
         // Get the param value and set in temp var
-        float valueToSet = atof(param2->get_value().c_str());
+        float valueToSet = atof(param2->GetValue().c_str());
 		current_symbol->SetValue(valueToSet);
 	}
     
@@ -174,11 +174,11 @@ CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
 CompilerNode* VirtualMachine::ExecuteGetVariable(CompilerNode compilerNode)
 {
     // Check if params is not empty
-    if (compilerNode.get_value().empty())
+    if (compilerNode.GetValue().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameter
-    std::string parameter = compilerNode.get_value();
+    std::string parameter = compilerNode.GetValue();
     
     // Get the variable from symboltable
     // first check subSymbolTable
@@ -200,10 +200,10 @@ CompilerNode* VirtualMachine::ExecuteGetVariable(CompilerNode compilerNode)
 #pragma region DefaultOperations
 CompilerNode* VirtualMachine::ExecutePrint(CompilerNode compilerNode)
 {
-	if (compilerNode.get_nodeparamters().empty())
+	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(1, ParameterExceptionType::NoParameters);
 
-	std::vector<CompilerNode*> parameters = compilerNode.get_nodeparamters();
+	std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
 	if (parameters.size() > 1)
 		throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
 
@@ -211,11 +211,11 @@ CompilerNode* VirtualMachine::ExecutePrint(CompilerNode compilerNode)
 	CompilerNode* param1 = parameters.at(0);
 
 	// Check if expression is not value
-	if (param1->get_expression() != "$value")
+	if (param1->GetExpression() != "$value")
 		param1 = CallFunction(*param1);
 
 	// Get the new value
-	std::string valueToPrint = param1->get_value();
+	std::string valueToPrint = param1->GetValue();
 
 	// Print te new value
 	std::cout << valueToPrint << std::endl;
@@ -226,9 +226,9 @@ CompilerNode* VirtualMachine::ExecutePrint(CompilerNode compilerNode)
 
 CompilerNode* VirtualMachine::ExecuteStop(CompilerNode compilerNode)
 {
-	if (compilerNode.get_nodeparamters().empty())
+	if (compilerNode.GetNodeparameters().empty())
 	{
-		if (compilerNode.get_expression() == "$stop")
+		if (compilerNode.GetExpression() == "$stop")
 			std::exit(1);
 		else
 			throw std::runtime_error("Unknown expression type");
@@ -243,10 +243,10 @@ CompilerNode* VirtualMachine::ExecuteStop(CompilerNode compilerNode)
 CompilerNode* VirtualMachine::ExecuteLessCondition(CompilerNode compilerNode)
 {
 	// Check if nodeparams are not empty
-	if (compilerNode.get_nodeparamters().empty())
+	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 
-	std::vector<CompilerNode*> parameters = compilerNode.get_nodeparamters();
+	std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
 	// Check if count of params is not right
 	if (parameters.size() > 2)
 		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
@@ -255,14 +255,14 @@ CompilerNode* VirtualMachine::ExecuteLessCondition(CompilerNode compilerNode)
 	CompilerNode* param2 = parameters.at(1);
 
 	// Check if expression is value
-	if (param1->get_expression() != "$value")
+	if (param1->GetExpression() != "$value")
 		param1 = CallFunction(*param1);
-	if (param2->get_expression() != "$value")
+	if (param2->GetExpression() != "$value")
 		param2 = CallFunction(*param2);
 
 	// Set numbers / values
-	float num1 = atof(param1->get_value().c_str());
-	float num2 = atof(param2->get_value().c_str());
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
 	bool output = num1 < num2;
 
 	// Set boolean to true if num1 < num2, else return false (inside the node)
@@ -274,10 +274,10 @@ CompilerNode* VirtualMachine::ExecuteLessCondition(CompilerNode compilerNode)
 CompilerNode* VirtualMachine::ExecuteGreaterCondition(CompilerNode compilerNode)
 {
 	// Check if nodeparams are not empty
-	if (compilerNode.get_nodeparamters().empty())
+	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 
-	std::vector<CompilerNode*> parameters = compilerNode.get_nodeparamters();
+	std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
 	// Check if count of params is not right
 	if (parameters.size() > 2)
 		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
@@ -286,14 +286,14 @@ CompilerNode* VirtualMachine::ExecuteGreaterCondition(CompilerNode compilerNode)
 	CompilerNode* param2 = parameters.at(1);
 
 	// Check if expression is value
-	if (param1->get_expression() != "$value")
+	if (param1->GetExpression() != "$value")
 		param1 = CallFunction(*param1);
-	if (param2->get_expression() != "$value")
+	if (param2->GetExpression() != "$value")
 		param2 = CallFunction(*param2);
 
 	// Set numbers / values
-	float num1 = atof(param1->get_value().c_str());
-	float num2 = atof(param2->get_value().c_str());
+	float num1 = atof(param1->GetExpression().c_str());
+	float num2 = atof(param2->GetExpression().c_str());
 	bool output = num1 > num2;
 
 	// Set boolean to true if num1 > num2, else return false (inside the node)
@@ -305,10 +305,10 @@ CompilerNode* VirtualMachine::ExecuteGreaterCondition(CompilerNode compilerNode)
 CompilerNode* VirtualMachine::ExecuteEqualCondition(CompilerNode compilerNode)
 {
 	// Check if nodeparams are not empty
-	if (compilerNode.get_nodeparamters().empty())
+	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 
-	std::vector<CompilerNode*> parameters = compilerNode.get_nodeparamters();
+	std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
 	// Check if count of params is not right
 	if (parameters.size() > 2)
 		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
@@ -317,14 +317,14 @@ CompilerNode* VirtualMachine::ExecuteEqualCondition(CompilerNode compilerNode)
 	CompilerNode* param2 = parameters.at(1);
 
 	// Check if expression is value
-	if (param1->get_expression() != "$value")
+	if (param1->GetExpression() != "$value")
 		param1 = CallFunction(*param1);
-	if (param2->get_expression() != "$value")
+	if (param2->GetExpression() != "$value")
 		param2 = CallFunction(*param2);
 
 	// Set numbers / values
-	float num1 = atof(param1->get_value().c_str());
-	float num2 = atof(param2->get_value().c_str());
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
 	bool output = num1 == num2;
 
 	// Set boolean to true if num1 == num2, else return false (inside the node)
@@ -336,10 +336,10 @@ CompilerNode* VirtualMachine::ExecuteEqualCondition(CompilerNode compilerNode)
 CompilerNode* VirtualMachine::ExecuteNotEqualCondition(CompilerNode compilerNode)
 {
 	// Check if nodeparams are not empty
-	if (compilerNode.get_nodeparamters().empty())
+	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 
-	std::vector<CompilerNode*> parameters = compilerNode.get_nodeparamters();
+	std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
 	// Check if count of params is not right
 	if (parameters.size() > 2)
 		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
@@ -348,14 +348,14 @@ CompilerNode* VirtualMachine::ExecuteNotEqualCondition(CompilerNode compilerNode
 	CompilerNode* param2 = parameters.at(1);
 
 	// Check if expression is value
-	if (param1->get_expression() != "$value")
+	if (param1->GetExpression() != "$value")
 		param1 = CallFunction(*param1);
-	if (param2->get_expression() != "$value")
+	if (param2->GetExpression() != "$value")
 		param2 = CallFunction(*param2);
 
 	// Set numbers / values
-	float num1 = atof(param1->get_value().c_str());
-	float num2 = atof(param2->get_value().c_str());
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
 	bool output = num1 != num2;
 
 	// Set boolean to true if num1 != num2, else return false (inside the node)
@@ -368,11 +368,11 @@ CompilerNode* VirtualMachine::ExecuteNotEqualCondition(CompilerNode compilerNode
 #pragma region SimpleMath
 CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
 {
-    if (compilerNode.get_nodeparamters().empty())
+    if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
@@ -383,14 +383,14 @@ CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
-    if (param1->get_expression() != "$value")
+    if (param1->GetExpression() != "$value")
         param1 = CallFunction(*param1);
-    if (param2->get_expression() != "$value")
+    if (param2->GetExpression() != "$value")
         param2 = CallFunction(*param2);
     
     // Parse the parameters to a float for mathmatic operation
-    float num1 = atof(param1->get_value().c_str());
-    float num2 = atof(param2->get_value().c_str());
+    float num1 = atof(param1->GetValue().c_str());
+    float num2 = atof(param2->GetValue().c_str());
     float output = num1 + num2;
     
     // Create a new value compilernode to return
@@ -401,11 +401,11 @@ CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
 
 CompilerNode* VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
 {
-    if (compilerNode.get_nodeparamters().empty())
+    if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
@@ -416,14 +416,14 @@ CompilerNode* VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
-    if (param1->get_expression() != "$value")
+    if (param1->GetExpression() != "$value")
         param1 = CallFunction(*param1);
-    if (param2->get_expression() != "$value")
+    if (param2->GetExpression() != "$value")
         param2 = CallFunction(*param2);
     
     // Parse the parameters to a float for mathmatic operation
-    float num1 = atof(param1->get_value().c_str());
-    float num2 = atof(param2->get_value().c_str());
+    float num1 = atof(param1->GetValue().c_str());
+    float num2 = atof(param2->GetValue().c_str());
 	float output = num1 - num2;
     
     // Create a new value compilernode to return
@@ -434,11 +434,11 @@ CompilerNode* VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
 
 CompilerNode* VirtualMachine::ExecuteMultiplyOperation(CompilerNode compilerNode)
 {
-    if (compilerNode.get_nodeparamters().empty())
+    if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
@@ -449,14 +449,14 @@ CompilerNode* VirtualMachine::ExecuteMultiplyOperation(CompilerNode compilerNode
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
-    if (param1->get_expression() != "$value")
+    if (param1->GetExpression() != "$value")
         param1 = CallFunction(*param1);
-    if (param2->get_expression() != "$value")
+    if (param2->GetExpression() != "$value")
         param2 = CallFunction(*param2);
     
     // Parse the parameters to a float for mathmatic operation
-    float num1 = atof(param1->get_value().c_str());
-    float num2 = atof(param2->get_value().c_str());
+    float num1 = atof(param1->GetValue().c_str());
+    float num2 = atof(param2->GetValue().c_str());
 	float output = num1 * num2;
     
     // Create a new value compilernode to return
@@ -467,11 +467,11 @@ CompilerNode* VirtualMachine::ExecuteMultiplyOperation(CompilerNode compilerNode
 
 CompilerNode* VirtualMachine::ExecuteDivideOperation(CompilerNode compilerNode)
 {
-    if (compilerNode.get_nodeparamters().empty())
+    if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
@@ -482,14 +482,14 @@ CompilerNode* VirtualMachine::ExecuteDivideOperation(CompilerNode compilerNode)
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
-    if (param1->get_expression() != "$value")
+    if (param1->GetExpression() != "$value")
         param1 = CallFunction(*param1);
-    if (param2->get_expression() != "$value")
+    if (param2->GetExpression() != "$value")
         param2 = CallFunction(*param2);
     
     // Parse the parameters to a float for mathmatic operation
-    float num1 = atof(param1->get_value().c_str());
-    float num2 = atof(param2->get_value().c_str());
+    float num1 = atof(param1->GetValue().c_str());
+    float num2 = atof(param2->GetValue().c_str());
 	float output = num1 / num2;
     
     // Create a new value compilernode to return
@@ -500,11 +500,11 @@ CompilerNode* VirtualMachine::ExecuteDivideOperation(CompilerNode compilerNode)
 
 CompilerNode* VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
 {
-	if (compilerNode.get_nodeparamters().empty())
+	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 
 	// Get the Node parameters
-	std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+	std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
 
 	// Check if there aren't more than two parameters
 	if (parameters.size() > 2)
@@ -515,14 +515,14 @@ CompilerNode* VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
 
 	// Check if the parameters are a value or another function call
 	// if function call, execute function
-	if (param1->get_expression() != "$value")
+	if (param1->GetExpression() != "$value")
 		param1 = CallFunction(*param1);
-	if (param2->get_expression() != "$value")
+	if (param2->GetExpression() != "$value")
 		param2 = CallFunction(*param2);
 
 	// Parse the parameters to a float for mathmatic operation
-	float num1 = atof(param1->get_value().c_str());
-	float num2 = atof(param2->get_value().c_str());
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
 	float output = fmod(num1, num2);
 
 	// Create a new value compilernode to return
@@ -537,11 +537,11 @@ CompilerNode* VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
 
 CompilerNode* VirtualMachine::ExecuteSinOperation(CompilerNode compilerNode)
 {
-    if (compilerNode.get_nodeparamters().empty())
+    if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than one parameter
     if (parameters.size() > 1)
@@ -551,11 +551,11 @@ CompilerNode* VirtualMachine::ExecuteSinOperation(CompilerNode compilerNode)
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
-    if (param1->get_expression() != "$value")
+    if (param1->GetExpression() != "$value")
         param1 = CallFunction(*param1);
     
     // Parse the parameters to a float for mathmatic operation
-    float num1 = atof(param1->get_value().c_str());
+    float num1 = atof(param1->GetValue().c_str());
     float output = std::sin(num1);
     
     // Create a new value compilernode to return
@@ -566,11 +566,11 @@ CompilerNode* VirtualMachine::ExecuteSinOperation(CompilerNode compilerNode)
 
 CompilerNode* VirtualMachine::ExecuteCosOperation(CompilerNode compilerNode)
 {
-    if (compilerNode.get_nodeparamters().empty())
+    if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than one parameter
     if (parameters.size() > 1)
@@ -580,11 +580,11 @@ CompilerNode* VirtualMachine::ExecuteCosOperation(CompilerNode compilerNode)
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
-    if (param1->get_expression() != "$value")
+    if (param1->GetExpression() != "$value")
         param1 = CallFunction(*param1);
     
     // Parse the parameters to a float for mathmatic operation
-    float num1 = atof(param1->get_value().c_str());
+    float num1 = atof(param1->GetValue().c_str());
 	float output = std::cos(num1);
     
     // Create a new value compilernode to return
@@ -595,11 +595,11 @@ CompilerNode* VirtualMachine::ExecuteCosOperation(CompilerNode compilerNode)
 
 CompilerNode* VirtualMachine::ExecuteTanOperation(CompilerNode compilerNode)
 {
-    if (compilerNode.get_nodeparamters().empty())
+    if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.get_nodeparamters();
+    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than one parameter
     if (parameters.size() > 1)
@@ -609,11 +609,11 @@ CompilerNode* VirtualMachine::ExecuteTanOperation(CompilerNode compilerNode)
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
-    if (param1->get_expression() != "$value")
+    if (param1->GetExpression() != "$value")
         param1 = CallFunction(*param1);
     
     // Parse the parameters to a float for mathmatic operation
-    float num1 = atof(param1->get_value().c_str());
+    float num1 = atof(param1->GetValue().c_str());
 	float output = std::tan(num1);
     
     // Create a new value compilernode to return

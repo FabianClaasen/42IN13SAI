@@ -2,9 +2,13 @@
 //  main.cpp
 //  tokenizer
 //
-#define _CRTDBG_MAP_ALLOC
+
 #include <stdlib.h>
+
+#ifdef _WIN32
+#define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
+#endif
 
 #include <iostream>
 #include "TokenizerController.h"
@@ -13,8 +17,10 @@
 
 int main(int argc, const char * argv[])
 {
+#ifdef _WIN32
 	// Memory leaks notifier
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
 
 	// Load the file
 	std::string fileName("C:\\Users\\Sjoerd\\Dropbox\\42IN13SAI\\Testen\\Compiler\\decleration.txt");
