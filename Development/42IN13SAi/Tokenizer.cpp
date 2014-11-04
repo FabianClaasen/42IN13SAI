@@ -42,15 +42,15 @@ void Tokenizer::Tokenize()
 				match = true;
 
 				// Check if the level should be raised
-				if (definition.tokenType == TokenType::OpenBracket || definition.tokenType == TokenType::OpenCurlyBracket || definition.tokenType == TokenType::OpenMethod)
+				if (definition.myTokenType == MyTokenType::OpenBracket || definition.myTokenType == MyTokenType::OpenCurlyBracket || definition.myTokenType == MyTokenType::OpenMethod)
 					level++;
 
 				// Find a partner
 				Token* partner = nullptr;
-				if (ShouldFindPartner(definition.tokenType))
+				if (ShouldFindPartner(definition.myTokenType))
 				{
 					try {
-						partner = FindPartner(definition.tokenType, level);
+						partner = FindPartner(definition.myTokenType, level);
 					}
 					catch (PartnerNotFoundException &e) {
 						// Catch the exception and rethrow
@@ -61,14 +61,14 @@ void Tokenizer::Tokenize()
 
 				// Create token
 				std::string token_value = lineRemaining.substr(0, matched);
-				tokenVector.push_back(Token(lineNumber, linePosition, level, token_value, definition.tokenType, partner));
+				tokenVector.push_back(Token(lineNumber, linePosition, level, token_value, definition.myTokenType, partner));
                 
                 // if partner found, give this token to partner
                 if (partner)
                     partner->Partner = &tokenVector.back();
 
 				// Check if the level should be lowered
-				if (definition.tokenType == TokenType::CloseBracket || definition.tokenType == TokenType::CloseCurlyBracket || definition.tokenType == TokenType::CloseMethod)
+				if (definition.myTokenType == MyTokenType::CloseBracket || definition.myTokenType == MyTokenType::CloseCurlyBracket || definition.myTokenType == MyTokenType::CloseMethod)
 					level--;
 
 				// Change your position and line
@@ -90,8 +90,8 @@ void Tokenizer::Tokenize()
 // Find a partner for the current token.
 // @param
 //  type: this is the type of the token where you need to find a match for.
-//	level: this is the level of the tokentype, the partner needs to be on the same level.
-Token* Tokenizer::FindPartner(TokenType &type, int level)
+//	level: this is the level of the myTokenType, the partner needs to be on the same level.
+Token* Tokenizer::FindPartner(MyTokenType &type, int level)
 {
     std::list<TokenPartner>::const_iterator token_partner;
     for (TokenPartner tokenPartner : tokenPartners)
@@ -120,9 +120,9 @@ Token* Tokenizer::FindPartner(TokenType &type, int level)
 // Check if the current token is able to have a partner
 // @Param
 //	type: the function will check if this type can have a partner.
-bool Tokenizer::ShouldFindPartner(TokenType type)
+bool Tokenizer::ShouldFindPartner(MyTokenType type)
 {
-    std::vector<TokenType> types{ TokenType::CloseCurlyBracket, TokenType::CloseMethod, TokenType::CloseBracket, TokenType::Else, TokenType::ElseIf };
+    std::vector<MyTokenType> types{ MyTokenType::CloseCurlyBracket, MyTokenType::CloseMethod, MyTokenType::CloseBracket, MyTokenType::Else, MyTokenType::ElseIf };
 	return std::find(types.begin(), types.end(), type) != types.end();
 }
 

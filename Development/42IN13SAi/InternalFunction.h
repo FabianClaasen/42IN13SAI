@@ -10,7 +10,7 @@ class InternalFunction
 public:
 	InternalFunction(Compiler* compiler);
 	virtual ~InternalFunction();
-	CompilerNode* GetInternalFunction(TokenType type);
+	CompilerNode* GetInternalFunction(MyTokenType type);
 
 private:
 	Compiler*					compiler;

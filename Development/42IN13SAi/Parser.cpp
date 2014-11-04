@@ -21,14 +21,14 @@ void Parser::ParseFunction()
 
 	SymbolTable symbolTable;
 
-    if (currentToken.Type == TokenType::MainFunction || IsNextTokenReturnType())
+    if (currentToken.Type == MyTokenType::MainFunction || IsNextTokenReturnType())
 	{
         Token returnType;
         Token functionName;
-        if (currentToken.Type == TokenType::MainFunction)
+        if (currentToken.Type == MyTokenType::MainFunction)
         {
-            returnType = Token(0,0,0, "", TokenType::Void, nullptr);
-            functionName = Token(0,0,0, "main", TokenType::MainFunction, nullptr);
+            returnType = Token(0,0,0, "", MyTokenType::Void, nullptr);
+            functionName = Token(0,0,0, "main", MyTokenType::MainFunction, nullptr);
         }
         else
         {
@@ -36,12 +36,12 @@ void Parser::ParseFunction()
             functionName = compiler->GetNext();
         }
 
-		compiler->Match(TokenType::OpenBracket);
+		compiler->Match(MyTokenType::OpenBracket);
 
 		// Set the parameters
-		while (compiler->PeekNext()->Type != TokenType::CloseBracket)
+		while (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
 		{
-			if (compiler->PeekNext()->Type == TokenType::Seperator)
+			if (compiler->PeekNext()->Type == MyTokenType::Seperator)
 			{
 				compiler->GetNext(); // remove seperator so you can add a new parameter
 			}
@@ -60,22 +60,22 @@ void Parser::ParseFunction()
 			}
 		}
         
-        if (compiler->PeekNext()->Type == TokenType::CloseBracket)
+        if (compiler->PeekNext()->Type == MyTokenType::CloseBracket)
             compiler->GetNext();
 
 		// Check if the functions starts and create a subroutine
-		compiler->Match(TokenType::OpenMethod);
+		compiler->Match(MyTokenType::OpenMethod);
 		compiler->SetSubroutine(Subroutine(functionName.Value, returnType.Type, SubroutineKind::Function, symbolTable));
 
 		// Set all the statements inside this subroutine
-		while (compiler->PeekNext()->Type != TokenType::CloseMethod && compiler->PeekNext()->Level > 1)
+		while (compiler->PeekNext()->Type != MyTokenType::CloseMethod && compiler->PeekNext()->Level > 1)
 		{
 			compiler->ParseStatement();
 		}
 
 		// Check if the subroutine is closed correctly
 		// And add the subroutine to the subroutine table
-		compiler->Match(TokenType::CloseMethod);
+		compiler->Match(MyTokenType::CloseMethod);
 		compiler->AddSubroutine();
 	}
 	else
@@ -84,7 +84,7 @@ void Parser::ParseFunction()
 
 CompilerNode* Parser::ParseReturn()
 {
-    compiler->Match(TokenType::Return);
+    compiler->Match(MyTokenType::Return);
     
     Token returnToken = compiler->GetNext();
     
@@ -106,7 +106,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 
 	Token identifier;
 	Token currentToken = compiler->GetNext();
-	if (currentToken.Type == TokenType::Var)
+	if (currentToken.Type == MyTokenType::Var)
 	{
 		newIdentifier = true;
 		identifier = compiler->GetNext();
@@ -117,7 +117,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 	}
 
 	// Check if the identifier is a identifier
-	if (identifier.Type != TokenType::Identifier)
+	if (identifier.Type != MyTokenType::Identifier)
 		throw std::runtime_error("Identifier expected");
 
 	// Check if the identifier exists
@@ -153,7 +153,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 	nodeParameters.push_back(id);
 
 	// Check if it is an assignment or only a decleration.
-	if (compiler->PeekNext()->Type == TokenType::Equals)
+	if (compiler->PeekNext()->Type == MyTokenType::Equals)
 	{
 		compiler->GetNext(); // remove the '=' token
 		expression = "$assignment";
@@ -162,7 +162,7 @@ CompilerNode Parser::ParseAssignmentStatement()
 	}
 
 	// Check if the code is closed
-	compiler->Match(TokenType::EOL);
+	compiler->Match(MyTokenType::EOL);
 
 	// Set the final node
 	endNode = new CompilerNode(expression, nodeParameters, nullptr, false);
@@ -184,11 +184,11 @@ void Parser::ParseFunctionCall()
 	CompilerNode* node = new CompilerNode("$functionName", currentToken.Value, false);
 	nodeParameters.push_back(node);
 
-    compiler->Match(TokenType::OpenBracket);
-	while (compiler->PeekNext()->Type != TokenType::CloseBracket)
+    compiler->Match(MyTokenType::OpenBracket);
+	while (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
 	{
 		currentToken = compiler->GetNext();
-		if (currentToken.Type == TokenType::Seperator)
+		if (currentToken.Type == MyTokenType::Seperator)
 		{
 			currentToken = compiler->GetNext();
 		}
@@ -198,8 +198,8 @@ void Parser::ParseFunctionCall()
             nodeParameters.push_back(node);
 	}
 
-	compiler->Match(TokenType::CloseBracket);
-	compiler->Match(TokenType::EOL);
+	compiler->Match(MyTokenType::CloseBracket);
+	compiler->Match(MyTokenType::EOL);
 
 	// Create the finall node
 	CompilerNode endNode = CompilerNode("$functionCall", nodeParameters, nullptr, false);
@@ -226,7 +226,7 @@ void Parser::ParseIfStatement()
 	CompilerNode* statementNode;
 	CompilerNode* endNode;
 
-	if (currentToken.Type == TokenType::If)
+	if (currentToken.Type == MyTokenType::If)
 	{
 		if (currentToken.Partner != nullptr)
 		{
@@ -238,24 +238,24 @@ void Parser::ParseIfStatement()
 		throw std::runtime_error("Expected if keyword");
 	}
 
-	compiler->Match(TokenType::OpenBracket);
+	compiler->Match(MyTokenType::OpenBracket);
 
 	statementNode = ParseExpression();
 
-	compiler->Match(TokenType::CloseBracket);
-	compiler->Match(TokenType::OpenMethod);
+	compiler->Match(MyTokenType::CloseBracket);
+	compiler->Match(MyTokenType::OpenMethod);
 
-	while (compiler->PeekNext()->Type != TokenType::CloseMethod)
+	while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
 	{
 		switch (compiler->PeekNext()->Type)
 		{
-		case TokenType::If:
+		case MyTokenType::If:
 			ParseIfStatement();
 			break;
-		case TokenType::While:
+		case MyTokenType::While:
 			ParseLoopStatement();
 			break;
-		case TokenType::Identifier:
+		case MyTokenType::Identifier:
 			ParseAssignmentStatement();
 			break;
 		default:
@@ -264,24 +264,24 @@ void Parser::ParseIfStatement()
 		}
 	}
 
-	compiler->Match(TokenType::CloseMethod);
+	compiler->Match(MyTokenType::CloseMethod);
 
 	if (hasPartner)
 	{
-		compiler->Match(TokenType::Else);
-		compiler->Match(TokenType::OpenMethod);
+		compiler->Match(MyTokenType::Else);
+		compiler->Match(MyTokenType::OpenMethod);
 
-		while (compiler->PeekNext()->Type != TokenType::CloseMethod)
+		while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
 		{
 			switch (compiler->PeekNext()->Type)
 			{
-			case TokenType::If:
+			case MyTokenType::If:
 				ParseIfStatement();
 				break;
-			case TokenType::While:
+			case MyTokenType::While:
 				ParseLoopStatement();
 				break;
-			case TokenType::Identifier : case TokenType::Var:
+			case MyTokenType::Identifier : case MyTokenType::Var:
 				ParseAssignmentStatement();
 				break;
 			default:
@@ -290,7 +290,7 @@ void Parser::ParseIfStatement()
 			}
 		}
 
-		compiler->Match(TokenType::CloseMethod);
+		compiler->Match(MyTokenType::CloseMethod);
 	}
 
 	std::vector<std::string> doNothing;
@@ -338,9 +338,9 @@ void Parser::ParseLoopStatement()
 	CompilerNode statementNode;
 	std::list<CompilerNode> innerStatementNodes;
 
-	if (currentToken.Type == TokenType::While || currentToken.Type == TokenType::ForLoop)
+	if (currentToken.Type == MyTokenType::While || currentToken.Type == MyTokenType::ForLoop)
 	{
-		if (currentToken.Type == TokenType::ForLoop)
+		if (currentToken.Type == MyTokenType::ForLoop)
 		{
 			forLoop = true;
 		}
@@ -350,7 +350,7 @@ void Parser::ParseLoopStatement()
 		throw std::runtime_error("Expected a loop keyword");
 	}
 
-	compiler->Match(TokenType::OpenBracket);
+	compiler->Match(MyTokenType::OpenBracket);
 
 	if (forLoop)
 	{
@@ -367,16 +367,16 @@ void Parser::ParseLoopStatement()
 		statementExpression = "$whileLoop";
 	}
 
-	compiler->Match(TokenType::CloseBracket);
+	compiler->Match(MyTokenType::CloseBracket);
 	Token* openMethod = compiler->PeekNext();
-	compiler->Match(TokenType::OpenMethod);
+	compiler->Match(MyTokenType::OpenMethod);
 
-	while (compiler->PeekNext()->Type != TokenType::CloseMethod && compiler->PeekNext()->Level == openMethod->Level)
+	while (compiler->PeekNext()->Type != MyTokenType::CloseMethod && compiler->PeekNext()->Level == openMethod->Level)
 	{
 		compiler->ParseStatement();
 	}
 
-	compiler->Match(TokenType::CloseMethod);
+	compiler->Match(MyTokenType::CloseMethod);
 
 	// Create a do nothing, so you can jump to this when the statement is false
 	std::vector<std::string> doNothing;
@@ -414,12 +414,12 @@ CompilerNode* Parser::ParseExpression()
 
 		switch (logicalOp.Type)
 		{
-		case TokenType::And:
+		case MyTokenType::And:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$and", parameters, nullptr, false);
 			break;
-		case TokenType::Or:
+		case MyTokenType::Or:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$or", parameters, nullptr, false);
@@ -441,27 +441,27 @@ CompilerNode* Parser::ParseRelationalExpression()
 
 		switch (relOp.Type)
 		{
-		case TokenType::LowerThan:
+		case MyTokenType::LowerThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$less", parameters, nullptr, false);
 			break;
-		case TokenType::LowerOrEqThan:
+		case MyTokenType::LowerOrEqThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$lessOrEq", parameters, nullptr, false);
 			break;
-		case TokenType::GreaterThan:
+		case MyTokenType::GreaterThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$greater", parameters, nullptr, false);
 			break;
-		case TokenType::GreaterOrEqThan:
+		case MyTokenType::GreaterOrEqThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$greaterOrEq", parameters, nullptr, false);
 			break;
-		case TokenType::Comparator:
+		case MyTokenType::Comparator:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$equals", parameters, nullptr, false);
@@ -483,12 +483,12 @@ CompilerNode* Parser::ParseAddExpression()
 
 		switch (addOp.Type)
 		{
-		case TokenType::OperatorPlus:
+		case MyTokenType::OperatorPlus:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$add", parameters, nullptr, false);
 			break;
-		case TokenType::OperatorMinus:
+		case MyTokenType::OperatorMinus:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
 			parsedExpr = new CompilerNode("$min", parameters, nullptr, false);
@@ -510,17 +510,17 @@ CompilerNode* Parser::ParseMulExpression()
 
 		switch (mullOp.Type)
 		{
-		case TokenType::OperatorMultiply:
+		case MyTokenType::OperatorMultiply:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
 			term = new CompilerNode("$mul", parameters, nullptr, false);
 			break;
-		case TokenType::OperatorDivide:
+		case MyTokenType::OperatorDivide:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
 			term = new CompilerNode("$div", parameters, nullptr, false);
 			break;
-		case TokenType::OperatorRaised:
+		case MyTokenType::OperatorRaised:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
 			term = new CompilerNode("$raise", parameters, nullptr, false);
@@ -542,15 +542,15 @@ CompilerNode* Parser::ParseUniExpression()
 
 		switch (uniOp.Type)
 		{
-		case TokenType::UniOperatorPlus:
+		case MyTokenType::UniOperatorPlus:
 			parameters.push_back(term);
 			term = new CompilerNode("$uniPlus", parameters, nullptr, false);
-			compiler->Match(TokenType::EOL);
+			compiler->Match(MyTokenType::EOL);
 			break;
-        case TokenType::UniOperatorMinus:
+        case MyTokenType::UniOperatorMinus:
 			parameters.push_back(term);
 			term = new CompilerNode("$uniMin", parameters, nullptr, false);
-			compiler->Match(TokenType::EOL);
+			compiler->Match(MyTokenType::EOL);
 			break;
 		}
 	}
@@ -564,14 +564,14 @@ CompilerNode* Parser::ParseTerm()
 
 	CompilerNode* node = nullptr;
 
-	if (token.Type == TokenType::Float)
+	if (token.Type == MyTokenType::Float)
 	{
 		node = new CompilerNode("$value", token.Value, false);
 		return node;
 	}
-	else if (token.Type == TokenType::Identifier)
+	else if (token.Type == MyTokenType::Identifier)
 	{
-		if (compiler->PeekNext()->Type == TokenType::OpenBracket)
+		if (compiler->PeekNext()->Type == MyTokenType::OpenBracket)
 		{
 			return ParseFunctionCall(token);
 		}
@@ -588,18 +588,18 @@ CompilerNode* Parser::ParseTerm()
 			return node;
 		}
 	}
-	else if (token.Type == TokenType::OpenBracket)
+	else if (token.Type == MyTokenType::OpenBracket)
 	{
 		node = ParseExpression();
-		compiler->Match(TokenType::CloseBracket);
+		compiler->Match(MyTokenType::CloseBracket);
 		return node;
 	}
-	else if (compiler->IsInternalFunction(token.Type) && !(token.Type==TokenType::PrintLine || token.Type==TokenType::Stop))
+	else if (compiler->IsInternalFunction(token.Type) && !(token.Type==MyTokenType::PrintLine || token.Type==MyTokenType::Stop))
 	{
 			node = InternalFunction(compiler).GetInternalFunction(token.Type);
 			return node;
 	}
-    else if (compiler->PeekNext()->Type == TokenType::OpenBracket)
+    else if (compiler->PeekNext()->Type == MyTokenType::OpenBracket)
     {
         return ParseFunctionCall(token);
     }
@@ -614,9 +614,9 @@ CompilerNode* Parser::ParseFunctionCall(Token token)
 	nodeParameters.push_back(node);
 	Token currentToken = compiler->GetNext();
 
-	while (compiler->PeekNext()->Type != TokenType::CloseBracket)
+	while (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
 	{
-		if (compiler->PeekNext()->Type == TokenType::Seperator)
+		if (compiler->PeekNext()->Type == MyTokenType::Seperator)
 		{
 			currentToken = compiler->GetNext();
 		}
@@ -625,7 +625,7 @@ CompilerNode* Parser::ParseFunctionCall(Token token)
 		nodeParameters.push_back(node);
 	}
 
-	compiler->Match(TokenType::CloseBracket);
+	compiler->Match(MyTokenType::CloseBracket);
 
 	CompilerNode* finalNode = new CompilerNode("$functionCall", nodeParameters, nullptr, false);
 	return finalNode;
@@ -635,66 +635,66 @@ CompilerNode* Parser::ParseFunctionCall(Token token)
 #pragma region IsNextTokenMethods
 bool Parser::IsNextTokenLogicalOp()
 {
-	TokenType type = compiler->PeekNext()->Type;
-	return type == TokenType::And ||
-		type == TokenType::Or;
+	MyTokenType type = compiler->PeekNext()->Type;
+	return type == MyTokenType::And ||
+		type == MyTokenType::Or;
 
-	/*std::vector<TokenType> operators{ TokenType::And, TokenType::Or };
+	/*std::vector<MyTokenType> operators{ MyTokenType::And, MyTokenType::Or };
 	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 
 bool Parser::IsNextTokenRelationalOp()
 {
-	TokenType type = compiler->PeekNext()->Type;
-	return type == TokenType::GreaterThan ||
-		type == TokenType::GreaterOrEqThan ||
-		type == TokenType::LowerThan ||
-		type == TokenType::LowerOrEqThan ||
-		type == TokenType::Comparator;
+	MyTokenType type = compiler->PeekNext()->Type;
+	return type == MyTokenType::GreaterThan ||
+		type == MyTokenType::GreaterOrEqThan ||
+		type == MyTokenType::LowerThan ||
+		type == MyTokenType::LowerOrEqThan ||
+		type == MyTokenType::Comparator;
 
-	/*std::vector<TokenType> operators{ TokenType::GreaterThan, TokenType::GreaterOrEqThan, TokenType::LowerThan, TokenType::LowerOrEqThan };
+	/*std::vector<MyTokenType> operators{ MyTokenType::GreaterThan, MyTokenType::GreaterOrEqThan, MyTokenType::LowerThan, MyTokenType::LowerOrEqThan };
 	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 
 bool Parser::IsNextTokenAddOp()
 {
-	TokenType type = compiler->PeekNext()->Type;
-	return type == TokenType::OperatorMinus ||
-		type == TokenType::OperatorPlus;
+	MyTokenType type = compiler->PeekNext()->Type;
+	return type == MyTokenType::OperatorMinus ||
+		type == MyTokenType::OperatorPlus;
 
-	/*std::vector<TokenType> operators{ TokenType::OperatorPlus, TokenType::OperatorMinus };
+	/*std::vector<MyTokenType> operators{ MyTokenType::OperatorPlus, MyTokenType::OperatorMinus };
 	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 
 bool Parser::IsNextTokenMulOp()
 {
-	TokenType type = compiler->PeekNext()->Type;
-	return type == TokenType::OperatorMultiply ||
-		type == TokenType::OperatorDivide ||
-		type == TokenType::OperatorRaised;
+	MyTokenType type = compiler->PeekNext()->Type;
+	return type == MyTokenType::OperatorMultiply ||
+		type == MyTokenType::OperatorDivide ||
+		type == MyTokenType::OperatorRaised;
 
-	/*std::vector<TokenType> operators{ TokenType::OperatorMultiply, TokenType::OperatorDivide, TokenType::OperatorRaised };
+	/*std::vector<MyTokenType> operators{ MyTokenType::OperatorMultiply, MyTokenType::OperatorDivide, MyTokenType::OperatorRaised };
 	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 
 bool Parser::IsNextTokenUniOp()
 {
-	TokenType type = compiler->PeekNext()->Type;
-	return type == TokenType::UniOperatorPlus ||
-		type == TokenType::UniOperatorMinus;
+	MyTokenType type = compiler->PeekNext()->Type;
+	return type == MyTokenType::UniOperatorPlus ||
+		type == MyTokenType::UniOperatorMinus;
 
-	/*std::vector<TokenType> operators{ TokenType::UniOperatorPlus, TokenType::UniOperatorMinus };
+	/*std::vector<MyTokenType> operators{ MyTokenType::UniOperatorPlus, MyTokenType::UniOperatorMinus };
 	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 
 bool Parser::IsNextTokenReturnType()
 {
-	TokenType type = compiler->PeekNext()->Type;
-	return type == TokenType::Void ||
-		type == TokenType::None ||
-		type == TokenType::Float;
+	MyTokenType type = compiler->PeekNext()->Type;
+	return type == MyTokenType::Void ||
+		type == MyTokenType::None ||
+		type == MyTokenType::Float;
 
-	/*std::vector<TokenType> operators{ TokenType::Void, TokenType::None, TokenType::Float };
+	/*std::vector<MyTokenType> operators{ MyTokenType::Void, MyTokenType::None, MyTokenType::Float };
 	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 #pragma endregion IsNextTokenMethods

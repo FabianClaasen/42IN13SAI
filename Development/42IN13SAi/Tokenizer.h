@@ -33,8 +33,8 @@ private:
     std::vector<Token> tokenVector;
     
     void NextLine();
-    Token* FindPartner(TokenType &tokenType, int level);
-	bool ShouldFindPartner(TokenType type);
+    Token* FindPartner(MyTokenType &myTokenType, int level);
+	bool ShouldFindPartner(MyTokenType type);
     
 public:
     Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::vector<TokenPartner> partners);

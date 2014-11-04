@@ -23,12 +23,12 @@ private:
 
 public:	
     SubroutineKind kind;
-    TokenType returnType;
+    MyTokenType returnType;
     std::string name;
 	bool isEmpty;
     
     Subroutine();
-	Subroutine(std::string p_name, TokenType p_return, SubroutineKind p_kind, SymbolTable p_parameters);
+	Subroutine(std::string p_name, MyTokenType p_return, SubroutineKind p_kind, SymbolTable p_parameters);
 	Subroutine& operator=(const Subroutine& other);
     virtual ~Subroutine();
     

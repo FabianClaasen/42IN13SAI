@@ -94,7 +94,7 @@ bool Compiler::HasSymbol(std::string symbolName)
 }
 
 // Match the next token with the given type
-void Compiler::Match(TokenType type)
+void Compiler::Match(MyTokenType type)
 {
 	if (Compiler::PeekNext() == nullptr)
 	{
@@ -115,7 +115,7 @@ void Compiler::ParseFunctionOrGlobal()
 {
 	switch (PeekNext()->Type)
 	{
-	case TokenType::Function:
+	case MyTokenType::Function:
 		Parser(this).ParseFunction();
 		break;
 	default:
@@ -130,7 +130,7 @@ void Compiler::ParseGlobalStatement()
 {
 	switch (PeekNext()->Type)
 	{
-	case TokenType::Var:
+	case MyTokenType::Var:
 		Parser(this).ParseAssignmentStatement();
 		break;
 	default:
@@ -144,36 +144,36 @@ void Compiler::ParseStatement()
 {
 	switch (PeekNext()->Type)
 	{
-	case TokenType::If:
+	case MyTokenType::If:
 		Parser(this).ParseIfStatement();
 		break;
-	case TokenType::While:
+	case MyTokenType::While:
 		Parser(this).ParseLoopStatement();
 		break;
-	case TokenType::Identifier:
+	case MyTokenType::Identifier:
 		ParseFunctionOrAssignment();
 		break;
-	case TokenType::Var:
+	case MyTokenType::Var:
 		Parser(this).ParseAssignmentStatement();
 		break;
-    case TokenType::MainFunction:
-	case TokenType::Function:
+    case MyTokenType::MainFunction:
+	case MyTokenType::Function:
 		Parser(this).ParseFunction();
 		break;
-    case TokenType::Return:
+    case MyTokenType::Return:
         Parser(this).ParseReturn();
         break;
-	case TokenType::PrintLine:
+	case MyTokenType::PrintLine:
 		if (!currentSubroutine.isEmpty)
-			currentSubroutine.AddCompilerNode(*InternalFunction(this).GetInternalFunction(TokenType::PrintLine));
-            Match(TokenType::EOL);
+			currentSubroutine.AddCompilerNode(*InternalFunction(this).GetInternalFunction(MyTokenType::PrintLine));
+            Match(MyTokenType::EOL);
 		//else
 			//std::runtime_error("");
 		break;
-	case TokenType::Stop:
+	case MyTokenType::Stop:
 		if (!currentSubroutine.isEmpty)
-			currentSubroutine.AddCompilerNode(*InternalFunction(this).GetInternalFunction(TokenType::Stop));
-            Match(TokenType::EOL);
+			currentSubroutine.AddCompilerNode(*InternalFunction(this).GetInternalFunction(MyTokenType::Stop));
+            Match(MyTokenType::EOL);
 		//else
 		//std::runtime_error("");
 		break;
@@ -186,7 +186,7 @@ void Compiler::ParseStatement()
 void Compiler::ParseFunctionOrAssignment()
 {
 	Token temp = GetNext();
-	if (PeekNext()->Type == TokenType::OpenBracket)
+	if (PeekNext()->Type == MyTokenType::OpenBracket)
 	{
 		tokenizerTokens.insert(tokenizerTokens.begin(), temp);
 		Parser(this).ParseFunctionCall();
@@ -199,30 +199,30 @@ void Compiler::ParseFunctionOrAssignment()
 }
 
 // Internal functions
-bool Compiler::IsInternalFunction(TokenType type)
+bool Compiler::IsInternalFunction(MyTokenType type)
 {
 	//check if type is an internal function
 	switch (type)
 	{
 		// Default functions
-		case TokenType::Stop:
-		case TokenType::PrintLine:
+		case MyTokenType::Stop:
+		case MyTokenType::PrintLine:
 		// Math functions
-		case TokenType::Cosine:
-		case TokenType::Sine:
-		case TokenType::Tangent:
-		case TokenType::Square:
-		case TokenType::Power:
-		case TokenType::SquareRoot:
-		case TokenType::CubeRoot:
-		case TokenType::Degree:
-		case TokenType::Radiant:
-		case TokenType::Percent:
-		case TokenType::PerMillage:
-		case TokenType::NormalLog:
-		case TokenType::NormaltwoLog:
-		case TokenType::Nlog:
-		case TokenType::Modulo:
+		case MyTokenType::Cosine:
+		case MyTokenType::Sine:
+		case MyTokenType::Tangent:
+		case MyTokenType::Square:
+		case MyTokenType::Power:
+		case MyTokenType::SquareRoot:
+		case MyTokenType::CubeRoot:
+		case MyTokenType::Degree:
+		case MyTokenType::Radiant:
+		case MyTokenType::Percent:
+		case MyTokenType::PerMillage:
+		case MyTokenType::NormalLog:
+		case MyTokenType::NormaltwoLog:
+		case MyTokenType::Nlog:
+		case MyTokenType::Modulo:
 			return true;
 		default:
 			return false;
