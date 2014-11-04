@@ -25,6 +25,7 @@ void FunctionCaller::fillFunctionMap()
 {
     // Function Operations
     functions.insert(functionMap::value_type("$functionCall", &VirtualMachine::ExecuteFunction));
+    functions.insert(functionMap::value_type("$ret", &VirtualMachine::ExecuteReturn));
     
     // Variable Operations
 	functions.insert(functionMap::value_type("$assignment", &VirtualMachine::ExecuteAssignment));
@@ -34,6 +35,9 @@ void FunctionCaller::fillFunctionMap()
 	functions.insert(functionMap::value_type("$prnt", &VirtualMachine::ExecutePrint));
 	functions.insert(functionMap::value_type("$stop", &VirtualMachine::ExecuteStop));
 
+    // Loop operations
+    functions.insert(functionMap::value_type("$whileLoop", &VirtualMachine::ExecuteWhile));
+    
 	// Conditional statements
 	functions.insert(functionMap::value_type("$less", &VirtualMachine::ExecuteLessCondition));
 	functions.insert(functionMap::value_type("$greater", &VirtualMachine::ExecuteGreaterCondition));

@@ -5,6 +5,8 @@ VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subrou
 	: mainSymboltable(symboltable), subroutineTable(subroutine), _compilernodes(compiler_nodes)
 {
 	function_caller = new FunctionCaller(this);
+    subSymbolTable = nullptr;
+    subSubroutine = nullptr;
 }
 
 VirtualMachine::~VirtualMachine(){}
@@ -48,11 +50,11 @@ void VirtualMachine::ExecuteCode()
 		} while (currentIndex < _compilernodes.size()-1);
 	}
     // Find main subroutine
-    Subroutine* mainRoutine = subroutineTable->GetSubroutine("main");
-    if (mainRoutine == nullptr)
+    subSubroutine = subroutineTable->GetSubroutine("main");
+    if (subSubroutine == nullptr)
         throw std::runtime_error("No main function found");
-    subSymbolTable = mainRoutine->GetSymbolTable();
-    ExecuteNodes(*mainRoutine->GetCompilerNodeVector());
+    subSymbolTable = subSubroutine->GetSymbolTable();
+    ExecuteNodes(*subSubroutine->GetCompilerNodeVector());
 }
 
 CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes)
@@ -68,6 +70,8 @@ CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes)
             
             if (function_call == "$ret")
                 return function_caller->Call(function_call, node);
+            else if (function_call == "$doNothing")
+                return nullptr;
             else
                 function_caller->Call(function_call, node);
         }
@@ -100,15 +104,15 @@ CompilerNode* VirtualMachine::ExecuteFunction(CompilerNode compilerNode)
         throw std::runtime_error("Expected function name");
     
     // Get the subroutine table and check if exists
-    Subroutine* functionRoutine = subroutineTable->GetSubroutine(functionNode->GetValue());
-    if (functionRoutine == nullptr)
+    subSubroutine = subroutineTable->GetSubroutine(functionNode->GetValue());
+    if (subSubroutine == nullptr)
         throw std::runtime_error("Subroutine for function " + functionNode->GetValue() + " not found");
     
     // Set the subSymbolTable
-    subSymbolTable = functionRoutine->GetSymbolTable();
+    subSymbolTable = subSubroutine->GetSymbolTable();
     
     // Get parameter count and check if enough parameters are given
-    int parameterCount = subSymbolTable->Size();
+    int parameterCount = subSymbolTable->ParameterSize();
     if (parameters.size() - 1 != parameterCount)
         throw ParameterException((int)parameters.size() - 1, parameterCount, ParameterExceptionType::IncorrectParameters);
     
@@ -117,13 +121,39 @@ CompilerNode* VirtualMachine::ExecuteFunction(CompilerNode compilerNode)
     std::vector<Symbol*> vSymbols = subSymbolTable->GetSymbolVector();
     for (Symbol* symbol : vSymbols)
     {
-        float param = atof(parameters.at(paramNum)->GetValue().c_str());
-        symbol->SetValue(param);
+        CompilerNode* param = parameters.at(paramNum);
+        if (param->GetExpression() != "$value")
+            param = CallFunction(*param);
+        
+        float fParam = atof(param->GetValue().c_str());
+        symbol->SetValue(fParam);
         paramNum++;
     }
     
-    VirtualMachine::ExecuteNodes(*functionRoutine->GetCompilerNodeVector());
-    return nullptr;
+    return VirtualMachine::ExecuteNodes(*subSubroutine->GetCompilerNodeVector());
+}
+
+CompilerNode* VirtualMachine::ExecuteReturn(CompilerNode compilerNode)
+{
+    // Check if params is not empty
+    if (compilerNode.GetNodeparameters().empty())
+        throw ParameterException(1, ParameterExceptionType::NoParameters);
+    
+    // Get the Node parameters
+    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    
+    // Check if there aren't more than two parameters
+    if (parameters.size() > 1)
+        throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
+    
+    CompilerNode* param1 = parameters.at(0);
+    if (param1->GetExpression() != "$value")
+        param1 = CallFunction(*param1);
+    
+    // Create the return node
+    CompilerNode* returnNode = new CompilerNode("$value", param1->GetValue(), false);
+    
+    return returnNode;
 }
 
 #pragma endregion FunctionOperations
@@ -238,6 +268,60 @@ CompilerNode* VirtualMachine::ExecuteStop(CompilerNode compilerNode)
 }
 
 #pragma endregion DefaultOperations
+
+#pragma region LoopOperations
+
+CompilerNode* VirtualMachine::ExecuteWhile(CompilerNode compilerNode)
+{
+    // Check if nodeparams are not empty
+    if (compilerNode.GetNodeparameters().empty())
+        throw ParameterException(1, ParameterExceptionType::NoParameters);
+    
+    std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
+    // Check if count of params is not right
+    if (parameters.size() > 1)
+        throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
+    
+    CompilerNode* condition = parameters.at(0);
+    
+    if (condition->GetExpression() != "$value")
+        condition = CallFunction(*condition);
+    
+    if (condition->GetValue() == "1")
+    {
+        std::vector<CompilerNode>::iterator iterator;
+        std::vector<CompilerNode> whileNodes;
+        for (iterator = _compilernodes.begin(); iterator != _compilernodes.end(); ++iterator)
+        {
+            if (iterator->GetExpression() == "$whileLoop")
+            {
+                whileNodes = std::vector<CompilerNode> {++iterator, _compilernodes.end()};
+                ExecuteNodes(whileNodes);
+                _compilernodes = *subSubroutine->GetCompilerNodeVector();
+                CallFunction(compilerNode);
+            }
+        }
+        return nullptr;
+    }
+    else
+    {
+        int incrementBy = 0;
+        std::vector<CompilerNode>::iterator iterator;
+        for (iterator = _compilernodes.begin() + currentIndex; iterator != _compilernodes.end(); ++iterator)
+        {
+            if (iterator->GetExpression() == "$doNothing")
+            {
+                break;
+            }
+            incrementBy++;
+        }
+        _compilernodes = *subSubroutine->GetCompilerNodeVector();
+        currentIndex = currentIndex + incrementBy;
+        return nullptr;
+    }
+}
+
+#pragma endregion LoopOperations
 
 #pragma region ConditionalStatements
 CompilerNode* VirtualMachine::ExecuteLessCondition(CompilerNode compilerNode)

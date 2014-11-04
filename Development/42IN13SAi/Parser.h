@@ -18,7 +18,7 @@ public:
 	void ParseIfStatement();
 	void ParseLoopStatement();
 	void ParseFunctionCall();
-    CompilerNode* ParseReturn();
+    void ParseReturn();
     
 	CompilerNode* ParseExpression();
 	CompilerNode* ParseRelationalExpression();
@@ -37,6 +37,7 @@ private:
 	bool IsNextTokenRelationalOp();
 	bool IsNextTokenLogicalOp();
 	bool IsNextTokenReturnType();
+    bool IsTokenReturnVarType(Token token);
 
 	Symbol* GetSymbol(std::string identifier);
 };

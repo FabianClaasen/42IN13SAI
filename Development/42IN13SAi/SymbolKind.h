@@ -4,5 +4,6 @@ enum class SymbolKind {
     None,
     Global,
     Local,
-    Parameter
+    Parameter,
+    ParameterType
 };

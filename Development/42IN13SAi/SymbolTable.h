@@ -19,4 +19,5 @@ public:
     Symbol* GetSymbol(std::string symbolName);
     std::vector<Symbol*> GetSymbolVector();
     int Size();
+    int ParameterSize();
 };

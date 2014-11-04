@@ -48,7 +48,11 @@ void Parser::ParseFunction()
 			else
 			{
 				Token parameter = compiler->GetNext();
-				Symbol parameterSymbol = Symbol(parameter.Value, parameter.Type, SymbolKind::Parameter);
+                SymbolKind kind = SymbolKind::Parameter;
+                if (IsTokenReturnVarType(parameter))
+                    kind = SymbolKind::ParameterType;
+                
+				Symbol parameterSymbol = Symbol(parameter.Value, parameter.Type, kind);
 				
 
 				if (!symbolTable.HasSymbol(parameterSymbol.name))
@@ -82,16 +86,17 @@ void Parser::ParseFunction()
 		throw std::runtime_error("Expected return type");
 }
 
-CompilerNode* Parser::ParseReturn()
+void Parser::ParseReturn()
 {
     compiler->Match(TokenType::Return);
-    
-    Token returnToken = compiler->GetNext();
     
     std::vector<CompilerNode*> nodeParameters;
     nodeParameters.push_back(ParseExpression());
     
-    return new CompilerNode("$ret", nodeParameters, nullptr, false);
+    compiler->Match(TokenType::EOL);
+    
+    CompilerNode returnNode = CompilerNode("$ret", nodeParameters, nullptr, false);
+    compiler->GetSubroutine()->AddCompilerNode(returnNode);
 }
 
 //Also parse (standard) Arithmetical operations
@@ -160,6 +165,12 @@ CompilerNode Parser::ParseAssignmentStatement()
 		CompilerNode* node = ParseExpression();
 		nodeParameters.push_back(node);
 	}
+    else if (IsNextTokenUniOp())
+    {
+        expression = "$assignment";
+        CompilerNode* node = ParseExpression();
+        nodeParameters.push_back(node);
+    }
 
 	// Check if the code is closed
 	compiler->Match(TokenType::EOL);
@@ -368,10 +379,10 @@ void Parser::ParseLoopStatement()
 	}
 
 	compiler->Match(TokenType::CloseBracket);
-	Token* openMethod = compiler->PeekNext();
+	int openMethodLevel = compiler->PeekNext()->Level;
 	compiler->Match(TokenType::OpenMethod);
 
-	while (compiler->PeekNext()->Type != TokenType::CloseMethod && compiler->PeekNext()->Level == openMethod->Level)
+	while (compiler->PeekNext()->Type != TokenType::CloseMethod && compiler->PeekNext()->Level == openMethodLevel)
 	{
 		compiler->ParseStatement();
 	}
@@ -383,8 +394,8 @@ void Parser::ParseLoopStatement()
 	CompilerNode jumpTo = CompilerNode("$doNothing", "", false);
 
 	statementNode = CompilerNode(statementExpression, nodeParameters, &jumpTo, false);
-
-	std::list<CompilerNode>::iterator it;
+    
+    std::list<CompilerNode>::iterator it;
 	it = compilerNodes->begin();
 	//make it point to the correct compilernode
 	for (int i = 0; i < compilerNodesPos; i++)
@@ -393,10 +404,10 @@ void Parser::ParseLoopStatement()
 	}
 	compilerNodes->insert(it, statementNode);
 
-	std::list<CompilerNode>::const_iterator iterator;
+	/*std::list<CompilerNode>::const_iterator iterator;
 	for (iterator = innerStatementNodes.begin(); iterator != innerStatementNodes.end(); ++iterator) {
 		compilerNodes->insert(it, *iterator);
-	}
+	}*/
 
 	compilerNodes->push_back(jumpTo);
 }
@@ -692,12 +703,17 @@ bool Parser::IsNextTokenReturnType()
 	TokenType type = compiler->PeekNext()->Type;
 	return type == TokenType::Void ||
 		type == TokenType::None ||
-		type == TokenType::Float;
+		type == TokenType::FloatReturn;
 
 	/*std::vector<TokenType> operators{ TokenType::Void, TokenType::None, TokenType::Float };
 	return std::find(operators.begin(), operators.end(), compiler->PeekNext()->Type) != operators.end();*/
 }
 #pragma endregion IsNextTokenMethods
+
+bool Parser::IsTokenReturnVarType(Token token)
+{
+    return token.Type == TokenType::FloatReturn;
+}
 
 // This function will return a symbol based on the identifier parameter.
 // It will not just check the global symboltable but will first check the 

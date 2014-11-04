@@ -20,6 +20,7 @@ public:
 
     // Function Operations
     CompilerNode* ExecuteFunction(CompilerNode compilerNode);
+    CompilerNode* ExecuteReturn(CompilerNode compilerNode);
     
     // Variable operations
 	CompilerNode* ExecuteAssignment(CompilerNode compilerNode);
@@ -28,6 +29,9 @@ public:
 	//Default operations
 	CompilerNode* ExecutePrint(CompilerNode compilerNode);
 	CompilerNode* ExecuteStop(CompilerNode compilerNode);
+    
+    // Loop operations
+    CompilerNode* ExecuteWhile(CompilerNode compilerNode);
 
     // Simple math operations
     CompilerNode* ExecuteAddOperation(CompilerNode compilerNode);
@@ -51,6 +55,7 @@ private:
 	SymbolTable* mainSymboltable;
     SymbolTable* subSymbolTable;
 	SubroutineTable* subroutineTable;
+    Subroutine* subSubroutine;
 	CompilerNode* PeekNext();
 	CompilerNode GetNext();
     CompilerNode* CallFunction(CompilerNode node);
