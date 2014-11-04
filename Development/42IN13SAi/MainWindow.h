@@ -12,11 +12,11 @@ class MainWindow : public QMainWindow
 		MainWindow(QWidget *parent = 0);
 		~MainWindow();
 		QString getText();
-		bool isExecuted = false;
 
 	private slots:
 		void execute();
 
 	private:
 		CodeEditor* codeEditor;
+		QString getFileFromStream();
 };
