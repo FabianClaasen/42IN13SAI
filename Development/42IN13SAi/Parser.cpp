@@ -102,6 +102,11 @@ void Parser::ParseReturn()
 //Also parse (standard) Arithmetical operations
 CompilerNode* Parser::ParseAssignmentStatement(bool forLoop)
 {
+#ifdef _WIN32
+	// Memory leaks notifier
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
 	std::string expression = "";
 	std::vector<CompilerNode*> nodeParameters;
 	CompilerNode* endNode = nullptr;
@@ -192,7 +197,7 @@ CompilerNode* Parser::ParseAssignmentStatement(bool forLoop)
 	// Check if the code is closed
 	compiler->Match(MyTokenType::EOL);
 
-	if (!forLoop)
+	if (!forLoop && endNode != nullptr)
 	{
 		if (compiler->GetSubroutine()->isEmpty)
 			compiler->AddCompilerNode(*endNode);

@@ -16,6 +16,7 @@ class MainWindow : public QMainWindow
 
 	private slots:
 		void execute();
+		void clearConsole();
 
 	private:
 		CodeEditor* codeEditor;
