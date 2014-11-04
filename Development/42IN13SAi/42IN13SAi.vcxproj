@@ -582,7 +582,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Qt5Version_x0020_Win32="qt_v5" />
+      <UserProperties Qt5Version_x0020_Win32="QT5" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -95,11 +95,11 @@ CompilerNode* Parser::ParseReturn()
 }
 
 //Also parse (standard) Arithmetical operations
-void Parser::ParseAssignmentStatement()
+CompilerNode* Parser::ParseAssignmentStatement(bool forLoop)
 {
 	std::string expression = "";
 	std::vector<CompilerNode*> nodeParameters;
-	CompilerNode* endNode;
+	CompilerNode* endNode = nullptr;
 	Subroutine* subroutine = compiler->GetSubroutine();
 
 	bool newIdentifier = false;
@@ -159,18 +159,37 @@ void Parser::ParseAssignmentStatement()
 		expression = "$assignment";
 		CompilerNode* node = ParseExpression();
 		nodeParameters.push_back(node);
+		endNode = new CompilerNode(expression, nodeParameters, nullptr, false);
+	}
+	else if (IsNextTokenUniOp())
+	{
+		currentToken = compiler->GetNext();
+		std::vector<CompilerNode*> parameters;
+		switch (currentToken.Type)
+		{
+		case MyTokenType::UniOperatorPlus:
+			parameters.push_back(new CompilerNode("$identifier", identifier.Value, false));
+			endNode = new CompilerNode("$uniPlus", parameters, nullptr, false);
+			break;
+		case MyTokenType::UniOperatorMinus:
+			parameters.push_back(new CompilerNode("$identifier", identifier.Value, false));
+			endNode = new CompilerNode("$uniMin", parameters, nullptr, false);
+			break;
+		}
 	}
 
 	// Check if the code is closed
 	compiler->Match(MyTokenType::EOL);
 
-	// Set the final node
-	endNode = new CompilerNode(expression, nodeParameters, nullptr, false);
+	if (!forLoop)
+	{
+		if (compiler->GetSubroutine()->isEmpty)
+			compiler->AddCompilerNode(*endNode);
+		else
+			compiler->GetSubroutine()->AddCompilerNode(*endNode);
+	}
 
-	if (compiler->GetSubroutine()->isEmpty)
-		compiler->AddCompilerNode(*endNode);
-	else
-		compiler->GetSubroutine()->AddCompilerNode(*endNode);
+	return endNode;
 }
 
 // This function is only called when a function is called without it being in a assignment.
@@ -304,9 +323,10 @@ void Parser::ParseLoopStatement()
 
 	if (forLoop)
 	{
-		ParseAssignmentStatement();
+		nodeParameters.push_back(ParseAssignmentStatement(true));
 		nodeParameters.push_back(ParseExpression());
-		nodeParameters.push_back(ParseAddExpression());
+		compiler->GetNext();
+		nodeParameters.push_back(ParseExpression());
 
 		statementExpression = "$forLoop";
 	}

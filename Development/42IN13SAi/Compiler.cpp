@@ -131,7 +131,7 @@ void Compiler::ParseGlobalStatement()
 	switch (PeekNext()->Type)
 	{
 	case MyTokenType::Var:
-		Parser(this).ParseAssignmentStatement();
+		Parser(this).ParseAssignmentStatement(false);
 		break;
 	default:
 		throw std::runtime_error("No variable found");
@@ -147,14 +147,14 @@ void Compiler::ParseStatement()
 	case MyTokenType::If:
 		Parser(this).ParseIfStatement();
 		break;
-	case MyTokenType::While:
+	case MyTokenType::While: case MyTokenType::ForLoop:
 		Parser(this).ParseLoopStatement();
 		break;
 	case MyTokenType::Identifier:
 		ParseFunctionOrAssignment();
 		break;
 	case MyTokenType::Var:
-		Parser(this).ParseAssignmentStatement();
+		Parser(this).ParseAssignmentStatement(false);
 		break;
     case MyTokenType::MainFunction:
 	case MyTokenType::Function:
@@ -194,7 +194,7 @@ void Compiler::ParseFunctionOrAssignment()
 	else
 	{
 		tokenizerTokens.insert(tokenizerTokens.begin(), temp);
-		Parser(this).ParseAssignmentStatement();
+		Parser(this).ParseAssignmentStatement(false);
 	}
 }
 
