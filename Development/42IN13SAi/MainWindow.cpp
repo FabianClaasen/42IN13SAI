@@ -50,6 +50,11 @@ void MainWindow::execute()
 	virtual_machine.ExecuteCode();
 }
 
+void MainWindow::clearConsole()
+{
+	system("cls");
+}
+
 QString MainWindow::getText()
 {
 	return codeEditor->toPlainText();
@@ -87,7 +92,10 @@ void MainWindow::showMenuBar()
 
 	// Create action and connect
 	QAction *runAction = menu->addAction("Run");
+	QAction *clearAction = menu->addAction("Clear console");
+
 	connect(runAction, SIGNAL(triggered()), this, SLOT(execute()));
+	connect(clearAction, SIGNAL(triggered()), this, SLOT(clearConsole()));
 
 	// Set the menu bar on ui from left to right
 	this->setMenuBar(menu);

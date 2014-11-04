@@ -220,7 +220,7 @@ CompilerNode* VirtualMachine::ExecutePrint(CompilerNode compilerNode)
 
 	// Print te new value
 	std::cout << valueToPrint << std::endl;
-    std::cin.get();
+    //std::cin.get();
     
 	return nullptr;
 }
