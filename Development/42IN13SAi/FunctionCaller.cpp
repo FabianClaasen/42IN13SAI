@@ -49,6 +49,8 @@ void FunctionCaller::fillFunctionMap()
     functions.insert(functionMap::value_type("$mul", &VirtualMachine::ExecuteMultiplyOperation));
     functions.insert(functionMap::value_type("$div", &VirtualMachine::ExecuteDivideOperation));
 	functions.insert(functionMap::value_type("$mod", &VirtualMachine::ExecuteModuloOperation));
+    functions.insert(functionMap::value_type("$uniMin", &VirtualMachine::ExecuteUniMinOperation));
+    functions.insert(functionMap::value_type("$uniPlus", &VirtualMachine::ExecuteUniPlusOperation));
 
     // Complex Math Operations
     functions.insert(functionMap::value_type("$sin", &VirtualMachine::ExecuteSinOperation));
