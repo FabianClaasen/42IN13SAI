@@ -336,7 +336,14 @@ CompilerNode* VirtualMachine::ExecuteWhile(CompilerNode compilerNode)
     if (condition->GetExpression() != "$value")
         condition = CallFunction(*condition);
     
-    std::vector<CompilerNode> compilerNodes = *subSubroutine->GetCompilerNodeVector();
+	std::vector<CompilerNode> compilerNodes;
+	if (subSubroutine == nullptr)
+	{
+		subSubroutine = subroutineTable->GetSubroutine("main");
+		compilerNodes = *subSubroutine->GetCompilerNodeVector();
+	}
+	else
+		compilerNodes = *subSubroutine->GetCompilerNodeVector();
     if (condition->GetValue() == "1")
     {
         std::vector<CompilerNode>::iterator iterator;
