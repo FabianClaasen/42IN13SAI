@@ -54,7 +54,7 @@ void Tokenizer::Tokenize()
 					}
 					catch (PartnerNotFoundException &e) {
 						// Catch the exception and rethrow
-                        std::cout << e.what();
+                        std::cout << e.what() << std::endl;
                         throw;
 					}
 				}
