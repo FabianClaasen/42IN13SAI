@@ -33,9 +33,15 @@ void MainWindow::execute()
 	// Get the file from the stream and convert to std::string
 	std::string input(getFileFromStream().toStdString());
 
-	// Tokenize the code
 	TokenizerController *tokenizer_controller = new TokenizerController(input);
-	tokenizer_controller->Tokenize();
+	try {
+		// Tokenize the code		
+		tokenizer_controller->Tokenize();
+	}
+	catch (const std::exception& e)
+	{
+		return;
+	}
 
 	// Run the compiler
 	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
