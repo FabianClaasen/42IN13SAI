@@ -178,14 +178,17 @@ CompilerNode* Parser::ParseAssignmentStatement(bool forLoop)
 		switch (currentToken.Type)
 		{
 		case MyTokenType::UniOperatorPlus:
-			parameters.push_back(new CompilerNode("$identifier", identifier.Value, false));
-			endNode = new CompilerNode("$uniPlus", parameters, nullptr, false);
+			parameters.push_back(new CompilerNode("$getVariable", identifier.Value, false));
+			nodeParameters.push_back(new CompilerNode("$uniPlus", parameters, nullptr, false));
 			break;
 		case MyTokenType::UniOperatorMinus:
-			parameters.push_back(new CompilerNode("$identifier", identifier.Value, false));
-			endNode = new CompilerNode("$uniMin", parameters, nullptr, false);
+			parameters.push_back(new CompilerNode("$getVariable", identifier.Value, false));
+			nodeParameters.push_back(new CompilerNode("$uniMin", parameters, nullptr, false));
+            
 			break;
 		}
+        expression = "$assignment";
+        endNode = new CompilerNode(expression, nodeParameters, nullptr, false);
 	}
     else if (IsNextTokenUniOp())
     {
@@ -220,8 +223,7 @@ void Parser::ParseFunctionCall()
     compiler->Match(MyTokenType::OpenBracket);
 	while (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
 	{
-		currentToken = compiler->GetNext();
-		if (currentToken.Type == MyTokenType::Seperator)
+		if (compiler->PeekNext()->Type == MyTokenType::Seperator)
 		{
 			currentToken = compiler->GetNext();
 		}
@@ -359,7 +361,7 @@ void Parser::ParseLoopStatement()
     
     //Make the endNode before parsing the statements in the loop
     endNode = CompilerNode(statementExpression, nodeParameters, &jumpTo, false);
-    compiler->AddCompilerNode(endNode);
+    compiler->GetSubroutine()->AddCompilerNode(endNode);
     
     compiler->Match(MyTokenType::CloseBracket);
     compiler->Match(MyTokenType::OpenMethod);
@@ -373,7 +375,7 @@ void Parser::ParseLoopStatement()
     
     //Finally add the jumpTo compilerNode
     
-    compiler->AddCompilerNode(jumpTo);
+    compiler->GetSubroutine()->AddCompilerNode(jumpTo);
 }
 
 #pragma endregion ParseStatementMethods

@@ -8,24 +8,33 @@ VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subrou
 
     subSymbolTable = nullptr;
     subSubroutine = nullptr;
-
 }
 
 VirtualMachine::~VirtualMachine(){}
 
-CompilerNode* VirtualMachine::PeekNext()
+CompilerNode VirtualMachine::PeekNext(int _currentIndex, std::vector<CompilerNode> nodes)
 {
-	CompilerNode *node = &_compilernodes.at(currentIndex + 1);
+    CompilerNode node;
+    if (nodes.size() - 1 > _currentIndex || _currentIndex == -1)
+       node = nodes.at(_currentIndex + 1);
 	return node;
 }
 
-CompilerNode VirtualMachine::GetNext()
+CompilerNode VirtualMachine::PeekPrevious(int _currentIndex, std::vector<CompilerNode> nodes)
+{
+    CompilerNode node;
+    if (_currentIndex >= 1)
+        node = nodes.at(_currentIndex - 1);
+    return node;
+}
+
+CompilerNode VirtualMachine::GetNext(int* _currentIndex, std::vector<CompilerNode> nodes)
 {
 	CompilerNode node;
-    currentIndex++;
-	if (currentIndex <= _compilernodes.size()-1 && _compilernodes.size() > 0)
+    (*_currentIndex)++;
+	if (*_currentIndex <= nodes.size()-1 && nodes.size() > 0)
 	{
-		node = _compilernodes.at(currentIndex);
+		node = nodes.at(*_currentIndex);
 	}
 	else
 	{
@@ -35,17 +44,18 @@ CompilerNode VirtualMachine::GetNext()
 	return node;
 }
 
+
 void VirtualMachine::ExecuteCode()
 {
-	// Only when there are compilernodes for gloval vars
+	// Only when there are compilernodes for global vars
 	if (_compilernodes.size() > 0)
 	{
 		// First check all compilernodes for global variables
 		do 
 		{
-			if (PeekNext() != nullptr)
+			if (PeekNext(currentIndex, _compilernodes).GetExpression() != "")
 			{
-				CompilerNode node = VirtualMachine::GetNext();
+				CompilerNode node = VirtualMachine::GetNext(&currentIndex, _compilernodes);
 				std::string function_call = node.GetExpression();
 				function_caller->Call(function_call, node);
 			}
@@ -57,17 +67,31 @@ void VirtualMachine::ExecuteCode()
         throw std::runtime_error("No main function found");
     subSymbolTable = subSubroutine->GetSymbolTable();
     ExecuteNodes(*subSubroutine->GetCompilerNodeVector());
+    
+    //std::vector<CompilerNode> mainNodes = *subSubroutine->GetCompilerNodeVector();
 }
 
 CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes)
 {
-    currentIndex = -1;
-    _compilernodes = nodes;
+    int* _currentIndex = new int(-1);
+    std::vector<CompilerNode>* compilernodes = &nodes;
     do
     {
-        if (PeekNext() != nullptr)
+        if (PeekNext(*_currentIndex, *compilernodes).GetExpression() != "")
         {
-            CompilerNode node = VirtualMachine::GetNext();
+            CompilerNode node = VirtualMachine::GetNext(_currentIndex, *compilernodes);
+            
+            CompilerNode previous = PeekPrevious(*_currentIndex, *compilernodes);
+            if (previous.GetExpression() != "" && previous.GetExpression() == "$whileLoop")
+            {
+                while (PeekNext(*_currentIndex, *compilernodes).GetExpression() != "$doNothing")
+                {
+                    node = VirtualMachine::GetNext(_currentIndex, *compilernodes);
+                }
+                node = VirtualMachine::GetNext(_currentIndex, *compilernodes);
+            }
+            
+            // commentaar
             std::string function_call = node.GetExpression();
             
             if (function_call == "$ret")
@@ -77,7 +101,30 @@ CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes)
             else
                 function_caller->Call(function_call, node);
         }
-    } while (currentIndex < _compilernodes.size()-1);
+    } while (*_currentIndex < compilernodes->size()-1);
+    
+    return nullptr;
+}
+
+CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes, int currenIndex)
+{
+    int* _currentIndex = new int(currenIndex);
+    std::vector<CompilerNode>* compilernodes = &nodes;
+    do
+    {
+        if (PeekNext(*_currentIndex, *compilernodes).GetExpression() != "")
+        {
+            CompilerNode node = VirtualMachine::GetNext(_currentIndex, *compilernodes);
+            std::string function_call = node.GetExpression();
+            
+            if (function_call == "$ret")
+                return function_caller->Call(function_call, node);
+            else if (function_call == "$doNothing")
+                return nullptr;
+            else
+                function_caller->Call(function_call, node);
+        }
+    } while (*_currentIndex < compilernodes->size()-1);
     
     return nullptr;
 }
@@ -289,17 +336,17 @@ CompilerNode* VirtualMachine::ExecuteWhile(CompilerNode compilerNode)
     if (condition->GetExpression() != "$value")
         condition = CallFunction(*condition);
     
+    std::vector<CompilerNode> compilerNodes = *subSubroutine->GetCompilerNodeVector();
     if (condition->GetValue() == "1")
     {
         std::vector<CompilerNode>::iterator iterator;
         std::vector<CompilerNode> whileNodes;
-        for (iterator = _compilernodes.begin(); iterator != _compilernodes.end(); ++iterator)
+        for (iterator = compilerNodes.begin(); iterator != compilerNodes.end(); ++iterator)
         {
             if (iterator->GetExpression() == "$whileLoop")
             {
-                whileNodes = std::vector<CompilerNode> {++iterator, _compilernodes.end()};
+                whileNodes = std::vector<CompilerNode> {++iterator, compilerNodes.end()};
                 ExecuteNodes(whileNodes);
-                _compilernodes = *subSubroutine->GetCompilerNodeVector();
                 CallFunction(compilerNode);
             }
         }
@@ -307,18 +354,17 @@ CompilerNode* VirtualMachine::ExecuteWhile(CompilerNode compilerNode)
     }
     else
     {
-        int incrementBy = 0;
+        /*int startIndex = 0;
         std::vector<CompilerNode>::iterator iterator;
-        for (iterator = _compilernodes.begin() + currentIndex; iterator != _compilernodes.end(); ++iterator)
+        for (iterator = compilerNodes.begin(); iterator != compilerNodes.end(); ++iterator)
         {
             if (iterator->GetExpression() == "$doNothing")
             {
                 break;
             }
-            incrementBy++;
+            startIndex++;
         }
-        _compilernodes = *subSubroutine->GetCompilerNodeVector();
-        currentIndex = currentIndex + incrementBy;
+        ExecuteNodes(compilerNodes, startIndex);*/
         return nullptr;
     }
 }
@@ -378,8 +424,8 @@ CompilerNode* VirtualMachine::ExecuteGreaterCondition(CompilerNode compilerNode)
 		param2 = CallFunction(*param2);
 
 	// Set numbers / values
-	float num1 = atof(param1->GetExpression().c_str());
-	float num2 = atof(param2->GetExpression().c_str());
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
 	bool output = num1 > num2;
 
 	// Set boolean to true if num1 > num2, else return false (inside the node)
@@ -615,6 +661,64 @@ CompilerNode* VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
 	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
 
 	return rNode;
+}
+
+CompilerNode* VirtualMachine::ExecuteUniMinOperation(CompilerNode compilerNode)
+{
+    if (compilerNode.GetNodeparameters().empty())
+        throw ParameterException(1, ParameterExceptionType::NoParameters);
+    
+    // Get the Node parameters
+    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    
+    // Check if there aren't more than two parameters
+    if (parameters.size() > 1)
+        throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
+    
+    CompilerNode* param1 = parameters.at(0);
+    
+    // Check if the parameters are a value or another function call
+    // if function call, execute function
+    if (param1->GetExpression() != "$value")
+        param1 = CallFunction(*param1);
+    
+    // Parse the parameters to a float for mathmatic operation
+    float num1 = atof(param1->GetValue().c_str());
+    float output = num1 - 1;
+    
+    // Create a new value compilernode to return
+    CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
+    
+    return rNode;
+}
+
+CompilerNode* VirtualMachine::ExecuteUniPlusOperation(CompilerNode compilerNode)
+{
+    if (compilerNode.GetNodeparameters().empty())
+        throw ParameterException(1, ParameterExceptionType::NoParameters);
+    
+    // Get the Node parameters
+    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    
+    // Check if there aren't more than two parameters
+    if (parameters.size() > 1)
+        throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
+    
+    CompilerNode* param1 = parameters.at(0);
+    
+    // Check if the parameters are a value or another function call
+    // if function call, execute function
+    if (param1->GetExpression() != "$value")
+        param1 = CallFunction(*param1);
+    
+    // Parse the parameters to a float for mathmatic operation
+    float num1 = atof(param1->GetValue().c_str());
+    float output = num1++;
+    
+    // Create a new value compilernode to return
+    CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
+    
+    return rNode;
 }
 
 #pragma endregion SimpleMath

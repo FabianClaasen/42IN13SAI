@@ -17,6 +17,7 @@ public:
 
 	void ExecuteCode();
     CompilerNode* ExecuteNodes(std::vector<CompilerNode> nodes);
+    CompilerNode* ExecuteNodes(std::vector<CompilerNode> nodes, int currentIndex);
 
     // Function Operations
     CompilerNode* ExecuteFunction(CompilerNode compilerNode);
@@ -39,6 +40,8 @@ public:
     CompilerNode* ExecuteMultiplyOperation(CompilerNode compilerNode);
     CompilerNode* ExecuteDivideOperation(CompilerNode compilerNode);
 	CompilerNode* ExecuteModuloOperation(CompilerNode compilerNode);
+    CompilerNode* ExecuteUniPlusOperation(CompilerNode compilerNode);
+    CompilerNode* ExecuteUniMinOperation(CompilerNode compilerNode);
     
 	//Conditional statements
 	CompilerNode* ExecuteLessCondition(CompilerNode compilerNode);
@@ -56,8 +59,9 @@ private:
     SymbolTable* subSymbolTable;
 	SubroutineTable* subroutineTable;
     Subroutine* subSubroutine;
-	CompilerNode* PeekNext();
-	CompilerNode GetNext();
+    CompilerNode PeekNext(int currentIndex, std::vector<CompilerNode> nodes);
+    CompilerNode PeekPrevious(int currentIndex, std::vector<CompilerNode> nodes);
+	CompilerNode GetNext(int* currentIndex, std::vector<CompilerNode> nodes);
     CompilerNode* CallFunction(CompilerNode node);
 	FunctionCaller* function_caller;
 
