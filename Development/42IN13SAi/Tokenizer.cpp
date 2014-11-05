@@ -50,12 +50,14 @@ void Tokenizer::Tokenize()
 				if (ShouldFindPartner(definition.myTokenType))
 				{
 					try {
-						partner = FindPartner(definition.myTokenType, level);
+						Token* temp = FindPartner(definition.myTokenType, level);
+						if (temp->Partner != nullptr)
+							partner = temp;
 					}
-					catch (PartnerNotFoundException &e) {
+					catch (const PartnerNotFoundException &e) {
 						// Catch the exception and rethrow
                         std::cout << e.what() << std::endl;
-                        throw;
+						throw;
 					}
 				}
 
@@ -84,6 +86,8 @@ void Tokenizer::Tokenize()
 		// Throw an exception if the target couldnt be parsed as a token.
 		if (!match)
 			throw ParseException("Unrecognized character '" + lineRemaining.substr(1) + "' on line " + std::to_string(lineNumber) + " at position " + std::to_string(linePosition));
+
+		
 	}
 }
 

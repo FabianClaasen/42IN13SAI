@@ -6,10 +6,17 @@ Token::Token(int lineNumber, int linePosition, int level, std::string value, MyT
 {
 }
 
-Token::Token() : LineNumber(0), LinePosition(0), Level(0), Value("")
+Token::Token() : LineNumber(0), LinePosition(0), Level(0), Value(""), Partner(nullptr)
 {
 }
 
 Token::~Token()
 {
+	try{
+		delete Partner;
+	}
+	catch (...)
+	{
+		throw;
+	}
 }

@@ -38,8 +38,9 @@ void MainWindow::execute()
 		// Tokenize the code		
 		tokenizer_controller->Tokenize();
 	}
-	catch (const std::exception& e)
+	catch (const PartnerNotFoundException& e)
 	{
+		delete(tokenizer_controller);
 		return;
 	}
 
@@ -48,7 +49,7 @@ void MainWindow::execute()
 	compiler.Compile();
 
 	// Delete the tokenizer controller
-	//delete(tokenizer_controller);
+	delete(tokenizer_controller);
 
 	// Run the virtual machine with the compilernodes
 	VirtualMachine virtual_machine =
