@@ -12,12 +12,12 @@
 class VirtualMachine
 {
 public:
-	VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::vector<CompilerNode> compiler_nodes);
+	VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::list<CompilerNode> compiler_nodes);
 	virtual ~VirtualMachine();
 
 	void ExecuteCode();
-    CompilerNode* ExecuteNodes(std::vector<CompilerNode> nodes);
-    CompilerNode* ExecuteNodes(std::vector<CompilerNode> nodes, int currentIndex);
+    CompilerNode* ExecuteNodes(std::list<CompilerNode> nodes);
+    CompilerNode* ExecuteNodes(std::list<CompilerNode> nodes, int currentIndex);
 
     // Function Operations
     CompilerNode* ExecuteFunction(CompilerNode compilerNode);
@@ -59,14 +59,14 @@ private:
     SymbolTable* subSymbolTable;
 	SubroutineTable* subroutineTable;
     Subroutine* subSubroutine;
-    CompilerNode PeekNext(int currentIndex, std::vector<CompilerNode> nodes);
-    CompilerNode PeekPrevious(int currentIndex, std::vector<CompilerNode> nodes);
-	CompilerNode GetNext(int* currentIndex, std::vector<CompilerNode> nodes);
+    CompilerNode PeekNext(int currentIndex, std::list<CompilerNode> nodes);
+	CompilerNode PeekPrevious(int currentIndex, std::list<CompilerNode> nodes);
+	CompilerNode GetNext(int* currentIndex, std::list<CompilerNode> nodes);
     CompilerNode* CallFunction(CompilerNode node);
 	FunctionCaller* function_caller;
 
-	std::vector<CompilerNode> _compilernodes;
-	std::vector<CompilerNode> _received_compilernodes;
+	std::list<CompilerNode> _compilernodes;
+	std::list<CompilerNode> _received_compilernodes;
 	int currentIndex = -1;
 
 	//bool isAction(MFP);

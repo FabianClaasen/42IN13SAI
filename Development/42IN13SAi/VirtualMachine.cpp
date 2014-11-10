@@ -1,7 +1,7 @@
 #include "VirtualMachine.h"
 #include <iostream>
 
-VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::vector<CompilerNode> compiler_nodes)
+VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::list<CompilerNode> compiler_nodes)
 	: mainSymboltable(symboltable), subroutineTable(subroutine), _compilernodes(compiler_nodes)
 {
 	function_caller = new FunctionCaller(this);
@@ -12,29 +12,46 @@ VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subrou
 
 VirtualMachine::~VirtualMachine(){}
 
-CompilerNode VirtualMachine::PeekNext(int _currentIndex, std::vector<CompilerNode> nodes)
+CompilerNode VirtualMachine::PeekNext(int _currentIndex, std::list<CompilerNode> nodes)
 {
     CompilerNode node;
-    if (nodes.size() - 1 > _currentIndex || _currentIndex == -1)
-       node = nodes.at(_currentIndex + 1);
+	if (nodes.size() - 1 > _currentIndex || _currentIndex == -1)
+	{
+		std::list<CompilerNode>::iterator it = nodes.begin();
+		std::advance(it, _currentIndex + 1);
+		node = *it;
+	}
+       /*node = nodes.at(_currentIndex + 1);*/
 	return node;
 }
 
-CompilerNode VirtualMachine::PeekPrevious(int _currentIndex, std::vector<CompilerNode> nodes)
+CompilerNode VirtualMachine::PeekPrevious(int _currentIndex, std::list<CompilerNode> nodes)
 {
     CompilerNode node;
-    if (_currentIndex >= 1)
-        node = nodes.at(_currentIndex - 1);
+	if (_currentIndex >= 1)
+	{
+		std::list<CompilerNode>::iterator it = nodes.begin();
+		std::advance(it, _currentIndex - 1);
+		node = *it;
+	}
+        /*node = nodes.at(_currentIndex - 1);*/
     return node;
 }
 
-CompilerNode VirtualMachine::GetNext(int* _currentIndex, std::vector<CompilerNode> nodes)
+CompilerNode VirtualMachine::GetNext(int* _currentIndex, std::list<CompilerNode> nodes)
 {
 	CompilerNode node;
     (*_currentIndex)++;
 	if (*_currentIndex <= nodes.size()-1 && nodes.size() > 0)
 	{
-		node = nodes.at(*_currentIndex);
+		std::list<CompilerNode>::iterator it = nodes.begin();
+		if (*_currentIndex > 0)
+		{
+			std::advance(it, _currentIndex);
+		}
+		
+		node = *it;
+		/*node = nodes.at(*_currentIndex);*/
 	}
 	else
 	{
@@ -66,15 +83,15 @@ void VirtualMachine::ExecuteCode()
     if (subSubroutine == nullptr)
         throw std::runtime_error("No main function found");
     subSymbolTable = subSubroutine->GetSymbolTable();
-    ExecuteNodes(*subSubroutine->GetCompilerNodeVector());
+    ExecuteNodes(*subSubroutine->GetCompilerNodeCollection());
     
     //std::vector<CompilerNode> mainNodes = *subSubroutine->GetCompilerNodeVector();
 }
 
-CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes)
+CompilerNode* VirtualMachine::ExecuteNodes(std::list<CompilerNode> nodes)
 {
     int* _currentIndex = new int(-1);
-    std::vector<CompilerNode>* compilernodes = &nodes;
+    std::list<CompilerNode>* compilernodes = &nodes;
     do
     {
         if (PeekNext(*_currentIndex, *compilernodes).GetExpression() != "")
@@ -106,10 +123,10 @@ CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes)
     return nullptr;
 }
 
-CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes, int currenIndex)
+CompilerNode* VirtualMachine::ExecuteNodes(std::list<CompilerNode> nodes, int currenIndex)
 {
     int* _currentIndex = new int(currenIndex);
-    std::vector<CompilerNode>* compilernodes = &nodes;
+    std::list<CompilerNode>* compilernodes = &nodes;
     do
     {
         if (PeekNext(*_currentIndex, *compilernodes).GetExpression() != "")
@@ -179,7 +196,7 @@ CompilerNode* VirtualMachine::ExecuteFunction(CompilerNode compilerNode)
         paramNum++;
     }
     
-    return VirtualMachine::ExecuteNodes(*subSubroutine->GetCompilerNodeVector());
+    return VirtualMachine::ExecuteNodes(*subSubroutine->GetCompilerNodeCollection());
 }
 
 CompilerNode* VirtualMachine::ExecuteReturn(CompilerNode compilerNode)
@@ -347,12 +364,12 @@ CompilerNode* VirtualMachine::ExecuteWhile(CompilerNode compilerNode)
     if (condition->GetValue() == "1")
     {
         std::vector<CompilerNode>::iterator iterator;
-        std::vector<CompilerNode> whileNodes;
+        std::list<CompilerNode> whileNodes;
         for (iterator = compilerNodes.begin(); iterator != compilerNodes.end(); ++iterator)
         {
             if (iterator->GetExpression() == "$whileLoop")
             {
-                whileNodes = std::vector<CompilerNode> {++iterator, compilerNodes.end()};
+                whileNodes = std::list<CompilerNode> {++iterator, compilerNodes.end()};
                 ExecuteNodes(whileNodes);
                 CallFunction(compilerNode);
             }
