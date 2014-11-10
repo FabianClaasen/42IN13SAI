@@ -1,6 +1,6 @@
 #include "CompilerNode.h"
 
-CompilerNode::CompilerNode(std::string p_expression, std::vector<CompilerNode*> p_nodeParameters, CompilerNode *p_jumpTo, bool condition) : expression(p_expression), nodeParameters(p_nodeParameters), jumpTo(p_jumpTo), condition(condition)
+CompilerNode::CompilerNode(std::string p_expression, std::vector<std::shared_ptr<CompilerNode>> p_nodeParameters, std::shared_ptr<CompilerNode> p_jumpTo, bool condition) : expression(p_expression), nodeParameters(p_nodeParameters), jumpTo(p_jumpTo), condition(condition)
 {
 }
 
@@ -24,7 +24,7 @@ CompilerNode::~CompilerNode()
 
 void CompilerNode::SetJumpTo(CompilerNode jump)
 {
-	jumpTo = &jump;
+	jumpTo = std::shared_ptr<CompilerNode>(&jump);
 }
 
 std::string CompilerNode::GetExpression()
@@ -37,7 +37,7 @@ std::string CompilerNode::GetValue()
 	return value;
 }
 
-std::vector<CompilerNode*> CompilerNode::GetNodeparameters()
+std::vector<std::shared_ptr<CompilerNode>> CompilerNode::GetNodeparameters()
 {
 	return nodeParameters;
 }
