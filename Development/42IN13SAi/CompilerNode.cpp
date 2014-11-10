@@ -8,7 +8,7 @@ CompilerNode::CompilerNode(std::string p_expression, std::string p_value, bool c
 {
 }
 
-CompilerNode::CompilerNode() : expression(""), jumpTo(nullptr), condition(condition)
+CompilerNode::CompilerNode() : expression(""), condition(condition)
 {
 }
 
@@ -22,9 +22,9 @@ CompilerNode::~CompilerNode()
 	//delete jumpTo;
 }
 
-void CompilerNode::SetJumpTo(CompilerNode jump)
+void CompilerNode::SetJumpTo(std::shared_ptr<CompilerNode> jump)
 {
-	jumpTo = std::shared_ptr<CompilerNode>(&jump);
+	jumpTo = jump;
 }
 
 std::string CompilerNode::GetExpression()

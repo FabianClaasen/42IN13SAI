@@ -83,7 +83,7 @@ void Compiler::AddSymbol(Symbol symbol)
 }
 
 // Add a compiler node
-void Compiler::AddCompilerNode(CompilerNode node)
+void Compiler::AddCompilerNode(std::shared_ptr<CompilerNode> node)
 {
 	compilerNodes.push_back(node);
 }
@@ -165,14 +165,14 @@ void Compiler::ParseStatement()
         break;
 	case MyTokenType::PrintLine:
 		if (!currentSubroutine.isEmpty)
-			currentSubroutine.AddCompilerNode(*InternalFunction(this).GetInternalFunction(MyTokenType::PrintLine));
+			currentSubroutine.AddCompilerNode(std::shared_ptr<CompilerNode>(InternalFunction(this).GetInternalFunction(MyTokenType::PrintLine)));
             Match(MyTokenType::EOL);
 		//else
 			//std::runtime_error("");
 		break;
 	case MyTokenType::Stop:
 		if (!currentSubroutine.isEmpty)
-			currentSubroutine.AddCompilerNode(*InternalFunction(this).GetInternalFunction(MyTokenType::Stop));
+			currentSubroutine.AddCompilerNode(std::shared_ptr<CompilerNode>(InternalFunction(this).GetInternalFunction(MyTokenType::Stop)));
             Match(MyTokenType::EOL);
 		//else
 		//std::runtime_error("");
@@ -249,7 +249,7 @@ SubroutineTable* Compiler::GetSubroutineTable()
 }
 
 // Get the Compiler nodes (list) for the VM
-std::list<CompilerNode> Compiler::GetCompilerNodes()
+std::list<std::shared_ptr<CompilerNode>> Compiler::GetCompilerNodes()
 {
 	return compilerNodes;
 }

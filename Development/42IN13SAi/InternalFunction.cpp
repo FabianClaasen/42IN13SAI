@@ -9,7 +9,7 @@ InternalFunction::~InternalFunction()
 	//delete(compiler);
 }
 
-CompilerNode* InternalFunction::GetInternalFunction(MyTokenType type)
+std::shared_ptr<CompilerNode> InternalFunction::GetInternalFunction(MyTokenType type)
 {
 	switch (type)
 	{
@@ -53,17 +53,17 @@ CompilerNode* InternalFunction::GetInternalFunction(MyTokenType type)
 	default:
 		break;
 	}
-	return new CompilerNode();
+	return nullptr;
 }
 
-std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
+std::vector<std::shared_ptr<CompilerNode>> InternalFunction::parseParameters(int expectedParams)
 {
 	// Check and parse all the parameters
-	std::vector<CompilerNode*>* compiler_nodes = new std::vector<CompilerNode*>;
+	std::vector<std::shared_ptr<CompilerNode>> compiler_nodes;
 	compiler->Match(MyTokenType::OpenBracket);
 	while (expectedParams > 0) {
-        CompilerNode* node = Parser(compiler).ParseExpression();
-		compiler_nodes->push_back(node);
+		std::shared_ptr<CompilerNode> node(Parser(compiler).ParseExpression());
+		compiler_nodes.push_back(node);
 		expectedParams--;
         if (expectedParams > 0)
         {
@@ -72,10 +72,10 @@ std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
 	}
 	compiler->Match(MyTokenType::CloseBracket);
 
-	return *compiler_nodes;
+	return compiler_nodes;
 }
 
-CompilerNode* InternalFunction::getCompilerNode(std::string functionName, int params) {
-	std::vector<CompilerNode*> compiler_nodes = parseParameters(params);
-	return new CompilerNode(functionName, compiler_nodes, nullptr, false);
+std::shared_ptr<CompilerNode> InternalFunction::getCompilerNode(std::string functionName, int params) {
+	std::vector<std::shared_ptr<CompilerNode>> compiler_nodes = parseParameters(params);
+	return std::shared_ptr<CompilerNode>(new CompilerNode(functionName, compiler_nodes, nullptr, false));
 }
