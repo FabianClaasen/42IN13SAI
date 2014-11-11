@@ -25,7 +25,7 @@ public:
 	CompilerNode(std::string expression, std::string value, bool condition);
 	~CompilerNode();
 
-	void SetJumpTo(std::shared_ptr<CompilerNode> jump);
+	void SetJumpTo(CompilerNode jump);
 	std::string GetExpression();
 	std::string GetValue();
 	std::vector<std::shared_ptr<CompilerNode>> GetNodeparameters();

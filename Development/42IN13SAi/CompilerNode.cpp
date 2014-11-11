@@ -8,7 +8,7 @@ CompilerNode::CompilerNode(std::string p_expression, std::string p_value, bool c
 {
 }
 
-CompilerNode::CompilerNode() : expression(""), jumpTo(nullptr), condition(condition)
+CompilerNode::CompilerNode() : expression(""), jumpTo(std::shared_ptr<CompilerNode>()), condition(condition)
 {
 }
 

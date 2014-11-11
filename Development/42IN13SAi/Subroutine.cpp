@@ -65,9 +65,14 @@ void Subroutine::AddCompilerNode(CompilerNode node)
 	subroutineCompilerNodes.push_back(node);
 }
 
-std::list<CompilerNode>* Subroutine::GetCompilerNodeCollection()
+std::list<std::shared_ptr<CompilerNode>> Subroutine::GetCompilerNodeCollection()
 {
-    return &subroutineCompilerNodes;
+    std::list<std::shared_ptr<CompilerNode>> nodes;
+    for (CompilerNode node: subroutineCompilerNodes)
+    {
+        nodes.push_back(std::make_shared<CompilerNode>(node));
+    }
+    return nodes;
 }
 
 std::vector<CompilerNode>* Subroutine::GetCompilerNodeVector()

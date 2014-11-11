@@ -25,10 +25,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::execute()
 {
-	// Excute typed code
-	#ifndef _WIN32
-	fileName = "/Users/Alex/Documents/test.txt";
-	#endif
 
 	// Get the file from the stream and convert to std::string
 	std::string input(getFileFromStream().toStdString());
@@ -52,9 +48,9 @@ void MainWindow::execute()
 	delete(tokenizer_controller);
 
 	// Run the virtual machine with the compilernodes
-	VirtualMachine virtual_machine =
+	//VirtualMachine virtual_machine =
 		VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), compiler.GetCompilerNodes());
-	virtual_machine.ExecuteCode();
+	//virtual_machine.ExecuteCode();
 }
 
 void MainWindow::clearConsole()

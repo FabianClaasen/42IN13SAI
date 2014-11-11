@@ -3,7 +3,7 @@
 //  tokenizer
 //
 
-#include <QtWidgets\QApplication> //qt
+#include <QApplication> //qt
 #include "MainWindow.h" //qt
 
 #include <stdlib.h>

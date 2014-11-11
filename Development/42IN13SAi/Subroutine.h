@@ -37,7 +37,7 @@ public:
     Symbol* GetLocal(std::string name);
     SymbolTable* GetSymbolTable();
 
-	std::list<CompilerNode>* GetCompilerNodeCollection();
+	std::list<std::shared_ptr<CompilerNode>> GetCompilerNodeCollection();
     std::vector<CompilerNode>* GetCompilerNodeVector();
 	void AddCompilerNode(CompilerNode node);
 };

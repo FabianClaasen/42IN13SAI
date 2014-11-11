@@ -62,8 +62,8 @@ std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
 	std::vector<CompilerNode*>* compiler_nodes = new std::vector<CompilerNode*>;
 	compiler->Match(MyTokenType::OpenBracket);
 	while (expectedParams > 0) {
-        CompilerNode* node = Parser(compiler).ParseExpression();
-		compiler_nodes->push_back(node);
+        std::shared_ptr<CompilerNode> node = Parser(compiler).ParseExpression();
+		compiler_nodes->push_back(node.get());
 		expectedParams--;
         if (expectedParams > 0)
         {
@@ -77,5 +77,20 @@ std::vector<CompilerNode*> InternalFunction::parseParameters(int expectedParams)
 
 CompilerNode* InternalFunction::getCompilerNode(std::string functionName, int params) {
 	std::vector<CompilerNode*> compiler_nodes = parseParameters(params);
-	return new CompilerNode(functionName, compiler_nodes, nullptr, false);
+    
+    std::vector<std::shared_ptr<CompilerNode>> sharedNodes;
+    for (CompilerNode* node : compiler_nodes)
+    {
+        sharedNodes.push_back(std::make_shared<CompilerNode>(CompilerNode(*node)));
+    }
+    
+    return new CompilerNode(functionName, sharedNodes, std::shared_ptr<CompilerNode>(), false);
 }
+
+
+
+
+
+
+
+

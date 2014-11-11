@@ -85,7 +85,8 @@ void Compiler::AddSymbol(Symbol symbol)
 // Add a compiler node
 void Compiler::AddCompilerNode(CompilerNode node)
 {
-	compilerNodes.push_back(node);
+    std::shared_ptr<CompilerNode> sNode = std::make_shared<CompilerNode>(node);
+	compilerNodes.push_back(sNode);
 }
 
 bool Compiler::HasSymbol(std::string symbolName)
@@ -249,7 +250,7 @@ SubroutineTable* Compiler::GetSubroutineTable()
 }
 
 // Get the Compiler nodes (list) for the VM
-std::list<CompilerNode> Compiler::GetCompilerNodes()
+std::list<std::shared_ptr<CompilerNode>> Compiler::GetCompilerNodes()
 {
 	return compilerNodes;
 }
