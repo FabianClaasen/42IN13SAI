@@ -83,9 +83,9 @@ void Compiler::AddSymbol(Symbol symbol)
 }
 
 // Add a compiler node
-void Compiler::AddCompilerNode(CompilerNode node)
+void Compiler::AddCompilerNode(std::shared_ptr<CompilerNode> node)
 {
-    std::shared_ptr<CompilerNode> sNode = std::make_shared<CompilerNode>(node);
+    std::shared_ptr<CompilerNode> sNode = std::shared_ptr<CompilerNode>(node);
 	compilerNodes.push_back(sNode);
 }
 
@@ -166,14 +166,14 @@ void Compiler::ParseStatement()
         break;
 	case MyTokenType::PrintLine:
 		if (!currentSubroutine.isEmpty)
-			currentSubroutine.AddCompilerNode(*InternalFunction(this).GetInternalFunction(MyTokenType::PrintLine));
+			currentSubroutine.AddCompilerNode(std::shared_ptr<CompilerNode>(InternalFunction(this).GetInternalFunction(MyTokenType::PrintLine)));
             Match(MyTokenType::EOL);
 		//else
 			//std::runtime_error("");
 		break;
 	case MyTokenType::Stop:
 		if (!currentSubroutine.isEmpty)
-			currentSubroutine.AddCompilerNode(*InternalFunction(this).GetInternalFunction(MyTokenType::Stop));
+			currentSubroutine.AddCompilerNode(std::shared_ptr<CompilerNode>(InternalFunction(this).GetInternalFunction(MyTokenType::Stop)));
             Match(MyTokenType::EOL);
 		//else
 		//std::runtime_error("");

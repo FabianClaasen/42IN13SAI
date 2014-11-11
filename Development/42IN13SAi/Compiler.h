@@ -31,7 +31,7 @@ public:
 	void SetSubroutine(Subroutine subroutine);
 	void AddSubroutine();
 	void AddSymbol(Symbol symbol);
-	void AddCompilerNode(CompilerNode node);
+	void AddCompilerNode(std::shared_ptr<CompilerNode> node);
 	bool HasSymbol(std::string symbolName);
 	void ParseGlobalStatement();
 	void ParseStatement();

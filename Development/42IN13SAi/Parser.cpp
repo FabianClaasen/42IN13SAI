@@ -95,7 +95,7 @@ void Parser::ParseReturn()
     
     compiler->Match(MyTokenType::EOL);
     
-    CompilerNode returnNode = CompilerNode("$ret", nodeParameters, nullptr, false);
+	std::shared_ptr<CompilerNode> returnNode(new CompilerNode("$ret", nodeParameters, nullptr, false));
     compiler->GetSubroutine()->AddCompilerNode(returnNode);
 }
 
@@ -203,9 +203,9 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 	if (!forLoop && endNode != nullptr)
 	{
 		if (compiler->GetSubroutine()->isEmpty)
-			compiler->AddCompilerNode(*endNode);
+			compiler->AddCompilerNode(endNode);
 		else
-			compiler->GetSubroutine()->AddCompilerNode(*endNode);
+			compiler->GetSubroutine()->AddCompilerNode(endNode);
 	}
 
 	return endNode;
@@ -237,7 +237,7 @@ void Parser::ParseFunctionCall()
 	compiler->Match(MyTokenType::EOL);
 
 	// Create the finall node
-	CompilerNode endNode = CompilerNode("$functionCall", nodeParameters, nullptr, false);
+	std::shared_ptr<CompilerNode> endNode(new CompilerNode("$functionCall", nodeParameters, nullptr, false));
 
 	// Add the final node
 	if (compiler->GetSubroutine()->isEmpty)
@@ -255,7 +255,7 @@ void Parser::ParseIfStatement()
 	std::list<CompilerNode> innerIfStatementNodes;
 	std::list<CompilerNode> innerElseStatementNodes;
 	std::shared_ptr<CompilerNode> statementNode;
-	CompilerNode endNode;
+	std::shared_ptr<CompilerNode> endNode;
 
 	if (currentToken.Type == MyTokenType::If)
 	{
@@ -278,13 +278,13 @@ void Parser::ParseIfStatement()
 
 	//Make a do nothing compilerNode to jump to if the statement is false
 	std::vector<std::string> doNothing;
-	CompilerNode jumpTo = CompilerNode("$doNothing", "", false);
+	std::shared_ptr<CompilerNode> jumpTo(new CompilerNode("$doNothing", "", false));
 	statementNode->SetJumpTo(jumpTo);
 
 	//Create the endNode before parsing the statements in the if/else
 	std::vector<std::shared_ptr<CompilerNode>> params;
 	params.push_back(statementNode);
-	endNode = CompilerNode("$if", params, nullptr, false);
+	endNode = std::shared_ptr<CompilerNode>(new CompilerNode("$if", params, nullptr, false));
 	compiler->AddCompilerNode(endNode);
 
 	while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
@@ -322,7 +322,7 @@ void Parser::ParseLoopStatement()
 	std::vector<std::shared_ptr<CompilerNode>> nodeParameters;
 	std::string statementExpression;
 
-	CompilerNode endNode;
+	std::shared_ptr<CompilerNode> endNode;
 	std::list<CompilerNode> innerStatementNodes;
 
 	if (currentToken.Type == MyTokenType::While || currentToken.Type == MyTokenType::ForLoop)
@@ -360,7 +360,7 @@ void Parser::ParseLoopStatement()
     std::shared_ptr<CompilerNode> jumpTo(new CompilerNode("$doNothing", "", false));
     
     //Make the endNode before parsing the statements in the loop
-    endNode = CompilerNode(statementExpression, nodeParameters, jumpTo, false);
+	endNode = std::shared_ptr<CompilerNode>(new CompilerNode(statementExpression, nodeParameters, jumpTo, false));
     compiler->GetSubroutine()->AddCompilerNode(endNode);
     
     compiler->Match(MyTokenType::CloseBracket);
@@ -375,7 +375,7 @@ void Parser::ParseLoopStatement()
     
     //Finally add the jumpTo compilerNode
     
-    compiler->GetSubroutine()->AddCompilerNode(*jumpTo);
+    compiler->GetSubroutine()->AddCompilerNode(jumpTo);
 }
 
 #pragma endregion ParseStatementMethods

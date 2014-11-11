@@ -60,23 +60,18 @@ Symbol* Subroutine::GetLocal(std::string name)
     return nullptr;
 }
 
-void Subroutine::AddCompilerNode(CompilerNode node)
+void Subroutine::AddCompilerNode(std::shared_ptr<CompilerNode> node)
 {
 	subroutineCompilerNodes.push_back(node);
 }
 
 std::list<std::shared_ptr<CompilerNode>> Subroutine::GetCompilerNodeCollection()
 {
-    std::list<std::shared_ptr<CompilerNode>> nodes;
-    for (CompilerNode node: subroutineCompilerNodes)
-    {
-        nodes.push_back(std::make_shared<CompilerNode>(node));
-    }
-    return nodes;
+    return subroutineCompilerNodes;
 }
 
-std::vector<CompilerNode>* Subroutine::GetCompilerNodeVector()
+std::vector<std::shared_ptr<CompilerNode>> Subroutine::GetCompilerNodeVector()
 {
-    std::vector<CompilerNode>* nodeVector = new std::vector<CompilerNode>{ std::begin(subroutineCompilerNodes), std::end(subroutineCompilerNodes) };
+	std::vector<std::shared_ptr<CompilerNode>> nodeVector = std::vector<std::shared_ptr<CompilerNode>>{ std::begin(subroutineCompilerNodes), std::end(subroutineCompilerNodes) };
 	return nodeVector;
 }
