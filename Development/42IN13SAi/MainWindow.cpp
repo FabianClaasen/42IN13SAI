@@ -48,9 +48,8 @@ void MainWindow::execute()
 	delete(tokenizer_controller);
 
 	// Run the virtual machine with the compilernodes
-	//VirtualMachine virtual_machine =
-		VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), compiler.GetCompilerNodes());
-	//virtual_machine.ExecuteCode();
+	VirtualMachine virtual_machine = VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), compiler.GetCompilerNodes());
+	virtual_machine.ExecuteCode();
 }
 
 void MainWindow::clearConsole()
@@ -91,7 +90,14 @@ QString MainWindow::getFileFromStream()
 void MainWindow::showMenuBar()
 {
 	// Create menu bar
-	QMenuBar* menu = new QMenuBar();
+    QMenuBar* menu = nullptr;
+#ifdef _WIN32
+	menu = new QMenuBar();
+#else
+    menu = new QMenuBar(0);
+    
+    QMenu* mainMenu = menu->addMenu("File");
+#endif
 
 	// Create action and connect
 	QAction *runAction = menu->addAction("Run");
@@ -99,6 +105,11 @@ void MainWindow::showMenuBar()
 
 	connect(runAction, SIGNAL(triggered()), this, SLOT(execute()));
 	connect(clearAction, SIGNAL(triggered()), this, SLOT(clearConsole()));
+    
+#ifndef _WIN32
+    mainMenu->addAction(runAction);
+    mainMenu->addAction(clearAction);
+#endif
 
 	// Set the menu bar on ui from left to right
 	this->setMenuBar(menu);

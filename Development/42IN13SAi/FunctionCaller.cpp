@@ -60,6 +60,6 @@ void FunctionCaller::fillFunctionMap()
 
 FunctionCaller::~FunctionCaller()
 {
-    delete virtualMachine;
-    virtualMachine = nullptr;
+    //delete virtualMachine;
+    //virtualMachine = nullptr;
 }

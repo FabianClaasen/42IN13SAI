@@ -10,13 +10,32 @@ VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subrou
     subSubroutine = nullptr;
 }
 
+VirtualMachine::VirtualMachine(const VirtualMachine &other) :mainSymboltable(other.mainSymboltable), subSubroutine(other.subSubroutine), subSymbolTable(other.subSymbolTable), subroutineTable(other.subroutineTable), compilerNodes(other.compilerNodes)
+{
+    
+}
+
+VirtualMachine& VirtualMachine::operator=(const VirtualMachine& other)
+{
+    if (this != &other)
+    {
+        VirtualMachine* cVirtualMachine = new VirtualMachine(other);
+        return *cVirtualMachine;
+        
+    }
+    return *this;
+}
+
 VirtualMachine::~VirtualMachine(){}
 
 CompilerNode VirtualMachine::PeekNext(int _currentIndex, std::list<std::shared_ptr<CompilerNode>> nodes)
 {
-    std::shared_ptr<CompilerNode> node;
+    std::shared_ptr<CompilerNode> node = std::make_shared<CompilerNode>(CompilerNode());
 	if (nodes.size() - 1 > _currentIndex || _currentIndex == -1)
 	{
+        // release node
+        node.reset();
+        
 		std::list<std::shared_ptr<CompilerNode>>::iterator it = nodes.begin();
 		std::advance(it, _currentIndex + 1);
 		node = *it;
@@ -27,9 +46,12 @@ CompilerNode VirtualMachine::PeekNext(int _currentIndex, std::list<std::shared_p
 
 CompilerNode VirtualMachine::PeekPrevious(int _currentIndex, std::list<std::shared_ptr<CompilerNode>> nodes)
 {
-    std::shared_ptr<CompilerNode> node;
+    std::shared_ptr<CompilerNode> node = std::make_shared<CompilerNode>(CompilerNode());
 	if (_currentIndex >= 1)
 	{
+        // release node
+        node.reset();
+        
 		std::list<std::shared_ptr<CompilerNode>>::iterator it = nodes.begin();
 		std::advance(it, _currentIndex - 1);
 		node = *it;
@@ -40,10 +62,13 @@ CompilerNode VirtualMachine::PeekPrevious(int _currentIndex, std::list<std::shar
 
 CompilerNode VirtualMachine::GetNext(int* _currentIndex, std::list<std::shared_ptr<CompilerNode>> nodes)
 {
-	std::shared_ptr<CompilerNode> node;
+	std::shared_ptr<CompilerNode> node = std::make_shared<CompilerNode>(CompilerNode());
     (*_currentIndex)++;
 	if (*_currentIndex <= nodes.size()-1 && nodes.size() > 0)
 	{
+        // release node
+        node.reset();
+        
 		std::list<std::shared_ptr<CompilerNode>>::iterator it = nodes.begin();
 		if (*_currentIndex > 0)
 		{
@@ -112,13 +137,20 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::list<std::shared
             std::string function_call = node.GetExpression();
             
             if (function_call == "$ret")
+            {
+                delete _currentIndex;
+                _currentIndex = nullptr;
                 return function_caller->Call(function_call, node);
+            }
             else if (function_call == "$doNothing")
-                return nullptr;
+                break;
             else
                 function_caller->Call(function_call, node);
         }
     } while (*_currentIndex < compilernodes.size()-1);
+    
+    delete _currentIndex;
+    _currentIndex = nullptr;
     
     return nullptr;
 }
@@ -135,13 +167,20 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::list<std::shared
             std::string function_call = node.GetExpression();
             
             if (function_call == "$ret")
+            {
+                delete _currentIndex;
+                _currentIndex = nullptr;
                 return function_caller->Call(function_call, node);
+            }
             else if (function_call == "$doNothing")
-                return nullptr;
+                break;
             else
                 function_caller->Call(function_call, node);
         }
     } while (*_currentIndex < compilernodes.size()-1);
+    
+    delete _currentIndex;
+    _currentIndex = nullptr;
     
     return nullptr;
 }
@@ -353,14 +392,14 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteWhile(CompilerNode compiler
         condition = CallFunction(*condition);
     
     
-	std::vector<CompilerNode> compilerNodes;
+    std::vector<std::shared_ptr<CompilerNode>> compilerNodes;
 	if (subSubroutine == nullptr)
 	{
 		subSubroutine = subroutineTable->GetSubroutine("main");
-		compilerNodes = *subSubroutine->GetCompilerNodeVector();
+		compilerNodes = subSubroutine->GetCompilerNodeVector();
 	}
 	else
-		compilerNodes = *subSubroutine->GetCompilerNodeVector();
+		compilerNodes = subSubroutine->GetCompilerNodeVector();
     
     
     if (condition->GetValue() == "1")

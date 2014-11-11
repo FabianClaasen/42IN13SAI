@@ -14,6 +14,8 @@ class VirtualMachine
 {
 public:
 	VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::list<std::shared_ptr<CompilerNode>> compiler_nodes);
+    VirtualMachine(const VirtualMachine &other);
+    VirtualMachine& operator=(const VirtualMachine &other);
 	virtual ~VirtualMachine();
 
 	void ExecuteCode();

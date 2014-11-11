@@ -154,9 +154,15 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		if (!compiler->HasSymbol(identifierSymbol->name))
 		{
 			compiler->AddSymbol(*identifierSymbol);
+            delete identifierSymbol;
+            identifierSymbol = nullptr;
 		}
 		else
+        {
+            delete identifierSymbol;
+            identifierSymbol = nullptr;
 			throw std::runtime_error("Identifier name is already in use");
+        }
 	}
 
 	std::shared_ptr<CompilerNode> id(new CompilerNode("$identifier", identifier.Value, nullptr));
