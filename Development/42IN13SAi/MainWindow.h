@@ -11,16 +11,16 @@ class MainWindow : public QMainWindow
 
 public:
 		MainWindow(QWidget *parent = 0);
-		~MainWindow();
+		virtual ~MainWindow();
 		QString getText();
-
-	private slots:
-		void execute();
-		void clearConsole();
+		QAction *getRunAction();
+		QAction *getClearAction();
 
 	private:
 		CodeEditor* codeEditor;
 		Highlighter* highlighter;
-		QString getFileFromStream();
+		QAction *runAction;
+		QAction *clearAction;
+
 		void showMenuBar();
 };

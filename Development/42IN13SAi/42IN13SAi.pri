@@ -33,6 +33,7 @@ HEADERS += ./Grammar.h \
     ./SubroutineTable.h \
     ./ParameterException.h \
     ./ParameterExceptionType.h \
+    ./MainController.h \
     ./CodeEditor.h \
     ./MainWindow.h
 SOURCES += ./main.cpp \
@@ -59,4 +60,5 @@ SOURCES += ./main.cpp \
     ./SymbolNotFoundException.cpp \
     ./ParameterException.cpp \
     ./CodeEditor.cpp \
+    ./MainController.cpp \
     ./MainWindow.cpp

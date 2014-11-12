@@ -24,6 +24,11 @@ LIBS += -lkernel32 \
     -lodbccp32 \
     -lopengl32 \
     -lglu32
+DESTDIR = ../Debug
+QT += core widgets gui
+CONFIG += debug
+DEFINES += _CRT_SECURE_NO_WARNINGS
+INCLUDEPATH += ./GeneratedFiles/Debug
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/release
 OBJECTS_DIR += release
