@@ -6,13 +6,13 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 	HighlightingRule rule;
 
 	varFormat.setFontWeight(QFont::Bold);
-	varFormat.setForeground(Qt::gray);
+	varFormat.setForeground(Qt::darkGreen);
 	rule.pattern = QRegExp("\\bvar\\b"); // regex that contains var
 	rule.format = varFormat;
 	highlightingRules.append(rule);
 
 	funcFormat.setForeground(Qt::blue);
-	rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()"); // regex that contains func
+	rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()"); // regex that contains a function with parenthesis
 	rule.format = funcFormat;
 	highlightingRules.append(rule);
 

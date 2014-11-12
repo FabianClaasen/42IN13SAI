@@ -6,6 +6,7 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 {
 	this->setFont(QFont("Consolas", 9));
 	this->setTabStopWidth(20);
+
 	lineNumberArea = new LineNumberArea(this);
 
 	connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));

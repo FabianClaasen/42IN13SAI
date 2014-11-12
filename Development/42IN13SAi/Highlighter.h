@@ -24,7 +24,7 @@ private:
 	QRegExp commentStartExpression;
 	QRegExp commentEndExpression;
 
-	// TODO OWN FORMATS FOR HIGHLIGHTING
+	// own formats for highlighting
 	QTextCharFormat varFormat;
 	QTextCharFormat funcFormat;
 	QTextCharFormat returnFormat;

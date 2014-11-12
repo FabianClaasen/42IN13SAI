@@ -97,6 +97,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_Highlighter.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="CodeCompleter.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_CodeCompleter.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CodeCompleter.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -241,6 +250,9 @@
       <Filter>Header Files\Qt</Filter>
     </CustomBuild>
     <CustomBuild Include="Highlighter.h">
+      <Filter>Header Files\Qt</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CodeCompleter.h">
       <Filter>Header Files\Qt</Filter>
     </CustomBuild>
   </ItemGroup>
