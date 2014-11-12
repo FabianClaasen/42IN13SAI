@@ -90,17 +90,17 @@ void Parser::ParseReturn()
 {
     compiler->Match(MyTokenType::Return);
     
-    std::vector<CompilerNode*> nodeParameters;
+	std::vector<std::shared_ptr<CompilerNode>> nodeParameters;
     nodeParameters.push_back(ParseExpression());
     
     compiler->Match(MyTokenType::EOL);
     
-    CompilerNode returnNode = CompilerNode("$ret", nodeParameters, nullptr, false);
+	std::shared_ptr<CompilerNode> returnNode(new CompilerNode("$ret", nodeParameters, nullptr, false));
     compiler->GetSubroutine()->AddCompilerNode(returnNode);
 }
 
 //Also parse (standard) Arithmetical operations
-CompilerNode* Parser::ParseAssignmentStatement(bool forLoop)
+std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 {
 #ifdef _WIN32
 	// Memory leaks notifier
@@ -108,8 +108,8 @@ CompilerNode* Parser::ParseAssignmentStatement(bool forLoop)
 #endif
 
 	std::string expression = "";
-	std::vector<CompilerNode*> nodeParameters;
-	CompilerNode* endNode = nullptr;
+	std::vector<std::shared_ptr<CompilerNode>> nodeParameters;
+	std::shared_ptr<CompilerNode> endNode = nullptr;
 	Subroutine* subroutine = compiler->GetSubroutine();
 
 	bool newIdentifier = false;
@@ -154,12 +154,18 @@ CompilerNode* Parser::ParseAssignmentStatement(bool forLoop)
 		if (!compiler->HasSymbol(identifierSymbol->name))
 		{
 			compiler->AddSymbol(*identifierSymbol);
+            delete identifierSymbol;
+            identifierSymbol = nullptr;
 		}
 		else
+        {
+            delete identifierSymbol;
+            identifierSymbol = nullptr;
 			throw std::runtime_error("Identifier name is already in use");
+        }
 	}
 
-	CompilerNode* id = new CompilerNode("$identifier", identifier.Value, nullptr);
+	std::shared_ptr<CompilerNode> id(new CompilerNode("$identifier", identifier.Value, nullptr));
 	nodeParameters.push_back(id);
 
 	// Check if it is an assignment or only a decleration.
@@ -167,33 +173,33 @@ CompilerNode* Parser::ParseAssignmentStatement(bool forLoop)
 	{
 		compiler->GetNext(); // remove the '=' token
 		expression = "$assignment";
-		CompilerNode* node = ParseExpression();
+		std::shared_ptr<CompilerNode> node = ParseExpression();
 		nodeParameters.push_back(node);
-		endNode = new CompilerNode(expression, nodeParameters, nullptr, false);
+		endNode = std::shared_ptr<CompilerNode>(new CompilerNode(expression, nodeParameters, nullptr, false));
 	}
 	else if (IsNextTokenUniOp())
 	{
 		currentToken = compiler->GetNext();
-		std::vector<CompilerNode*> parameters;
+		std::vector<std::shared_ptr<CompilerNode>> parameters;
 		switch (currentToken.Type)
 		{
 		case MyTokenType::UniOperatorPlus:
-			parameters.push_back(new CompilerNode("$getVariable", identifier.Value, false));
-			nodeParameters.push_back(new CompilerNode("$uniPlus", parameters, nullptr, false));
+			parameters.push_back(std::shared_ptr<CompilerNode>(new CompilerNode("$getVariable", identifier.Value, false)));
+			nodeParameters.push_back(std::shared_ptr<CompilerNode>(new CompilerNode("$uniPlus", parameters, nullptr, false)));
 			break;
 		case MyTokenType::UniOperatorMinus:
-			parameters.push_back(new CompilerNode("$getVariable", identifier.Value, false));
-			nodeParameters.push_back(new CompilerNode("$uniMin", parameters, nullptr, false));
+			parameters.push_back(std::shared_ptr<CompilerNode>(new CompilerNode("$getVariable", identifier.Value, false)));
+			nodeParameters.push_back(std::shared_ptr<CompilerNode>(new CompilerNode("$uniMin", parameters, nullptr, false)));
             
 			break;
 		}
         expression = "$assignment";
-        endNode = new CompilerNode(expression, nodeParameters, nullptr, false);
+		endNode = std::shared_ptr<CompilerNode>(new CompilerNode(expression, nodeParameters, nullptr, false));
 	}
     else if (IsNextTokenUniOp())
     {
         expression = "$assignment";
-        CompilerNode* node = ParseExpression();
+		std::shared_ptr<CompilerNode> node = ParseExpression();
         nodeParameters.push_back(node);
     }
 
@@ -203,9 +209,9 @@ CompilerNode* Parser::ParseAssignmentStatement(bool forLoop)
 	if (!forLoop && endNode != nullptr)
 	{
 		if (compiler->GetSubroutine()->isEmpty)
-			compiler->AddCompilerNode(*endNode);
+			compiler->AddCompilerNode(endNode);
 		else
-			compiler->GetSubroutine()->AddCompilerNode(*endNode);
+			compiler->GetSubroutine()->AddCompilerNode(endNode);
 	}
 
 	return endNode;
@@ -214,10 +220,10 @@ CompilerNode* Parser::ParseAssignmentStatement(bool forLoop)
 // This function is only called when a function is called without it being in a assignment.
 void Parser::ParseFunctionCall()
 {
-	std::vector<CompilerNode*> nodeParameters;
+	std::vector<std::shared_ptr<CompilerNode>> nodeParameters;
 	Token currentToken = compiler->GetNext();
 
-	CompilerNode* node = new CompilerNode("$functionName", currentToken.Value, false);
+	std::shared_ptr<CompilerNode> node(new CompilerNode("$functionName", currentToken.Value, false));
 	nodeParameters.push_back(node);
 
     compiler->Match(MyTokenType::OpenBracket);
@@ -228,7 +234,7 @@ void Parser::ParseFunctionCall()
 			currentToken = compiler->GetNext();
 		}
 
-		CompilerNode* node = ParseExpression();
+		std::shared_ptr<CompilerNode> node = ParseExpression();
         if (node != nullptr)
             nodeParameters.push_back(node);
 	}
@@ -237,7 +243,7 @@ void Parser::ParseFunctionCall()
 	compiler->Match(MyTokenType::EOL);
 
 	// Create the finall node
-	CompilerNode endNode = CompilerNode("$functionCall", nodeParameters, nullptr, false);
+	std::shared_ptr<CompilerNode> endNode(new CompilerNode("$functionCall", nodeParameters, nullptr, false));
 
 	// Add the final node
 	if (compiler->GetSubroutine()->isEmpty)
@@ -254,8 +260,8 @@ void Parser::ParseIfStatement()
 
 	std::list<CompilerNode> innerIfStatementNodes;
 	std::list<CompilerNode> innerElseStatementNodes;
-	CompilerNode* statementNode;
-	CompilerNode endNode;
+	std::shared_ptr<CompilerNode> statementNode;
+	std::shared_ptr<CompilerNode> endNode;
 
 	if (currentToken.Type == MyTokenType::If)
 	{
@@ -278,13 +284,13 @@ void Parser::ParseIfStatement()
 
 	//Make a do nothing compilerNode to jump to if the statement is false
 	std::vector<std::string> doNothing;
-	CompilerNode jumpTo = CompilerNode("$doNothing", "", false);
+	std::shared_ptr<CompilerNode> jumpTo(new CompilerNode("$doNothing", "", false));
 	statementNode->SetJumpTo(jumpTo);
 
 	//Create the endNode before parsing the statements in the if/else
-	std::vector<CompilerNode*> params;
+	std::vector<std::shared_ptr<CompilerNode>> params;
 	params.push_back(statementNode);
-	endNode = CompilerNode("$if", params, nullptr, false);
+	endNode = std::shared_ptr<CompilerNode>(new CompilerNode("$if", params, nullptr, false));
 	compiler->AddCompilerNode(endNode);
 
 	while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
@@ -319,10 +325,10 @@ void Parser::ParseLoopStatement()
 	Token currentToken = compiler->GetNext();
 	bool forLoop = false;
 
-	std::vector<CompilerNode*> nodeParameters;
+	std::vector<std::shared_ptr<CompilerNode>> nodeParameters;
 	std::string statementExpression;
 
-	CompilerNode endNode;
+	std::shared_ptr<CompilerNode> endNode;
 	std::list<CompilerNode> innerStatementNodes;
 
 	if (currentToken.Type == MyTokenType::While || currentToken.Type == MyTokenType::ForLoop)
@@ -357,11 +363,14 @@ void Parser::ParseLoopStatement()
     
     // Create a do nothing, so you can jump to this when the statement is false
     std::vector<std::string> doNothing;
-    CompilerNode jumpTo = CompilerNode("$doNothing", "", false);
+    std::shared_ptr<CompilerNode> jumpTo(new CompilerNode("$doNothing", "", false));
     
     //Make the endNode before parsing the statements in the loop
-    endNode = CompilerNode(statementExpression, nodeParameters, &jumpTo, false);
+	endNode = std::shared_ptr<CompilerNode>(new CompilerNode(statementExpression, nodeParameters, jumpTo, false));
     compiler->GetSubroutine()->AddCompilerNode(endNode);
+    
+    // set the doNothing jumpto to the endNode so it can jump to it at the end of the while
+    jumpTo->SetJumpTo(endNode);
     
     compiler->Match(MyTokenType::CloseBracket);
     compiler->Match(MyTokenType::OpenMethod);
@@ -381,26 +390,26 @@ void Parser::ParseLoopStatement()
 #pragma endregion ParseStatementMethods
 
 #pragma region ParseExpressionMethods
-CompilerNode* Parser::ParseExpression()
+std::shared_ptr<CompilerNode> Parser::ParseExpression()
 {
-	CompilerNode* parsedExpr = ParseRelationalExpression();
+	std::shared_ptr<CompilerNode> parsedExpr = ParseRelationalExpression();
 	while (IsNextTokenLogicalOp())
 	{
 		Token logicalOp = compiler->GetNext();
-		CompilerNode* secondParsedExpr = ParseRelationalExpression();
-		std::vector<CompilerNode*> parameters;
+		std::shared_ptr<CompilerNode> secondParsedExpr = ParseRelationalExpression();
+		std::vector<std::shared_ptr<CompilerNode>> parameters;
 
 		switch (logicalOp.Type)
 		{
 		case MyTokenType::And:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$and", parameters, nullptr, false);
+			parsedExpr = std::shared_ptr<CompilerNode>(new CompilerNode("$and", parameters, nullptr, false));
 			break;
 		case MyTokenType::Or:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$or", parameters, nullptr, false);
+			parsedExpr = std::shared_ptr<CompilerNode>(new CompilerNode("$or", parameters, nullptr, false));
 			break;
 		}
 	}
@@ -408,41 +417,41 @@ CompilerNode* Parser::ParseExpression()
 	return parsedExpr;
 }
 
-CompilerNode* Parser::ParseRelationalExpression()
+std::shared_ptr<CompilerNode> Parser::ParseRelationalExpression()
 {
-	CompilerNode* parsedExpr = ParseAddExpression();
+	std::shared_ptr<CompilerNode> parsedExpr = ParseAddExpression();
 	while (IsNextTokenRelationalOp())
 	{
 		Token relOp = compiler->GetNext();
-		CompilerNode* secondParsedExpr = ParseAddExpression();
-		std::vector<CompilerNode*> parameters;
+		std::shared_ptr<CompilerNode> secondParsedExpr = ParseAddExpression();
+		std::vector<std::shared_ptr<CompilerNode>> parameters;
 
 		switch (relOp.Type)
 		{
 		case MyTokenType::LowerThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$less", parameters, nullptr, false);
+			parsedExpr = std::shared_ptr<CompilerNode>(new CompilerNode("$less", parameters, nullptr, false));
 			break;
 		case MyTokenType::LowerOrEqThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$lessOrEq", parameters, nullptr, false);
+			parsedExpr = std::shared_ptr<CompilerNode>(new CompilerNode("$lessOrEq", parameters, nullptr, false));
 			break;
 		case MyTokenType::GreaterThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$greater", parameters, nullptr, false);
+			parsedExpr = std::shared_ptr<CompilerNode>(new CompilerNode("$greater", parameters, nullptr, false));
 			break;
 		case MyTokenType::GreaterOrEqThan:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$greaterOrEq", parameters, nullptr, false);
+			parsedExpr = std::shared_ptr<CompilerNode>(new CompilerNode("$greaterOrEq", parameters, nullptr, false));
 			break;
 		case MyTokenType::Comparator:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$equals", parameters, nullptr, false);
+			parsedExpr = std::shared_ptr<CompilerNode>(new CompilerNode("$equals", parameters, nullptr, false));
 			break;
 		}
 	}
@@ -450,26 +459,26 @@ CompilerNode* Parser::ParseRelationalExpression()
 	return parsedExpr;
 }
 
-CompilerNode* Parser::ParseAddExpression()
+std::shared_ptr<CompilerNode> Parser::ParseAddExpression()
 {
-	CompilerNode* parsedExpr = ParseMulExpression();
+	std::shared_ptr<CompilerNode> parsedExpr = ParseMulExpression();
 	while (IsNextTokenAddOp())
 	{
 		Token addOp = compiler->GetNext();
-		CompilerNode* secondParsedExpr = ParseMulExpression();
-		std::vector<CompilerNode*> parameters;
+		std::shared_ptr<CompilerNode> secondParsedExpr = ParseMulExpression();
+		std::vector<std::shared_ptr<CompilerNode>> parameters;
 
 		switch (addOp.Type)
 		{
 		case MyTokenType::OperatorPlus:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$add", parameters, nullptr, false);
+			parsedExpr = std::shared_ptr<CompilerNode>(new CompilerNode("$add", parameters, nullptr, false));
 			break;
 		case MyTokenType::OperatorMinus:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = new CompilerNode("$min", parameters, nullptr, false);
+			parsedExpr = std::shared_ptr<CompilerNode>(new CompilerNode("$min", parameters, nullptr, false));
 			break;
 		}
 	}
@@ -477,31 +486,31 @@ CompilerNode* Parser::ParseAddExpression()
 	return parsedExpr;
 }
 
-CompilerNode* Parser::ParseMulExpression()
+std::shared_ptr<CompilerNode> Parser::ParseMulExpression()
 {
-	CompilerNode* term = ParseUniExpression();
+	std::shared_ptr<CompilerNode> term = ParseUniExpression();
 	while (IsNextTokenMulOp())
 	{
 		Token mullOp = compiler->GetNext();
-		CompilerNode* secondTerm = ParseUniExpression();
-		std::vector<CompilerNode*> parameters;
+		std::shared_ptr<CompilerNode> secondTerm = ParseUniExpression();
+		std::vector<std::shared_ptr<CompilerNode>> parameters;
 
 		switch (mullOp.Type)
 		{
 		case MyTokenType::OperatorMultiply:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
-			term = new CompilerNode("$mul", parameters, nullptr, false);
+			term = std::shared_ptr<CompilerNode>(new CompilerNode("$mul", parameters, nullptr, false));
 			break;
 		case MyTokenType::OperatorDivide:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
-			term = new CompilerNode("$div", parameters, nullptr, false);
+			term = std::shared_ptr<CompilerNode>(new CompilerNode("$div", parameters, nullptr, false));
 			break;
 		case MyTokenType::OperatorRaised:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
-			term = new CompilerNode("$raise", parameters, nullptr, false);
+			term = std::shared_ptr<CompilerNode>(new CompilerNode("$raise", parameters, nullptr, false));
 			break;
 		}
 	}
@@ -509,25 +518,25 @@ CompilerNode* Parser::ParseMulExpression()
 	return term;
 }
 
-CompilerNode* Parser::ParseUniExpression()
+std::shared_ptr<CompilerNode> Parser::ParseUniExpression()
 {
-	CompilerNode* term = ParseTerm();
+	std::shared_ptr<CompilerNode> term = ParseTerm();
 
 	while (IsNextTokenUniOp())
 	{
 		Token uniOp = compiler->GetNext();
-		std::vector<CompilerNode *> parameters;
+		std::vector<std::shared_ptr<CompilerNode>> parameters;
 
 		switch (uniOp.Type)
 		{
 		case MyTokenType::UniOperatorPlus:
 			parameters.push_back(term);
-			term = new CompilerNode("$uniPlus", parameters, nullptr, false);
+			term = std::shared_ptr<CompilerNode>(new CompilerNode("$uniPlus", parameters, nullptr, false));
 			compiler->Match(MyTokenType::EOL);
 			break;
         case MyTokenType::UniOperatorMinus:
 			parameters.push_back(term);
-			term = new CompilerNode("$uniMin", parameters, nullptr, false);
+			term = std::shared_ptr<CompilerNode>(new CompilerNode("$uniMin", parameters, nullptr, false));
 			compiler->Match(MyTokenType::EOL);
 			break;
 		}
@@ -536,15 +545,15 @@ CompilerNode* Parser::ParseUniExpression()
 	return term;
 }
 
-CompilerNode* Parser::ParseTerm()
+std::shared_ptr<CompilerNode> Parser::ParseTerm()
 {
 	Token token = compiler->GetNext();
 
-	CompilerNode* node = nullptr;
+	std::shared_ptr<CompilerNode> node = nullptr;
 
 	if (token.Type == MyTokenType::Float)
 	{
-		node = new CompilerNode("$value", token.Value, false);
+		node = std::shared_ptr<CompilerNode>(new CompilerNode("$value", token.Value, false));
 		return node;
 	}
 	else if (token.Type == MyTokenType::Identifier)
@@ -562,7 +571,7 @@ CompilerNode* Parser::ParseTerm()
 			if (symbol == nullptr)
 				throw SymbolNotFoundException("");
 
-			node = new CompilerNode("$getVariable", symbol->name, false);
+			node = std::shared_ptr<CompilerNode>(new CompilerNode("$getVariable", symbol->name, false));
 			return node;
 		}
 	}
@@ -574,7 +583,7 @@ CompilerNode* Parser::ParseTerm()
 	}
 	else if (compiler->IsInternalFunction(token.Type) && !(token.Type==MyTokenType::PrintLine || token.Type==MyTokenType::Stop))
 	{
-			node = InternalFunction(compiler).GetInternalFunction(token.Type);
+		node = std::shared_ptr<CompilerNode>(InternalFunction(compiler).GetInternalFunction(token.Type));
 			return node;
 	}
     else if (compiler->PeekNext()->Type == MyTokenType::OpenBracket)
@@ -585,10 +594,10 @@ CompilerNode* Parser::ParseTerm()
 }
 
 // This function is called when there is a function inside a expression
-CompilerNode* Parser::ParseFunctionCall(Token token)
+std::shared_ptr<CompilerNode> Parser::ParseFunctionCall(Token token)
 {
-	std::vector<CompilerNode*> nodeParameters;
-	CompilerNode* node = new CompilerNode("$functionName", token.Value, false);
+	std::vector<std::shared_ptr<CompilerNode>> nodeParameters;
+	std::shared_ptr<CompilerNode> node(new CompilerNode("$functionName", token.Value, false));
 	nodeParameters.push_back(node);
 	Token currentToken = compiler->GetNext();
 
@@ -599,13 +608,13 @@ CompilerNode* Parser::ParseFunctionCall(Token token)
 			currentToken = compiler->GetNext();
 		}
 
-		CompilerNode* node = ParseExpression();
+		std::shared_ptr<CompilerNode> node = ParseExpression();
 		nodeParameters.push_back(node);
 	}
 
 	compiler->Match(MyTokenType::CloseBracket);
 
-	CompilerNode* finalNode = new CompilerNode("$functionCall", nodeParameters, nullptr, false);
+	std::shared_ptr<CompilerNode> finalNode(new CompilerNode("$functionCall", nodeParameters, nullptr, false));
 	return finalNode;
 }
 #pragma endregion ParseExpressionMethods

@@ -1,6 +1,6 @@
 #include "CompilerNode.h"
 
-CompilerNode::CompilerNode(std::string p_expression, std::vector<CompilerNode*> p_nodeParameters, CompilerNode *p_jumpTo, bool condition) : expression(p_expression), nodeParameters(p_nodeParameters), jumpTo(p_jumpTo), condition(condition)
+CompilerNode::CompilerNode(std::string p_expression, std::vector<std::shared_ptr<CompilerNode>> p_nodeParameters, std::shared_ptr<CompilerNode> p_jumpTo, bool condition) : expression(p_expression), nodeParameters(p_nodeParameters), jumpTo(p_jumpTo), condition(condition)
 {
 }
 
@@ -8,7 +8,11 @@ CompilerNode::CompilerNode(std::string p_expression, std::string p_value, bool c
 {
 }
 
-CompilerNode::CompilerNode() : expression(""), jumpTo(nullptr), condition(condition)
+CompilerNode::CompilerNode(std::string p_expression, std::string p_value, std::shared_ptr<CompilerNode> p_jumpTo, bool condition) : expression(p_expression), value(p_value), jumpTo(p_jumpTo), condition(condition)
+{
+}
+
+CompilerNode::CompilerNode() : expression(""), condition(condition)
 {
 }
 
@@ -22,9 +26,15 @@ CompilerNode::~CompilerNode()
 	//delete jumpTo;
 }
 
-void CompilerNode::SetJumpTo(CompilerNode jump)
+void CompilerNode::SetJumpTo(std::shared_ptr<CompilerNode> jump)
 {
-	jumpTo = &jump;
+	jumpTo = jump;
+}
+
+std::shared_ptr<CompilerNode> CompilerNode::GetJumpTo()
+{
+    
+    return std::shared_ptr<CompilerNode>(jumpTo.lock());
 }
 
 std::string CompilerNode::GetExpression()
@@ -37,7 +47,7 @@ std::string CompilerNode::GetValue()
 	return value;
 }
 
-std::vector<CompilerNode*> CompilerNode::GetNodeparameters()
+std::vector<std::shared_ptr<CompilerNode>> CompilerNode::GetNodeparameters()
 {
 	return nodeParameters;
 }

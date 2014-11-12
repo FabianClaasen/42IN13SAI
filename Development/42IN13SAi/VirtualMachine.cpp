@@ -1,135 +1,144 @@
 #include "VirtualMachine.h"
 #include <iostream>
 
-VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::vector<CompilerNode> compiler_nodes)
-	: mainSymboltable(symboltable), subroutineTable(subroutine), _compilernodes(compiler_nodes)
+VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::list<std::shared_ptr<CompilerNode>> compiler_nodes)
+	: mainSymboltable(symboltable), subroutineTable(subroutine), compilerNodes(compiler_nodes)
 {
-	function_caller = new FunctionCaller(this);
-
+    function_caller = std::unique_ptr<FunctionCaller>(new FunctionCaller(this));
+    currentIndex = std::make_shared<int>(int(-1));
+    
     subSymbolTable = nullptr;
     subSubroutine = nullptr;
 }
 
+VirtualMachine::VirtualMachine(const VirtualMachine &other) :mainSymboltable(other.mainSymboltable), subSubroutine(other.subSubroutine), subSymbolTable(other.subSymbolTable), subroutineTable(other.subroutineTable), compilerNodes(other.compilerNodes)
+{
+    
+}
+
+VirtualMachine& VirtualMachine::operator=(const VirtualMachine& other)
+{
+    if (this != &other)
+    {
+        VirtualMachine* cVirtualMachine = new VirtualMachine(other);
+        return *cVirtualMachine;
+        
+    }
+    return *this;
+}
+
 VirtualMachine::~VirtualMachine(){}
 
-CompilerNode VirtualMachine::PeekNext(int _currentIndex, std::vector<CompilerNode> nodes)
+CompilerNode VirtualMachine::PeekNext(std::string functionName, compilerNodeList nodes)
 {
-    CompilerNode node;
-    if (nodes.size() - 1 > _currentIndex || _currentIndex == -1)
-       node = nodes.at(_currentIndex + 1);
-	return node;
-}
-
-CompilerNode VirtualMachine::PeekPrevious(int _currentIndex, std::vector<CompilerNode> nodes)
-{
-    CompilerNode node;
-    if (_currentIndex >= 1)
-        node = nodes.at(_currentIndex - 1);
-    return node;
-}
-
-CompilerNode VirtualMachine::GetNext(int* _currentIndex, std::vector<CompilerNode> nodes)
-{
-	CompilerNode node;
-    (*_currentIndex)++;
-	if (*_currentIndex <= nodes.size()-1 && nodes.size() > 0)
+    std::shared_ptr<CompilerNode> node = std::make_shared<CompilerNode>(CompilerNode());
+	
+    if (nodeIterators[functionName] != nodes.end())
 	{
-		node = nodes.at(*_currentIndex);
+        // release node
+        node.reset();
+        
+		std::next(nodeIterators[functionName]);
+		node = *nodeIterators[functionName];
+        std::prev(nodeIterators[functionName]);
+	}
+	return *node;
+}
+
+CompilerNode VirtualMachine::GetNext(std::string functionName, compilerNodeList &nodes)
+{
+	std::shared_ptr<CompilerNode> node = std::make_shared<CompilerNode>(CompilerNode());
+	
+    // Get the iterator
+    if (nodeIterators[functionName] != nodes.end())
+	{
+        // release node
+        node.reset();
+        
+		node = *nodeIterators[functionName];
+        std::advance(nodeIterators[functionName], 1);
 	}
 	else
 	{
 		throw std::runtime_error("Compilernode missing");
 	}
 
-	return node;
+	return *node;
 }
 
 
 void VirtualMachine::ExecuteCode()
 {
 	// Only when there are compilernodes for global vars
-	if (_compilernodes.size() > 0)
+	if (compilerNodes.size() > 0)
 	{
+        // The subroutine name
+        std::string subroutineName = "globals";
+        // Add the main node iterator
+        nodeIterators.insert(std::pair<std::string, compilerNodeList::iterator>(subroutineName, compilerNodes.begin()));
+        
 		// First check all compilernodes for global variables
 		do 
 		{
-			if (PeekNext(currentIndex, _compilernodes).GetExpression() != "")
-			{
-				CompilerNode node = VirtualMachine::GetNext(&currentIndex, _compilernodes);
-				std::string function_call = node.GetExpression();
-				function_caller->Call(function_call, node);
-			}
-		} while (currentIndex < _compilernodes.size()-1);
+            CompilerNode node = VirtualMachine::GetNext(subroutineName, compilerNodes);
+            std::string function_call = node.GetExpression();
+            function_caller->Call(function_call, node);
+		} while (nodeIterators[subroutineName] != compilerNodes.end());
+        
+        // Delete the globals node iterator
+        nodeIterators.erase(subroutineName);
 	}
+    
     // Find main subroutine
     subSubroutine = subroutineTable->GetSubroutine("main");
+    
     if (subSubroutine == nullptr)
         throw std::runtime_error("No main function found");
+    
     subSymbolTable = subSubroutine->GetSymbolTable();
-    ExecuteNodes(*subSubroutine->GetCompilerNodeVector());
     
-    //std::vector<CompilerNode> mainNodes = *subSubroutine->GetCompilerNodeVector();
+    // Get the main nodes and execute them
+    std::list<std::shared_ptr<CompilerNode>> mainNodes = subSubroutine->GetCompilerNodeCollection();
+    ExecuteNodes(mainNodes);
 }
 
-CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(compilerNodeList nodes)
 {
-    int* _currentIndex = new int(-1);
-    std::vector<CompilerNode>* compilernodes = &nodes;
+    // Get the subroutine name
+    std::string subroutineName = subSubroutine->name;
+    compilerNodeList compilernodes = nodes;
+    
+    
+    // Insert the iterator for this subroutine
+    nodeIterators.insert(std::pair<std::string, compilerNodeList::iterator>
+                         (subroutineName, compilernodes.begin()));
     do
     {
-        if (PeekNext(*_currentIndex, *compilernodes).GetExpression() != "")
+        CompilerNode node = VirtualMachine::GetNext(subroutineName, compilernodes);
+        
+        // Get the function name
+        std::string function_call = node.GetExpression();
+        
+        if (function_call == "$ret")
         {
-            CompilerNode node = VirtualMachine::GetNext(_currentIndex, *compilernodes);
-            
-            CompilerNode previous = PeekPrevious(*_currentIndex, *compilernodes);
-            if (previous.GetExpression() != "" && previous.GetExpression() == "$whileLoop")
-            {
-                while (PeekNext(*_currentIndex, *compilernodes).GetExpression() != "$doNothing")
-                {
-                    node = VirtualMachine::GetNext(_currentIndex, *compilernodes);
-                }
-                node = VirtualMachine::GetNext(_currentIndex, *compilernodes);
-            }
-            
-            // commentaar
-            std::string function_call = node.GetExpression();
-            
-            if (function_call == "$ret")
-                return function_caller->Call(function_call, node);
-            else if (function_call == "$doNothing")
-                return nullptr;
-            else
-                function_caller->Call(function_call, node);
+            return function_caller->Call(function_call, node);
         }
-    } while (*_currentIndex < compilernodes->size()-1);
+        else if (function_call == "$doNothing")
+        {
+            nodeIterators[subroutineName] = std::find(compilernodes.begin(), compilernodes.end(), node.GetJumpTo());
+        }
+        else
+            function_caller->Call(function_call, node);
+        
+    } while (nodeIterators[subroutineName] != compilernodes.end());
+    
+    // Erase the iterator
+    nodeIterators.erase(subroutineName);
     
     return nullptr;
 }
 
-CompilerNode* VirtualMachine::ExecuteNodes(std::vector<CompilerNode> nodes, int currenIndex)
-{
-    int* _currentIndex = new int(currenIndex);
-    std::vector<CompilerNode>* compilernodes = &nodes;
-    do
-    {
-        if (PeekNext(*_currentIndex, *compilernodes).GetExpression() != "")
-        {
-            CompilerNode node = VirtualMachine::GetNext(_currentIndex, *compilernodes);
-            std::string function_call = node.GetExpression();
-            
-            if (function_call == "$ret")
-                return function_caller->Call(function_call, node);
-            else if (function_call == "$doNothing")
-                return nullptr;
-            else
-                function_caller->Call(function_call, node);
-        }
-    } while (*_currentIndex < compilernodes->size()-1);
-    
-    return nullptr;
-}
-
-CompilerNode* VirtualMachine::CallFunction(CompilerNode node)
+std::shared_ptr<CompilerNode> VirtualMachine::CallFunction(CompilerNode node)
 {
     std::string function_call = node.GetExpression();
     // call the compilernode function
@@ -138,15 +147,15 @@ CompilerNode* VirtualMachine::CallFunction(CompilerNode node)
 
 #pragma region FunctionOperations
 
-CompilerNode* VirtualMachine::ExecuteFunction(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compilerNode)
 {
     // Check if params is not empty
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
-    CompilerNode* functionNode = parameters.at(0);
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
+    std::shared_ptr<CompilerNode> functionNode = parameters.at(0);
 
     // Check if node contains the functionname
     if (functionNode->GetExpression() != "$functionName")
@@ -170,7 +179,7 @@ CompilerNode* VirtualMachine::ExecuteFunction(CompilerNode compilerNode)
     std::vector<Symbol*> vSymbols = subSymbolTable->GetSymbolVector();
     for (Symbol* symbol : vSymbols)
     {
-        CompilerNode* param = parameters.at(paramNum);
+        std::shared_ptr<CompilerNode> param = parameters.at(paramNum);
         if (param->GetExpression() != "$value")
             param = CallFunction(*param);
         
@@ -179,28 +188,27 @@ CompilerNode* VirtualMachine::ExecuteFunction(CompilerNode compilerNode)
         paramNum++;
     }
     
-    return VirtualMachine::ExecuteNodes(*subSubroutine->GetCompilerNodeVector());
+    return VirtualMachine::ExecuteNodes(subSubroutine->GetCompilerNodeCollection());
 }
-
-CompilerNode* VirtualMachine::ExecuteReturn(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteReturn(CompilerNode compilerNode)
 {
     // Check if params is not empty
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 1)
         throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-    CompilerNode* param1 = parameters.at(0);
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
     if (param1->GetExpression() != "$value")
         param1 = CallFunction(*param1);
     
     // Create the return node
-    CompilerNode* returnNode = new CompilerNode("$value", param1->GetValue(), false);
+    std::shared_ptr<CompilerNode> returnNode = std::make_shared<CompilerNode>(CompilerNode("$value", param1->GetValue(), false));
     
     return returnNode;
 }
@@ -208,21 +216,21 @@ CompilerNode* VirtualMachine::ExecuteReturn(CompilerNode compilerNode)
 #pragma endregion FunctionOperations
 
 #pragma region VariableOperations
-CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
 {
 	// Check if params is not empty
 	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 	
     // Get the Node parameters
-	std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+	std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
         throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-	CompilerNode* param1 = parameters.at(0);
-	CompilerNode* param2 = parameters.at(1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
     
 	// Only go through when param is identifier
 	if (param1->GetExpression() == "$identifier")
@@ -250,7 +258,7 @@ CompilerNode* VirtualMachine::ExecuteAssignment(CompilerNode compilerNode)
     return nullptr;
 }
 
-CompilerNode* VirtualMachine::ExecuteGetVariable(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGetVariable(CompilerNode compilerNode)
 {
     // Check if params is not empty
     if (compilerNode.GetValue().empty())
@@ -270,24 +278,24 @@ CompilerNode* VirtualMachine::ExecuteGetVariable(CompilerNode compilerNode)
         current_symbol = mainSymboltable->GetSymbol(parameter);
     
     // Create the return node
-	CompilerNode* returnNode = new CompilerNode("$value", std::to_string(current_symbol->GetValue()), false);
+	std::shared_ptr<CompilerNode> returnNode = std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(current_symbol->GetValue()), false));
     
     return returnNode;
 }
 #pragma endregion VariableOperations
 
 #pragma region DefaultOperations
-CompilerNode* VirtualMachine::ExecutePrint(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecutePrint(CompilerNode compilerNode)
 {
 	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(1, ParameterExceptionType::NoParameters);
 
-	std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
+	std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
 	if (parameters.size() > 1)
 		throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
 
 	// Get first and only parameter
-	CompilerNode* param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Check if expression is not value
 	if (param1->GetExpression() != "$value")
@@ -303,7 +311,7 @@ CompilerNode* VirtualMachine::ExecutePrint(CompilerNode compilerNode)
 	return nullptr;
 }
 
-CompilerNode* VirtualMachine::ExecuteStop(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteStop(CompilerNode compilerNode)
 {
 	if (compilerNode.GetNodeparameters().empty())
 	{
@@ -320,58 +328,45 @@ CompilerNode* VirtualMachine::ExecuteStop(CompilerNode compilerNode)
 
 #pragma region LoopOperations
 
-CompilerNode* VirtualMachine::ExecuteWhile(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteWhile(CompilerNode compilerNode)
 {
     // Check if nodeparams are not empty
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
-    std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     // Check if count of params is not right
     if (parameters.size() > 1)
         throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-    CompilerNode* condition = parameters.at(0);
+    std::shared_ptr<CompilerNode> condition = parameters.at(0);
     
     if (condition->GetExpression() != "$value")
         condition = CallFunction(*condition);
     
-	std::vector<CompilerNode> compilerNodes;
+    
+    compilerNodeList compilernodes;
 	if (subSubroutine == nullptr)
 	{
 		subSubroutine = subroutineTable->GetSubroutine("main");
-		compilerNodes = *subSubroutine->GetCompilerNodeVector();
+		compilernodes = subSubroutine->GetCompilerNodeCollection();
 	}
 	else
-		compilerNodes = *subSubroutine->GetCompilerNodeVector();
+		compilernodes = subSubroutine->GetCompilerNodeCollection();
+    
+    
     if (condition->GetValue() == "1")
     {
-        std::vector<CompilerNode>::iterator iterator;
-        std::vector<CompilerNode> whileNodes;
-        for (iterator = compilerNodes.begin(); iterator != compilerNodes.end(); ++iterator)
-        {
-            if (iterator->GetExpression() == "$whileLoop")
-            {
-                whileNodes = std::vector<CompilerNode> {++iterator, compilerNodes.end()};
-                ExecuteNodes(whileNodes);
-                CallFunction(compilerNode);
-            }
-        }
         return nullptr;
     }
     else
     {
-        /*int startIndex = 0;
-        std::vector<CompilerNode>::iterator iterator;
-        for (iterator = compilerNodes.begin(); iterator != compilerNodes.end(); ++iterator)
-        {
-            if (iterator->GetExpression() == "$doNothing")
-            {
-                break;
-            }
-            startIndex++;
-        }
-        ExecuteNodes(compilerNodes, startIndex);*/
+        nodeIterators[subSubroutine->name] = std::find(compilernodes.begin(), compilernodes.end(), compilerNode.GetJumpTo());
+        if (nodeIterators[subSubroutine->name] != --compilernodes.end())
+            std::next(nodeIterators[subSubroutine->name]);
+        else
+            nodeIterators[subSubroutine->name] = compilernodes.end();
+        
         return nullptr;
     }
 }
@@ -379,19 +374,19 @@ CompilerNode* VirtualMachine::ExecuteWhile(CompilerNode compilerNode)
 #pragma endregion LoopOperations
 
 #pragma region ConditionalStatements
-CompilerNode* VirtualMachine::ExecuteLessCondition(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLessCondition(CompilerNode compilerNode)
 {
 	// Check if nodeparams are not empty
 	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 
-	std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
+	std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
 	// Check if count of params is not right
 	if (parameters.size() > 2)
 		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
 
-	CompilerNode* param1 = parameters.at(0);
-	CompilerNode* param2 = parameters.at(1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Check if expression is value
 	if (param1->GetExpression() != "$value")
@@ -405,24 +400,22 @@ CompilerNode* VirtualMachine::ExecuteLessCondition(CompilerNode compilerNode)
 	bool output = num1 < num2;
 
 	// Set boolean to true if num1 < num2, else return false (inside the node)
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output), output);
-
-	return rNode;
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-CompilerNode* VirtualMachine::ExecuteGreaterCondition(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGreaterCondition(CompilerNode compilerNode)
 {
 	// Check if nodeparams are not empty
 	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 
-	std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
+	std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
 	// Check if count of params is not right
 	if (parameters.size() > 2)
 		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
 
-	CompilerNode* param1 = parameters.at(0);
-	CompilerNode* param2 = parameters.at(1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Check if expression is value
 	if (param1->GetExpression() != "$value")
@@ -436,24 +429,22 @@ CompilerNode* VirtualMachine::ExecuteGreaterCondition(CompilerNode compilerNode)
 	bool output = num1 > num2;
 
 	// Set boolean to true if num1 > num2, else return false (inside the node)
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output), output);
-
-	return rNode;
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-CompilerNode* VirtualMachine::ExecuteEqualCondition(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteEqualCondition(CompilerNode compilerNode)
 {
 	// Check if nodeparams are not empty
 	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 
-	std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
+	std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
 	// Check if count of params is not right
 	if (parameters.size() > 2)
 		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
 
-	CompilerNode* param1 = parameters.at(0);
-	CompilerNode* param2 = parameters.at(1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Check if expression is value
 	if (param1->GetExpression() != "$value")
@@ -467,24 +458,22 @@ CompilerNode* VirtualMachine::ExecuteEqualCondition(CompilerNode compilerNode)
 	bool output = num1 == num2;
 
 	// Set boolean to true if num1 == num2, else return false (inside the node)
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output), output);
-
-	return rNode;
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-CompilerNode* VirtualMachine::ExecuteNotEqualCondition(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNotEqualCondition(CompilerNode compilerNode)
 {
 	// Check if nodeparams are not empty
 	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 
-	std::vector<CompilerNode*> parameters = compilerNode.GetNodeparameters();
+	std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
 	// Check if count of params is not right
 	if (parameters.size() > 2)
 		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
 
-	CompilerNode* param1 = parameters.at(0);
-	CompilerNode* param2 = parameters.at(1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Check if expression is value
 	if (param1->GetExpression() != "$value")
@@ -498,27 +487,25 @@ CompilerNode* VirtualMachine::ExecuteNotEqualCondition(CompilerNode compilerNode
 	bool output = num1 != num2;
 
 	// Set boolean to true if num1 != num2, else return false (inside the node)
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output), output);
-
-	return rNode;
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 #pragma endregion ConditionalStatements
 
 #pragma region SimpleMath
-CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
 {
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
         throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-    CompilerNode* param1 = parameters.at(0);
-    CompilerNode* param2 = parameters.at(1);
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+    std::shared_ptr<CompilerNode> param2 = parameters.at(1);
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
@@ -533,25 +520,23 @@ CompilerNode *VirtualMachine::ExecuteAddOperation(CompilerNode compilerNode)
     float output = num1 + num2;
     
     // Create a new value compilernode to return
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output), false);
-     
-	return rNode;
+    return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-CompilerNode* VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
 {
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
         throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-    CompilerNode* param1 = parameters.at(0);
-    CompilerNode* param2 = parameters.at(1);
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+    std::shared_ptr<CompilerNode> param2 = parameters.at(1);
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
@@ -566,25 +551,23 @@ CompilerNode* VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
 	float output = num1 - num2;
     
     // Create a new value compilernode to return
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
-    
-    return rNode;
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-CompilerNode* VirtualMachine::ExecuteMultiplyOperation(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteMultiplyOperation(CompilerNode compilerNode)
 {
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
         throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-    CompilerNode* param1 = parameters.at(0);
-    CompilerNode* param2 = parameters.at(1);
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+    std::shared_ptr<CompilerNode> param2 = parameters.at(1);
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
@@ -599,25 +582,23 @@ CompilerNode* VirtualMachine::ExecuteMultiplyOperation(CompilerNode compilerNode
 	float output = num1 * num2;
     
     // Create a new value compilernode to return
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
-    
-    return rNode;
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-CompilerNode* VirtualMachine::ExecuteDivideOperation(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDivideOperation(CompilerNode compilerNode)
 {
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(2, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 2)
         throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-    CompilerNode* param1 = parameters.at(0);
-    CompilerNode* param2 = parameters.at(1);
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+    std::shared_ptr<CompilerNode> param2 = parameters.at(1);
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
@@ -632,25 +613,23 @@ CompilerNode* VirtualMachine::ExecuteDivideOperation(CompilerNode compilerNode)
 	float output = num1 / num2;
     
     // Create a new value compilernode to return
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
-    
-    return rNode;
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-CompilerNode* VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
 {
 	if (compilerNode.GetNodeparameters().empty())
 		throw ParameterException(2, ParameterExceptionType::NoParameters);
 
 	// Get the Node parameters
-	std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+	std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
 
 	// Check if there aren't more than two parameters
 	if (parameters.size() > 2)
 		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
 
-	CompilerNode* param1 = parameters.at(0);
-	CompilerNode* param2 = parameters.at(1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Check if the parameters are a value or another function call
 	// if function call, execute function
@@ -665,24 +644,22 @@ CompilerNode* VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
 	float output = fmod(num1, num2);
 
 	// Create a new value compilernode to return
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
-
-	return rNode;
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-CompilerNode* VirtualMachine::ExecuteUniMinOperation(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteUniMinOperation(CompilerNode compilerNode)
 {
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 1)
         throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-    CompilerNode* param1 = parameters.at(0);
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
@@ -694,24 +671,22 @@ CompilerNode* VirtualMachine::ExecuteUniMinOperation(CompilerNode compilerNode)
     float output = num1 - 1;
     
     // Create a new value compilernode to return
-    CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
-    
-    return rNode;
+    return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-CompilerNode* VirtualMachine::ExecuteUniPlusOperation(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteUniPlusOperation(CompilerNode compilerNode)
 {
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than two parameters
     if (parameters.size() > 1)
         throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-    CompilerNode* param1 = parameters.at(0);
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
@@ -720,31 +695,29 @@ CompilerNode* VirtualMachine::ExecuteUniPlusOperation(CompilerNode compilerNode)
     
     // Parse the parameters to a float for mathmatic operation
     float num1 = atof(param1->GetValue().c_str());
-    float output = num1++;
+    float output = num1 + 1;
     
     // Create a new value compilernode to return
-    CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
-    
-    return rNode;
+    return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
 #pragma endregion SimpleMath
 
 #pragma region ComplexMath
 
-CompilerNode* VirtualMachine::ExecuteSinOperation(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSinOperation(CompilerNode compilerNode)
 {
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than one parameter
     if (parameters.size() > 1)
         throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-    CompilerNode* param1 = parameters.at(0);
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
@@ -756,24 +729,22 @@ CompilerNode* VirtualMachine::ExecuteSinOperation(CompilerNode compilerNode)
     float output = std::sin(num1);
     
     // Create a new value compilernode to return
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
-    
-    return rNode;
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-CompilerNode* VirtualMachine::ExecuteCosOperation(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCosOperation(CompilerNode compilerNode)
 {
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than one parameter
     if (parameters.size() > 1)
         throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-    CompilerNode* param1 = parameters.at(0);
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
@@ -785,24 +756,22 @@ CompilerNode* VirtualMachine::ExecuteCosOperation(CompilerNode compilerNode)
 	float output = std::cos(num1);
     
     // Create a new value compilernode to return
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
-    
-    return rNode;
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-CompilerNode* VirtualMachine::ExecuteTanOperation(CompilerNode compilerNode)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteTanOperation(CompilerNode compilerNode)
 {
     if (compilerNode.GetNodeparameters().empty())
         throw ParameterException(1, ParameterExceptionType::NoParameters);
     
     // Get the Node parameters
-    std::vector<CompilerNode *> parameters = compilerNode.GetNodeparameters();
+    std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
     
     // Check if there aren't more than one parameter
     if (parameters.size() > 1)
         throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
     
-    CompilerNode* param1 = parameters.at(0);
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
     
     // Check if the parameters are a value or another function call
     // if function call, execute function
@@ -814,9 +783,7 @@ CompilerNode* VirtualMachine::ExecuteTanOperation(CompilerNode compilerNode)
 	float output = std::tan(num1);
     
     // Create a new value compilernode to return
-	CompilerNode* rNode = new CompilerNode("$value", std::to_string(output),false);
-    
-    return rNode;
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
 #pragma endregion ComplexMath

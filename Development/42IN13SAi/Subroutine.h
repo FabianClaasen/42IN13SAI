@@ -19,7 +19,7 @@
 class Subroutine {
 private:
 	SymbolTable symbolTable;
-	std::list<CompilerNode> subroutineCompilerNodes;
+	std::list<std::shared_ptr<CompilerNode>> subroutineCompilerNodes;
 
 public:	
     SubroutineKind kind;
@@ -37,9 +37,9 @@ public:
     Symbol* GetLocal(std::string name);
     SymbolTable* GetSymbolTable();
 
-	std::list<CompilerNode>* GetCompilerNodeCollection();
-    std::vector<CompilerNode>* GetCompilerNodeVector();
-	void AddCompilerNode(CompilerNode node);
+	std::list<std::shared_ptr<CompilerNode>> GetCompilerNodeCollection();
+	std::vector<std::shared_ptr<CompilerNode>> GetCompilerNodeVector();
+	void AddCompilerNode(std::shared_ptr<CompilerNode> node);
 };
 
 

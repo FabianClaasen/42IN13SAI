@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-var x = 3;
+var x = 5;
 
 func Main()
 [
-	prnt(x);
+	prnt(x * 5);
 ]
-=======
->>>>>>> a55b38d8f7af5bf9a301b79942c693cc712ddc70
