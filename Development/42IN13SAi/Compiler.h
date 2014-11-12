@@ -31,7 +31,7 @@ public:
 	void SetSubroutine(Subroutine subroutine);
 	void AddSubroutine();
 	void AddSymbol(Symbol symbol);
-	void AddCompilerNode(CompilerNode node);
+	void AddCompilerNode(std::shared_ptr<CompilerNode> node);
 	bool HasSymbol(std::string symbolName);
 	void ParseGlobalStatement();
 	void ParseStatement();
@@ -43,14 +43,14 @@ public:
 	//Info to send to VM
 	SymbolTable* GetSymbolTable();
 	SubroutineTable* GetSubroutineTable();
-	std::vector<CompilerNode> GetCompilerNodes();
+	std::list<std::shared_ptr<CompilerNode>> GetCompilerNodes();
 	
 private:
 	// Variables
 	//std::shared_ptr<InternalFunction> internalFunction;
 	//std::shared_ptr<Parser> parser;
 	std::vector<Token> tokenizerTokens;
-	std::vector<CompilerNode> compilerNodes;
+	std::list<std::shared_ptr<CompilerNode>> compilerNodes;
 	SymbolTable symbolTable;
 	SubroutineTable subroutineTable;
 	Subroutine currentSubroutine;

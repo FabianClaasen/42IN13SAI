@@ -1,6 +1,10 @@
 #include <QtWidgets\QApplication>
 
 #include "MainController.h"
+#include <QApplication> //qt
+#include "MainWindow.h" //qt
+
+#include <stdlib.h>
 
 #ifdef _WIN32
 #define _CRTDBG_MAP_ALLOC

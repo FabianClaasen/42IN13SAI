@@ -14,19 +14,19 @@ public:
 
 	// Functions
 	void ParseFunction();
-	CompilerNode* ParseAssignmentStatement(bool forLoop);
+	std::shared_ptr<CompilerNode> ParseAssignmentStatement(bool forLoop);
 	void ParseIfStatement();
 	void ParseLoopStatement();
 	void ParseFunctionCall();
     void ParseReturn();
     
-	CompilerNode* ParseExpression();
-	CompilerNode* ParseRelationalExpression();
-	CompilerNode* ParseAddExpression();
-	CompilerNode* ParseMulExpression();
-	CompilerNode* ParseUniExpression();
-	CompilerNode* ParseTerm();
-	CompilerNode* ParseFunctionCall(Token token);
+	std::shared_ptr<CompilerNode> ParseExpression();
+	std::shared_ptr<CompilerNode> ParseRelationalExpression();
+	std::shared_ptr<CompilerNode> ParseAddExpression();
+	std::shared_ptr<CompilerNode> ParseMulExpression();
+	std::shared_ptr<CompilerNode> ParseUniExpression();
+	std::shared_ptr<CompilerNode> ParseTerm();
+	std::shared_ptr<CompilerNode> ParseFunctionCall(Token token);
 
 private:
 	Compiler* compiler;
