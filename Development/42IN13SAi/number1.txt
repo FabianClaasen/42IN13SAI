@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 var x = 3;
 
 func Main()
 [
 	prnt(x);
 ]
-=======
->>>>>>> a55b38d8f7af5bf9a301b79942c693cc712ddc70

@@ -5,11 +5,10 @@
 TEMPLATE = app
 TARGET = 42IN13SAi
 DESTDIR = ../Debug
-QT += widgets gui
-CONFIG += debug 
-DEFINES += _CRT_SECURE_NO_WARNINGS QT_WIDGETS_LIB
-INCLUDEPATH += ../../../../../../../../Boost/include/boost-1_56 \
-    ./GeneratedFiles/Debug
+QT += core widgets gui
+CONFIG += debug
+DEFINES += _CRT_SECURE_NO_WARNINGS
+INCLUDEPATH += ./GeneratedFiles/Debug
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/debug
 OBJECTS_DIR += debug
