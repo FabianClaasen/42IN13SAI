@@ -5,7 +5,8 @@ VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subrou
 	: mainSymboltable(symboltable), subroutineTable(subroutine), compilerNodes(compiler_nodes)
 {
     function_caller = std::unique_ptr<FunctionCaller>(new FunctionCaller(this));
-
+    currentIndex = std::make_shared<int>(int(-1));
+    
     subSymbolTable = nullptr;
     subSubroutine = nullptr;
 }
@@ -28,55 +29,34 @@ VirtualMachine& VirtualMachine::operator=(const VirtualMachine& other)
 
 VirtualMachine::~VirtualMachine(){}
 
-CompilerNode VirtualMachine::PeekNext(int _currentIndex, std::list<std::shared_ptr<CompilerNode>> nodes)
+CompilerNode VirtualMachine::PeekNext(std::string functionName, compilerNodeList nodes)
 {
     std::shared_ptr<CompilerNode> node = std::make_shared<CompilerNode>(CompilerNode());
-	if (nodes.size() - 1 > _currentIndex || _currentIndex == -1)
+	
+    if (nodeIterators[functionName] != nodes.end())
 	{
         // release node
         node.reset();
         
-		std::list<std::shared_ptr<CompilerNode>>::iterator it = nodes.begin();
-		std::advance(it, _currentIndex + 1);
-		node = *it;
+		std::next(nodeIterators[functionName]);
+		node = *nodeIterators[functionName];
+        std::prev(nodeIterators[functionName]);
 	}
-       /*node = nodes.at(_currentIndex + 1);*/
 	return *node;
 }
 
-CompilerNode VirtualMachine::PeekPrevious(int _currentIndex, std::list<std::shared_ptr<CompilerNode>> nodes)
-{
-    std::shared_ptr<CompilerNode> node = std::make_shared<CompilerNode>(CompilerNode());
-	if (_currentIndex >= 1)
-	{
-        // release node
-        node.reset();
-        
-		std::list<std::shared_ptr<CompilerNode>>::iterator it = nodes.begin();
-		std::advance(it, _currentIndex - 1);
-		node = *it;
-	}
-        /*node = nodes.at(_currentIndex - 1);*/
-    return *node;
-}
-
-CompilerNode VirtualMachine::GetNext(int* _currentIndex, std::list<std::shared_ptr<CompilerNode>> nodes)
+CompilerNode VirtualMachine::GetNext(std::string functionName, compilerNodeList &nodes)
 {
 	std::shared_ptr<CompilerNode> node = std::make_shared<CompilerNode>(CompilerNode());
-    (*_currentIndex)++;
-	if (*_currentIndex <= nodes.size()-1 && nodes.size() > 0)
+	
+    // Get the iterator
+    if (nodeIterators[functionName] != nodes.end())
 	{
         // release node
         node.reset();
         
-		std::list<std::shared_ptr<CompilerNode>>::iterator it = nodes.begin();
-		if (*_currentIndex > 0)
-		{
-			std::advance(it, *_currentIndex);
-		}
-		
-		node = *it;
-		/*node = nodes.at(*_currentIndex);*/
+		node = *nodeIterators[functionName];
+        std::advance(nodeIterators[functionName], 1);
 	}
 	else
 	{
@@ -92,95 +72,68 @@ void VirtualMachine::ExecuteCode()
 	// Only when there are compilernodes for global vars
 	if (compilerNodes.size() > 0)
 	{
+        // The subroutine name
+        std::string subroutineName = "globals";
+        // Add the main node iterator
+        nodeIterators.insert(std::pair<std::string, compilerNodeList::iterator>(subroutineName, compilerNodes.begin()));
+        
 		// First check all compilernodes for global variables
 		do 
 		{
-			if (PeekNext(currentIndex, compilerNodes).GetExpression() != "")
-			{
-				CompilerNode node = VirtualMachine::GetNext(&currentIndex,compilerNodes);
-				std::string function_call = node.GetExpression();
-				function_caller->Call(function_call, node);
-			}
-		} while (currentIndex < compilerNodes.size()-1);
+            CompilerNode node = VirtualMachine::GetNext(subroutineName, compilerNodes);
+            std::string function_call = node.GetExpression();
+            function_caller->Call(function_call, node);
+		} while (nodeIterators[subroutineName] != compilerNodes.end());
+        
+        // Delete the globals node iterator
+        nodeIterators.erase(subroutineName);
 	}
+    
     // Find main subroutine
     subSubroutine = subroutineTable->GetSubroutine("main");
+    
     if (subSubroutine == nullptr)
         throw std::runtime_error("No main function found");
+    
     subSymbolTable = subSubroutine->GetSymbolTable();
-    ExecuteNodes(subSubroutine->GetCompilerNodeCollection());
     
-    //std::vector<CompilerNode> mainNodes = *subSubroutine->GetCompilerNodeVector();
+    // Get the main nodes and execute them
+    std::list<std::shared_ptr<CompilerNode>> mainNodes = subSubroutine->GetCompilerNodeCollection();
+    ExecuteNodes(mainNodes);
 }
 
-std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::list<std::shared_ptr<CompilerNode>> nodes)
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(compilerNodeList nodes)
 {
-    int* _currentIndex = new int(-1);
-    std::list<std::shared_ptr<CompilerNode>> compilernodes = nodes;
+    // Get the subroutine name
+    std::string subroutineName = subSubroutine->name;
+    compilerNodeList compilernodes = nodes;
+    
+    
+    // Insert the iterator for this subroutine
+    nodeIterators.insert(std::pair<std::string, compilerNodeList::iterator>
+                         (subroutineName, compilernodes.begin()));
     do
     {
-        if (PeekNext(*_currentIndex, compilernodes).GetExpression() != "")
+        CompilerNode node = VirtualMachine::GetNext(subroutineName, compilernodes);
+        
+        // Get the function name
+        std::string function_call = node.GetExpression();
+        
+        if (function_call == "$ret")
         {
-            CompilerNode node = VirtualMachine::GetNext(_currentIndex, compilernodes);
-            
-            CompilerNode previous = PeekPrevious(*_currentIndex, compilernodes);
-            if (previous.GetExpression() != "" && previous.GetExpression() == "$whileLoop")
-            {
-                while (PeekNext(*_currentIndex, compilernodes).GetExpression() != "$doNothing")
-                {
-                    node = VirtualMachine::GetNext(_currentIndex, compilernodes);
-                }
-                node = VirtualMachine::GetNext(_currentIndex, compilernodes);
-            }
-            
-            // commentaar
-            std::string function_call = node.GetExpression();
-            
-            if (function_call == "$ret")
-            {
-                delete _currentIndex;
-                _currentIndex = nullptr;
-                return function_caller->Call(function_call, node);
-            }
-            else if (function_call == "$doNothing")
-                break;
-            else
-                function_caller->Call(function_call, node);
+            return function_caller->Call(function_call, node);
         }
-    } while (*_currentIndex < compilernodes.size()-1);
-    
-    delete _currentIndex;
-    _currentIndex = nullptr;
-    
-    return nullptr;
-}
-
-std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::list<std::shared_ptr<CompilerNode>> nodes, int currenIndex)
-{
-    int* _currentIndex = new int(currenIndex);
-    std::list<std::shared_ptr<CompilerNode>> compilernodes = nodes;
-    do
-    {
-        if (PeekNext(*_currentIndex, compilernodes).GetExpression() != "")
+        else if (function_call == "$doNothing")
         {
-            CompilerNode node = VirtualMachine::GetNext(_currentIndex, compilernodes);
-            std::string function_call = node.GetExpression();
-            
-            if (function_call == "$ret")
-            {
-                delete _currentIndex;
-                _currentIndex = nullptr;
-                return function_caller->Call(function_call, node);
-            }
-            else if (function_call == "$doNothing")
-                break;
-            else
-                function_caller->Call(function_call, node);
+            nodeIterators[subroutineName] = std::find(compilernodes.begin(), compilernodes.end(), node.GetJumpTo());
         }
-    } while (*_currentIndex < compilernodes.size()-1);
+        else
+            function_caller->Call(function_call, node);
+        
+    } while (nodeIterators[subroutineName] != compilernodes.end());
     
-    delete _currentIndex;
-    _currentIndex = nullptr;
+    // Erase the iterator
+    nodeIterators.erase(subroutineName);
     
     return nullptr;
 }
@@ -392,33 +345,28 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteWhile(CompilerNode compiler
         condition = CallFunction(*condition);
     
     
-    std::vector<std::shared_ptr<CompilerNode>> compilerNodes;
+    compilerNodeList compilernodes;
 	if (subSubroutine == nullptr)
 	{
 		subSubroutine = subroutineTable->GetSubroutine("main");
-		compilerNodes = subSubroutine->GetCompilerNodeVector();
+		compilernodes = subSubroutine->GetCompilerNodeCollection();
 	}
 	else
-		compilerNodes = subSubroutine->GetCompilerNodeVector();
+		compilernodes = subSubroutine->GetCompilerNodeCollection();
     
     
     if (condition->GetValue() == "1")
     {
-       /* std::list<std::shared_ptr<CompilerNode>>::iterator iterator;
-        std::list<std::shared_ptr<CompilerNode>> whileNodes;
-        for (iterator = compilerNodes.begin(); iterator != compilerNodes.end(); ++iterator)
-        {
-            if (iterator->GetExpression() == "$whileLoop")
-            {
-                whileNodes = std::list<std::shared_ptr<CompilerNode>> {++iterator, compilerNodes.end()};
-                ExecuteNodes(whileNodes);
-                CallFunction(compilerNode);
-            }
-        }*/
         return nullptr;
     }
     else
     {
+        nodeIterators[subSubroutine->name] = std::find(compilernodes.begin(), compilernodes.end(), compilerNode.GetJumpTo());
+        if (nodeIterators[subSubroutine->name] != --compilernodes.end())
+            std::next(nodeIterators[subSubroutine->name]);
+        else
+            nodeIterators[subSubroutine->name] = compilernodes.end();
+        
         return nullptr;
     }
 }
@@ -747,7 +695,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteUniPlusOperation(CompilerNo
     
     // Parse the parameters to a float for mathmatic operation
     float num1 = atof(param1->GetValue().c_str());
-    float output = num1++;
+    float output = num1 + 1;
     
     // Create a new value compilernode to return
     return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));

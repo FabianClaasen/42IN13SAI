@@ -12,8 +12,10 @@
 
 class VirtualMachine
 {
+    typedef std::list<std::shared_ptr<CompilerNode>> compilerNodeList;
+    
 public:
-	VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::list<std::shared_ptr<CompilerNode>> compiler_nodes);
+	VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, compilerNodeList compiler_nodes);
     VirtualMachine(const VirtualMachine &other);
     VirtualMachine& operator=(const VirtualMachine &other);
 	virtual ~VirtualMachine();
@@ -62,15 +64,16 @@ private:
     SymbolTable* subSymbolTable;
 	SubroutineTable* subroutineTable;
     Subroutine* subSubroutine;
-    CompilerNode PeekNext(int currentIndex, std::list<std::shared_ptr<CompilerNode>> nodes);
-	CompilerNode PeekPrevious(int currentIndex, std::list<std::shared_ptr<CompilerNode>> nodes);
-	CompilerNode GetNext(int* currentIndex, std::list<std::shared_ptr<CompilerNode>> nodes);
+    CompilerNode PeekNext(std::string functionName, compilerNodeList nodes);
+	CompilerNode PeekPrevious(std::string functionName, compilerNodeList nodes);
+	CompilerNode GetNext(std::string functionName, compilerNodeList &nodes);
     std::shared_ptr<CompilerNode> CallFunction(CompilerNode node);
     std::unique_ptr<FunctionCaller> function_caller;
 
+    std::map<std::string, compilerNodeList::iterator> nodeIterators;
 	std::list<std::shared_ptr<CompilerNode>> compilerNodes;
 	std::list<std::shared_ptr<CompilerNode>> receivedCompilerNodes;
-	int currentIndex = -1;
+    std::shared_ptr<int> currentIndex;
 
 	//bool isAction(MFP);
 };

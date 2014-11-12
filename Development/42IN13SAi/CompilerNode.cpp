@@ -8,6 +8,10 @@ CompilerNode::CompilerNode(std::string p_expression, std::string p_value, bool c
 {
 }
 
+CompilerNode::CompilerNode(std::string p_expression, std::string p_value, std::shared_ptr<CompilerNode> p_jumpTo, bool condition) : expression(p_expression), value(p_value), jumpTo(p_jumpTo), condition(condition)
+{
+}
+
 CompilerNode::CompilerNode() : expression(""), condition(condition)
 {
 }
@@ -25,6 +29,12 @@ CompilerNode::~CompilerNode()
 void CompilerNode::SetJumpTo(std::shared_ptr<CompilerNode> jump)
 {
 	jumpTo = jump;
+}
+
+std::shared_ptr<CompilerNode> CompilerNode::GetJumpTo()
+{
+    
+    return std::shared_ptr<CompilerNode>(jumpTo.lock());
 }
 
 std::string CompilerNode::GetExpression()

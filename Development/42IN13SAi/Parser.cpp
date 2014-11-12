@@ -369,6 +369,9 @@ void Parser::ParseLoopStatement()
 	endNode = std::shared_ptr<CompilerNode>(new CompilerNode(statementExpression, nodeParameters, jumpTo, false));
     compiler->GetSubroutine()->AddCompilerNode(endNode);
     
+    // set the doNothing jumpto to the endNode so it can jump to it at the end of the while
+    jumpTo->SetJumpTo(endNode);
+    
     compiler->Match(MyTokenType::CloseBracket);
     compiler->Match(MyTokenType::OpenMethod);
     
