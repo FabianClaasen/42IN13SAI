@@ -18,7 +18,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 	QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_F5), this);
 	codeEditor = new CodeEditor();
+	
 	connect(shortcut, SIGNAL(activated()), this, SLOT(execute()));
+	
+	highlighter = new Highlighter(codeEditor->document());
 	
 	this->setCentralWidget(codeEditor);
 }

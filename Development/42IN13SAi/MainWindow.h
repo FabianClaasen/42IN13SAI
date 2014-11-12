@@ -2,7 +2,7 @@
 
 #include <QMainWindow>
 #include <QObject>
-
+#include "Highlighter.h"
 class CodeEditor;
 
 class MainWindow : public QMainWindow
@@ -20,6 +20,7 @@ public:
 
 	private:
 		CodeEditor* codeEditor;
+		Highlighter* highlighter;
 		QString getFileFromStream();
 		void showMenuBar();
 };
