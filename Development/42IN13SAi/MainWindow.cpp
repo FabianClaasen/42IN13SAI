@@ -38,9 +38,10 @@ void MainWindow::execute()
 		// Tokenize the code		
 		tokenizer_controller->Tokenize();
 	}
-	catch (const PartnerNotFoundException& e)
+	catch (const std::exception& e)
 	{
-		delete(tokenizer_controller);
+		puts(e.what());
+		delete(tokenizer_controller);	
 		return;
 	}
 
