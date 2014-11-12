@@ -1,11 +1,6 @@
-var x = 3;
+var x = 10;
 
-func Main()
+func main()
 [
-	prnt(x);
-var x = 5;
 
-func Main()
-[
-	prnt(x * 5);
 ]
