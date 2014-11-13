@@ -24,8 +24,10 @@ void MainWindow::showMenuBar()
 	#ifdef _WIN32
 		menu = new QMenuBar();
 	#else
+        // Mac OS X needs menubar without a parent
 		menu = new QMenuBar(0);
-
+    
+        // Also needs a menu to show the items, doesn't work with only actions
 		QMenu* mainMenu = menu->addMenu("File");
 	#endif
 
@@ -34,6 +36,7 @@ void MainWindow::showMenuBar()
 	clearAction = menu->addAction("Clear console");
 
 	#ifndef _WIN32
+        // Add the actions to the menu
 		mainMenu->addAction(runAction);
 		mainMenu->addAction(clearAction);
 	#endif
