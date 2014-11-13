@@ -107,23 +107,23 @@
     <ClCompile Include="MissingTokenException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="StatementNotFoundException.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VariableNotFoundException.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UnexpectedTypeException.cpp">
-      <Filter>Generated Files</Filter>
+    <ClCompile Include="IdentifierException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="ParameterNameException.cpp">
-      <Filter>Generated Files</Filter>
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="StatementNotFoundException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="UnexpectedKeywordException.cpp">
-      <Filter>Generated Files</Filter>
+      <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="IdentifierException.cpp">
-      <Filter>Generated Files</Filter>
+    <ClCompile Include="UnexpectedTypeException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="VariableNotFoundException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -272,23 +272,23 @@
     <ClInclude Include="MissingTokenException.h">
       <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="StatementNotFoundException.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VariableNotFoundException.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UnexpectedTypeException.h">
-      <Filter>Generated Files</Filter>
+    <ClInclude Include="IdentifierException.h">
+      <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="ParameterNameException.h">
-      <Filter>Generated Files</Filter>
+      <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="StatementNotFoundException.h">
+      <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="UnexpectedKeywordException.h">
-      <Filter>Generated Files</Filter>
+      <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="IdentifierException.h">
-      <Filter>Generated Files</Filter>
+    <ClInclude Include="UnexpectedTypeException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="VariableNotFoundException.h">
+      <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
