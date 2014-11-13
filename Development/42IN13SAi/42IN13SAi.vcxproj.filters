@@ -104,6 +104,27 @@
     <ClCompile Include="MainController.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
+    <ClCompile Include="MissingTokenException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="StatementNotFoundException.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VariableNotFoundException.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnexpectedTypeException.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParameterNameException.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnexpectedKeywordException.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentifierException.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="packages.config" />
@@ -246,5 +267,28 @@
     <Filter Include="Header Files\Exceptions">
       <UniqueIdentifier>{e8ce2c9d-1abe-4985-bcd3-97abc9b06a94}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MissingTokenException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="StatementNotFoundException.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VariableNotFoundException.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnexpectedTypeException.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParameterNameException.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnexpectedKeywordException.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentifierException.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

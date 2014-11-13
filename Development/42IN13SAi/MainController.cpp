@@ -43,16 +43,27 @@ void MainController::execute()
 	{
 		tokenizer_controller->Tokenize(); // Tokenize
 	}
-	catch (const PartnerNotFoundException& e)
+	catch (const std::exception& e)
 	{
 		delete(tokenizer_controller);
-
+		puts(e.what());
 		return;
 	}
 
 	// Run the compiler
 	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
-	compiler.Compile();
+
+	try
+	{
+		compiler.Compile();
+	}
+	catch (const std::exception& e)
+	{
+		delete(tokenizer_controller);
+		puts(e.what());
+		return;
+	}
+
 
 	// Delete the tokenizer controller
 	delete(tokenizer_controller);
