@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="CodeEditor.cpp">
+      <Filter>Source Files\Qt</Filter>
     </ClCompile>
     <ClCompile Include="Compiler.cpp">
       <Filter>Source Files\Compiler</Filter>
@@ -10,76 +11,82 @@
     <ClCompile Include="CompilerNode.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
+    <ClCompile Include="FunctionCaller.cpp">
+      <Filter>Source Files\VirtualMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="Grammar.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="Highlighter.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="InternalFunction.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="LabelStack.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="ParameterException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
     <ClCompile Include="ParseException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="PartnerNotFoundException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="TokenPartner.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
+    <ClCompile Include="SymbolNotFoundException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="TokenizerController.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
+    <ClCompile Include="VirtualMachine.cpp">
+      <Filter>Source Files\VirtualMachine</Filter>
     </ClCompile>
-    <ClCompile Include="Tokenizer.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TokenDefinition.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Token.cpp">
+    <ClCompile Include="Parser.cpp">
       <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="RegexMatcher.cpp">
       <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
-    <ClCompile Include="Grammar.cpp">
+    <ClCompile Include="Subroutine.cpp">
       <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
-    <ClCompile Include="LabelStack.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="Parser.cpp">
-      <Filter>Source Files\Compiler</Filter>
+    <ClCompile Include="SubroutineTable.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="Symbol.cpp">
-      <Filter>Source Files\Compiler</Filter>
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="SymbolTable.cpp">
-      <Filter>Source Files\Compiler</Filter>
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
-    <ClCompile Include="InternalFunction.cpp">
-      <Filter>Source Files\Compiler</Filter>
+    <ClCompile Include="Token.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
-    <ClCompile Include="SymbolNotFoundException.cpp">
-      <Filter>Source Files\Exceptions</Filter>
+    <ClCompile Include="TokenDefinition.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
-    <ClCompile Include="ParameterException.cpp">
-      <Filter>Source Files\Exceptions</Filter>
+    <ClCompile Include="Tokenizer.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
-    <ClCompile Include="Subroutine.cpp">
-      <Filter>Source Files\Compiler</Filter>
+    <ClCompile Include="TokenizerController.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
-    <ClCompile Include="SubroutineTable.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="VirtualMachine.cpp">
-      <Filter>Source Files\Virtual Machine</Filter>
-    </ClCompile>
-    <ClCompile Include="FunctionCaller.cpp">
-      <Filter>Source Files\Virtual Machine</Filter>
-    </ClCompile>
-    <ClCompile Include="CodeEditor.cpp">
-      <Filter>Source Files\Qt</Filter>
-    </ClCompile>
-    <ClCompile Include="MainWindow.cpp">
-      <Filter>Source Files\Qt</Filter>
+    <ClCompile Include="TokenPartner.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_CodeEditor.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_CodeEditor.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Highlighter.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Highlighter.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
@@ -88,69 +95,88 @@
     <ClCompile Include="GeneratedFiles\Release\moc_MainWindow.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{3e1c29e5-9cb8-4084-b403-6b045e4cc29e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{929180c7-406f-4ee2-a057-315f80b68f18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Tokenizer">
-      <UniqueIdentifier>{185bada5-5136-4d41-a390-f0bbe106e1bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Virtual Machine">
-      <UniqueIdentifier>{1acf653c-d22f-4ff6-9faa-a53426d620c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Compiler">
-      <UniqueIdentifier>{e162f620-9dcc-439f-adc1-ef10370cd3ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Compiler">
-      <UniqueIdentifier>{431bd891-df84-422f-b18b-0960a41f18ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Virtual Machine">
-      <UniqueIdentifier>{6a6928c3-7546-495b-a692-2f908ca96e3a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Tokenizer">
-      <UniqueIdentifier>{10d423a5-b716-4b25-90dd-abbaa4bac5d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Exceptions">
-      <UniqueIdentifier>{1b4961e6-f617-41bf-b9ce-2e21dd48c8e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Exceptions">
-      <UniqueIdentifier>{b25466ae-fabf-4a78-9868-9357a450931c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{06aacc4a-8af8-4a5c-bc86-f855fc9bf70a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Qt">
-      <UniqueIdentifier>{095d10f7-f5c9-46e6-bb6e-72ee5e8e9a73}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Qt">
-      <UniqueIdentifier>{00a7e633-8ee5-419b-852a-b25936ed6db6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Generated Files">
-      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
-      <Extensions>moc;h;cpp</Extensions>
-      <ParseFiles>true</ParseFiles>
-    </Filter>
-    <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{fb3a6fc4-2a94-4790-894b-55bc7017ebf7}</UniqueIdentifier>
-      <Extensions>cpp;moc</Extensions>
-      <SourceControlFiles>False</SourceControlFiles>
-    </Filter>
-    <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{63710fb0-5b45-4c7c-97c3-017f0c6f1ced}</UniqueIdentifier>
-      <Extensions>cpp;moc</Extensions>
-      <SourceControlFiles>False</SourceControlFiles>
-    </Filter>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MainController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MainController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="MainController.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="packages.config" />
+    <CustomBuild Include="CodeEditor.h">
+      <Filter>Header Files\Qt</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Compiler.h">
+      <Filter>Header Files\Compiler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CompilerNode.h">
+      <Filter>Header Files\Compiler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FunctionCaller.h">
+      <Filter>Header Files\VirtualMachine</Filter>
+    </CustomBuild>
     <CustomBuild Include="Grammar.h">
       <Filter>Header Files\Tokenizer</Filter>
     </CustomBuild>
+    <CustomBuild Include="Highlighter.h">
+      <Filter>Header Files\Qt</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MainWindow.h">
+      <Filter>Header Files\Qt</Filter>
+    </CustomBuild>
+    <CustomBuild Include="InternalFunction.h">
+      <Filter>Header Files\Compiler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="LabelStack.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MyTokenType.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ParameterException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ParameterExceptionType.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ParseException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PartnerNotFoundException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SymbolNotFoundException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="VirtualMachine.h">
+      <Filter>Header Files\VirtualMachine</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Parser.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </CustomBuild>
     <CustomBuild Include="RegexMatcher.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Subroutine.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SubroutineKind.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SubroutineTable.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Symbol.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SymbolKind.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SymbolTable.h">
       <Filter>Header Files\Tokenizer</Filter>
     </CustomBuild>
     <CustomBuild Include="Token.h">
@@ -168,68 +194,57 @@
     <CustomBuild Include="TokenPartner.h">
       <Filter>Header Files\Tokenizer</Filter>
     </CustomBuild>
-    <CustomBuild Include="MyTokenType.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </CustomBuild>
-    <CustomBuild Include="VirtualMachine.h">
-      <Filter>Header Files\Virtual Machine</Filter>
-    </CustomBuild>
-    <CustomBuild Include="FunctionCaller.h">
-      <Filter>Header Files\Virtual Machine</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Compiler.h">
-      <Filter>Header Files\Compiler</Filter>
-    </CustomBuild>
-    <CustomBuild Include="CompilerNode.h">
-      <Filter>Header Files\Compiler</Filter>
-    </CustomBuild>
-    <CustomBuild Include="InternalFunction.h">
-      <Filter>Header Files\Compiler</Filter>
-    </CustomBuild>
-    <CustomBuild Include="LabelStack.h">
-      <Filter>Header Files\Compiler</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Parser.h">
-      <Filter>Header Files\Compiler</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Symbol.h">
-      <Filter>Header Files\Compiler</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SymbolTable.h">
-      <Filter>Header Files\Compiler</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SymbolKind.h">
-      <Filter>Header Files\Compiler</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ParseException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </CustomBuild>
-    <CustomBuild Include="PartnerNotFoundException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SymbolNotFoundException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Subroutine.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SubroutineKind.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SubroutineTable.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ParameterException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ParameterExceptionType.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </CustomBuild>
-    <CustomBuild Include="CodeEditor.h">
+    <CustomBuild Include="MainController.h">
       <Filter>Header Files\Qt</Filter>
     </CustomBuild>
-    <CustomBuild Include="MainWindow.h">
-      <Filter>Header Files\Qt</Filter>
-    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{ef64edf0-b809-4eb3-82b2-8c8601e9211d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{667a75b8-59bd-4c5f-8097-52d23d1a3b97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tokenizer">
+      <UniqueIdentifier>{c7df049b-d1d9-4fc8-8fa2-6ad57e6ce480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Compiler">
+      <UniqueIdentifier>{0d452c09-0f46-4a9e-a3b5-9e36f67459d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VirtualMachine">
+      <UniqueIdentifier>{8ac18288-f259-46a9-811e-616bcb7be3b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Qt">
+      <UniqueIdentifier>{fbf69999-d60c-4736-b24d-8fe15c1c4b09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tokenizer">
+      <UniqueIdentifier>{9dcf4f7f-e3e3-4827-90f2-9351094d8bd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compiler">
+      <UniqueIdentifier>{27b84b49-7b33-4687-92ed-47e89a435cb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VirtualMachine">
+      <UniqueIdentifier>{9d2ec259-d462-4d4c-9cb8-b68ca2e6aaa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Qt">
+      <UniqueIdentifier>{6c62c0ac-63e6-4826-b8d3-db7b971c0451}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{12bbd952-1110-413d-85e6-9f3d53e74cdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{229d0cf0-23d3-448a-8b90-cfb18aacf514}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Exceptions">
+      <UniqueIdentifier>{e1c3d781-656c-4157-972b-b54ceda95bc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Exceptions">
+      <UniqueIdentifier>{e8ce2c9d-1abe-4985-bcd3-97abc9b06a94}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

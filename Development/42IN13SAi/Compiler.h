@@ -4,6 +4,7 @@
 #include <iterator>
 #include <string>
 #include <memory>
+#include <iostream>
 
 #include "CompilerNode.h"
 #include "Token.h"

@@ -4,8 +4,14 @@
 
 CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 {
-	this->setFont(QFont("Consolas", 9));
+    this->setFont(QFont("Consolas", 9));
+    
+#ifndef _WIN32
+    // Set font to bigger size for readability on Mac OS X
+	this->setFont(QFont("Consolas", 12));
+#endif
 	this->setTabStopWidth(20);
+
 	lineNumberArea = new LineNumberArea(this);
 
 	connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));

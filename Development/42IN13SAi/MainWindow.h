@@ -2,7 +2,7 @@
 
 #include <QMainWindow>
 #include <QObject>
-
+#include "Highlighter.h"
 class CodeEditor;
 
 class MainWindow : public QMainWindow
@@ -11,15 +11,16 @@ class MainWindow : public QMainWindow
 
 public:
 		MainWindow(QWidget *parent = 0);
-		~MainWindow();
+		virtual ~MainWindow();
 		QString getText();
-
-	private slots:
-		void execute();
-		void clearConsole();
+		QAction *getRunAction();
+		QAction *getClearAction();
 
 	private:
 		CodeEditor* codeEditor;
-		QString getFileFromStream();
+		Highlighter* highlighter;
+		QAction *runAction;
+		QAction *clearAction;
+
 		void showMenuBar();
 };
