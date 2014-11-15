@@ -14,6 +14,7 @@
     <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="CompilerNode.cpp" />
     <ClCompile Include="CodeEditor.cpp" />
+    <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_CodeEditor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -551,6 +552,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FileIO.h" />
     <ClInclude Include="IdentifierException.h" />
     <ClInclude Include="MissingTokenException.h" />
     <ClInclude Include="ParameterNameException.h" />

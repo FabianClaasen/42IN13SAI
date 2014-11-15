@@ -1,11 +1,4 @@
-#include <iostream>
-#include <QtWidgets>
-#include <QShortcut>
-
 #include "MainController.h"
-#include "TokenizerController.h"
-#include "Compiler.h"
-#include "VirtualMachine.h"
 
 MainController::MainController() : QObject()
 {
@@ -13,13 +6,13 @@ MainController::MainController() : QObject()
 	mainWindow.resize(640, 360);
 	mainWindow.show();
 
-	setup();
+	Setup();
 }
 
-void MainController::setup()
+void MainController::Setup()
 {
 	QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_F5), &mainWindow);
-	connect(shortcut, SIGNAL(activated()), this, SLOT(execute()));
+	connect(shortcut, SIGNAL(activated()), this, SLOT(Execute()));
     
 #ifndef _WIN32
     // Mac OS X cmd + R for running program like in xcode
@@ -27,11 +20,12 @@ void MainController::setup()
     connect(macShortcut, SIGNAL(activated()), this, SLOT(execute()));
 #endif
 
-	connect(mainWindow.getRunAction(), SIGNAL(triggered()), this, SLOT(execute()));
-	connect(mainWindow.getClearAction(), SIGNAL(triggered()), this, SLOT(clearConsole()));
+	connect(mainWindow.GetRunAction(), SIGNAL(triggered()), this, SLOT(Execute()));
+	connect(mainWindow.GetClearAction(), SIGNAL(triggered()), this, SLOT(ClearConsole()));
+	connect(mainWindow.GetLoadFileAction(), SIGNAL(triggered()), this, SLOT(LoadFile()));
 }
 
-void MainController::execute()
+void MainController::Execute()
 {
 	// Excute typed code
 	// Get the file from the stream and convert to std::string
@@ -73,17 +67,18 @@ void MainController::execute()
 	virtual_machine.ExecuteCode();
 }
 
-void MainController::clearConsole()
+void MainController::ClearConsole()
 {
 	system("cls");
 }
 
 QString MainController::getFileFromStream()
 {
-	QString gen_code = mainWindow.getText();
+	QString gen_code = mainWindow.GetText();
 
 	QFile file;
 
+	// Check if the file is loaded from a existing file..
 	file.setFileName("number1.txt");
 
 	if (file.exists())
@@ -102,6 +97,13 @@ QString MainController::getFileFromStream()
 	QString filepath = info.absoluteFilePath();
 
 	return filepath;
+}
+
+void MainController::LoadFile()
+{
+	QString URI = mainWindow.OpenFileDialog();
+	QString text = FileIO::LoadFile(URI);
+	mainWindow.SetText(text);
 }
 
 MainController::~MainController()

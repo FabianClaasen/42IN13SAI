@@ -12,15 +12,21 @@ class MainWindow : public QMainWindow
 public:
 		MainWindow(QWidget *parent = 0);
 		virtual ~MainWindow();
-		QString getText();
-		QAction *getRunAction();
-		QAction *getClearAction();
+		QString GetText();
+		void SetText(QString text);
+		QAction* GetRunAction();
+		QAction* GetClearAction();
+		QAction* GetLoadFileAction();
+		QString OpenFileDialog();
 
 	private:
 		CodeEditor* codeEditor;
 		Highlighter* highlighter;
+
+		QMenu *fileMenu;
 		QAction *runAction;
 		QAction *clearAction;
+		QAction *openFile;
 
-		void showMenuBar();
+		void ShowMenuBar();
 };

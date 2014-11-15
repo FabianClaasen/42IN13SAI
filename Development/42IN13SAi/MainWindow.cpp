@@ -9,14 +9,14 @@
 
 MainWindow::MainWindow(QWidget *parent)
 {
-	showMenuBar();
+	ShowMenuBar();
 	codeEditor = new CodeEditor();
 	highlighter = new Highlighter(codeEditor->document());
 
 	this->setCentralWidget(codeEditor);
 }
 
-void MainWindow::showMenuBar()
+void MainWindow::ShowMenuBar()
 {
 	// Create menu bar
 	QMenuBar* menu = nullptr;
@@ -32,6 +32,8 @@ void MainWindow::showMenuBar()
 	#endif
 
 	// Create action and connect
+	fileMenu = menu->addMenu("File");
+	openFile = fileMenu->addAction("Open file");
 	runAction = menu->addAction("Run");
 	clearAction = menu->addAction("Clear console");
 
@@ -46,19 +48,35 @@ void MainWindow::showMenuBar()
 	menu->setLayoutDirection(Qt::LeftToRight);
 }
 
-QAction *MainWindow::getRunAction()
+QAction* MainWindow::GetRunAction()
 {
 	return runAction;
 }
 
-QAction *MainWindow::getClearAction()
+QAction* MainWindow::GetClearAction()
 {
 	return clearAction;
 }
 
-QString MainWindow::getText()
+QAction* MainWindow::GetLoadFileAction()
+{
+	return openFile;
+}
+
+QString MainWindow::GetText()
 {
 	return codeEditor->toPlainText();
+}
+
+QString MainWindow::OpenFileDialog()
+{
+	return QFileDialog::getOpenFileName(this, tr("Open file"), "", tr("Text Files (*.txt)"));
+}
+
+void MainWindow::SetText(QString text)
+{
+	codeEditor->clear();
+	codeEditor->insertPlainText(text);
 }
 
 MainWindow::~MainWindow()
