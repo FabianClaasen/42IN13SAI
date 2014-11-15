@@ -21,12 +21,18 @@ class MainController : public QObject
 		virtual ~MainController();
 
 	private:
+		// Variables
 		MainWindow mainWindow;
-		QString getFileFromStream();
+		QFile currentFile;
+
+		// Functions
+		QString GetFileFromStream();
 		void Setup();
 
 	private slots:
 		void Execute();
 		void ClearConsole();
 		void LoadFile();
+		void SaveFile();
+		void SaveAsFile();
 };

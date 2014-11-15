@@ -14,6 +14,6 @@ public:
 
 	// Functions
 	static QString LoadFile(QString URI);
-	static void SaveFile();
+	static void SaveFile(QString URI, QString code);
 };
 

@@ -16,8 +16,11 @@ public:
 		void SetText(QString text);
 		QAction* GetRunAction();
 		QAction* GetClearAction();
-		QAction* GetLoadFileAction();
-		QString OpenFileDialog();
+		QAction* GetLoadAction();
+		QAction* GetSaveAction();
+		QAction* GetSaveAsAction();
+		QString OpenLoadDialog();
+		QString OpenSaveDialog();
 
 	private:
 		CodeEditor* codeEditor;
@@ -26,7 +29,9 @@ public:
 		QMenu *fileMenu;
 		QAction *runAction;
 		QAction *clearAction;
-		QAction *openFile;
+		QAction *openAction;
+		QAction *saveAction;
+		QAction *saveAsAction;
 
 		void ShowMenuBar();
 };

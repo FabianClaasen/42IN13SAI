@@ -35,7 +35,17 @@ QString FileIO::LoadFile(QString URI)
 }
 
 
-void FileIO::SaveFile()
+void FileIO::SaveFile(QString URI, QString code)
 {
+	QFile file(URI);
+	if (file.exists())
+	{
+		file.remove();
+	}
 
+	file.open(QIODevice::ReadWrite | QIODevice::Text);
+	QTextStream stream(&file);
+
+	stream << code;
+	file.close();
 }

@@ -33,7 +33,9 @@ void MainWindow::ShowMenuBar()
 
 	// Create action and connect
 	fileMenu = menu->addMenu("File");
-	openFile = fileMenu->addAction("Open file");
+	openAction = fileMenu->addAction("Open");
+	saveAction = fileMenu->addAction("Save");
+	saveAsAction = fileMenu->addAction("Save as");
 	runAction = menu->addAction("Run");
 	clearAction = menu->addAction("Clear console");
 
@@ -58,9 +60,19 @@ QAction* MainWindow::GetClearAction()
 	return clearAction;
 }
 
-QAction* MainWindow::GetLoadFileAction()
+QAction* MainWindow::GetLoadAction()
 {
-	return openFile;
+	return openAction;
+}
+
+QAction* MainWindow::GetSaveAction()
+{
+	return saveAction;
+}
+
+QAction* MainWindow::GetSaveAsAction()
+{
+	return saveAsAction;
 }
 
 QString MainWindow::GetText()
@@ -68,9 +80,14 @@ QString MainWindow::GetText()
 	return codeEditor->toPlainText();
 }
 
-QString MainWindow::OpenFileDialog()
+QString MainWindow::OpenLoadDialog()
 {
 	return QFileDialog::getOpenFileName(this, tr("Open file"), "", tr("Text Files (*.txt)"));
+}
+
+QString MainWindow::OpenSaveDialog()
+{
+	return QFileDialog::getSaveFileName(this, tr("Save file"), "", tr("Text Files (*.txt)"));
 }
 
 void MainWindow::SetText(QString text)

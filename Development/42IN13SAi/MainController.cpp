@@ -22,14 +22,16 @@ void MainController::Setup()
 
 	connect(mainWindow.GetRunAction(), SIGNAL(triggered()), this, SLOT(Execute()));
 	connect(mainWindow.GetClearAction(), SIGNAL(triggered()), this, SLOT(ClearConsole()));
-	connect(mainWindow.GetLoadFileAction(), SIGNAL(triggered()), this, SLOT(LoadFile()));
+	connect(mainWindow.GetLoadAction(), SIGNAL(triggered()), this, SLOT(LoadFile()));
+	connect(mainWindow.GetSaveAction(), SIGNAL(triggered()), this, SLOT(SaveFile()));
+	connect(mainWindow.GetSaveAsAction(), SIGNAL(triggered()), this, SLOT(SaveAsFile()));
 }
 
 void MainController::Execute()
 {
 	// Excute typed code
 	// Get the file from the stream and convert to std::string
-	std::string input(getFileFromStream().toStdString());
+	std::string input(GetFileFromStream().toStdString());
 
 	TokenizerController *tokenizer_controller = new TokenizerController(input);
 
@@ -72,13 +74,11 @@ void MainController::ClearConsole()
 	system("cls");
 }
 
-QString MainController::getFileFromStream()
+QString MainController::GetFileFromStream()
 {
 	QString gen_code = mainWindow.GetText();
 
 	QFile file;
-
-	// Check if the file is loaded from a existing file..
 	file.setFileName("number1.txt");
 
 	if (file.exists())
@@ -101,9 +101,20 @@ QString MainController::getFileFromStream()
 
 void MainController::LoadFile()
 {
-	QString URI = mainWindow.OpenFileDialog();
+	QString URI = mainWindow.OpenLoadDialog();
 	QString text = FileIO::LoadFile(URI);
 	mainWindow.SetText(text);
+}
+
+void MainController::SaveFile()
+{
+	QString URI = mainWindow.OpenSaveDialog();
+	FileIO::SaveFile(URI, mainWindow.GetText());
+}
+
+void MainController::SaveAsFile()
+{
+	
 }
 
 MainController::~MainController()
