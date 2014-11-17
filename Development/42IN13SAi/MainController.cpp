@@ -31,7 +31,7 @@ void MainController::Execute()
 {
 	// Excute typed code
 	// Get the file from the stream and convert to std::string
-	std::string input(GetFileFromStream().toStdString());
+	std::string input(GetFileFromStream());
 
 	TokenizerController *tokenizer_controller = new TokenizerController(input);
 
@@ -74,29 +74,36 @@ void MainController::ClearConsole()
 	system("cls");
 }
 
-QString MainController::GetFileFromStream()
+std::string MainController::GetFileFromStream()
 {
 	QString gen_code = mainWindow.GetText();
 
-	QFile file;
-	file.setFileName("number1.txt");
-
-	if (file.exists())
+	std::shared_ptr<QFile> file;
+	if (currentFile)
 	{
-		file.remove();
+		file = currentFile;
+	}
+	else
+	{
+		file = std::shared_ptr<QFile>(new QFile("number1.txt"));
 	}
 
-	file.open(QIODevice::ReadWrite | QIODevice::Text);
-	QTextStream stream(&file);
+	if (file->exists())
+	{
+		file->remove();
+	}
+
+	file->open(QIODevice::ReadWrite | QIODevice::Text);
+	QTextStream stream(file.get());
 
 	stream << gen_code;
-	file.close();
+	file->close();
 
-	QFileInfo info(file);
-
+	QFileInfo info(*file);
 	QString filepath = info.absoluteFilePath();
 
-	return filepath;
+	std::string filepath_std = filepath.toLocal8Bit().constData();
+	return filepath_std;
 }
 
 void MainController::LoadFile()
@@ -104,17 +111,28 @@ void MainController::LoadFile()
 	QString URI = mainWindow.OpenLoadDialog();
 	QString text = FileIO::LoadFile(URI);
 	mainWindow.SetText(text);
+
+	// Set the current file
+	currentFile = std::shared_ptr<QFile>(new QFile(URI));
 }
 
 void MainController::SaveFile()
 {
-	QString URI = mainWindow.OpenSaveDialog();
-	FileIO::SaveFile(URI, mainWindow.GetText());
+	if (!currentFile)
+	{
+		QString URI = mainWindow.OpenSaveDialog();
+		FileIO::SaveFile(URI, mainWindow.GetText());
+	}
+	else
+	{
+		FileIO::SaveFile(currentFile, mainWindow.GetText());
+	}	
 }
 
 void MainController::SaveAsFile()
 {
-	
+	QString URI = mainWindow.OpenSaveDialog();
+	FileIO::SaveFile(URI, mainWindow.GetText());
 }
 
 MainController::~MainController()
