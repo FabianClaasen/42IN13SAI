@@ -78,22 +78,28 @@ QString MainController::GetFileFromStream()
 {
 	QString gen_code = mainWindow.GetText();
 
-	QFile file;
-	file.setFileName("number1.txt");
-
-	if (file.exists())
+	std::shared_ptr<QFile> file;
+	if (currentFile)
 	{
-		file.remove();
+		file = currentFile;
+	}
+	else
+	{
+		file = std::shared_ptr<QFile>(new QFile("number1.txt"));
 	}
 
-	file.open(QIODevice::ReadWrite | QIODevice::Text);
-	QTextStream stream(&file);
+	if (file->exists())
+	{
+		file->remove();
+	}
+
+	file->open(QIODevice::ReadWrite | QIODevice::Text);
+	QTextStream stream(file.get());
 
 	stream << gen_code;
-	file.close();
+	file->close();
 
-	QFileInfo info(file);
-
+	QFileInfo info(*file);
 	QString filepath = info.absoluteFilePath();
 
 	return filepath;

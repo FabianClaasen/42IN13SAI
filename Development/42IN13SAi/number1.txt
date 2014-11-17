@@ -1,0 +1,9 @@
+func Main()
+[
+	var x = cos(20);
+	prnt(x);
+	x = sin(20);
+	prnt(x);
+	x = tan(20);
+	prnt(x);
+]
