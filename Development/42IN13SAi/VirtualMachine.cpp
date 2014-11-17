@@ -55,8 +55,11 @@ CompilerNode VirtualMachine::GetNext(std::string functionName, compilerNodeList 
         // release node
         node.reset();
         
-		node = *nodeIterators[functionName];
-        std::advance(nodeIterators[functionName], 1);
+        if (!((CompilerNode)*nodeIterators[functionName]->get()).GetExpression().empty())
+        {
+            node = *nodeIterators[functionName];
+            std::advance(nodeIterators[functionName], 1);
+        }
 	}
 	else
 	{
@@ -83,6 +86,7 @@ void VirtualMachine::ExecuteCode()
             CompilerNode node = VirtualMachine::GetNext(subroutineName, compilerNodes);
             std::string function_call = node.GetExpression();
             function_caller->Call(function_call, node);
+            
 		} while (nodeIterators[subroutineName] != compilerNodes.end());
         
         // Delete the globals node iterator
@@ -362,10 +366,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteWhile(CompilerNode compiler
     else
     {
         nodeIterators[subSubroutine->name] = std::find(compilernodes.begin(), compilernodes.end(), compilerNode.GetJumpTo());
-        if (nodeIterators[subSubroutine->name] != --compilernodes.end())
-            std::next(nodeIterators[subSubroutine->name]);
-        else
-            nodeIterators[subSubroutine->name] = compilernodes.end();
+        GetNext(subSubroutine->name, compilernodes);
         
         return nullptr;
     }

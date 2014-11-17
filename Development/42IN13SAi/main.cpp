@@ -1,4 +1,4 @@
-#include <QtWidgets\QApplication>
+//#include <QtWidgets\QApplication>
 
 #include "MainController.h"
 #include <QApplication> //qt
