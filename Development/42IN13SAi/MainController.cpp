@@ -17,7 +17,7 @@ void MainController::Setup()
 #ifndef _WIN32
     // Mac OS X cmd + R for running program like in xcode
     QShortcut *macShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_R), &mainWindow);
-    connect(macShortcut, SIGNAL(activated()), this, SLOT(execute()));
+    connect(macShortcut, SIGNAL(activated()), this, SLOT(Execute()));
 #endif
 
 	connect(mainWindow.GetRunAction(), SIGNAL(triggered()), this, SLOT(Execute()));
