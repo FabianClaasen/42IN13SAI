@@ -31,7 +31,7 @@ void MainController::Execute()
 {
 	// Excute typed code
 	// Get the file from the stream and convert to std::string
-	std::string input(GetFileFromStream().toStdString());
+	std::string input(GetFileFromStream());
 
 	TokenizerController *tokenizer_controller = new TokenizerController(input);
 
@@ -74,7 +74,7 @@ void MainController::ClearConsole()
 	system("cls");
 }
 
-QString MainController::GetFileFromStream()
+std::string MainController::GetFileFromStream()
 {
 	QString gen_code = mainWindow.GetText();
 
@@ -102,7 +102,8 @@ QString MainController::GetFileFromStream()
 	QFileInfo info(*file);
 	QString filepath = info.absoluteFilePath();
 
-	return filepath;
+	std::string filepath_std = filepath.toLocal8Bit().constData();
+	return filepath_std;
 }
 
 void MainController::LoadFile()

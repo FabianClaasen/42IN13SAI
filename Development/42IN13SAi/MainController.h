@@ -27,7 +27,7 @@ class MainController : public QObject
 		std::shared_ptr<QFile> currentFile;
 
 		// Functions
-		QString GetFileFromStream();
+		std::string GetFileFromStream();
 		void Setup();
 
 	private slots:
