@@ -110,17 +110,28 @@ void MainController::LoadFile()
 	QString URI = mainWindow.OpenLoadDialog();
 	QString text = FileIO::LoadFile(URI);
 	mainWindow.SetText(text);
+
+	// Set the current file
+	currentFile = std::shared_ptr<QFile>(new QFile(URI));
 }
 
 void MainController::SaveFile()
 {
-	QString URI = mainWindow.OpenSaveDialog();
-	FileIO::SaveFile(URI, mainWindow.GetText());
+	if (!currentFile)
+	{
+		QString URI = mainWindow.OpenSaveDialog();
+		FileIO::SaveFile(URI, mainWindow.GetText());
+	}
+	else
+	{
+		FileIO::SaveFile(currentFile, mainWindow.GetText());
+	}	
 }
 
 void MainController::SaveAsFile()
 {
-	
+	QString URI = mainWindow.OpenSaveDialog();
+	FileIO::SaveFile(URI, mainWindow.GetText());
 }
 
 MainController::~MainController()

@@ -34,7 +34,6 @@ QString FileIO::LoadFile(QString URI)
 	return text;
 }
 
-
 void FileIO::SaveFile(QString URI, QString code)
 {
 	QFile file(URI);
@@ -48,4 +47,18 @@ void FileIO::SaveFile(QString URI, QString code)
 
 	stream << code;
 	file.close();
+}
+
+void FileIO::SaveFile(std::shared_ptr<QFile> file, QString code)
+{
+	if (file->exists())
+	{
+		file->remove();
+	}
+
+	file->open(QIODevice::ReadWrite | QIODevice::Text);
+	QTextStream stream(file.get());
+
+	stream << code;
+	file->close();
 }
