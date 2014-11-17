@@ -1,11 +1,4 @@
-#include <iostream>
-#include <QtWidgets>
-#include <QShortcut>
-
 #include "MainController.h"
-#include "TokenizerController.h"
-#include "Compiler.h"
-#include "VirtualMachine.h"
 
 MainController::MainController() : QObject()
 {
@@ -13,13 +6,13 @@ MainController::MainController() : QObject()
 	mainWindow.resize(640, 360);
 	mainWindow.show();
 
-	setup();
+	Setup();
 }
 
-void MainController::setup()
+void MainController::Setup()
 {
 	QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_F5), &mainWindow);
-	connect(shortcut, SIGNAL(activated()), this, SLOT(execute()));
+	connect(shortcut, SIGNAL(activated()), this, SLOT(Execute()));
     
 #ifndef _WIN32
     // Mac OS X cmd + R for running program like in xcode
@@ -27,15 +20,18 @@ void MainController::setup()
     connect(macShortcut, SIGNAL(activated()), this, SLOT(execute()));
 #endif
 
-	connect(mainWindow.getRunAction(), SIGNAL(triggered()), this, SLOT(execute()));
-	connect(mainWindow.getClearAction(), SIGNAL(triggered()), this, SLOT(clearConsole()));
+	connect(mainWindow.GetRunAction(), SIGNAL(triggered()), this, SLOT(Execute()));
+	connect(mainWindow.GetClearAction(), SIGNAL(triggered()), this, SLOT(ClearConsole()));
+	connect(mainWindow.GetLoadAction(), SIGNAL(triggered()), this, SLOT(LoadFile()));
+	connect(mainWindow.GetSaveAction(), SIGNAL(triggered()), this, SLOT(SaveFile()));
+	connect(mainWindow.GetSaveAsAction(), SIGNAL(triggered()), this, SLOT(SaveAsFile()));
 }
 
-void MainController::execute()
+void MainController::Execute()
 {
 	// Excute typed code
 	// Get the file from the stream and convert to std::string
-	std::string input(getFileFromStream().toStdString());
+	std::string input(GetFileFromStream().toStdString());
 
 	TokenizerController *tokenizer_controller = new TokenizerController(input);
 
@@ -43,16 +39,27 @@ void MainController::execute()
 	{
 		tokenizer_controller->Tokenize(); // Tokenize
 	}
-	catch (const PartnerNotFoundException& e)
+	catch (const std::exception& e)
 	{
 		delete(tokenizer_controller);
-
+		puts(e.what());
 		return;
 	}
 
 	// Run the compiler
 	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
-	compiler.Compile();
+
+	try
+	{
+		compiler.Compile();
+	}
+	catch (const std::exception& e)
+	{
+		delete(tokenizer_controller);
+		puts(e.what());
+		return;
+	}
+
 
 	// Delete the tokenizer controller
 	delete(tokenizer_controller);
@@ -62,17 +69,16 @@ void MainController::execute()
 	virtual_machine.ExecuteCode();
 }
 
-void MainController::clearConsole()
+void MainController::ClearConsole()
 {
 	system("cls");
 }
 
-QString MainController::getFileFromStream()
+QString MainController::GetFileFromStream()
 {
-	QString gen_code = mainWindow.getText();
+	QString gen_code = mainWindow.GetText();
 
 	QFile file;
-
 	file.setFileName("number1.txt");
 
 	if (file.exists())
@@ -91,6 +97,24 @@ QString MainController::getFileFromStream()
 	QString filepath = info.absoluteFilePath();
 
 	return filepath;
+}
+
+void MainController::LoadFile()
+{
+	QString URI = mainWindow.OpenLoadDialog();
+	QString text = FileIO::LoadFile(URI);
+	mainWindow.SetText(text);
+}
+
+void MainController::SaveFile()
+{
+	QString URI = mainWindow.OpenSaveDialog();
+	FileIO::SaveFile(URI, mainWindow.GetText());
+}
+
+void MainController::SaveAsFile()
+{
+	
 }
 
 MainController::~MainController()

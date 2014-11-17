@@ -14,6 +14,7 @@
     <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="CompilerNode.cpp" />
     <ClCompile Include="CodeEditor.cpp" />
+    <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_CodeEditor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -39,16 +40,20 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Highlighter.cpp" />
+    <ClCompile Include="IdentifierException.cpp" />
     <ClCompile Include="MainController.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Grammar.cpp" />
     <ClCompile Include="InternalFunction.cpp" />
     <ClCompile Include="LabelStack.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MissingTokenException.cpp" />
+    <ClCompile Include="ParameterNameException.cpp" />
     <ClCompile Include="ParseException.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="PartnerNotFoundException.cpp" />
     <ClCompile Include="RegexMatcher.cpp" />
+    <ClCompile Include="StatementNotFoundException.cpp" />
     <ClCompile Include="SymbolNotFoundException.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="TokenDefinition.cpp" />
@@ -59,6 +64,9 @@
     <ClCompile Include="SymbolTable.cpp" />
     <ClCompile Include="Subroutine.cpp" />
     <ClCompile Include="SubroutineTable.cpp" />
+    <ClCompile Include="UnexpectedKeywordException.cpp" />
+    <ClCompile Include="UnexpectedTypeException.cpp" />
+    <ClCompile Include="VariableNotFoundException.cpp" />
     <ClCompile Include="VirtualMachine.cpp" />
     <ClCompile Include="FunctionCaller.cpp" />
     <ClCompile Include="ParameterException.cpp" />
@@ -542,6 +550,16 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_MBCS -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB "-IC:\Boost\include\boost-1_56" "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FileIO.h" />
+    <ClInclude Include="IdentifierException.h" />
+    <ClInclude Include="MissingTokenException.h" />
+    <ClInclude Include="ParameterNameException.h" />
+    <ClInclude Include="StatementNotFoundException.h" />
+    <ClInclude Include="UnexpectedKeywordException.h" />
+    <ClInclude Include="UnexpectedTypeException.h" />
+    <ClInclude Include="VariableNotFoundException.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0F8E62D6-F5A0-4C66-AD23-F45D847EB1FE}</ProjectGuid>

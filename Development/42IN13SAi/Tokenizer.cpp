@@ -91,22 +91,22 @@ void Tokenizer::Tokenize()
 	}
 
 	//// Check for closing partners missing
-	//for (Token t : tokenVector)
-	//{
-	//	if (ShouldFindPartnerR(t.Type))
-	//	{
-	//		Token* partner = nullptr;
-	//		try {
-	//			Token* temp = FindPartnerR(t.Type, level);
-	//			if (temp->Partner != nullptr)
-	//				partner = temp;
-	//		}
-	//		catch (const PartnerNotFoundException &e) {
-	//			// Catch the exception and rethrow
-	//			throw;
-	//		}
-	//	}
-	//}
+	for (Token t : tokenVector)
+	{
+		if (ShouldFindPartnerR(t.Type))
+		{
+			Token* partner = nullptr;
+			try {
+				Token* temp = FindPartnerR(t.Type, t.Level);
+				if (temp->Partner != nullptr)
+					partner = temp;
+			}
+			catch (const PartnerNotFoundException &e) {
+				// Catch the exception and rethrow
+				throw;
+			}
+		}
+	}
 }
 
 // Find a partner for the current token.
@@ -148,12 +148,12 @@ Token* Tokenizer::FindPartnerR(MyTokenType &type, int level)
 	std::list<TokenPartner>::const_iterator token_partner;
 	for (TokenPartner tokenPartner : tokenPartners)
 	{
-		if (tokenPartner.token == type)
+		if (tokenPartner.partner == type)
 		{
 			std::vector<Token>::iterator tokenIt;
 			for (tokenIt = tokenVector.begin(); tokenIt != tokenVector.end(); ++tokenIt)
 			{
-				if (tokenIt->Type == tokenPartner.partner && tokenIt->Level == level)
+				if (tokenIt->Type == tokenPartner.token && tokenIt->Level == level)
 					return &(*tokenIt);
 			}
 		}

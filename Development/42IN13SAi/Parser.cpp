@@ -60,8 +60,7 @@ void Parser::ParseFunction()
 					symbolTable.AddSymbol(parameterSymbol);
 				}
 				else
-					/*throw std::runtime_error("Parameter name is already in use");*/
-					std::cout << "Parameter name: " << parameter.Value << " is already in use (line " << currentToken.LineNumber << ")";
+					throw ParameterNameException("Parameter name: " + parameter.Value + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
 			}
 		}
 
@@ -84,8 +83,7 @@ void Parser::ParseFunction()
 		compiler->AddSubroutine();
 	}
 	else
-		/*throw std::runtime_error("Expected return type");*/
-		std::cout << "Expected return type (line " << currentToken.LineNumber << ")";
+		throw UnexpectedTypeException("Expected return type (line " + std::to_string(currentToken.LineNumber) + ")");
 }
 
 void Parser::ParseReturn()
@@ -130,8 +128,7 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 
 	// Check if the identifier is a identifier
 	if (identifier.Type != MyTokenType::Identifier)
-		/*throw std::runtime_error("Identifier expected");*/
-		std::cout << "Identifier expected on line " << currentToken.LineNumber;
+		throw IdentifierException("An IdentifierException occured. Identifier expected. (line " + std::to_string(currentToken.LineNumber) + ")");
 
 	// Check if the identifier exists
 	if (!newIdentifier)
@@ -139,8 +136,7 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		Symbol* symbol = GetSymbol(identifier.Value);
 
 		if (symbol == nullptr)
-			/*throw SymbolNotFoundException("This identifier has not been made yet");*/
-			std::cout << "The identifier: " << identifier.Value << " does not exists (line " << currentToken.LineNumber << ")";
+			throw IdentifierException("An IdentifierException occured. The identifier: " + identifier.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
 	}
 	else
 	{
@@ -165,8 +161,7 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
         {
             delete identifierSymbol;
             identifierSymbol = nullptr;
-			/*throw std::runtime_error("Identifier name is already in use");*/
-			std::cout << "The identifier: " << identifierSymbol->GetValue() << " is already in use (line " << currentToken.LineNumber << ")";
+			throw IdentifierException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
         }
 	}
 
@@ -277,8 +272,7 @@ void Parser::ParseIfStatement()
 	}
 	else
 	{
-		/*throw std::runtime_error("Expected if keyword");*/
-		std::cout << "Expected if keyword on line " << currentToken.LineNumber;
+		throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected an if keyword on line " + std::to_string(currentToken.LineNumber) + ".");
 	}
 
 	compiler->Match(MyTokenType::OpenBracket);
@@ -346,8 +340,7 @@ void Parser::ParseLoopStatement()
 	}
 	else
 	{
-		/*throw std::runtime_error("Expected a loop keyword");*/
-		std::cout << "Expected a loop keyword on line " << currentToken.LineNumber;
+		throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");		
 	}
 
 	compiler->Match(MyTokenType::OpenBracket);
