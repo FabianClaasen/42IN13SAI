@@ -104,6 +104,15 @@
     <ClCompile Include="MainController.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_CodeCompleter.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CodeCompleter.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeCompleter.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="packages.config" />
@@ -195,6 +204,9 @@
       <Filter>Header Files\Tokenizer</Filter>
     </CustomBuild>
     <CustomBuild Include="MainController.h">
+      <Filter>Header Files\Qt</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CodeCompleter.h">
       <Filter>Header Files\Qt</Filter>
     </CustomBuild>
   </ItemGroup>
