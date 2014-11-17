@@ -23,10 +23,9 @@ private:
 
 	QRegExp commentStartExpression;
 	QRegExp commentEndExpression;
+	QTextCharFormat currentFormat;
+	HighlightingRule rule;
 
-	// own formats for highlighting
-	QTextCharFormat varFormat;
-	QTextCharFormat funcFormat;
-	QTextCharFormat returnFormat;
+	void setCurrentFormat(QTextCharFormat format, HighlightingRule rule, QRegExp regexPattern, QFont::Weight font, QColor color);
 };
 

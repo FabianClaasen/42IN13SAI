@@ -1,37 +1,64 @@
 #include "Highlighter.h"
-
-
+#include "Grammar.h"
+#include "TokenDefinition.h"
+#include <iostream>
+#include "MyTokenType.h"
+#include <iterator>
+#include <qvector.h>
 Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 {
-	HighlightingRule rule;
-
-	varFormat.setFontWeight(QFont::Bold);
-	varFormat.setForeground(Qt::darkGreen);
-	rule.pattern = QRegExp("\\bvar\\b"); // regex that contains var
-	rule.format = varFormat;
-	highlightingRules.append(rule);
-
-	funcFormat.setForeground(Qt::blue);
-	rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()"); // regex that contains a function with parenthesis
-	rule.format = funcFormat;
-	highlightingRules.append(rule);
-
-	returnFormat.setFontWeight(QFont::Bold);
-	returnFormat.setForeground(Qt::darkBlue);
-	rule.pattern = QRegExp("\\bvoid|float\\b"); // regex that contains void or float
-	rule.format = returnFormat;
-	highlightingRules.append(rule);
+	// get all definitions and iterate through that
+	std::list<TokenDefinition> definitions = Grammar::getGrammar();
+	std::list<TokenDefinition>::iterator iter;
+	
+	for (iter = definitions.begin(); iter != definitions.end(); iter++)
+	{
+		// Check which tokentype it is and set current format
+		switch (iter->myTokenType)
+		{
+			case MyTokenType::If:
+			case MyTokenType::Else:
+			case MyTokenType::ElseIf:
+			case MyTokenType::While:
+			case MyTokenType::ForLoop:
+			case MyTokenType::Var:
+				setCurrentFormat(currentFormat, rule, QRegExp("\\bif|else|while|frl|var"), QFont::Bold, QColor(153, 0, 153)); // sort of purple
+				break;
+			case MyTokenType::Return:
+			case MyTokenType::Void:
+			case MyTokenType::Float:
+				setCurrentFormat(currentFormat, rule, QRegExp("\\bvoid|float|ret\\b"), QFont::Bold, Qt::darkBlue);
+				break;
+			case MyTokenType::Function:
+			case MyTokenType::MainFunction:
+				setCurrentFormat(currentFormat, rule, QRegExp("\\b(?!if|else|while|frl)[A-Za-z0-9_]+(?=\\()"), QFont::Normal, Qt::blue);
+				break;
+			default:
+				break;
+		}
+	}
 
 	commentStartExpression = QRegExp("/\\*");
 	commentEndExpression = QRegExp("\\*/");
 }
 
+void Highlighter::setCurrentFormat(QTextCharFormat currentFormat, HighlightingRule rule, QRegExp regexPattern, QFont::Weight font, QColor color)
+{
+	currentFormat.setFontWeight(font);
+	currentFormat.setForeground(color);
+	rule.format = currentFormat;
+	rule.pattern = regexPattern;
+	highlightingRules.append(rule);
+}
+
 void Highlighter::highlightBlock(const QString &text)
 {
-	foreach(const HighlightingRule &rule, highlightingRules) {
+	foreach(const HighlightingRule &rule, highlightingRules) 
+	{
 		QRegExp expression(rule.pattern);
 		int index = expression.indexIn(text);
-		while (index >= 0) {
+		while (index >= 0) 
+		{
 			int length = expression.matchedLength();
 			setFormat(index, length, rule.format);
 			index = expression.indexIn(text, index + length);

@@ -3,26 +3,27 @@
 #include <QPlainTextEdit>
 #include <QObject>
 #include <qcompleter.h>
+#include <memory>
 class CodeEditor : public QPlainTextEdit
 {
 	Q_OBJECT
 
 public:
-		CodeEditor(QWidget *parent = 0);
+		CodeEditor();
 
 		void lineNumberAreaPaintEvent(QPaintEvent *event);
 		int lineNumberAreaWidth();
 
 		// for codecompletion
 		void setCompleter(QCompleter *compl);
-		QCompleter *getCompleter() const;
+		//QCompleter *getCompleter() const;
 
 	protected:
 		void resizeEvent(QResizeEvent *event);
 
 		// for codecompletion
-		virtual void keyPressEvent(QKeyEvent *e);
-		void focusInEvent(QFocusEvent *e);
+		virtual void keyPressEvent(QKeyEvent* e);
+		//virtual void focusInEvent(QFocusEvent *e);
 
 	private slots:
 		void updateLineNumberAreaWidth(int newBlockCount);

@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ShowMenuBar();
 	codeEditor = new CodeEditor();
-	highlighter = new Highlighter(codeEditor->document());
+	
 
 	completer = new QCompleter(this);
 	completer->setModel(modelFromFile("C:\\Users\\stefan\\Desktop\\words.txt"));
@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 	completer->setCaseSensitivity(Qt::CaseInsensitive);
 	completer->setWrapAround(false);
 	codeEditor->setCompleter(completer);
-
+	highlighter = new Highlighter(codeEditor->document());
 	this->setCentralWidget(codeEditor);
 }
 
