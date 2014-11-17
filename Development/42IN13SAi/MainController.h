@@ -1,8 +1,16 @@
 #pragma once
 
+#include <iostream>
 #include <QObject>
+#include <QtWidgets>
+#include <QShortcut>
 
 #include "MainWindow.h"
+#include "MainController.h"
+#include "TokenizerController.h"
+#include "Compiler.h"
+#include "VirtualMachine.h"
+#include "FileIO.h"
 
 class MainController : public QObject
 {
@@ -13,11 +21,18 @@ class MainController : public QObject
 		virtual ~MainController();
 
 	private:
+		// Variables
 		MainWindow mainWindow;
-		QString getFileFromStream();
-		void setup();
+		QFile currentFile;
+
+		// Functions
+		QString GetFileFromStream();
+		void Setup();
 
 	private slots:
-		void execute();
-		void clearConsole();
+		void Execute();
+		void ClearConsole();
+		void LoadFile();
+		void SaveFile();
+		void SaveAsFile();
 };

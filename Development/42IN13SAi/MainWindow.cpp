@@ -7,11 +7,10 @@
 #include "Compiler.h"
 #include "VirtualMachine.h"
 #include <QKeyEvent>
-#include "CodeCompleter.h"
 
 MainWindow::MainWindow(QWidget *parent)
 {
-	showMenuBar();
+	ShowMenuBar();
 	codeEditor = new CodeEditor();
 	highlighter = new Highlighter(codeEditor->document());
 
@@ -25,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
 	this->setCentralWidget(codeEditor);
 }
 
-void MainWindow::showMenuBar()
+void MainWindow::ShowMenuBar()
 {
 	// Create menu bar
 	QMenuBar* menu = nullptr;
@@ -33,16 +32,23 @@ void MainWindow::showMenuBar()
 	#ifdef _WIN32
 		menu = new QMenuBar();
 	#else
+        // Mac OS X needs menubar without a parent
 		menu = new QMenuBar(0);
-
-		QMenu* mainMenu = menu->addMenu("File");
 	#endif
 
 	// Create action and connect
+	fileMenu = menu->addMenu("File");
+	openAction = fileMenu->addAction("Open");
+	saveAction = fileMenu->addAction("Save");
+	saveAsAction = fileMenu->addAction("Save as");
 	runAction = menu->addAction("Run");
 	clearAction = menu->addAction("Clear console");
 
 	#ifndef _WIN32
+        // Also needs a menu to show the items, doesn't work with only actions
+        QMenu* mainMenu = menu->addMenu("Debug");
+    
+        // Add the actions to the menu
 		mainMenu->addAction(runAction);
 		mainMenu->addAction(clearAction);
 	#endif
@@ -52,17 +58,32 @@ void MainWindow::showMenuBar()
 	menu->setLayoutDirection(Qt::LeftToRight);
 }
 
-QAction *MainWindow::getRunAction()
+QAction* MainWindow::GetRunAction()
 {
 	return runAction;
 }
 
-QAction *MainWindow::getClearAction()
+QAction* MainWindow::GetClearAction()
 {
 	return clearAction;
 }
 
-QString MainWindow::getText()
+QAction* MainWindow::GetLoadAction()
+{
+	return openAction;
+}
+
+QAction* MainWindow::GetSaveAction()
+{
+	return saveAction;
+}
+
+QAction* MainWindow::GetSaveAsAction()
+{
+	return saveAsAction;
+}
+
+QString MainWindow::GetText()
 {
 	return codeEditor->toPlainText();
 }
@@ -90,11 +111,21 @@ QAbstractItemModel* MainWindow::modelFromFile(const QString& fileName)
 	return new QStringListModel(words, completer);
 }
 
-//void MainWindow::keyPressEvent(QKeyEvent* event)
-//{
-//	std::cout << "pressed in mainwindow " << event->key() << std::endl;
-//	//CodeCompleter::keyPressEvent(event);
-//}
+QString MainWindow::OpenLoadDialog()
+{
+	return QFileDialog::getOpenFileName(this, tr("Open file"), "", tr("Text Files (*.txt)"));
+}
+
+QString MainWindow::OpenSaveDialog()
+{
+	return QFileDialog::getSaveFileName(this, tr("Save file"), "", tr("Text Files (*.txt)"));
+}
+
+void MainWindow::SetText(QString text)
+{
+	codeEditor->clear();
+	codeEditor->insertPlainText(text);
+}
 
 MainWindow::~MainWindow()
 {

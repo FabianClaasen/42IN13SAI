@@ -6,7 +6,7 @@ TEMPLATE = app
 TARGET = 42IN13SAi
 DESTDIR = ../Release
 QT += core opengl widgets gui
-CONFIG += debug_and_release embed_manifest_exe
+CONFIG += debug
 DEFINES += _MBCS _CRT_SECURE_NO_WARNINGS QT_DLL QT_OPENGL_LIB QT_WIDGETS_LIB
 INCLUDEPATH += ../../../../../../../../Boost/include/boost-1_56 \
     ./GeneratedFiles/Release
@@ -24,16 +24,9 @@ LIBS += -lkernel32 \
     -lodbccp32 \
     -lopengl32 \
     -lglu32
-DESTDIR = ../Debug
-QT += core widgets gui
-CONFIG += debug
-DEFINES += _CRT_SECURE_NO_WARNINGS
-INCLUDEPATH += ./GeneratedFiles/Debug
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/release
 OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 RCC_DIR += ./GeneratedFiles
-target.path = C:\Qt\Qt5.3.2.1\5.3\msvc2013_opengl\bin
-INSTALLS += target
 include(42IN13SAi.pri)

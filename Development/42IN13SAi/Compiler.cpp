@@ -40,7 +40,7 @@ Token Compiler::GetNext()
 	}
 	else
 	{
-		throw std::runtime_error("Token missing");
+		throw MissingTokenException("A MissingTokenException occured.");
 	}
 
 	return token;
@@ -99,14 +99,14 @@ void Compiler::Match(MyTokenType type)
 {
 	if (Compiler::PeekNext() == nullptr)
 	{
-		throw std::runtime_error(&"Expected: "[int(type)]);
+		throw UnexpectedTypeException("An UnexpectedTypeException occured. Expected: " + std::to_string(int(type)));
 	}
 
 	Token currentToken = GetNext(); // Bestaat al
 
 	if (currentToken.Type != type)
 	{
-		throw std::runtime_error(&"Expected: "[int(type)]);
+		throw UnexpectedTypeException("An UnexpectedTypeException occured. Expected: " + std::to_string(int(type)));
 	}
 }
 
@@ -135,7 +135,7 @@ void Compiler::ParseGlobalStatement()
 		Parser(this).ParseAssignmentStatement(false);
 		break;
 	default:
-		throw std::runtime_error("No variable found");
+		throw VariableNotFoundException("A VariableNotFoundException occured.");
 		break;
 	}
 }
@@ -161,7 +161,7 @@ void Compiler::ParseStatement()
 	case MyTokenType::Function:
 		Parser(this).ParseFunction();
 		break;
-    case MyTokenType::Return:
+    case MyTokenType::Return:	
         Parser(this).ParseReturn();
         break;
 	case MyTokenType::PrintLine:
@@ -179,7 +179,7 @@ void Compiler::ParseStatement()
 		//std::runtime_error("");
 		break;
 	default:
-		throw std::runtime_error("No statement found");
+		throw StatementNotFoundException("A StatementNotFoundException occurred.");
 		break;
 	}
 }

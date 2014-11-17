@@ -21,20 +21,20 @@ void Parser::ParseFunction()
 
 	SymbolTable symbolTable;
 
-    if (currentToken.Type == MyTokenType::MainFunction || IsNextTokenReturnType())
+	if (currentToken.Type == MyTokenType::MainFunction || IsNextTokenReturnType())
 	{
-        Token returnType;
-        Token functionName;
-        if (currentToken.Type == MyTokenType::MainFunction)
-        {
-            returnType = Token(0,0,0, "", MyTokenType::Void, nullptr);
-            functionName = Token(0,0,0, "main", MyTokenType::MainFunction, nullptr);
-        }
-        else
-        {
-            returnType = compiler->GetNext();
-            functionName = compiler->GetNext();
-        }
+		Token returnType;
+		Token functionName;
+		if (currentToken.Type == MyTokenType::MainFunction)
+		{
+			returnType = Token(0, 0, 0, "", MyTokenType::Void, nullptr);
+			functionName = Token(0, 0, 0, "main", MyTokenType::MainFunction, nullptr);
+		}
+		else
+		{
+			returnType = compiler->GetNext();
+			functionName = compiler->GetNext();
+		}
 
 		compiler->Match(MyTokenType::OpenBracket);
 
@@ -48,24 +48,24 @@ void Parser::ParseFunction()
 			else
 			{
 				Token parameter = compiler->GetNext();
-                SymbolKind kind = SymbolKind::Parameter;
-                if (IsTokenReturnVarType(parameter))
-                    kind = SymbolKind::ParameterType;
-                
+				SymbolKind kind = SymbolKind::Parameter;
+				if (IsTokenReturnVarType(parameter))
+					kind = SymbolKind::ParameterType;
+
 				Symbol parameterSymbol = Symbol(parameter.Value, parameter.Type, kind);
-				
+
 
 				if (!symbolTable.HasSymbol(parameterSymbol.name))
 				{
 					symbolTable.AddSymbol(parameterSymbol);
 				}
 				else
-					throw std::runtime_error("Parameter name is already in use");
+					throw ParameterNameException("Parameter name: " + parameter.Value + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
 			}
 		}
-        
-        if (compiler->PeekNext()->Type == MyTokenType::CloseBracket)
-            compiler->GetNext();
+
+		if (compiler->PeekNext()->Type == MyTokenType::CloseBracket)
+			compiler->GetNext();
 
 		// Check if the functions starts and create a subroutine
 		compiler->Match(MyTokenType::OpenMethod);
@@ -83,7 +83,7 @@ void Parser::ParseFunction()
 		compiler->AddSubroutine();
 	}
 	else
-		throw std::runtime_error("Expected return type");
+		throw UnexpectedTypeException("Expected return type (line " + std::to_string(currentToken.LineNumber) + ")");
 }
 
 void Parser::ParseReturn()
@@ -128,7 +128,7 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 
 	// Check if the identifier is a identifier
 	if (identifier.Type != MyTokenType::Identifier)
-		throw std::runtime_error("Identifier expected");
+		throw IdentifierException("An IdentifierException occured. Identifier expected. (line " + std::to_string(currentToken.LineNumber) + ")");
 
 	// Check if the identifier exists
 	if (!newIdentifier)
@@ -136,7 +136,7 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		Symbol* symbol = GetSymbol(identifier.Value);
 
 		if (symbol == nullptr)
-			throw SymbolNotFoundException("This identifier has not been made yet");
+			throw IdentifierException("An IdentifierException occured. The identifier: " + identifier.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
 	}
 	else
 	{
@@ -161,7 +161,7 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
         {
             delete identifierSymbol;
             identifierSymbol = nullptr;
-			throw std::runtime_error("Identifier name is already in use");
+			throw IdentifierException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
         }
 	}
 
@@ -272,7 +272,7 @@ void Parser::ParseIfStatement()
 	}
 	else
 	{
-		throw std::runtime_error("Expected if keyword");
+		throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected an if keyword on line " + std::to_string(currentToken.LineNumber) + ".");
 	}
 
 	compiler->Match(MyTokenType::OpenBracket);
@@ -340,7 +340,7 @@ void Parser::ParseLoopStatement()
 	}
 	else
 	{
-		throw std::runtime_error("Expected a loop keyword");
+		throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");		
 	}
 
 	compiler->Match(MyTokenType::OpenBracket);

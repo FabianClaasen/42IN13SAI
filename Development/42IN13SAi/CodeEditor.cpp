@@ -6,7 +6,12 @@
 #include <QScrollBar>
 CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent), compl(0)
 {
-	this->setFont(QFont("Consolas", 9));
+    this->setFont(QFont("Consolas", 9));
+    
+#ifndef _WIN32
+    // Set font to bigger size for readability on Mac OS X
+	this->setFont(QFont("Consolas", 12));
+#endif
 	this->setTabStopWidth(20);
 
 	lineNumberArea = new LineNumberArea(this);
@@ -119,7 +124,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 void CodeEditor::keyPressEvent(QKeyEvent *e)
 {
-	std::cout << "pressed in editor " << e->key() << std::endl;
+	//std::cout << "pressed in editor " << e->key() << std::endl;
 	if (compl->popup()->isVisible()) {
 		switch (e->key()) {
 		case 16777220: // enter key

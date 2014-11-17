@@ -1,4 +1,4 @@
-#include <QtWidgets\QApplication>
+//#include <QtWidgets\QApplication>
 
 #include "MainController.h"
 #include <QApplication> //qt
@@ -15,7 +15,7 @@ int main(int argc, const char * argv[])
 {
 	QApplication app(argc, 0);
 
-	MainController *mainController = new MainController();
+	std::unique_ptr<MainController> mainController(new MainController());
 
 	app.exec();
 }

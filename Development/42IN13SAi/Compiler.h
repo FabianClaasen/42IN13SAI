@@ -4,6 +4,7 @@
 #include <iterator>
 #include <string>
 #include <memory>
+#include <iostream>
 
 #include "CompilerNode.h"
 #include "Token.h"
@@ -12,6 +13,13 @@
 #include "Subroutine.h"
 #include "SubroutineTable.h"
 
+#include "MissingTokenException.h"
+#include "StatementNotFoundException.h"
+#include "VariableNotFoundException.h"
+#include "UnexpectedTypeException.h"
+#include "UnexpectedKeywordException.h"
+#include "ParameterNameException.h"
+#include "IdentifierException.h"
 
 class InternalFunction;
 class Parser;
