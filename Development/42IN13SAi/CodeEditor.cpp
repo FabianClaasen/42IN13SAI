@@ -1,8 +1,10 @@
 #include <QtGui>
-
 #include "CodeEditor.h"
-
-CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
+#include <iostream>
+#include <QAbstractItemView>
+#include <QCompleter>
+#include <QScrollBar>
+CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent), compl(0)
 {
     this->setFont(QFont("Consolas", 9));
     
@@ -117,3 +119,103 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 		++blockNumber;
 	}
 }
+
+#pragma region codeCompletion
+
+void CodeEditor::keyPressEvent(QKeyEvent *e)
+{
+	//std::cout << "pressed in editor " << e->key() << std::endl;
+	if (compl->popup()->isVisible()) {
+		switch (e->key()) {
+		case 16777220: // enter key
+		case 16777219: // backspace key
+		case 32: // space key
+			compl->popup()->hide();
+			break;
+		}
+	}
+		
+		bool isShortcut = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space); // CTRL+space
+		if (!compl || !isShortcut) // do not process the shortcut when we have a completer
+			QPlainTextEdit::keyPressEvent(e);
+
+		const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
+		if (!compl || (ctrlOrShift && e->text().isEmpty()))
+			return;
+
+		static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
+		bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
+		QString completionPrefix = textUnderCursor();
+
+		if (!isShortcut && (hasModifier || e->text().isEmpty() || completionPrefix.length() < 3
+			|| eow.contains(e->text().right(1)))) {
+			compl->popup()->hide();
+			return;
+		}
+
+		if (completionPrefix != compl->completionPrefix()) {
+			compl->setCompletionPrefix(completionPrefix);
+			compl->popup()->setCurrentIndex(compl->completionModel()->index(0, 0));
+		}
+		
+		QRect cr = cursorRect();
+		cr.setX(20);
+		cr.setWidth(compl->popup()->sizeHintForColumn(0) + compl->popup()->verticalScrollBar()->width());
+		compl->popup();
+		if((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space)
+			compl->complete(cr); // popup it up!
+}
+
+void CodeEditor::setCompleter(QCompleter *completer)
+{
+	if (compl)
+		QObject::disconnect(completer, 0, this, 0);
+
+	compl = completer;
+
+	if (!compl)
+		return;
+
+	compl->setWidget(this);
+	compl->setCompletionMode(QCompleter::PopupCompletion);
+	compl->setCaseSensitivity(Qt::CaseInsensitive);
+	QObject::connect(compl, SIGNAL(activated(QString)),
+		this, SLOT(insertCompletion(QString)));
+}
+
+void CodeEditor::insertCompletion(const QString &text)
+{
+	if (compl->widget() != this)
+		return;
+
+	QTextCursor tc = textCursor();
+	int extra = text.length() - compl->completionPrefix().length();
+	tc.movePosition(QTextCursor::Left);
+	tc.movePosition(QTextCursor::EndOfWord);
+	tc.insertText(text.right(extra));
+	setTextCursor(tc);
+}
+
+QString CodeEditor::textUnderCursor() const
+{
+	QTextCursor tc = textCursor();
+	tc.select(QTextCursor::WordUnderCursor);
+	return tc.selectedText();
+}
+
+void CodeEditor::focusInEvent(QFocusEvent *e)
+{
+	if (compl)
+		compl->setWidget(this);
+
+	QPlainTextEdit::focusInEvent(e);
+}
+
+QCompleter *CodeEditor::getCompleter() const
+{
+	return compl;
+}
+
+
+
+#pragma endregion codeCompletion

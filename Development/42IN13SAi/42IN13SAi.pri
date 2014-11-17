@@ -8,6 +8,8 @@ message("You are running qmake on a generated .pro file. This may not work!")
 
 
 HEADERS += ./Grammar.h \
+    ./LabelStack.h \
+    ./Parser.h \
     ./RegexMatcher.h \
     ./Token.h \
     ./TokenDefinition.h \
@@ -15,50 +17,66 @@ HEADERS += ./Grammar.h \
     ./TokenizerController.h \
     ./TokenPartner.h \
     ./MyTokenType.h \
-    ./VirtualMachine.h \
-    ./FunctionCaller.h \
-    ./Compiler.h \
-    ./CompilerNode.h \
-    ./InternalFunction.h \
-    ./LabelStack.h \
-    ./Parser.h \
     ./Symbol.h \
     ./SymbolTable.h \
     ./SymbolKind.h \
-    ./ParseException.h \
-    ./PartnerNotFoundException.h \
-    ./SymbolNotFoundException.h \
     ./Subroutine.h \
     ./SubroutineKind.h \
     ./SubroutineTable.h \
+    ./Compiler.h \
+    ./CompilerNode.h \
+    ./InternalFunction.h \
+    ./VirtualMachine.h \
+    ./FunctionCaller.h \
+    ./CodeEditor.h \
+    ./MainWindow.h \
+    ./Highlighter.h \
+    ./IdentifierException.h \
+    ./MissingTokenException.h \
+    ./ParameterNameException.h \
+    ./StatementNotFoundException.h \
+    ./UnexpectedKeywordException.h \
+    ./UnexpectedTypeException.h \
+    ./VariableNotFoundException.h \
+    ./ParseException.h \
+    ./PartnerNotFoundException.h \
+    ./SymbolNotFoundException.h \
     ./ParameterException.h \
     ./ParameterExceptionType.h \
-    ./MainController.h \
-    ./CodeEditor.h \
-    ./MainWindow.h
+    ./FileIO.h \
+    ./MainController.h
 SOURCES += ./main.cpp \
-    ./Compiler.cpp \
-    ./CompilerNode.cpp \
-    ./InternalFunction.cpp \
+    ./Grammar.cpp \
     ./LabelStack.cpp \
     ./Parser.cpp \
-    ./Symbol.cpp \
-    ./SymbolTable.cpp \
-    ./Subroutine.cpp \
-    ./SubroutineTable.cpp \
-    ./VirtualMachine.cpp \
-    ./FunctionCaller.cpp \
-    ./Grammar.cpp \
     ./RegexMatcher.cpp \
     ./Token.cpp \
     ./TokenDefinition.cpp \
     ./Tokenizer.cpp \
     ./TokenizerController.cpp \
     ./TokenPartner.cpp \
+    ./Symbol.cpp \
+    ./SymbolTable.cpp \
+    ./Subroutine.cpp \
+    ./SubroutineTable.cpp \
+    ./Compiler.cpp \
+    ./CompilerNode.cpp \
+    ./InternalFunction.cpp \
+    ./VirtualMachine.cpp \
+    ./FunctionCaller.cpp \
+    ./CodeEditor.cpp \
+    ./Highlighter.cpp \
+    ./MainWindow.cpp \
+    ./IdentifierException.cpp \
+    ./MissingTokenException.cpp \
+    ./ParameterNameException.cpp \
     ./ParseException.cpp \
     ./PartnerNotFoundException.cpp \
+    ./StatementNotFoundException.cpp \
     ./SymbolNotFoundException.cpp \
+    ./UnexpectedKeywordException.cpp \
+    ./UnexpectedTypeException.cpp \
+    ./VariableNotFoundException.cpp \
     ./ParameterException.cpp \
-    ./CodeEditor.cpp \
-    ./MainController.cpp \
-    ./MainWindow.cpp
+    ./FileIO.cpp \
+    ./MainController.cpp
