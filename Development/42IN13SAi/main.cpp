@@ -1,13 +1,14 @@
-//#include <QtWidgets\QApplication>
-#ifdef _WIN32
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#include <stdlib.h>
-#endif
+#include <QApplication>
 
 #include "MainController.h"
-#include <QApplication> //qt
-#include "MainWindow.h" //qt
+#include "MainWindow.h"
+
+#ifdef _WIN32
+	#define _CRTDBG_MAP_ALLOC
+
+	#include <crtdbg.h>
+	#include <stdlib.h>
+#endif
 
 int main(int argc, const char * argv[])
 {
