@@ -5,14 +5,14 @@
 #include <QCompleter>
 #include <QScrollBar>
 
-CodeEditor::CodeEditor() : QPlainTextEdit(), compl(0)
+CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 {
     this->setFont(QFont("Consolas", 9));
-    
 #ifndef _WIN32
     // Set font to bigger size for readability on Mac OS X
 	this->setFont(QFont("Consolas", 12));
 #endif
+
 	this->setTabStopWidth(20);
 
 	lineNumberArea = new LineNumberArea(this);
@@ -80,7 +80,7 @@ void CodeEditor::highlightCurrentLine()
 	{
 		QTextEdit::ExtraSelection selection;
 
-		QColor lineColor = QColor(Qt::yellow).lighter(160);
+		QColor lineColor = QColor(Qt::blue).lighter(160);
 
 		selection.format.setBackground(lineColor);
 		selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -94,6 +94,7 @@ void CodeEditor::highlightCurrentLine()
 
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
+	
 	QPainter painter(lineNumberArea);
 	painter.fillRect(event->rect(), Qt::lightGray);
 
@@ -136,10 +137,11 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		}
 	}
 		
-	//bool isShortcut = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space); // CTRL+space
-	//if (!compl || !isShortcut) // do not process the shortcut when we have a completer
-	QPlainTextEdit::keyPressEvent(e);
-
+	bool isCtrlSpace = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space); // CTRL+space
+	bool isShiftEnter = ((e->modifiers() & Qt::ShiftModifier) && e->key() == Qt::Key_Enter); // Shift+enter
+	if (!isCtrlSpace || !isShiftEnter) // prevent that cursor is moving
+		QPlainTextEdit::keyPressEvent(e);
+		
 	/*const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
 	if (!compl || (ctrlOrShift && e->text().isEmpty()))
 		return;*/
@@ -147,7 +149,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	//static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
 	//bool hasModifier = (e->modifiers() != Qt::NoModifier);
 	const QString completionPrefix = textUnderCursor();
-
+	
 	/*if (!isShortcut && (hasModifier || e->text().isEmpty() || completionPrefix.length() < 3
 		|| eow.contains(e->text().right(1)))) {
 		compl->popup()->hide();

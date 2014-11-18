@@ -12,15 +12,18 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ShowMenuBar();
 	codeEditor = new CodeEditor();
-	
 
+	// set the completer
 	completer = new QCompleter(this);
 	completer->setModel(modelFromFile("C:\\Users\\stefan\\Desktop\\words.txt"));
 	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
 	completer->setCaseSensitivity(Qt::CaseInsensitive);
 	completer->setWrapAround(false);
 	codeEditor->setCompleter(completer);
+
+	// set the highlighter
 	highlighter = new Highlighter(codeEditor->document());
+
 	this->setCentralWidget(codeEditor);
 }
 
@@ -129,5 +132,5 @@ void MainWindow::SetText(QString text)
 
 MainWindow::~MainWindow()
 {
-	// Empty
+	// Keep empty, Qobject is cleaning everything for you :)
 }

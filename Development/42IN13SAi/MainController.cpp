@@ -59,8 +59,6 @@ void MainController::Execute()
 		puts(e.what());
 		return;
 	}
-
-
 	// Delete the tokenizer controller
 	delete(tokenizer_controller);
 

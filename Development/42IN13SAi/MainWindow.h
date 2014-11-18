@@ -4,8 +4,9 @@
 #include <QObject>
 #include "Highlighter.h"
 #include <QCompleter>
-#include <qmessagebox.h>
 #include <QKeyEvent>
+#include <memory>
+
 class CodeEditor;
 
 class MainWindow : public QMainWindow
@@ -25,19 +26,16 @@ public:
 		QString OpenLoadDialog();
 		QString OpenSaveDialog();
 
-
 	private:
 		CodeEditor* codeEditor;
 		Highlighter* highlighter;
-		QCompleter *completer;
+		QCompleter* completer;
+
 		QAbstractItemModel *modelFromFile(const QString& fileName);
 
+		// Menu include all menu items
 		QMenu *fileMenu;
-		QAction *runAction;
-		QAction *clearAction;
-		QAction *openAction;
-		QAction *saveAction;
-		QAction *saveAsAction;
+		QAction *runAction, *clearAction, *openAction, *saveAction, *saveAsAction;
 
 		void ShowMenuBar();
 };

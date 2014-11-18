@@ -31,6 +31,11 @@ HEADERS += ./Grammar.h \
     ./CodeEditor.h \
     ./MainWindow.h \
     ./Highlighter.h \
+    ./ParseException.h \
+    ./PartnerNotFoundException.h \
+    ./SymbolNotFoundException.h \
+    ./ParameterException.h \
+    ./ParameterExceptionType.h \
     ./IdentifierException.h \
     ./MissingTokenException.h \
     ./ParameterNameException.h \
@@ -38,11 +43,6 @@ HEADERS += ./Grammar.h \
     ./UnexpectedKeywordException.h \
     ./UnexpectedTypeException.h \
     ./VariableNotFoundException.h \
-    ./ParseException.h \
-    ./PartnerNotFoundException.h \
-    ./SymbolNotFoundException.h \
-    ./ParameterException.h \
-    ./ParameterExceptionType.h \
     ./FileIO.h \
     ./MainController.h
 SOURCES += ./main.cpp \

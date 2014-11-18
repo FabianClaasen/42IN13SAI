@@ -1,0 +1,5 @@
+float
+func
+Main
+ret
+var

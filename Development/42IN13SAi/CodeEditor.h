@@ -9,9 +9,9 @@ class CodeEditor : public QPlainTextEdit
 	Q_OBJECT
 
 public:
-		CodeEditor();
+		CodeEditor(QWidget* parent = 0);
 
-		void lineNumberAreaPaintEvent(QPaintEvent *event);
+		virtual void lineNumberAreaPaintEvent(QPaintEvent *event);
 		int lineNumberAreaWidth();
 
 		// for codecompletion
@@ -37,7 +37,7 @@ public:
 
 		// for codecompletion
 		QString textUnderCursor() const;
-		QCompleter *compl;
+		QCompleter* compl;
 		QTextEdit* textEdit;
 };
 
@@ -55,7 +55,7 @@ class LineNumberArea : public QWidget
 		}
 
 	protected:
-		void paintEvent(QPaintEvent *event)
+		virtual void paintEvent(QPaintEvent *event)
 		{
 			codeEditor->lineNumberAreaPaintEvent(event);
 		}
