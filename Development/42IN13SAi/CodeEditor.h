@@ -4,6 +4,8 @@
 #include <QObject>
 #include <qcompleter.h>
 #include <memory>
+
+class QListView;
 class CodeEditor : public QPlainTextEdit
 {
 	Q_OBJECT
@@ -16,7 +18,7 @@ public:
 
 		// for codecompletion
 		void setCompleter(QCompleter *compl);
-		//QCompleter *getCompleter() const;
+		QCompleter *getCompleter() const;
 
 	protected:
 		void resizeEvent(QResizeEvent *event);
@@ -34,6 +36,10 @@ public:
 		void insertCompletion(const QString &completion);
 	private:
 		QWidget *lineNumberArea;
+
+		QListView *listView;
+		QStringList words;
+		QAbstractItemModel* modelFromFile(const QString& fileName);
 
 		// for codecompletion
 		QString textUnderCursor() const;
