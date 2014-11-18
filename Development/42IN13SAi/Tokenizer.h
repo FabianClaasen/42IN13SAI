@@ -20,6 +20,12 @@
 
 class Tokenizer
 {
+public:
+	Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::vector<TokenPartner> partners);
+	virtual ~Tokenizer();
+
+	void Tokenize();
+	std::vector<Token> GetTokenList();
 private:
 	int lineNumber;
 	int linePosition;
@@ -34,14 +40,8 @@ private:
     
     void NextLine();
     Token* FindPartner(MyTokenType &myTokenType, int level);
-	Token* FindPartnerR(MyTokenType &myTokenType, int level);
 	bool ShouldFindPartner(MyTokenType type);
 	bool ShouldFindPartnerR(MyTokenType type);
-    
-public:
-    Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::vector<TokenPartner> partners);
-	virtual ~Tokenizer();
-
-    void Tokenize();
-    std::vector<Token> GetTokenList();
+	void TryFindPartner(MyTokenType &myTokenType, int level);
+	void CheckClosingPartners();
 };

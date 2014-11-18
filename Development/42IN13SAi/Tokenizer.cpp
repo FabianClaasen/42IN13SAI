@@ -90,16 +90,25 @@ void Tokenizer::Tokenize()
 		}
 	}
 
-	//// Check for closing partners missing
+	try {
+		CheckClosingPartners();
+	}
+	catch (const PartnerNotFoundException &e) {
+		// Catch the exception and rethrow
+		throw;
+	}
+}
+
+
+// Check for closing partners missing
+void Tokenizer::CheckClosingPartners()
+{	
 	for (Token t : tokenVector)
 	{
 		if (ShouldFindPartnerR(t.Type))
 		{
-			Token* partner = nullptr;
 			try {
-				Token* temp = FindPartnerR(t.Type, t.Level);
-				if (temp->Partner != nullptr)
-					partner = temp;
+				TryFindPartner(t.Type, t.Level);
 			}
 			catch (const PartnerNotFoundException &e) {
 				// Catch the exception and rethrow
@@ -143,7 +152,7 @@ Token* Tokenizer::FindPartner(MyTokenType &type, int level)
 // @param
 //  type: this is the type of the token where you need to find a match for.
 //	level: this is the level of the myTokenType, the partner needs to be on the same level.
-Token* Tokenizer::FindPartnerR(MyTokenType &type, int level)
+void Tokenizer::TryFindPartner(MyTokenType &type, int level)
 {
 	std::list<TokenPartner>::const_iterator token_partner;
 	for (TokenPartner tokenPartner : tokenPartners)
@@ -154,10 +163,14 @@ Token* Tokenizer::FindPartnerR(MyTokenType &type, int level)
 			for (tokenIt = tokenVector.begin(); tokenIt != tokenVector.end(); ++tokenIt)
 			{
 				if (tokenIt->Type == tokenPartner.token && tokenIt->Level == level)
-					return &(*tokenIt);
+				{	// FOUND A PARTNER
+					return;
+				}
 			}
 		}
 	}
+
+	// Didn't find a partner:
 	char buffer[1024];
 
 #ifdef _WIN32
