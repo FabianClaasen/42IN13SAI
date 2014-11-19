@@ -195,6 +195,11 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		}
 	}
 
+	bool isShiftEnter = ((e->modifiers() & Qt::ShiftModifier) && e->key() == Qt::Key_Return);
+
+	if (isShiftEnter)
+		e = new QKeyEvent(e->type(), e->key(), e->modifiers()&Qt::MetaModifier&Qt::KeypadModifier, e->text(), e->isAutoRepeat(), (ushort)e->count());
+
 	bool isCtrlSpace = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space);
 	if (!isCtrlSpace)
 		QPlainTextEdit::keyPressEvent(e);
