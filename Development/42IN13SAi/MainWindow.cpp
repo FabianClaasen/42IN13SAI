@@ -44,6 +44,8 @@ void MainWindow::ShowMenuBar()
 	runAction = menu->addAction("Run");
 	clearAction = menu->addAction("Clear console");
 
+	quitAction = menu->addAction("Quit");
+
 	#ifndef _WIN32
         // Also needs a menu to show the items, doesn't work with only actions
         QMenu* mainMenu = menu->addMenu("Debug");
@@ -64,11 +66,12 @@ CodeEditor* MainWindow::CreateEditor()
 
 	// Set the completer
 	completer = new QCompleter(this);
-	completer->setModel(modelFromFile("C:\\Users\\stefan\\Desktop\\words.txt"));
+	completer->setModel(modelFromFile("C:\\42IN14SAi\\words.txt"));
 	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
 	completer->setCaseSensitivity(Qt::CaseInsensitive);
 	completer->setWrapAround(false);
 	codeEditor->setCompleter(completer);
+	codeEditor->installEventFilter(this);
 
 	// Set the highlighter
 	highlighter = new Highlighter(codeEditor->document());
@@ -104,6 +107,21 @@ QAction* MainWindow::GetSaveAsAction()
 int MainWindow::GetCurrentTabPosition()
 {
 	return tabs->currentIndex();
+}
+
+void MainWindow::RemoveStartTab()
+{
+	tabs->removeTab(0);
+}
+
+void MainWindow::SetTabTitle(QFileInfo* info)
+{
+	tabs->setTabText(tabs->currentIndex(), info->baseName());
+}
+
+QAction* MainWindow::GetQuitAction()
+{
+	return quitAction;
 }
 
 QString MainWindow::GetText()

@@ -8,7 +8,13 @@
 #include "SubroutineTable.h"
 #include "CompilerNode.h"
 #include "FunctionCaller.h"
+
 #include "ParameterException.h"
+#include "MissingCompilerNodeException.h"
+#include "MissingMainFunctionException.h"
+#include "FunctionNameExpectedException.h"
+#include "SubroutineNotFoundException.h"
+#include "UnknownExpressionException.h"
 
 class VirtualMachine
 {

@@ -63,7 +63,7 @@ CompilerNode VirtualMachine::GetNext(std::string functionName, compilerNodeList 
 	}
 	else
 	{
-		throw std::runtime_error("Compilernode missing");
+		throw MissingCompilerNodeException("Compilernode missing");
 	}
 
 	return *node;
@@ -97,7 +97,7 @@ void VirtualMachine::ExecuteCode()
     subSubroutine = subroutineTable->GetSubroutine("main");
     
     if (subSubroutine == nullptr)
-        throw std::runtime_error("No main function found");
+        throw MissingMainFunctionException("No main function found");
     
     subSymbolTable = subSubroutine->GetSymbolTable();
     
@@ -163,12 +163,12 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 
     // Check if node contains the functionname
     if (functionNode->GetExpression() != "$functionName")
-        throw std::runtime_error("Expected function name");
+        throw FunctionNameExpectedException("Expected function name");
     
     // Get the subroutine table and check if exists
     subSubroutine = subroutineTable->GetSubroutine(functionNode->GetValue());
     if (subSubroutine == nullptr)
-        throw std::runtime_error("Subroutine for function " + functionNode->GetValue() + " not found");
+        throw SubroutineNotFoundException("Subroutine for function " + functionNode->GetValue() + " not found");
     
     // Set the subSymbolTable
     subSymbolTable = subSubroutine->GetSymbolTable();
@@ -322,7 +322,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteStop(CompilerNode compilerN
 		if (compilerNode.GetExpression() == "$stop")
 			std::exit(1);
 		else
-			throw std::runtime_error("Unknown expression type");
+			throw UnknownExpressionException("Unknown expression type");
 	}
 	else
 		throw new ParameterException(0, ParameterExceptionType::IncorrectParameters);

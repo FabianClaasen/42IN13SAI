@@ -21,6 +21,8 @@ public:
 		MainWindow(QWidget *parent = 0);
 		virtual ~MainWindow();
 		int GetCurrentTabPosition();
+		void RemoveStartTab();
+		void SetTabTitle(QFileInfo* info);
 		QString GetText();
 		void AddFile(QFileInfo* info, QString text);
 		QAction* GetRunAction();
@@ -28,6 +30,7 @@ public:
 		QAction* GetLoadAction();
 		QAction* GetSaveAction();
 		QAction* GetSaveAsAction();
+		QAction* GetQuitAction();
 		QString OpenLoadDialog();
 		QString OpenSaveDialog();
 
@@ -43,7 +46,7 @@ public:
 
 		// Menu include all menu items
 		QMenu *fileMenu;
-		QAction *runAction, *clearAction, *openAction, *saveAction, *saveAsAction;
+		QAction *runAction, *clearAction, *openAction, *saveAction, *saveAsAction, *quitAction;
 
 		void ShowMenuBar();
 };
