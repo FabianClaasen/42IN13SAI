@@ -78,6 +78,12 @@ std::string MainController::GetFileFromStream()
 	QString gen_code = mainWindow.GetText();
 
 	std::shared_ptr<QFile> file;
+	std::shared_ptr<QFile> currentFile;
+	if (currentFiles.size() > mainWindow.GetCurrentTabPosition() - 1)
+	{
+		currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition() - 1);
+	}
+
 	if (currentFile)
 	{
 		file = currentFile;
@@ -109,18 +115,31 @@ void MainController::LoadFile()
 {
 	QString URI = mainWindow.OpenLoadDialog();
 	QString text = FileIO::LoadFile(URI);
-	mainWindow.SetText(text);
 
-	// Set the current file
-	currentFile = std::shared_ptr<QFile>(new QFile(URI));
+	// Check if the first file is not the start file
+	if (currentFiles.size() <= 0)
+		mainWindow.RemoveStartTab();
+	
+	// Add the loaded file
+	currentFiles.push_back(std::shared_ptr<QFile>(new QFile(URI)));
+	QFileInfo* fileInfo = new QFileInfo(URI);
+	mainWindow.AddFile(fileInfo, text);
 }
 
 void MainController::SaveFile()
 {
+	std::shared_ptr<QFile> currentFile;
+	if (currentFiles.size() > mainWindow.GetCurrentTabPosition() - 1)
+	{
+		currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition() - 1);
+	}
+
 	if (!currentFile)
 	{
 		QString URI = mainWindow.OpenSaveDialog();
 		FileIO::SaveFile(URI, mainWindow.GetText());
+		QFileInfo* fileInfo = new QFileInfo(URI);
+		mainWindow.SetTabTitle(fileInfo);
 	}
 	else
 	{

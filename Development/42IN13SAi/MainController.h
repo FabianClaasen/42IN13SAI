@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtWidgets>
 #include <QShortcut>
+#include <QFileInfo>
 #include <memory>
 
 #include "MainWindow.h"
@@ -24,7 +25,7 @@ class MainController : public QObject
 	private:
 		// Variables
 		MainWindow mainWindow;
-		std::shared_ptr<QFile> currentFile;
+		std::vector<std::shared_ptr<QFile>> currentFiles;
 
 		// Functions
 		std::string GetFileFromStream();
