@@ -77,6 +77,7 @@ std::string MainController::GetFileFromStream()
 	QString gen_code = mainWindow.GetText();
 
 	std::shared_ptr<QFile> file;
+	std::shared_ptr<QFile> currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition() - 1);
 	if (currentFile)
 	{
 		file = currentFile;
@@ -108,14 +109,16 @@ void MainController::LoadFile()
 {
 	QString URI = mainWindow.OpenLoadDialog();
 	QString text = FileIO::LoadFile(URI);
-	mainWindow.SetText(text);
 
-	// Set the current file
-	currentFile = std::shared_ptr<QFile>(new QFile(URI));
+	currentFiles.push_back(std::shared_ptr<QFile>(new QFile(URI)));
+	QFileInfo* fileInfo = new QFileInfo(URI);
+	mainWindow.AddFile(fileInfo, text);
+	//mainWindow.SetText(text);
 }
 
 void MainController::SaveFile()
 {
+	std::shared_ptr<QFile> currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition() - 1);
 	if (!currentFile)
 	{
 		QString URI = mainWindow.OpenSaveDialog();

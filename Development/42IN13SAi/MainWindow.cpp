@@ -11,20 +11,17 @@
 MainWindow::MainWindow(QWidget *parent)
 {
 	ShowMenuBar();
-	codeEditor = new CodeEditor();
 
-	// set the completer
-	completer = new QCompleter(this);
-	completer->setModel(modelFromFile("C:\\Users\\stefan\\Desktop\\words.txt"));
-	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-	completer->setCaseSensitivity(Qt::CaseInsensitive);
-	completer->setWrapAround(false);
-	codeEditor->setCompleter(completer);
+	// Create code editor
+	CodeEditor* codeEditor = CreateEditor();
+	codeEditorVector.push_back(codeEditor);
 
-	// set the highlighter
-	highlighter = new Highlighter(codeEditor->document());
+	// Set the tabs
+	tabs = new QTabWidget();
+	tabs->addTab(codeEditor, tr("New*"));
 
-	this->setCentralWidget(codeEditor);
+	// Add the mainview widget
+	this->setCentralWidget(tabs);
 }
 
 void MainWindow::ShowMenuBar()
@@ -61,6 +58,24 @@ void MainWindow::ShowMenuBar()
 	menu->setLayoutDirection(Qt::LeftToRight);
 }
 
+CodeEditor* MainWindow::CreateEditor()
+{
+	CodeEditor* codeEditor = new CodeEditor();
+
+	// Set the completer
+	completer = new QCompleter(this);
+	completer->setModel(modelFromFile("C:\\Users\\stefan\\Desktop\\words.txt"));
+	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+	completer->setCaseSensitivity(Qt::CaseInsensitive);
+	completer->setWrapAround(false);
+	codeEditor->setCompleter(completer);
+
+	// Set the highlighter
+	highlighter = new Highlighter(codeEditor->document());
+
+	return codeEditor;
+}
+
 QAction* MainWindow::GetRunAction()
 {
 	return runAction;
@@ -86,8 +101,14 @@ QAction* MainWindow::GetSaveAsAction()
 	return saveAsAction;
 }
 
+int MainWindow::GetCurrentTabPosition()
+{
+	return tabs->currentIndex();
+}
+
 QString MainWindow::GetText()
 {
+	CodeEditor* codeEditor = codeEditorVector.at(tabs->currentIndex());
 	return codeEditor->toPlainText();
 }
 
@@ -124,10 +145,15 @@ QString MainWindow::OpenSaveDialog()
 	return QFileDialog::getSaveFileName(this, tr("Save file"), "", tr("Text Files (*.txt)"));
 }
 
-void MainWindow::SetText(QString text)
+void MainWindow::AddFile(QFileInfo* info, QString text)
 {
-	codeEditor->clear();
-	codeEditor->insertPlainText(text);
+	// Create code editor
+	CodeEditor* codeEditor = CreateEditor();
+	codeEditor->setPlainText(text);
+	codeEditorVector.push_back(codeEditor);
+
+	// Remove tab if only the new file is existing...
+	tabs->addTab(codeEditor, info->baseName());
 }
 
 MainWindow::~MainWindow()
