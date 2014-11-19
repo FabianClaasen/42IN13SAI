@@ -29,10 +29,10 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 	highlightCurrentLine();
 
 	//connect(listView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(completeText(const QModelIndex &)));
-	listView = new QListView(this);
+	//listView = new QListView(this);
 	//listView->model()->insertRow(0,)
-	listView->setWindowFlags(Qt::ToolTip);
-	listView->setModel(modelFromFile("C:\\Users\\stefan\\Desktop\\words.txt"));
+	//listView->setWindowFlags(Qt::ToolTip);
+	//listView->setModel(modelFromFile("C:\\Users\\stefan\\Desktop\\words.txt"));
 }
 
 int CodeEditor::lineNumberAreaWidth()
@@ -139,10 +139,10 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	int key = e->key();
 	bool isEnterAndListVisible;
 	int row = 0;
-	if (!listView->isHidden())
+	if (!compl->popup()->isHidden())
 	{
-		int count = listView->model()->rowCount();
-		QModelIndex currentIndex = listView->currentIndex();
+		int count = compl->model()->rowCount();
+		QModelIndex currentIndex = compl->currentIndex();
 
 		if (key == Qt::Key_Down || key == Qt::Key_Up)
 		{
@@ -158,24 +158,24 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 				break;
 			}
 
-			if (listView->isEnabled())
-			{
-				QModelIndex index = listView->model()->index(row, 0);
-				listView->setCurrentIndex(index);
-			}
+			/*if (compl->popup()->isEnabled())
+			{*/
+				QModelIndex index = compl->model()->index(row, 0);
+				compl->popup()->setCurrentIndex(index);
+			//}
 		}
-		else if ((Qt::Key_Tab == key) && listView->isEnabled())
+		else if ((Qt::Key_Tab == key) && compl->popup()->isEnabled())
 		{
 			if (currentIndex.isValid())
 			{
 				QString text = currentIndex.data().toString();
 				//setText(text + " ");
-				isEnterAndListVisible = (key == Qt::Key_Tab) && listView->isVisible();
+				isEnterAndListVisible = (key == Qt::Key_Tab) && compl->popup()->isVisible();
 
 				if (!isEnterAndListVisible)
 					QPlainTextEdit::keyPressEvent(e);
 
-				listView->hide();
+				compl->popup()->hide();
 				//setCompleter(this->text());
 				insertCompletion(text);
 				return;
@@ -183,14 +183,14 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		}
 	}
 
-	if (listView->isVisible())
+	if (compl->popup()->isVisible())
 	{
 		switch (key)
 		{
 		case 16777220: // enter key
 		case 16777219: // backspace key
 		case 32: // space key
-			listView->hide();
+			compl->popup()->hide();
 			break;
 		}
 	}
@@ -218,32 +218,19 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		return;
 	}
 
-	if (completionPrefix != compl->completionPrefix())
+	if (completionPrefix != compl->completionPrefix()) 
 	{
-		QAbstractItemModel* model = listView->model();
-		int extra = 0;
-		for (int i = 0; i < model->rowCount(); i++)
-		{
-			QString variable = model->index(i, 0).data(Qt::DisplayRole).toString();
-			if (!variable.contains(completionPrefix))
-			{
-				extra++;
-			}
-			else
-				break;
-		}
-		if (extra == model->rowCount())
-			listView->hide();
+		compl->setCompletionPrefix(completionPrefix);
+		compl->popup()->setCurrentIndex(compl->completionModel()->index(0, 0));
+	}
 
-		listView->setCurrentIndex(listView->model()->index(extra, 0));
-	}
-	else
-	{
-		listView->setCurrentIndex(listView->model()->index(0, 0));
-	}
+	QRect cr = cursorRect();
+	cr.setX(20);
+	cr.setWidth(compl->popup()->sizeHintForColumn(0)
+		+ compl->popup()->verticalScrollBar()->sizeHint().width());
 
 	if ((e->modifiers() & Qt::ControlModifier) && (e->key() == Qt::Key_Space))
-		listView->show();
+		compl->complete(cr);
 }
 
 QAbstractItemModel* CodeEditor::modelFromFile(const QString& fileName)

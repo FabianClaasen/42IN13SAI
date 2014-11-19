@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	// set the completer
 	completer = new QCompleter(this);
-	completer->setModel(modelFromFile("C:\\Users\\stefan\\Desktop\\words.txt"));
+	completer->setModel(modelFromFile("C:\\42IN14SAi\\words.txt"));
 	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
 	completer->setCaseSensitivity(Qt::CaseInsensitive);
 	completer->setWrapAround(false);
