@@ -27,12 +27,6 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 
 	updateLineNumberAreaWidth(0);
 	highlightCurrentLine();
-
-	//connect(listView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(completeText(const QModelIndex &)));
-	//listView = new QListView(this);
-	//listView->model()->insertRow(0,)
-	//listView->setWindowFlags(Qt::ToolTip);
-	//listView->setModel(modelFromFile("C:\\Users\\stefan\\Desktop\\words.txt"));
 }
 
 int CodeEditor::lineNumberAreaWidth()
@@ -138,12 +132,26 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 {
 	int key = e->key();
 	bool isEnterAndListVisible;
-	int row = 0;
-	if (!compl->popup()->isHidden())
-	{
-		int count = compl->model()->rowCount();
-		QModelIndex currentIndex = compl->currentIndex();
+	bool setIndexAfterPrefix = false;
 
+	int row = 0;
+	if (compl->popup()->isVisible())
+	{
+		// if enter, backspace or space key are pressed when popup is visible, hide it
+		switch (key)
+		{
+		case 16777220: // enter key
+		case 16777219: // backspace key
+		case 32: // space key
+			compl->popup()->hide();
+			return;
+		}
+
+		// check count and index
+		int count = compl->model()->rowCount();
+		QModelIndex currentIndex = compl->popup()->currentIndex();
+		
+		// Check down or up for navigation
 		if (key == Qt::Key_Down || key == Qt::Key_Up)
 		{
 			row = currentIndex.row();
@@ -158,77 +166,70 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 				break;
 			}
 
-			/*if (compl->popup()->isEnabled())
-			{*/
-				QModelIndex index = compl->model()->index(row, 0);
+			if (compl->popup()->isEnabled())
+			{
+				QModelIndex index = compl->popup()->model()->index(row, 0);
 				compl->popup()->setCurrentIndex(index);
-			//}
+				currentIndex = compl->popup()->currentIndex();
+			}
 		}
+		// If tab key is pressed, fill in the completion
 		else if ((Qt::Key_Tab == key) && compl->popup()->isEnabled())
 		{
 			if (currentIndex.isValid())
 			{
 				QString text = currentIndex.data().toString();
-				//setText(text + " ");
 				isEnterAndListVisible = (key == Qt::Key_Tab) && compl->popup()->isVisible();
 
 				if (!isEnterAndListVisible)
 					QPlainTextEdit::keyPressEvent(e);
-
 				compl->popup()->hide();
-				//setCompleter(this->text());
 				insertCompletion(text);
+				return;
+			}
+		}
+		// for runtime behaviour
+		else
+		{
+			setIndexAfterPrefix = true;
+		}
+			
+	}
+
+	// Shift behaviour as normal shift
+	bool isShiftEnter = ((e->modifiers() & Qt::ShiftModifier) && e->key() == Qt::Key_Return);
+	if (isShiftEnter)
+		e = new QKeyEvent(e->type(), e->key(), e->modifiers()&Qt::MetaModifier&Qt::KeypadModifier, e->text(), e->isAutoRepeat(), (ushort)e->count());
+
+	// Check if ctrl space is clicked
+	bool isCtrlSpace = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space);
+	if (!isCtrlSpace)
+		QPlainTextEdit::keyPressEvent(e);
+
+	QString completionPrefix = textUnderCursor();
+
+	// this one is for first the completerview and then fill in the text (runtime filling)
+	if (setIndexAfterPrefix)
+	{
+		int count = compl->model()->rowCount();
+		for (int i = 0; i < count; i++)
+		{
+			QString key = compl->completionModel()->index(i, 0).data().toString();
+			if (key.startsWith(completionPrefix))
+			{
+				QModelIndex new_index = compl->completionModel()->index(i, 0);
+				compl->popup()->setCurrentIndex(new_index);
+				//setCompletionPrefix(completionPrefix);
 				return;
 			}
 		}
 	}
 
-	if (compl->popup()->isVisible())
-	{
-		switch (key)
-		{
-		case 16777220: // enter key
-		case 16777219: // backspace key
-		case 32: // space key
-			compl->popup()->hide();
-			break;
-		}
-	}
-
-	bool isShiftEnter = ((e->modifiers() & Qt::ShiftModifier) && e->key() == Qt::Key_Return);
-
-	if (isShiftEnter)
-		e = new QKeyEvent(e->type(), e->key(), e->modifiers()&Qt::MetaModifier&Qt::KeypadModifier, e->text(), e->isAutoRepeat(), (ushort)e->count());
-
-	bool isCtrlSpace = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space);
-	if (!isCtrlSpace)
-		QPlainTextEdit::keyPressEvent(e);
-
-	const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
-	if (!compl || (ctrlOrShift && e->text().isEmpty()))
+	if (!isCtrlSpace && (e->text().isEmpty() || completionPrefix.length() < 3)) 
 		return;
-
-	static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
-	bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
-	QString completionPrefix = textUnderCursor();
-
-	if (!isCtrlSpace && (hasModifier || e->text().isEmpty() || completionPrefix.length() < 3
-		|| eow.contains(e->text().right(1)))) {
-		//listView->hide();
-		return;
-	}
-
-	if (completionPrefix != compl->completionPrefix()) 
-	{
-		compl->setCompletionPrefix(completionPrefix);
-		compl->popup()->setCurrentIndex(compl->completionModel()->index(0, 0));
-	}
-
-	QRect cr = cursorRect();
-	cr.setX(20);
-	cr.setWidth(compl->popup()->sizeHintForColumn(0)
-		+ compl->popup()->verticalScrollBar()->sizeHint().width());
-
+	
+	setCompletionPrefix(completionPrefix);
+	cr = getCompleterView();
 	if ((e->modifiers() & Qt::ControlModifier) && (e->key() == Qt::Key_Space))
 		compl->complete(cr);
 }
@@ -269,8 +270,28 @@ void CodeEditor::setCompleter(QCompleter *completer)
 	compl->setWidget(this);
 	compl->setCompletionMode(QCompleter::PopupCompletion);
 	compl->setCaseSensitivity(Qt::CaseInsensitive);
+
 	QObject::connect(compl, SIGNAL(activated(QString)),
 		this, SLOT(insertCompletion(QString)));
+}
+
+void CodeEditor::setCompletionPrefix(QString completionPrefix)
+{
+	if (completionPrefix != compl->completionPrefix())
+	{
+		compl->setCompletionPrefix(completionPrefix);
+		compl->popup()->setCurrentIndex(compl->completionModel()->index(0, 0));
+	}
+}
+
+QRect CodeEditor::getCompleterView()
+{
+	QRect cr = cursorRect();
+	cr.setX(20);
+	cr.setWidth(compl->popup()->sizeHintForColumn(0)
+		+ compl->popup()->verticalScrollBar()->sizeHint().width());
+
+	return cr;
 }
 
 void CodeEditor::insertCompletion(const QString &text)
@@ -293,19 +314,9 @@ QString CodeEditor::textUnderCursor() const
 	return tc.selectedText();
 }
 
-//void CodeEditor::focusInEvent(QFocusEvent *e)
-//{
-//	if (compl)
-//		compl->setWidget(this);
-//
-//	QPlainTextEdit::focusInEvent(e);
-//}
-
 QCompleter *CodeEditor::getCompleter() const
 {
 	return compl;
 }
-
-
 
 #pragma endregion codeCompletion

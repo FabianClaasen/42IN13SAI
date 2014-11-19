@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 	completer->setCaseSensitivity(Qt::CaseInsensitive);
 	completer->setWrapAround(false);
 	codeEditor->setCompleter(completer);
-	codeEditor->installEventFilter(this);
+
 	// set the highlighter
 	highlighter = new Highlighter(codeEditor->document());
 

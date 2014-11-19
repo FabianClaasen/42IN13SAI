@@ -34,17 +34,20 @@ public:
 
 		// for codecompletion
 		void insertCompletion(const QString &completion);
+
 	private:
 		QWidget *lineNumberArea;
-
-		QListView *listView;
-		QStringList words;
-		QAbstractItemModel* modelFromFile(const QString& fileName);
 
 		// for codecompletion
 		QString textUnderCursor() const;
 		QCompleter* compl;
 		QTextEdit* textEdit;
+
+		void setCompletionPrefix(QString text);
+
+		QRect getCompleterView();
+		QRect cr;
+		QAbstractItemModel* modelFromFile(const QString& fileName);
 };
 
 class LineNumberArea : public QWidget
