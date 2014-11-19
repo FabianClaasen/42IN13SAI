@@ -23,6 +23,7 @@ public:
 		QAction* GetLoadAction();
 		QAction* GetSaveAction();
 		QAction* GetSaveAsAction();
+		QAction* GetQuitAction();
 		QString OpenLoadDialog();
 		QString OpenSaveDialog();
 
@@ -35,7 +36,7 @@ public:
 
 		// Menu include all menu items
 		QMenu *fileMenu;
-		QAction *runAction, *clearAction, *openAction, *saveAction, *saveAsAction;
+		QAction *runAction, *clearAction, *openAction, *saveAction, *saveAsAction, *quitAction;
 
 		void ShowMenuBar();
 };

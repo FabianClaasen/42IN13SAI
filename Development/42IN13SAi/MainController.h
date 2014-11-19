@@ -36,4 +36,5 @@ class MainController : public QObject
 		void LoadFile();
 		void SaveFile();
 		void SaveAsFile();
+		void Quit();
 };

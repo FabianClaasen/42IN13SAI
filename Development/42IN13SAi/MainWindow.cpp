@@ -47,6 +47,8 @@ void MainWindow::ShowMenuBar()
 	runAction = menu->addAction("Run");
 	clearAction = menu->addAction("Clear console");
 
+	quitAction = menu->addAction("Quit");
+
 	#ifndef _WIN32
         // Also needs a menu to show the items, doesn't work with only actions
         QMenu* mainMenu = menu->addMenu("Debug");
@@ -84,6 +86,11 @@ QAction* MainWindow::GetSaveAction()
 QAction* MainWindow::GetSaveAsAction()
 {
 	return saveAsAction;
+}
+
+QAction* MainWindow::GetQuitAction()
+{
+	return quitAction;
 }
 
 QString MainWindow::GetText()

@@ -25,6 +25,7 @@ void MainController::Setup()
 	connect(mainWindow.GetLoadAction(), SIGNAL(triggered()), this, SLOT(LoadFile()));
 	connect(mainWindow.GetSaveAction(), SIGNAL(triggered()), this, SLOT(SaveFile()));
 	connect(mainWindow.GetSaveAsAction(), SIGNAL(triggered()), this, SLOT(SaveAsFile()));
+	connect(mainWindow.GetQuitAction(), SIGNAL(triggered()), this, SLOT(Quit()));
 }
 
 void MainController::Execute()
@@ -131,6 +132,11 @@ void MainController::SaveAsFile()
 {
 	QString URI = mainWindow.OpenSaveDialog();
 	FileIO::SaveFile(URI, mainWindow.GetText());
+}
+
+void MainController::Quit()
+{
+	std::exit(0);
 }
 
 MainController::~MainController()
