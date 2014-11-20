@@ -22,10 +22,12 @@ void MainController::Setup()
 
 	connect(mainWindow.GetRunAction(), SIGNAL(triggered()), this, SLOT(Execute()));
 	connect(mainWindow.GetClearAction(), SIGNAL(triggered()), this, SLOT(ClearConsole()));
+	connect(mainWindow.GetNewAction(), SIGNAL(triggered()), this, SLOT(NewFile()));
 	connect(mainWindow.GetLoadAction(), SIGNAL(triggered()), this, SLOT(LoadFile()));
 	connect(mainWindow.GetSaveAction(), SIGNAL(triggered()), this, SLOT(SaveFile()));
 	connect(mainWindow.GetSaveAsAction(), SIGNAL(triggered()), this, SLOT(SaveAsFile()));
 	connect(mainWindow.GetQuitAction(), SIGNAL(triggered()), this, SLOT(Quit()));
+	connect(mainWindow.GetTabWidget(), SIGNAL(tabCloseRequested(int)), this, SLOT(CloseTab(int)));
 }
 
 void MainController::Execute()
@@ -111,6 +113,11 @@ std::string MainController::GetFileFromStream()
 	return filepath_std;
 }
 
+void MainController::NewFile()
+{
+	mainWindow.AddNewTab();
+}
+
 void MainController::LoadFile()
 {
 	QString URI = mainWindow.OpenLoadDialog();
@@ -118,7 +125,7 @@ void MainController::LoadFile()
 
 	// Check if the first file is not the start file
 	if (currentFiles.size() <= 0)
-		mainWindow.RemoveStartTab();
+		mainWindow.RemoveTab(0);
 	
 	// Add the loaded file
 	currentFiles.push_back(std::shared_ptr<QFile>(new QFile(URI)));
@@ -151,11 +158,22 @@ void MainController::SaveAsFile()
 {
 	QString URI = mainWindow.OpenSaveDialog();
 	FileIO::SaveFile(URI, mainWindow.GetText());
+	QFileInfo* fileInfo = new QFileInfo(URI);
+	mainWindow.SetTabTitle(fileInfo);
 }
 
 void MainController::Quit()
 {
 	std::exit(0);
+}
+
+void MainController::CloseTab(int index)
+{
+	mainWindow.RemoveTab(index);
+	
+	// Remove the file on the current position
+	if (currentFiles.size() > index)
+		currentFiles.erase(currentFiles.begin() + index);
 }
 
 MainController::~MainController()
