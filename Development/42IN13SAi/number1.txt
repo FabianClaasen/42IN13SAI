@@ -2,5 +2,5 @@ var x = 3;
 
 func Main()
 [
-	prnt(x);	
-]
+	prnt(x);
+] 

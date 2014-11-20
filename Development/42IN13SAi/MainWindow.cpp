@@ -1,37 +1,38 @@
-#include <QtWidgets>
-#include <QMenu>
-
 #include "MainWindow.h"
 #include "CodeEditor.h"
 #include "TokenizerController.h"
 #include "Compiler.h"
 #include "VirtualMachine.h"
+
 #include <QKeyEvent>
+#include <windows.h>
+#include <string>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
 {
 	ShowMenuBar();
 
-	//// set the completer
-	//completer = new QCompleter(this);
-	//completer->setModel(modelFromFile("C:\\42IN14SAi\\words.txt"));
-	//completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-	//completer->setCaseSensitivity(Qt::CaseInsensitive);
-	//completer->setWrapAround(false);
-	//codeEditor->setCompleter(completer);
-
-	//// set the highlighter
-	//highlighter = new Highlighter(codeEditor->document());
 	// Create code editor
 	CodeEditor* codeEditor = CreateEditor();
 	codeEditorVector.push_back(codeEditor);
 
 	// Set the tabs
 	tabs = new QTabWidget();
-	tabs->addTab(codeEditor, tr("New*"));
+	tabs->setTabsClosable(true);
+	tabs->addTab(codeEditor, "New*");
 
-	// Add the mainview widget
-	this->setCentralWidget(tabs);
+	exceptionWindow = CreateExceptionWindow();
+
+	//Make a layout to add different widgets
+	QVBoxLayout* layout = new QVBoxLayout();
+	layout->addWidget(tabs);
+	layout->addWidget(exceptionWindow);
+
+	//make a central widget set the layout and add it on the mainwindow
+	QWidget* mainWidget = new QWidget();
+	mainWidget->setLayout(layout);
+	this->setCentralWidget(mainWidget);
 }
 
 void MainWindow::ShowMenuBar()
@@ -48,6 +49,7 @@ void MainWindow::ShowMenuBar()
 
 	// Create action and connect
 	fileMenu = menu->addMenu("File");
+	newAction = fileMenu->addAction("New");
 	openAction = fileMenu->addAction("Open");
 	saveAction = fileMenu->addAction("Save");
 	saveAsAction = fileMenu->addAction("Save as");
@@ -76,9 +78,13 @@ CodeEditor* MainWindow::CreateEditor()
 
 	// Set the completer
 	completer = new QCompleter(this);
-	completer->setModel(modelFromFile("C:\\42IN14SAi\\words.txt"));
+
+	QString str = QDir::currentPath();
+	str.append("/Resources/words.txt");
+
+	completer->setModel(modelFromFile(str));
 	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-	completer->setCaseSensitivity(Qt::CaseInsensitive);
+	completer->setCaseSensitivity(Qt::CaseSensitive);
 	completer->setWrapAround(false);
 	codeEditor->setCompleter(completer);
 	codeEditor->installEventFilter(this);
@@ -89,6 +95,13 @@ CodeEditor* MainWindow::CreateEditor()
 	return codeEditor;
 }
 
+ExceptionWindow* MainWindow::CreateExceptionWindow()
+{
+	ExceptionWindow* exceptionWindow = new ExceptionWindow();
+
+	return exceptionWindow;
+}
+
 QAction* MainWindow::GetRunAction()
 {
 	return runAction;
@@ -97,6 +110,11 @@ QAction* MainWindow::GetRunAction()
 QAction* MainWindow::GetClearAction()
 {
 	return clearAction;
+}
+
+QAction* MainWindow::GetNewAction()
+{
+	return newAction;
 }
 
 QAction* MainWindow::GetLoadAction()
@@ -114,14 +132,29 @@ QAction* MainWindow::GetSaveAsAction()
 	return saveAsAction;
 }
 
+QTabWidget* MainWindow::GetTabWidget()
+{
+	return tabs;
+}
+
 int MainWindow::GetCurrentTabPosition()
 {
 	return tabs->currentIndex();
 }
 
-void MainWindow::RemoveStartTab()
+void MainWindow::RemoveTab(int index)
 {
-	tabs->removeTab(0);
+	tabs->removeTab(index);
+}
+
+void MainWindow::AddNewTab()
+{
+	tabs->addTab(CreateEditor(), "New*");
+}
+
+void MainWindow::addException(std::string exception)
+{
+	exceptionWindow->addException(exception);
 }
 
 void MainWindow::SetTabTitle(QFileInfo* info)
