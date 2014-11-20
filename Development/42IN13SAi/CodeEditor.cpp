@@ -3,6 +3,12 @@
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 {
     this->setFont(QFont("Consolas", 9));
+	QPalette pallete = this->palette();
+
+	pallete.setColor(QPalette::Active, QPalette::Base, QColor(253, 246, 227));
+	pallete.setColor(QPalette::Inactive, QPalette::Base, QColor(253, 246, 227));
+
+	this->setPalette(pallete);
 #ifndef _WIN32
     // Set font to bigger size for readability on Mac OS X
 	this->setFont(QFont("Consolas", 12));

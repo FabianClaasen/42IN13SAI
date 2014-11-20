@@ -4,23 +4,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ShowMenuBar();
 
-	//// set the completer
-	//completer = new QCompleter(this);
-	//completer->setModel(modelFromFile("C:\\42IN14SAi\\words.txt"));
-	//completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-	//completer->setCaseSensitivity(Qt::CaseInsensitive);
-	//completer->setWrapAround(false);
-	//codeEditor->setCompleter(completer);
-
-	//// set the highlighter
-	//highlighter = new Highlighter(codeEditor->document());
 	// Create code editor
 	CodeEditor* codeEditor = CreateEditor();
 	codeEditorVector.push_back(codeEditor);
 
 	// Set the tabs
 	tabs = new QTabWidget();
-	tabs->addTab(codeEditor, tr("New*"));
+	tabs->setTabsClosable(true);
+	tabs->addTab(codeEditor, "New*");
 
 	ExceptionWindow* exceptionWindow = CreateExceptionWindow();
 
@@ -49,6 +40,7 @@ void MainWindow::ShowMenuBar()
 
 	// Create action and connect
 	fileMenu = menu->addMenu("File");
+	newAction = fileMenu->addAction("New");
 	openAction = fileMenu->addAction("Open");
 	saveAction = fileMenu->addAction("Save");
 	saveAsAction = fileMenu->addAction("Save as");
@@ -107,6 +99,11 @@ QAction* MainWindow::GetClearAction()
 	return clearAction;
 }
 
+QAction* MainWindow::GetNewAction()
+{
+	return newAction;
+}
+
 QAction* MainWindow::GetLoadAction()
 {
 	return openAction;
@@ -122,14 +119,24 @@ QAction* MainWindow::GetSaveAsAction()
 	return saveAsAction;
 }
 
+QTabWidget* MainWindow::GetTabWidget()
+{
+	return tabs;
+}
+
 int MainWindow::GetCurrentTabPosition()
 {
 	return tabs->currentIndex();
 }
 
-void MainWindow::RemoveStartTab()
+void MainWindow::RemoveTab(int index)
 {
-	tabs->removeTab(0);
+	tabs->removeTab(index);
+}
+
+void MainWindow::AddNewTab()
+{
+	tabs->addTab(CreateEditor(), "New*");
 }
 
 void MainWindow::SetTabTitle(QFileInfo* info)

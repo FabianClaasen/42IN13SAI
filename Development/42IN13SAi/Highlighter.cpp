@@ -22,7 +22,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 			case MyTokenType::While:
 			case MyTokenType::ForLoop:
 			case MyTokenType::Var:
-				setCurrentFormat(currentFormat, rule, QRegExp("\\bif|else|while|frl|var"), QFont::Bold, QColor(153, 0, 153)); // sort of purple
+				setCurrentFormat(currentFormat, rule, QRegExp("\\bif|else|while|frl|var"), QFont::Bold, QColor(133, 153, 0)); // sort of purple
 				break;
 			case MyTokenType::Return:
 			case MyTokenType::Void:
@@ -31,7 +31,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 				break;
 			case MyTokenType::Function:
 			case MyTokenType::MainFunction:
-				setCurrentFormat(currentFormat, rule, QRegExp("\\b(?!if|else|while|frl)[A-Za-z0-9_]+(?=\\()"), QFont::Normal, Qt::blue);
+				setCurrentFormat(currentFormat, rule, QRegExp("\\b(?!if|else|while|frl)[A-Za-z0-9_]+(?=\\()"), QFont::Normal, QColor(108, 113, 196));
 				break;
 			default:
 				break;

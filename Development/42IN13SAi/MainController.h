@@ -34,8 +34,10 @@ class MainController : public QObject
 	private slots:
 		void Execute();
 		void ClearConsole();
+		void NewFile();
 		void LoadFile();
 		void SaveFile();
 		void SaveAsFile();
 		void Quit();
+		void CloseTab(int index);
 };
