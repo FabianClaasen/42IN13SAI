@@ -143,6 +143,15 @@
     <ClCompile Include="UnknownExpressionException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="LinkedList.cpp">
+      <Filter>Source Files\VirtualMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="ListNode.cpp">
+      <Filter>Source Files\VirtualMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="ListIterator.cpp">
+      <Filter>Source Files\VirtualMachine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="packages.config" />
@@ -260,6 +269,27 @@
     <CustomBuild Include="SymbolTable.h">
       <Filter>Header Files\Compiler</Filter>
     </CustomBuild>
+    <CustomBuild Include="FunctionNameExpectedException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MissingCompilerNodeException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MissingMainFunctionException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SubroutineNotFoundException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UnknownExpressionException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="resource.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="words.txt">
+      <Filter>Resources</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -326,28 +356,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="words.txt">
-      <Filter>Resources</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>Generated Files</Filter>
+    <ClInclude Include="ListIterator.h">
+      <Filter>Header Files\VirtualMachine</Filter>
     </ClInclude>
-    <ClInclude Include="MissingCompilerNodeException.h">
-      <Filter>Header Files\Exceptions</Filter>
+    <ClInclude Include="LinkedList.h">
+      <Filter>Header Files\VirtualMachine</Filter>
     </ClInclude>
-    <ClInclude Include="MissingMainFunctionException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="UnknownExpressionException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="SubroutineNotFoundException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="FunctionNameExpectedException.h">
-      <Filter>Header Files\Exceptions</Filter>
+    <ClInclude Include="ListNode.h">
+      <Filter>Header Files\VirtualMachine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
