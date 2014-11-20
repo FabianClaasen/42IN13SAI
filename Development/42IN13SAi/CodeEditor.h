@@ -44,10 +44,7 @@ public:
 		QCompleter* compl;
 		QTextEdit* textEdit;
 
-		void setCursorText(QString text);
-		QString getCursorText();
-		QString cursorText;
-
+		void checkBracketCharacter(QKeyEvent *e);
 		void setCompletionPrefix(QString text);
 
 		QRect getCompleterView();

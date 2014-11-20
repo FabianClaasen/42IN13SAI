@@ -196,7 +196,6 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 			{
 				QModelIndex new_index = compl->completionModel()->index(i, 0);
 				compl->popup()->setCurrentIndex(new_index);
-				setCursorText(completionPrefix);
 				compl->popup()->hide();
 				setCompletionPrefix(completionPrefix);
 				cr = getCompleterView();
@@ -208,8 +207,9 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		compl->popup()->hide();
 	}
 	
+	checkBracketCharacter(e);
+	
 	setCompletionPrefix(completionPrefix);
-	setCursorText(completionPrefix);
 	cr = getCompleterView();
 	if ((e->modifiers() & Qt::ControlModifier) && (e->key() == Qt::Key_Space))
 		compl->complete(cr);
@@ -238,14 +238,30 @@ QAbstractItemModel* CodeEditor::modelFromFile(const QString& fileName)
 	return new QStringListModel(words, compl);
 }
 
-void CodeEditor::setCursorText(QString text)
+void CodeEditor::checkBracketCharacter(QKeyEvent *e)
 {
-	cursorText = text;
-}
-
-QString CodeEditor::getCursorText()
-{
-	return cursorText;
+	std::cout << e->key() << std::endl;
+	if (e->key() == Qt::Key_BracketLeft || Qt::Key_ParenLeft)
+	{
+		QTextCursor tmpCursor;
+		switch (e->key())
+		{
+			case Qt::Key_BracketLeft:
+				insertPlainText("\n\n]");
+				tmpCursor = textCursor();
+				tmpCursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor, 1);
+				setTextCursor(tmpCursor);
+				insertPlainText("   ");
+				break;
+			case Qt::Key_ParenLeft:
+				insertPlainText(")");
+				tmpCursor = textCursor();
+				tmpCursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 1);
+				setTextCursor(tmpCursor);
+				break;
+		}
+		std::cout << "brace left or bracket left" << std::endl;
+	}
 }
 
 void CodeEditor::setCompleter(QCompleter *completer)
