@@ -14,8 +14,8 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
     this->setFont(QFont("Consolas", 9));
 	QPalette pallete = this->palette();
 
-	pallete.setColor(QPalette::Active, QPalette::Base, QColor(0, 43, 54));
-	pallete.setColor(QPalette::Inactive, QPalette::Base, QColor(0, 43, 54));
+	pallete.setColor(QPalette::Active, QPalette::Base, QColor(253, 246, 227));
+	pallete.setColor(QPalette::Inactive, QPalette::Base, QColor(253, 246, 227));
 
 	this->setPalette(pallete);
 #ifndef _WIN32
