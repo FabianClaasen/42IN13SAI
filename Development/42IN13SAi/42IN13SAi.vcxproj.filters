@@ -119,6 +119,9 @@
     <ClCompile Include="UnknownExpressionException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="ExceptionWindow.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_MainController.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -142,9 +145,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_MainWindow.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="ExceptionWindow.cpp">
-      <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -263,6 +263,27 @@
     <CustomBuild Include="SymbolTable.h">
       <Filter>Header Files\Compiler</Filter>
     </CustomBuild>
+    <CustomBuild Include="FunctionNameExpectedException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MissingCompilerNodeException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MissingMainFunctionException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SubroutineNotFoundException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UnknownExpressionException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="resource.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExceptionWindow.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -327,28 +348,5 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{2266cff4-c5c6-48ed-a6f4-b5b29367529b}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MissingCompilerNodeException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="MissingMainFunctionException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="UnknownExpressionException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="SubroutineNotFoundException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="FunctionNameExpectedException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="ExceptionWindow.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

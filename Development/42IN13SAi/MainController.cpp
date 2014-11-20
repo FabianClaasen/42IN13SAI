@@ -3,7 +3,7 @@
 MainController::MainController() : QObject()
 {
 	mainWindow.setWindowTitle(QObject::tr("Short C Editor"));
-	mainWindow.resize(640, 360);
+	mainWindow.resize(1000, 500);
 	mainWindow.show();
 
 	Setup();

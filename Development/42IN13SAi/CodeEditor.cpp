@@ -1,4 +1,11 @@
 #include "CodeEditor.h"
+#include <QPainter>
+#include <QTextBlock>
+#include <QCompleter>
+#include <qabstractitemview.h>
+#include <qapplication.h>
+#include <qstringlistmodel.h>
+#include <qscrollbar.h>
 
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 {

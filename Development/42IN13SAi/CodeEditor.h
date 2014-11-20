@@ -2,10 +2,11 @@
 
 #include <QPlainTextEdit>
 #include <QObject>
-#include <qcompleter.h>
 #include <memory>
 #include <iostream>
+#include <qabstractitemmodel.h>
 
+class QCompleter;
 class CodeEditor : public QPlainTextEdit
 {
 	Q_OBJECT

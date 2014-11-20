@@ -7,7 +7,7 @@ TARGET = 42IN13SAi
 DESTDIR = ../Debug
 QT += core opengl widgets gui
 CONFIG += debug
-DEFINES += $(NOINHERIT)
+DEFINES += QT_DLL _CRT_SECURE_NO_WARNINGS $(NOINHERIT)
 INCLUDEPATH += ../../../../../../../../Boost/include/boost-1_56 \
     ./GeneratedFiles/Debug
 LIBS += -lopengl32 \
