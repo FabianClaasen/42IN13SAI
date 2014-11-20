@@ -1,12 +1,4 @@
-#include <QtWidgets>
-#include <QMenu>
-
 #include "MainWindow.h"
-#include "CodeEditor.h"
-#include "TokenizerController.h"
-#include "Compiler.h"
-#include "VirtualMachine.h"
-#include <QKeyEvent>
 
 MainWindow::MainWindow(QWidget *parent)
 {
@@ -30,8 +22,17 @@ MainWindow::MainWindow(QWidget *parent)
 	tabs = new QTabWidget();
 	tabs->addTab(codeEditor, tr("New*"));
 
-	// Add the mainview widget
-	this->setCentralWidget(tabs);
+	ExceptionWindow* exceptionWindow = CreateExceptionWindow();
+
+	//Make a layout to add different widgets
+	QVBoxLayout* layout = new QVBoxLayout();
+	layout->addWidget(tabs);
+	layout->addWidget(exceptionWindow);
+
+	//make a central widget set the layout and add it on the mainwindow
+	QWidget* mainWidget = new QWidget();
+	mainWidget->setLayout(layout);
+	this->setCentralWidget(mainWidget);
 }
 
 void MainWindow::ShowMenuBar()
@@ -87,6 +88,13 @@ CodeEditor* MainWindow::CreateEditor()
 	highlighter = new Highlighter(codeEditor->document());
 
 	return codeEditor;
+}
+
+ExceptionWindow* MainWindow::CreateExceptionWindow()
+{
+	ExceptionWindow* exceptionWindow = new ExceptionWindow();
+
+	return exceptionWindow;
 }
 
 QAction* MainWindow::GetRunAction()

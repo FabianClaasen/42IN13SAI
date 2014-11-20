@@ -4,6 +4,15 @@
 #include <QObject>
 #include <qcompleter.h>
 #include <memory>
+#include <iostream>
+#include <QAbstractItemView>
+#include <QCompleter>
+#include <QScrollBar>
+#include <QKeyEvent>
+#include <QListView>
+#include <QStringListModel>
+#include <QApplication>
+#include <QtGui>
 
 class QListView;
 class CodeEditor : public QPlainTextEdit

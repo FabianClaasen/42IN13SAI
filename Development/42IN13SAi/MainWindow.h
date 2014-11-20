@@ -8,8 +8,16 @@
 #include <QFileInfo>
 #include <memory>
 #include <vector>
+#include <QtWidgets>
+#include <QMenu>
+#include <QKeyEvent>
 
+#include "CodeEditor.h"
+#include "TokenizerController.h"
+#include "Compiler.h"
+#include "VirtualMachine.h"
 #include "Highlighter.h"
+#include "ExceptionWindow.h"
 
 class CodeEditor;
 
@@ -43,6 +51,7 @@ public:
 
 		QAbstractItemModel *modelFromFile(const QString& fileName);
 		CodeEditor* CreateEditor();
+		ExceptionWindow* CreateExceptionWindow();
 
 		// Menu include all menu items
 		QMenu *fileMenu;

@@ -1,13 +1,4 @@
-#include <QtGui>
 #include "CodeEditor.h"
-#include <iostream>
-#include <QAbstractItemView>
-#include <QCompleter>
-#include <QScrollBar>
-#include <QKeyEvent>
-#include <QListView>
-#include <QStringListModel>
-#include <QApplication>
 
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 {

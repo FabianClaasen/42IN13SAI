@@ -143,6 +143,9 @@
     <ClCompile Include="UnknownExpressionException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="ExceptionWindow.cpp">
+      <Filter>Header Files\Qt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="packages.config" />
@@ -348,6 +351,9 @@
     </ClInclude>
     <ClInclude Include="FunctionNameExpectedException.h">
       <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="ExceptionWindow.h">
+      <Filter>Source Files\Qt</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
