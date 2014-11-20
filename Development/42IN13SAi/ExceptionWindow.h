@@ -4,6 +4,7 @@
 #include <qstringlist.h>
 #include <qstandarditemmodel.h>
 #include <qstringlistmodel.h>
+#include <QAbstractItemView>
 
 class ExceptionWindow : public QListView
 {

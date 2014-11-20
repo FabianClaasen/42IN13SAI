@@ -9,12 +9,11 @@ ExceptionWindow::ExceptionWindow(QWidget *parent) : QListView(parent)
 #endif
 
 	setMaximumHeight(100);
+	setEditTriggers(QAbstractItemView::NoEditTriggers);
+	setSelectionMode(QAbstractItemView::NoSelection);
 
 	listModel = new QStringListModel(exceptions, nullptr);
 	setModel(listModel);
-
-	addException("You are");
-	addException("a retard!!");
 }
 
 void ExceptionWindow::addException(std::string exception)

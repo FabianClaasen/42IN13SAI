@@ -45,7 +45,7 @@ void MainController::Execute()
 	catch (const std::exception& e)
 	{
 		delete(tokenizer_controller);
-		puts(e.what());
+		mainWindow.addException(e.what());
 		return;
 	}
 
@@ -59,7 +59,7 @@ void MainController::Execute()
 	catch (const std::exception& e)
 	{
 		delete(tokenizer_controller);
-		puts(e.what());
+		mainWindow.addException(e.what());
 		return;
 	}
 	// Delete the tokenizer controller
@@ -67,7 +67,17 @@ void MainController::Execute()
 
 	// Run the virtual machine with the compilernodes
 	VirtualMachine virtual_machine = VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), compiler.GetCompilerNodes());
-	virtual_machine.ExecuteCode();
+
+	try
+	{
+		virtual_machine.ExecuteCode();
+	}
+	catch (const std::exception& e)
+	{
+		delete(tokenizer_controller);
+		mainWindow.addException(e.what());
+		return;
+	}
 }
 
 void MainController::ClearConsole()

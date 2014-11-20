@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 	tabs->setTabsClosable(true);
 	tabs->addTab(codeEditor, "New*");
 
-	ExceptionWindow* exceptionWindow = CreateExceptionWindow();
+	exceptionWindow = CreateExceptionWindow();
 
 	//Make a layout to add different widgets
 	QVBoxLayout* layout = new QVBoxLayout();
@@ -137,6 +137,11 @@ void MainWindow::RemoveTab(int index)
 void MainWindow::AddNewTab()
 {
 	tabs->addTab(CreateEditor(), "New*");
+}
+
+void MainWindow::addException(std::string exception)
+{
+	exceptionWindow->addException(exception);
 }
 
 void MainWindow::SetTabTitle(QFileInfo* info)

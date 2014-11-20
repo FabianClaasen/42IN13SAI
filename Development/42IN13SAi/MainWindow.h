@@ -31,6 +31,7 @@ public:
 		int GetCurrentTabPosition();
 		void RemoveTab(int index);
 		void AddNewTab();
+		void addException(std::string exception);
 		void AddFile(QFileInfo* info, QString text);
 		void SetTabTitle(QFileInfo* info);
 		QString GetText();
@@ -47,6 +48,7 @@ public:
 
 	private:
 		int position;
+		ExceptionWindow* exceptionWindow;
 		std::vector<CodeEditor*> codeEditorVector;
 		Highlighter* highlighter;
 		QCompleter* completer;
