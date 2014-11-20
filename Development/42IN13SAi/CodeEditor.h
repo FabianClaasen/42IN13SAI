@@ -4,8 +4,8 @@
 #include <QObject>
 #include <qcompleter.h>
 #include <memory>
+#include <iostream>
 
-class QListView;
 class CodeEditor : public QPlainTextEdit
 {
 	Q_OBJECT
@@ -42,6 +42,10 @@ public:
 		QString textUnderCursor() const;
 		QCompleter* compl;
 		QTextEdit* textEdit;
+
+		void setCursorText(QString text);
+		QString getCursorText();
+		QString cursorText;
 
 		void setCompletionPrefix(QString text);
 

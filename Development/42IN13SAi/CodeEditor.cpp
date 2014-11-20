@@ -139,7 +139,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	int key = e->key();
 	bool isEnterAndListVisible;
 	bool setIndexAfterPrefix = false;
-
+	//std::cout << e->key() << std::endl;
 	int row = 0;
 	if (compl->popup()->isVisible())
 	{
@@ -147,59 +147,32 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		switch (key)
 		{
 		case 16777220: // enter key
-		case 16777219: // backspace key
+		case 16777221: // tab key
 		case 32: // space key
 			compl->popup()->hide();
 			return;
 		}
-
-		// check count and index
-		int count = compl->model()->rowCount();
-		QModelIndex currentIndex = compl->popup()->currentIndex();
-		
-		// Check down or up for navigation
-		if (key == Qt::Key_Down || key == Qt::Key_Up)
-		{
-			row = currentIndex.row();
-			switch (key) {
-			case Qt::Key_Down:
-				if (++row >= count)
-					row = 0;
-				break;
-			case Qt::Key_Up:
-				if (--row < 0)
-					row = count - 1;
-				break;
-			}
-
-			if (compl->popup()->isEnabled())
-			{
-				QModelIndex index = compl->popup()->model()->index(row, 0);
-				compl->popup()->setCurrentIndex(index);
-				currentIndex = compl->popup()->currentIndex();
-			}
-		}
 		// If tab key is pressed, fill in the completion
-		else if ((Qt::Key_Tab == key) && compl->popup()->isEnabled())
+		if ((Qt::Key_Tab == key) && compl->popup()->isEnabled())
 		{
-			if (currentIndex.isValid())
-			{
-				QString text = currentIndex.data().toString();
-				isEnterAndListVisible = (key == Qt::Key_Tab) && compl->popup()->isVisible();
+			QModelIndex currentIndex = compl->popup()->currentIndex();
+			QString text = currentIndex.data().toString();
+			isEnterAndListVisible = (key == Qt::Key_Tab) && compl->popup()->isVisible();
 
-				if (!isEnterAndListVisible)
-					QPlainTextEdit::keyPressEvent(e);
-				compl->popup()->hide();
-				insertCompletion(text);
-				return;
-			}
+			if (!isEnterAndListVisible)
+				QPlainTextEdit::keyPressEvent(e);
+
+			compl->popup()->hide();
+			insertCompletion(text);
+
+			return;
 		}
 		// for runtime behaviour
 		else
 		{
+			setCompletionPrefix("");
 			setIndexAfterPrefix = true;
 		}
-			
 	}
 
 	// Shift behaviour as normal shift
@@ -221,20 +194,24 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		for (int i = 0; i < count; i++)
 		{
 			QString key = compl->completionModel()->index(i, 0).data().toString();
-			if (key.startsWith(completionPrefix))
+			if (key.startsWith(completionPrefix, Qt::CaseSensitive))
 			{
 				QModelIndex new_index = compl->completionModel()->index(i, 0);
 				compl->popup()->setCurrentIndex(new_index);
-				//setCompletionPrefix(completionPrefix);
+				setCursorText(completionPrefix);
+				compl->popup()->hide();
+				setCompletionPrefix(completionPrefix);
+				cr = getCompleterView();
+				compl->complete(cr);
 				return;
 			}
 		}
+		// hide when case sensitive startswith is not found
+		compl->popup()->hide();
 	}
-
-	if (!isCtrlSpace && (e->text().isEmpty() || completionPrefix.length() < 3)) 
-		return;
 	
 	setCompletionPrefix(completionPrefix);
+	setCursorText(completionPrefix);
 	cr = getCompleterView();
 	if ((e->modifiers() & Qt::ControlModifier) && (e->key() == Qt::Key_Space))
 		compl->complete(cr);
@@ -263,6 +240,16 @@ QAbstractItemModel* CodeEditor::modelFromFile(const QString& fileName)
 	return new QStringListModel(words, compl);
 }
 
+void CodeEditor::setCursorText(QString text)
+{
+	cursorText = text;
+}
+
+QString CodeEditor::getCursorText()
+{
+	return cursorText;
+}
+
 void CodeEditor::setCompleter(QCompleter *completer)
 {
 	if (compl)
@@ -275,7 +262,7 @@ void CodeEditor::setCompleter(QCompleter *completer)
 
 	compl->setWidget(this);
 	compl->setCompletionMode(QCompleter::PopupCompletion);
-	compl->setCaseSensitivity(Qt::CaseInsensitive);
+	compl->setCaseSensitivity(Qt::CaseSensitive);
 
 	QObject::connect(compl, SIGNAL(activated(QString)),
 		this, SLOT(insertCompletion(QString)));

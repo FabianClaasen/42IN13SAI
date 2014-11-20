@@ -6,23 +6,15 @@
 #include "TokenizerController.h"
 #include "Compiler.h"
 #include "VirtualMachine.h"
+
 #include <QKeyEvent>
+#include <windows.h>
+#include <string>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
 {
 	ShowMenuBar();
-
-	//// set the completer
-	//completer = new QCompleter(this);
-	//completer->setModel(modelFromFile("C:\\42IN14SAi\\words.txt"));
-	//completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-	//completer->setCaseSensitivity(Qt::CaseInsensitive);
-	//completer->setWrapAround(false);
-	//codeEditor->setCompleter(completer);
-
-	//// set the highlighter
-	//highlighter = new Highlighter(codeEditor->document());
-	// Create code editor
 	CodeEditor* codeEditor = CreateEditor();
 	codeEditorVector.push_back(codeEditor);
 
@@ -76,9 +68,13 @@ CodeEditor* MainWindow::CreateEditor()
 
 	// Set the completer
 	completer = new QCompleter(this);
-	completer->setModel(modelFromFile("C:\\42IN14SAi\\words.txt"));
+
+	QString str = QDir::currentPath();
+	str.append("/Resources/words.txt");
+
+	completer->setModel(modelFromFile(str));
 	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-	completer->setCaseSensitivity(Qt::CaseInsensitive);
+	completer->setCaseSensitivity(Qt::CaseSensitive);
 	completer->setWrapAround(false);
 	codeEditor->setCompleter(completer);
 	codeEditor->installEventFilter(this);

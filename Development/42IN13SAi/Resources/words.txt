@@ -1,0 +1,9 @@
+cos
+float
+func
+Main
+prnt
+ret
+sin
+stop
+var

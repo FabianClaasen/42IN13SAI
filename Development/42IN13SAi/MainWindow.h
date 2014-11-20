@@ -43,7 +43,7 @@ public:
 
 		QAbstractItemModel *modelFromFile(const QString& fileName);
 		CodeEditor* CreateEditor();
-
+		
 		// Menu include all menu items
 		QMenu *fileMenu;
 		QAction *runAction, *clearAction, *openAction, *saveAction, *saveAsAction, *quitAction;
