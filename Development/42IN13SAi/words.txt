@@ -1,9 +1,0 @@
-func Main()
-[
-	prnt(12);
-]
-
-func void IDK()
-[
-	var x = 12;
-]

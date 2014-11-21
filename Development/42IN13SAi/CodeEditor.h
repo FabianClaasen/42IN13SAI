@@ -45,11 +45,15 @@ public:
 		QTextEdit* textEdit;
 
 		void checkBracketCharacter(QKeyEvent *e);
+		//int checkPreviousCharacters(QKeyEvent *e);
 		void setCompletionPrefix(QString text);
 
 		QRect getCompleterView();
 		QRect cr;
 		QAbstractItemModel* modelFromFile(const QString& fileName);
+
+		void addBrackets(QTextCursor tmpCursor, int pos, QString text, QString last, int spaces);
+		QString completeCloseParentesis();
 };
 
 class LineNumberArea : public QWidget

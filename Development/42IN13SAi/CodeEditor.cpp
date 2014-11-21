@@ -24,7 +24,11 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 	this->setFont(QFont("Consolas", 12));
 #endif
 
-	this->setTabStopWidth(20);
+	/*this->setTabStopWidth(21);*/
+	const int tabStop = 3;
+
+	QFontMetrics metrics(QFont("Consolas", 9));
+	setTabStopWidth(tabStop * metrics.width(' '));
 
 	lineNumberArea = new LineNumberArea(this);
 
@@ -175,6 +179,32 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 			setIndexAfterPrefix = true;
 		}
 	}
+	else 
+	{
+		// FOR THE ENTER TAB?
+		/*int space;
+		if (key == Qt::Key_Return)
+		{
+			space = checkPreviousCharacters(e);
+			QPlainTextEdit::keyPressEvent(e);
+			insertPlainText("\n");
+			std::cout << space << std::endl;
+			for (int i = 0; i < space; i++)
+				insertPlainText(" ");
+		}*/
+			
+	}
+
+	if (key == Qt::Key_ParenRight)
+	{
+		QTextCursor tc = textCursor();
+		QString result = completeCloseParentesis();
+		if (result == ")")
+		{
+			tc.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 2);
+			tc.deletePreviousChar();
+		}	
+	}
 
 	// Shift behaviour as normal shift
 	bool isShiftEnter = ((e->modifiers() & Qt::ShiftModifier) && e->key() == Qt::Key_Return);
@@ -209,13 +239,24 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		// hide when case sensitive startswith is not found
 		compl->popup()->hide();
 	}
-	
+
+	//checkPreviousCharacters(e);
 	checkBracketCharacter(e);
 	
 	setCompletionPrefix(completionPrefix);
 	cr = getCompleterView();
 	if ((e->modifiers() & Qt::ControlModifier) && (e->key() == Qt::Key_Space))
-		compl->complete(cr);
+	{
+		QModelIndex index = compl->popup()->currentIndex();
+		int count = compl->completionCount();
+		if (count == 1)
+		{
+			QString text = index.data().toString();
+			insertCompletion(text);
+		}
+		else
+			compl->complete(cr);
+	}
 }
 
 QAbstractItemModel* CodeEditor::modelFromFile(const QString& fileName)
@@ -241,20 +282,44 @@ QAbstractItemModel* CodeEditor::modelFromFile(const QString& fileName)
 	return new QStringListModel(words, compl);
 }
 
+//int CodeEditor::checkPreviousCharacters(QKeyEvent *e)
+//{
+//	QString text;
+//	int pos;
+//	int spaces = 0;
+//	pos = textCursor().block().firstLineNumber();
+//
+//	text = document()->findBlockByLineNumber(pos).text();
+//
+//	for (int i = 0; i < text.count(); i++)
+//	{
+//		if (text[i] == ' ' || text[i] == '\t')
+//		{
+//			spaces++;
+//			//insertPlainText(" ");
+//		}
+//		else
+//			break;
+//	}
+//	return spaces;
+//}
+
 void CodeEditor::checkBracketCharacter(QKeyEvent *e)
 {
 	std::cout << e->key() << std::endl;
 	if (e->key() == Qt::Key_BracketLeft || Qt::Key_ParenLeft)
 	{
 		QTextCursor tmpCursor;
+		QString text;
+		QString insertNewValue;
+		QTextBlock block;
+		int pos = 0;
+		int spaces = 0;
+		QString last;
 		switch (e->key())
 		{
 			case Qt::Key_BracketLeft:
-				insertPlainText("\n\n]");
-				tmpCursor = textCursor();
-				tmpCursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor, 1);
-				setTextCursor(tmpCursor);
-				insertPlainText("   ");
+				addBrackets(tmpCursor, pos, text, last, spaces);
 				break;
 			case Qt::Key_ParenLeft:
 				insertPlainText(")");
@@ -263,8 +328,85 @@ void CodeEditor::checkBracketCharacter(QKeyEvent *e)
 				setTextCursor(tmpCursor);
 				break;
 		}
-		std::cout << "brace left or bracket left" << std::endl;
 	}
+}
+
+void CodeEditor::addBrackets(QTextCursor tmpCursor, int pos, QString text, QString last, int spaces)
+{
+	pos = textCursor().block().firstLineNumber();
+
+	text = document()->findBlockByLineNumber(pos).text();
+
+	std::cout << text.count() << std::endl;
+	text.remove(text.count() - 1, 1);
+	if (text.size() == 0)
+	{
+		last = " ";
+	}
+	else
+	{
+		last = text[text.length() - 1];
+	}
+
+	if (last.isEmpty() || last == " " || last == "\t")
+	{
+
+		for (int l = 0; l < text.count(); l++)
+		{
+			if (text[l] == ' ')
+			{
+				spaces++;
+			}
+			else if (text[l] == '\t')
+				spaces = spaces + 3;
+		}
+	}
+	else
+	{
+		textCursor().deletePreviousChar();
+		insertPlainText("\n");
+		for (int i = 0; i < text.count(); i++)
+		{
+			if (text[i] == ' ')
+			{
+				spaces++;
+				insertPlainText(" ");
+			}
+			else if (text[i] == '\t')
+			{
+				spaces = spaces + 3;
+				insertPlainText("   ");
+			}
+			else
+				break;
+		}
+		insertPlainText("[");
+	}
+
+
+	insertPlainText("\n\n");
+	for (int j = 0; j < spaces; j++)
+		insertPlainText(" ");
+	insertPlainText("]");
+
+	tmpCursor = textCursor();
+	tmpCursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor, 1);
+	setTextCursor(tmpCursor);
+	if (spaces > 0)
+	{
+		for (int s = 0; s < spaces; s++)
+			insertPlainText(" ");
+	}
+	insertPlainText("   ");
+}
+
+QString CodeEditor::completeCloseParentesis()
+{
+	int pos = textCursor().block().firstLineNumber();
+
+	QString text = document()->findBlockByLineNumber(pos).text();
+	QString result = text.at(text.count() - 1);
+	return result;
 }
 
 void CodeEditor::setCompleter(QCompleter *completer)

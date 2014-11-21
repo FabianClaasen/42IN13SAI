@@ -8,10 +8,11 @@
 
 class ExceptionWindow : public QListView
 {
+	Q_OBJECT
 public:
 	ExceptionWindow(QWidget *parent = 0);
 	~ExceptionWindow();
-
+	
 	void addException(std::string exception);
 	void clearAll();
 
