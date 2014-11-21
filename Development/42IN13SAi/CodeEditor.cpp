@@ -144,21 +144,21 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	int row = 0;
 	if (compl->popup()->isVisible())
 	{
-		// if enter, backspace or space key are pressed when popup is visible, hide it
+		// if backspace or space key are pressed when popup is visible, hide it
 		switch (key)
 		{
-		case 16777220: // enter key
-		case 16777221: // tab key
-		case 32: // space key
+		case Qt::Key_Space:
+		case Qt::Key_Backspace: 
+		case Qt::Key_Escape:
 			compl->popup()->hide();
 			return;
 		}
 		// If tab key is pressed, fill in the completion
-		if ((Qt::Key_Tab == key) && compl->popup()->isEnabled())
+		if ((Qt::Key_Tab == key || key == Qt::Key_Return) && compl->popup()->isEnabled())
 		{
 			QModelIndex currentIndex = compl->popup()->currentIndex();
 			QString text = currentIndex.data().toString();
-			isEnterAndListVisible = (key == Qt::Key_Tab) && compl->popup()->isVisible();
+			isEnterAndListVisible = (key == Qt::Key_Tab || key == Qt::Key_Return) && compl->popup()->isVisible();
 
 			if (!isEnterAndListVisible)
 				QPlainTextEdit::keyPressEvent(e);
