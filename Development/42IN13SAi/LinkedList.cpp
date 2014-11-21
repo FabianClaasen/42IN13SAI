@@ -88,11 +88,17 @@ void LinkedList::SetCurrent(std::shared_ptr<CompilerNode> node)
 	SetCurrent(listNode);
 }
 
+void LinkedList::SetCurrent(std::shared_ptr<CompilerNode> node, bool isLoopEnd)
+{
+	std::shared_ptr<ListNode> listNode = findNode(node);
+	SetCurrent(listNode->GetNext());
+}
+
 std::shared_ptr<ListNode> LinkedList::findNode(std::shared_ptr<CompilerNode> node)
 {
 	std::shared_ptr<ListNode> listNode = head;
 	
-	while (listNode != tail)
+	while (listNode != std::shared_ptr<ListNode>())
 	{
 		if (listNode->GetData()->GetJumpTo() == node->GetJumpTo())
 			return listNode;
@@ -105,7 +111,7 @@ void LinkedList::PushBack(std::shared_ptr<CompilerNode> node)
 {
 	// Default settings
 	std::shared_ptr<ListNode> sNode = std::make_shared<ListNode>();
-	sNode->SetData(std::make_shared<CompilerNode>(*node));
+	sNode->SetData(node);
 	sNode->SetNext(std::make_shared<ListNode>());
 
 	if (!head)

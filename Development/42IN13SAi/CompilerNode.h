@@ -10,7 +10,7 @@ private:
 	std::string	expression;
 	std::string value;
 	std::vector<std::shared_ptr<CompilerNode>> nodeParameters;
-	std::shared_ptr<CompilerNode> jumpTo;
+	std::weak_ptr<CompilerNode> jumpTo;
 	bool condition;
 
 public:

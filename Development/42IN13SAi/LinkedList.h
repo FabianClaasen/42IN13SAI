@@ -30,6 +30,7 @@ public:
 	void PushBack(std::shared_ptr<CompilerNode> node);
 	void SetCurrent(std::shared_ptr<ListNode> node);
 	void SetCurrent(std::shared_ptr<CompilerNode> node);
+	void SetCurrent(std::shared_ptr<CompilerNode> node, bool isLoopEnd);
 
 	//iterator methods
 	ListIterator begin();

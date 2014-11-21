@@ -85,22 +85,25 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::shared_ptr<Linke
 		{
 			node = VirtualMachine::GetNext(nodeLists[subroutineName]);
 
-			// Get the function name
-			std::string function_call = node->GetExpression();
-
-			if (function_call == "$ret")
+			if (node)
 			{
-				return function_caller->Call(function_call, *node);
-			}
-			else if (function_call == "$doNothing")
-			{
-				nodeLists[subroutineName]->SetCurrent(node->GetJumpTo());
-				node = nodeLists[subroutineName]->GetCurrentData();
-			}
-			else
-				function_caller->Call(function_call, *node);
+				// Get the function name
+				std::string function_call = node->GetExpression();
 
-		} while (node != nodeLists[subroutineName]->GetTailData());
+				if (function_call == "$ret")
+				{
+					return function_caller->Call(function_call, *node);
+				}
+				else if (function_call == "$doNothing")
+				{
+					nodeLists[subroutineName]->SetCurrent(node->GetJumpTo());
+					node = nodeLists[subroutineName]->GetCurrentData();
+				}
+				else
+					function_caller->Call(function_call, *node);
+			}
+
+		} while (node != std::shared_ptr<CompilerNode>());
 	}
 	
 	// Erase the LinkedList
@@ -323,7 +326,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteWhile(CompilerNode compiler
 	else
 	{
 		// Condition is false, move linkedlist to donothing node
-		nodeLists[currentSubroutine->name]->SetCurrent(compilerNode.GetJumpTo());
+		nodeLists[currentSubroutine->name]->SetCurrent(compilerNode.GetJumpTo(), true);
 		return nullptr;
 	}
 }
