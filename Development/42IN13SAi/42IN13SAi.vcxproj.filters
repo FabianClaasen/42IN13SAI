@@ -357,4 +357,9 @@
       <Filter>Header Files\Qt</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\Menlo-Regular.ttf">
+      <Filter>Resources</Filter>
+    </Font>
+  </ItemGroup>
 </Project>
