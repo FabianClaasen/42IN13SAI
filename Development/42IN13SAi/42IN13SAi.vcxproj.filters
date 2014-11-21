@@ -372,4 +372,23 @@
       <UniqueIdentifier>{2266cff4-c5c6-48ed-a6f4-b5b29367529b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ListIterator.h">
+      <Filter>Header Files\VirtualMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkedList.h">
+      <Filter>Header Files\VirtualMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="ListNode.h">
+      <Filter>Header Files\VirtualMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="ExceptionWindow.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\Menlo-Regular.ttf">
+      <Filter>Resources</Filter>
+    </Font>
+  </ItemGroup>
 </Project>

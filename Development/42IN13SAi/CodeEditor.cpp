@@ -9,7 +9,11 @@
 
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 {
-	this->setFont(QFont("Consolas", 9));
+	QFontDatabase fontDatabase;
+	fontDatabase.addApplicationFont(":/Menlo-Regular.ttf");
+	this->setFont(QFont("Menlo-Regular", 10));
+	
+	// Editor colours
 	QPalette pallete = this->palette();
 
 	pallete.setColor(QPalette::Active, QPalette::Base, QColor(253, 246, 227));
@@ -19,10 +23,6 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 	pallete.setColor(QPalette::HighlightedText, QColor(101, 123, 131)); 
 
 	this->setPalette(pallete);
-#ifndef _WIN32
-	// Set font to bigger size for readability on Mac OS X
-	this->setFont(QFont("Consolas", 12));
-#endif
 
 	/*this->setTabStopWidth(21);*/
 	const int tabStop = 3;

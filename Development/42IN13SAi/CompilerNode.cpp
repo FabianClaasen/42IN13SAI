@@ -34,7 +34,7 @@ void CompilerNode::SetJumpTo(std::shared_ptr<CompilerNode> jump)
 std::shared_ptr<CompilerNode> CompilerNode::GetJumpTo()
 {
 	
-	return jumpTo;
+	return jumpTo.lock();
 }
 
 std::string CompilerNode::GetExpression()

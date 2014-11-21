@@ -44,6 +44,7 @@ public:
 	
 	// Loop operations
 	std::shared_ptr<CompilerNode> ExecuteWhile(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteFor(CompilerNode compilerNode);
 
 	// Simple math operations
 	std::shared_ptr<CompilerNode> ExecuteAddOperation(CompilerNode compilerNode);
@@ -56,7 +57,9 @@ public:
 	
 	//Conditional statements
 	std::shared_ptr<CompilerNode> ExecuteLessCondition(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteLessOrEqCondition(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteGreaterCondition(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteGreaterOrEqCondition(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteEqualCondition(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteNotEqualCondition(CompilerNode compilerNode);
 

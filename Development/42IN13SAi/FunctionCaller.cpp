@@ -38,12 +38,15 @@ void FunctionCaller::fillFunctionMap()
 
 	// Loop operations
 	functions.insert(functionMap::value_type("$whileLoop", &VirtualMachine::ExecuteWhile));
+	functions.insert(functionMap::value_type("$forLoop", &VirtualMachine::ExecuteFor));
 	
 	// Conditional statements
 	functions.insert(functionMap::value_type("$less", &VirtualMachine::ExecuteLessCondition));
+	functions.insert(functionMap::value_type("$lessOrEq", &VirtualMachine::ExecuteLessOrEqCondition));
 	functions.insert(functionMap::value_type("$greater", &VirtualMachine::ExecuteGreaterCondition));
+	functions.insert(functionMap::value_type("$greaterOrEq", &VirtualMachine::ExecuteGreaterOrEqCondition));
 	functions.insert(functionMap::value_type("$equals", &VirtualMachine::ExecuteEqualCondition));
-	functions.insert(functionMap::value_type("$equals", &VirtualMachine::ExecuteNotEqualCondition));
+	functions.insert(functionMap::value_type("$notEquals", &VirtualMachine::ExecuteNotEqualCondition));
 	// Simple Math Operations
 	functions.insert(functionMap::value_type("$add", &VirtualMachine::ExecuteAddOperation));
 	functions.insert(functionMap::value_type("$min", &VirtualMachine::ExecuteMinusOperation));

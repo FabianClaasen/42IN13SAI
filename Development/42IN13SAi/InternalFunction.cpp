@@ -77,5 +77,5 @@ std::vector<std::shared_ptr<CompilerNode>> InternalFunction::parseParameters(int
 
 std::shared_ptr<CompilerNode> InternalFunction::getCompilerNode(std::string functionName, int params) {
 	std::vector<std::shared_ptr<CompilerNode>> compiler_nodes = parseParameters(params);
-	return std::shared_ptr<CompilerNode>(new CompilerNode(functionName, compiler_nodes, nullptr, false));
+	return std::make_shared<CompilerNode>(functionName, compiler_nodes, nullptr, false);
 }
