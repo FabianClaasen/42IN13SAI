@@ -42,7 +42,7 @@ bool Subroutine::HasLocal(std::string name)
 
 void Subroutine::AddLocal(Symbol symbol)
 {
-	if (HasLocal(symbol.name))
+	if (!HasLocal(symbol.name))
 	{
 		symbolTable.AddSymbol(symbol);
 	}

@@ -151,9 +151,17 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 			identifierSymbol = new Symbol(identifier.Value, identifier.Type, SymbolKind::Local);
 		}
 
-		if (!compiler->HasSymbol(identifierSymbol->name))
+		if (compiler->GetSubroutine() != nullptr)
+		{
+			compiler->GetSubroutine()->AddLocal(*identifierSymbol);
+
+			delete identifierSymbol;
+			identifierSymbol = nullptr;
+		}
+		else if (!compiler->HasSymbol(identifierSymbol->name))
 		{
 			compiler->AddSymbol(*identifierSymbol);
+
 			delete identifierSymbol;
 			identifierSymbol = nullptr;
 		}
@@ -293,7 +301,7 @@ void Parser::ParseIfStatement()
 	std::vector<std::shared_ptr<CompilerNode>> params;
 	params.push_back(statementNode);
 	endNode = std::make_shared<CompilerNode>("$if", params, nullptr, false);
-	compiler->AddCompilerNode(endNode);
+	compiler->GetSubroutine()->AddCompilerNode(endNode);
 
 	while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
 	{
@@ -316,7 +324,7 @@ void Parser::ParseIfStatement()
 	}
 
 	//Finally add the do nothing CompilerNode to jump to if the statement is false
-	compiler->AddCompilerNode(jumpTo);
+	compiler->GetSubroutine()->AddCompilerNode(jumpTo);
 }
 
 /*

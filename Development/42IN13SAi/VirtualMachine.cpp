@@ -98,8 +98,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::shared_ptr<Linke
 				else if (function_call == "$doNothing")
 				{
 					// Set the current node to the partner of the donothing node
-					nodeLists[subroutineName]->SetCurrent(node->GetJumpTo());
-					node = nodeLists[subroutineName]->GetCurrentData();
+					if (node->GetJumpTo())
+					{
+						nodeLists[subroutineName]->SetCurrent(node->GetJumpTo());
+						node = nodeLists[subroutineName]->GetCurrentData();
+					}
 				}
 				else
 					function_caller->Call(function_call, *node);
@@ -379,6 +382,39 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFor(CompilerNode compilerNo
 }
 
 #pragma endregion LoopOperations
+
+#pragma region ConditionalOperations
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteIf(CompilerNode compilerNode)
+{
+	// Check if nodeparams are not empty
+	if (compilerNode.GetNodeparameters().empty())
+		throw ParameterException(1, ParameterExceptionType::NoParameters);
+
+	std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
+	// Check if count of params is not right
+	if (parameters.size() > 1)
+		throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
+
+	std::shared_ptr<CompilerNode> condition = parameters.at(0);
+
+	// Check if expression is value
+	if (condition->GetExpression() != "$value")
+		condition = CallFunction(*condition);
+
+	if (condition->GetValue() == "1")
+	{
+		return nullptr;
+	}
+	else
+	{
+		// Condition is false, move linkedlist to donothing node
+		nodeLists[currentSubroutine->name]->SetCurrent(compilerNode.GetJumpTo(), true);
+		return nullptr;
+	}
+}
+
+#pragma endregion ConditionalOperations
 
 #pragma region ConditionalStatements
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLessCondition(CompilerNode compilerNode)

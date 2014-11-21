@@ -46,6 +46,9 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteWhile(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteFor(CompilerNode compilerNode);
 
+	// Condition operations
+	std::shared_ptr<CompilerNode> ExecuteIf(CompilerNode compilerNode);
+
 	// Simple math operations
 	std::shared_ptr<CompilerNode> ExecuteAddOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteMinusOperation(CompilerNode compilerNode);

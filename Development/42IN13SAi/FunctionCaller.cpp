@@ -39,6 +39,9 @@ void FunctionCaller::fillFunctionMap()
 	// Loop operations
 	functions.insert(functionMap::value_type("$whileLoop", &VirtualMachine::ExecuteWhile));
 	functions.insert(functionMap::value_type("$forLoop", &VirtualMachine::ExecuteFor));
+
+	// Conditional operations
+	functions.insert(functionMap::value_type("$if", &VirtualMachine::ExecuteIf));
 	
 	// Conditional statements
 	functions.insert(functionMap::value_type("$less", &VirtualMachine::ExecuteLessCondition));
