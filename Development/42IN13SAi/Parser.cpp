@@ -204,7 +204,8 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 	}
 
 	// Check if the code is closed
-	compiler->Match(MyTokenType::EOL);
+	if (!forLoop)
+		compiler->Match(MyTokenType::EOL);
 
 	if (!forLoop && endNode != nullptr)
 	{
@@ -349,9 +350,15 @@ void Parser::ParseLoopStatement()
 	if (forLoop)
 	{
 		nodeParameters.push_back(ParseAssignmentStatement(true));
+		compiler->Match(MyTokenType::Seperator);
 		nodeParameters.push_back(ParseExpression());
-		compiler->GetNext();
-		nodeParameters.push_back(ParseExpression());
+		compiler->Match(MyTokenType::Seperator);
+
+		// Check if it is a uni operator, if true it should parse an assign
+		if (compiler->PeekNext()->Type == MyTokenType::Identifier)
+			nodeParameters.push_back(ParseAssignmentStatement(true));
+		else
+			nodeParameters.push_back(ParseExpression());
 
 		statementExpression = "$forLoop";
 	}
@@ -452,7 +459,10 @@ std::shared_ptr<CompilerNode> Parser::ParseRelationalExpression()
 		case MyTokenType::Comparator:
 			parameters.push_back(parsedExpr);
 			parameters.push_back(secondParsedExpr);
-			parsedExpr = std::make_shared<CompilerNode>(CompilerNode("$equals", parameters, nullptr, false));
+			if (relOp.Value == "==")
+				parsedExpr = std::make_shared<CompilerNode>(CompilerNode("$equals", parameters, nullptr, false));
+			else
+				parsedExpr = std::make_shared<CompilerNode>(CompilerNode("$notEquals", parameters, nullptr, false));
 			break;
 		}
 	}
@@ -533,12 +543,14 @@ std::shared_ptr<CompilerNode> Parser::ParseUniExpression()
 		case MyTokenType::UniOperatorPlus:
 			parameters.push_back(term);
 			term = std::make_shared<CompilerNode>("$uniPlus", parameters, nullptr, false);
-			compiler->Match(MyTokenType::EOL);
+			if (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
+				compiler->Match(MyTokenType::EOL);
 			break;
 		case MyTokenType::UniOperatorMinus:
 			parameters.push_back(term);
 			term = std::make_shared<CompilerNode>("$uniMin", parameters, nullptr, false);
-			compiler->Match(MyTokenType::EOL);
+			if (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
+				compiler->Match(MyTokenType::EOL);
 			break;
 		}
 	}

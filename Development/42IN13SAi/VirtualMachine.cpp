@@ -90,12 +90,14 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::shared_ptr<Linke
 				// Get the function name
 				std::string function_call = node->GetExpression();
 
+				// if it is a return function return the CompilerNode
 				if (function_call == "$ret")
 				{
 					return function_caller->Call(function_call, *node);
 				}
 				else if (function_call == "$doNothing")
 				{
+					// Set the current node to the partner of the donothing node
 					nodeLists[subroutineName]->SetCurrent(node->GetJumpTo());
 					node = nodeLists[subroutineName]->GetCurrentData();
 				}
@@ -331,6 +333,51 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteWhile(CompilerNode compiler
 	}
 }
 
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFor(CompilerNode compilerNode)
+{
+	// Check if nodeparams are not empty
+	if (compilerNode.GetNodeparameters().empty())
+		throw ParameterException(3, ParameterExceptionType::NoParameters);
+
+	std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
+	// Check if count of params is not right
+	if (parameters.size() > 3)
+		throw ParameterException(3, parameters.size(), ParameterExceptionType::IncorrectParameters);
+
+	std::shared_ptr<CompilerNode> assignment = parameters.at(0);
+	if (assignment->GetExpression() == "$assignment")
+	{
+		std::shared_ptr<CompilerNode> identifier = assignment->GetNodeparameters().at(0);
+		// If the symboltable doesn't contain the variable it's the first time in the for loop.
+		// Add the symbol to the table so it doesn't keep getting reset
+		if (currentSymbolTable->GetSymbol(identifier->GetValue()) == nullptr)
+		{
+			currentSymbolTable->AddSymbol(Symbol(identifier->GetValue(), MyTokenType::Float, SymbolKind::Local));
+			CallFunction(*assignment);
+		}
+	}
+
+	std::shared_ptr<CompilerNode> condition = parameters.at(1);
+	if (condition->GetExpression() != "$value")
+		condition = CallFunction(*condition);
+
+	// Check if condition is true.
+	if (condition->GetValue() == "1")
+	{
+		std::shared_ptr<CompilerNode> expression = parameters.at(2);
+		if (expression->GetExpression() != "$value")
+			expression = CallFunction(*expression);
+
+		return nullptr;
+	}
+	else
+	{
+		// Condition is false, move linkedlist to donothing node
+		nodeLists[currentSubroutine->name]->SetCurrent(compilerNode.GetJumpTo(), true);
+		return nullptr;
+	}
+}
+
 #pragma endregion LoopOperations
 
 #pragma region ConditionalStatements
@@ -363,6 +410,35 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLessCondition(CompilerNode 
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLessOrEqCondition(CompilerNode compilerNode)
+{
+	// Check if nodeparams are not empty
+	if (compilerNode.GetNodeparameters().empty())
+		throw ParameterException(2, ParameterExceptionType::NoParameters);
+
+	std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
+	// Check if count of params is not right
+	if (parameters.size() > 2)
+		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
+
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Check if expression is value
+	if (param1->GetExpression() != "$value")
+		param1 = CallFunction(*param1);
+	if (param2->GetExpression() != "$value")
+		param2 = CallFunction(*param2);
+
+	// Set numbers / values
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+	bool output = num1 <= num2;
+
+	// Set boolean to true if num1 < num2, else return false (inside the node)
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGreaterCondition(CompilerNode compilerNode)
 {
 	// Check if nodeparams are not empty
@@ -387,6 +463,35 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGreaterCondition(CompilerNo
 	float num1 = atof(param1->GetValue().c_str());
 	float num2 = atof(param2->GetValue().c_str());
 	bool output = num1 > num2;
+
+	// Set boolean to true if num1 > num2, else return false (inside the node)
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGreaterOrEqCondition(CompilerNode compilerNode)
+{
+	// Check if nodeparams are not empty
+	if (compilerNode.GetNodeparameters().empty())
+		throw ParameterException(2, ParameterExceptionType::NoParameters);
+
+	std::vector<std::shared_ptr<CompilerNode>> parameters = compilerNode.GetNodeparameters();
+	// Check if count of params is not right
+	if (parameters.size() > 2)
+		throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
+
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Check if expression is value
+	if (param1->GetExpression() != "$value")
+		param1 = CallFunction(*param1);
+	if (param2->GetExpression() != "$value")
+		param2 = CallFunction(*param2);
+
+	// Set numbers / values
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+	bool output = num1 >= num2;
 
 	// Set boolean to true if num1 > num2, else return false (inside the node)
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
@@ -647,6 +752,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteUniPlusOperation(CompilerNo
 		throw ParameterException(1, parameters.size(), ParameterExceptionType::IncorrectParameters);
 	
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::string identifierName = param1->GetValue();
 	
 	// Check if the parameters are a value or another function call
 	// if function call, execute function
