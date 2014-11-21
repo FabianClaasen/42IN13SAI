@@ -16,27 +16,41 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 		// Check which tokentype it is and set current format
 		switch (iter->myTokenType)
 		{
+			case MyTokenType::Var:
+			case MyTokenType::Void:
+			case MyTokenType::FloatReturn:
+				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, QColor(203, 75, 22));
+				break;
 			case MyTokenType::If:
 			case MyTokenType::Else:
 			case MyTokenType::ElseIf:
 			case MyTokenType::While:
 			case MyTokenType::ForLoop:
-			case MyTokenType::Var:
-				setCurrentFormat(currentFormat, rule, QRegExp("\\bif|else|while|frl|var"), QFont::Bold, QColor(133, 153, 0)); // sort of purple
-				break;
-			case MyTokenType::Return:
-			case MyTokenType::Void:
-			case MyTokenType::Float:
-				setCurrentFormat(currentFormat, rule, QRegExp("\\bvoid|float|ret\\b"), QFont::Bold, Qt::darkBlue);
+				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, QColor(133, 153, 0));
 				break;
 			case MyTokenType::Function:
 			case MyTokenType::MainFunction:
-				setCurrentFormat(currentFormat, rule, QRegExp("\\b(?!if|else|while|frl)[A-Za-z0-9_]+(?=\\()"), QFont::Normal, QColor(108, 113, 196));
+				setCurrentFormat(currentFormat, rule, QRegExp("\\b(?!if|else|while|frl)[A-Za-z0-9_]+(?=\\()"), QFont::Bold, QColor(88, 110, 117));
+				break;
+			case MyTokenType::OperatorDivide:
+			case MyTokenType::OperatorMinus:
+			case MyTokenType::OperatorMultiply:
+			case MyTokenType::OperatorPlus:
+			case MyTokenType::OperatorRaised:
+			case MyTokenType::UniOperatorMinus:
+			case MyTokenType::UniOperatorPlus:
+				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, QColor(211, 54, 130));
+				break;
+			case MyTokenType::Float:
+				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, QColor(42, 161, 152));
 				break;
 			default:
 				break;
 		}
 	}
+
+	// Rule for func
+	setCurrentFormat(currentFormat, rule, QRegExp("\\bfunc\\b"), QFont::Normal, QColor(203, 75, 22));
 
 	commentStartExpression = QRegExp("/\\*");
 	commentEndExpression = QRegExp("\\*/");

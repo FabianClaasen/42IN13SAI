@@ -12,11 +12,11 @@ void MainController::Setup()
 {
 	QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_F5), &mainWindow);
 	connect(shortcut, SIGNAL(activated()), this, SLOT(Execute()));
-    
+	
 #ifndef _WIN32
-    // Mac OS X cmd + R for running program like in xcode
-    QShortcut *macShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_R), &mainWindow);
-    connect(macShortcut, SIGNAL(activated()), this, SLOT(Execute()));
+	// Mac OS X cmd + R for running program like in xcode
+	QShortcut *macShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_R), &mainWindow);
+	connect(macShortcut, SIGNAL(activated()), this, SLOT(Execute()));
 #endif
 
 	connect(mainWindow.GetRunAction(), SIGNAL(triggered()), this, SLOT(Execute()));
@@ -65,7 +65,9 @@ void MainController::Execute()
 	delete(tokenizer_controller);
 
 	// Run the virtual machine with the compilernodes
-	VirtualMachine virtual_machine = VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), compiler.GetCompilerNodes());
+	std::list<std::shared_ptr<CompilerNode>> nodesList = compiler.GetCompilerNodes();
+	std::shared_ptr<LinkedList> nodesLinkedList = std::make_shared<LinkedList>(nodesList);
+	VirtualMachine virtual_machine = VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), nodesLinkedList);
 
 	try
 	{

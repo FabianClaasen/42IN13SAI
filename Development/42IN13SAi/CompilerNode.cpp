@@ -18,7 +18,7 @@ CompilerNode::CompilerNode() : expression(""), condition(condition)
 
 CompilerNode::CompilerNode(const CompilerNode& toCopy) : expression(toCopy.expression), nodeParameters(toCopy.nodeParameters), jumpTo(toCopy.jumpTo), value(toCopy.value), condition(toCopy.condition)
 {
-    
+	
 }
 
 CompilerNode::~CompilerNode()
@@ -33,8 +33,8 @@ void CompilerNode::SetJumpTo(std::shared_ptr<CompilerNode> jump)
 
 std::shared_ptr<CompilerNode> CompilerNode::GetJumpTo()
 {
-    
-    return std::shared_ptr<CompilerNode>(jumpTo.lock());
+	
+	return jumpTo;
 }
 
 std::string CompilerNode::GetExpression()

@@ -43,7 +43,7 @@ void MainWindow::ShowMenuBar()
 	#ifdef _WIN32
 		menu = new QMenuBar();
 	#else
-        // Mac OS X needs menubar without a parent
+		// Mac OS X needs menubar without a parent
 		menu = new QMenuBar(0);
 	#endif
 
@@ -59,10 +59,10 @@ void MainWindow::ShowMenuBar()
 	quitAction = menu->addAction("Quit");
 
 	#ifndef _WIN32
-        // Also needs a menu to show the items, doesn't work with only actions
-        QMenu* mainMenu = menu->addMenu("Debug");
-    
-        // Add the actions to the menu
+		// Also needs a menu to show the items, doesn't work with only actions
+		QMenu* mainMenu = menu->addMenu("Debug");
+	
+		// Add the actions to the menu
 		mainMenu->addAction(runAction);
 		mainMenu->addAction(clearAction);
 	#endif

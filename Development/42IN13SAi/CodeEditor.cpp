@@ -9,15 +9,18 @@
 
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 {
-    this->setFont(QFont("Consolas", 9));
+	this->setFont(QFont("Consolas", 9));
 	QPalette pallete = this->palette();
 
 	pallete.setColor(QPalette::Active, QPalette::Base, QColor(253, 246, 227));
 	pallete.setColor(QPalette::Inactive, QPalette::Base, QColor(253, 246, 227));
+	pallete.setColor(QPalette::Text, QColor(101, 123, 131));
+	pallete.setColor(QPalette::Highlight, QColor(225, 219, 200));
+	pallete.setColor(QPalette::HighlightedText, QColor(101, 123, 131)); 
 
 	this->setPalette(pallete);
 #ifndef _WIN32
-    // Set font to bigger size for readability on Mac OS X
+	// Set font to bigger size for readability on Mac OS X
 	this->setFont(QFont("Consolas", 12));
 #endif
 
@@ -88,7 +91,7 @@ void CodeEditor::highlightCurrentLine()
 	{
 		QTextEdit::ExtraSelection selection;
 
-		QColor lineColor = QColor(Qt::yellow).lighter(160);
+		QColor lineColor = QColor(238, 232, 213);
 
 		selection.format.setBackground(lineColor);
 		selection.format.setProperty(QTextFormat::FullWidthSelection, true);
