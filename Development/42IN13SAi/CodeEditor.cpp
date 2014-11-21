@@ -24,10 +24,9 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 
 	this->setPalette(pallete);
 
-	/*this->setTabStopWidth(21);*/
 	const int tabStop = 3;
 
-	QFontMetrics metrics(QFont("Consolas", 9));
+	QFontMetrics metrics(QFont("Menlo-Regular", 10));
 	setTabStopWidth(tabStop * metrics.width(' '));
 
 	lineNumberArea = new LineNumberArea(this);
