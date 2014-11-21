@@ -1,9 +1,11 @@
 cos
 float
 func
+if
 Main
 prnt
-ret
 sin
 stop
+ret
 var
+while
