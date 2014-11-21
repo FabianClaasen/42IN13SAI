@@ -71,12 +71,17 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteCosOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteTanOperation(CompilerNode compilerNode);
 	
+	//return the output (for showing it in the IDE)
+	std::vector<std::string> getOutput() { return output; };
+
 private:
 	SymbolTable* globalsSymboltable; // Globals symboltable
 	SymbolTable* currentSymbolTable; // User function symboltable
 
 	SubroutineTable* subroutineTable; // Main subroutineTable
 	Subroutine* currentSubroutine; // User function subroutine table
+
+	std::vector<std::string> output;
 
 	// Node methods
 	std::shared_ptr<CompilerNode> GetNext(std::shared_ptr<LinkedList> nodes);

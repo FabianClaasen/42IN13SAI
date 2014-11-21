@@ -1,7 +1,6 @@
-var x = 3;
-
 func Main()
 [
-	var y = x + 3;
-	prnt(y);
+ 	prnt(5);
+prnt(5);
+prnt(5);
 ]

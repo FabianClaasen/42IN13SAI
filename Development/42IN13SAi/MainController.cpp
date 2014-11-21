@@ -30,6 +30,9 @@ void MainController::Setup()
 
 void MainController::Execute()
 {
+	//Clear the output window
+	mainWindow.clearOutput();
+
 	// Excute typed code
 	// Get the file from the stream and convert to std::string
 	std::string input(GetFileFromStream());
@@ -43,7 +46,7 @@ void MainController::Execute()
 	catch (const std::exception& e)
 	{
 		delete(tokenizer_controller);
-		mainWindow.addException(e.what());
+		mainWindow.addOutput(e.what());
 		return;
 	}
 
@@ -57,7 +60,7 @@ void MainController::Execute()
 	catch (const std::exception& e)
 	{
 		delete(tokenizer_controller);
-		mainWindow.addException(e.what());
+		mainWindow.addOutput(e.what());
 		return;
 	}
 	// Delete the tokenizer controller
@@ -71,11 +74,15 @@ void MainController::Execute()
 	try
 	{
 		virtual_machine.ExecuteCode();
+		std::vector<std::string> output = virtual_machine.getOutput();
+		for (std::vector<std::string>::iterator it = output.begin(); it != output.end(); ++it) {
+			mainWindow.addOutput(*it);
+		}
 	}
 	catch (const std::exception& e)
 	{
 		delete(tokenizer_controller);
-		mainWindow.addException(e.what());
+		mainWindow.addOutput(e.what());
 		return;
 	}
 }

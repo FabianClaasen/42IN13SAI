@@ -22,12 +22,12 @@ MainWindow::MainWindow(QWidget *parent)
 	tabs->setTabsClosable(true);
 	tabs->addTab(codeEditor, "New*");
 
-	exceptionWindow = CreateExceptionWindow();
+	outputWindow = CreateOutputWindow();
 
 	//Make a layout to add different widgets
 	QVBoxLayout* layout = new QVBoxLayout();
 	layout->addWidget(tabs);
-	layout->addWidget(exceptionWindow);
+	layout->addWidget(outputWindow);
 
 	//make a central widget set the layout and add it on the mainwindow
 	QWidget* mainWidget = new QWidget();
@@ -95,11 +95,11 @@ CodeEditor* MainWindow::CreateEditor()
 	return codeEditor;
 }
 
-ExceptionWindow* MainWindow::CreateExceptionWindow()
+OutputWindow* MainWindow::CreateOutputWindow()
 {
-	ExceptionWindow* exceptionWindow = new ExceptionWindow();
+	OutputWindow* outputWindow = new OutputWindow();
 
-	return exceptionWindow;
+	return outputWindow;
 }
 
 QAction* MainWindow::GetRunAction()
@@ -152,9 +152,14 @@ void MainWindow::AddNewTab()
 	tabs->addTab(CreateEditor(), "New*");
 }
 
-void MainWindow::addException(std::string exception)
+void MainWindow::addOutput(std::string output)
 {
-	exceptionWindow->addException(exception);
+	outputWindow->addOutput(output);
+}
+
+void MainWindow::clearOutput()
+{
+	outputWindow->clearOutput();
 }
 
 void MainWindow::SetTabTitle(QFileInfo* info)

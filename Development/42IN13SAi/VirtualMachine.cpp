@@ -283,8 +283,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePrint(CompilerNode compiler
 	// Get the new value
 	std::string valueToPrint = param1->GetValue();
 
+	//Add the value to print to the output
+	output.push_back(valueToPrint);
+
 	// Print te new value
-	std::cout << valueToPrint << std::endl;
+	//std::cout << valueToPrint << std::endl;
 	//std::cin.get();
 	
 	return nullptr;
