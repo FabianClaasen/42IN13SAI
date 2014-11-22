@@ -28,14 +28,13 @@ HEADERS += ./Grammar.h \
     ./SubroutineTable.h \
     ./VirtualMachine.h \
     ./FunctionCaller.h \
+    ./LinkedList.h \
+    ./ListIterator.h \
+    ./ListNode.h \
     ./CodeEditor.h \
     ./MainWindow.h \
     ./Highlighter.h \
-    ./FunctionNameExpectedException.h \
-    ./MissingCompilerNodeException.h \
-    ./MissingMainFunctionException.h \
-    ./SubroutineNotFoundException.h \
-    ./UnknownExpressionException.h \
+    ./OutputWindow.h \
     ./ParseException.h \
     ./PartnerNotFoundException.h \
     ./SymbolNotFoundException.h \
@@ -48,9 +47,13 @@ HEADERS += ./Grammar.h \
     ./UnexpectedKeywordException.h \
     ./UnexpectedTypeException.h \
     ./VariableNotFoundException.h \
+    ./FunctionNameExpectedException.h \
+    ./MissingCompilerNodeException.h \
+    ./MissingMainFunctionException.h \
+    ./SubroutineNotFoundException.h \
+    ./UnknownExpressionException.h \
     ./FileIO.h \
-    ./MainController.h \
-    ./ExceptionWindow.h
+    ./MainController.h
 SOURCES += ./main.cpp \
     ./Grammar.cpp \
     ./LabelStack.cpp \
@@ -68,11 +71,15 @@ SOURCES += ./main.cpp \
     ./SymbolTable.cpp \
     ./Subroutine.cpp \
     ./SubroutineTable.cpp \
+    ./LinkedList.cpp \
+    ./ListIterator.cpp \
+    ./ListNode.cpp \
     ./VirtualMachine.cpp \
     ./FunctionCaller.cpp \
     ./CodeEditor.cpp \
     ./Highlighter.cpp \
     ./MainWindow.cpp \
+    ./OutputWindow.cpp \
     ./FunctionNameExpectedException.cpp \
     ./IdentifierException.cpp \
     ./MissingCompilerNodeException.cpp \
@@ -90,5 +97,4 @@ SOURCES += ./main.cpp \
     ./VariableNotFoundException.cpp \
     ./ParameterException.cpp \
     ./FileIO.cpp \
-    ./MainController.cpp \
-    ./ExceptionWindow.cpp
+    ./MainController.cpp

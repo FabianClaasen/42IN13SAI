@@ -5,7 +5,6 @@
 #include "VirtualMachine.h"
 
 #include <QKeyEvent>
-#include <windows.h>
 #include <string>
 #include <iostream>
 
