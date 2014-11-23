@@ -39,9 +39,11 @@ private:
     std::vector<Token> tokenVector;
     
     void NextLine();
-    Token* FindPartner(MyTokenType &myTokenType, int level);
-	bool ShouldFindPartner(MyTokenType type);
-	bool ShouldFindPartnerR(MyTokenType type);
+    Token* FindPartner(MyTokenType &type, int level);
+	bool ShouldFindPartner(MyTokenType &type);
+	bool ShouldFindPartnerR(MyTokenType &type);
 	void TryFindPartner(MyTokenType &myTokenType, int level);
 	void CheckClosingPartners();
+
+	std::string TokenToString(MyTokenType type);
 };

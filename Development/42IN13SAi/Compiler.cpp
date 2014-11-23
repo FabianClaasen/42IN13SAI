@@ -99,14 +99,14 @@ void Compiler::Match(MyTokenType type)
 {
 	if (Compiler::PeekNext() == nullptr)
 	{
-		throw UnexpectedTypeException("An UnexpectedTypeException occured. Expected: " + std::to_string(int(type)));
+		throw UnexpectedTypeException("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
 	}
 
 	Token currentToken = GetNext(); // Bestaat al
 
 	if (currentToken.Type != type)
 	{
-		throw UnexpectedTypeException("An UnexpectedTypeException occured. Expected: " + std::to_string(int(type)));
+		throw UnexpectedTypeException("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
 	}
 }
 
@@ -135,7 +135,7 @@ void Compiler::ParseGlobalStatement()
 		Parser(this).ParseAssignmentStatement(false);
 		break;
 	default:
-		throw VariableNotFoundException("A VariableNotFoundException occured.");
+		throw VariableNotFoundException("A VariableNotFoundException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ".");
 		break;
 	}
 }
@@ -179,7 +179,7 @@ void Compiler::ParseStatement()
 		//std::runtime_error("");
 		break;
 	default:
-		throw StatementNotFoundException("A StatementNotFoundException occurred.");
+		throw StatementNotFoundException("A StatementNotFoundException occurred at line " + std::to_string(PeekNext()->LineNumber) +" on position " + std::to_string(PeekNext()->LinePosition)+".");
 		break;
 	}
 }
@@ -253,4 +253,28 @@ SubroutineTable* Compiler::GetSubroutineTable()
 std::list<std::shared_ptr<CompilerNode>> Compiler::GetCompilerNodes()
 {
 	return compilerNodes;
+}
+
+
+std::string Compiler::TokenToString(MyTokenType type)
+{
+	switch (type)
+	{
+	case MyTokenType::OpenBracket:
+		return "(";
+	case MyTokenType::CloseBracket:
+		return ")";
+	case MyTokenType::OpenCurlyBracket:
+		return "{";
+	case MyTokenType::CloseCurlyBracket:
+		return "}";
+	case MyTokenType::OpenMethod:
+		return "[";
+	case MyTokenType::CloseMethod:
+		return "]";
+	case MyTokenType::EOL:
+		return ";";
+	default:
+		return "undefined";
+	}
 }

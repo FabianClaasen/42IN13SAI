@@ -66,4 +66,5 @@ private:
 	int currentIndex = -1;
 	void ParseFunctionOrGlobal();
 	void ParseFunctionOrAssignment();
+	std::string TokenToString(MyTokenType type);
 };

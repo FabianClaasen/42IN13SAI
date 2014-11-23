@@ -140,9 +140,9 @@ Token* Tokenizer::FindPartner(MyTokenType &type, int level)
     char buffer[1024];
     
 #ifdef _WIN32
-    _snprintf(buffer, sizeof(buffer), "Partner not found for %d on line %s at position %s", int(type), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
+	_snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(type).c_str(), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
 #else
-    snprintf(buffer, sizeof(buffer), "Partner not found for %d on line %s at position %s", int(type), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
+	snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(type).c_str(), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
 #endif
     
 	throw PartnerNotFoundException(buffer);
@@ -174,9 +174,9 @@ void Tokenizer::TryFindPartner(MyTokenType &type, int level)
 	char buffer[1024];
 
 #ifdef _WIN32
-	_snprintf(buffer, sizeof(buffer), "Partner not found for %d on line %s at position %s", int(type), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
+	_snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(type).c_str(), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
 #else
-	snprintf(buffer, sizeof(buffer), "Partner not found for %d on line %s at position %s", int(type), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
+	snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(type).c_str(), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
 #endif
 
 	throw PartnerNotFoundException(buffer);
@@ -185,7 +185,7 @@ void Tokenizer::TryFindPartner(MyTokenType &type, int level)
 // Check if the current token is able to have a partner
 // @Param
 //	type: the function will check if this type can have a partner.
-bool Tokenizer::ShouldFindPartner(MyTokenType type)
+bool Tokenizer::ShouldFindPartner(MyTokenType &type)
 {
     std::vector<MyTokenType> types{ MyTokenType::CloseCurlyBracket, MyTokenType::CloseMethod, MyTokenType::CloseBracket, MyTokenType::Else, MyTokenType::ElseIf };
 	return std::find(types.begin(), types.end(), type) != types.end();
@@ -194,7 +194,7 @@ bool Tokenizer::ShouldFindPartner(MyTokenType type)
 // Check if the current token is able to have a partner
 // @Param
 //	type: the function will check if this type can have a partner.
-bool Tokenizer::ShouldFindPartnerR(MyTokenType type)
+bool Tokenizer::ShouldFindPartnerR(MyTokenType &type)
 {
 	std::vector<MyTokenType> types{ MyTokenType::OpenCurlyBracket, MyTokenType::OpenMethod, MyTokenType::OpenBracket };
 	return std::find(types.begin(), types.end(), type) != types.end();
@@ -216,6 +216,29 @@ void Tokenizer::NextLine()
 std::vector<Token> Tokenizer::GetTokenList()
 {
     return tokenVector;
+}
+
+std::string Tokenizer::TokenToString(MyTokenType type)
+{
+	switch (type)
+	{		
+	case MyTokenType::OpenBracket:
+		return "(";
+	case MyTokenType::CloseBracket:
+		return ")";
+	case MyTokenType::OpenCurlyBracket:
+		return "{";
+	case MyTokenType::CloseCurlyBracket:
+		return "}";
+	case MyTokenType::OpenMethod:
+		return "[";
+	case MyTokenType::CloseMethod:
+		return "]";
+	case MyTokenType::EOL:
+		return ";";
+	default:
+		return "undefined";
+	}
 }
 
 Tokenizer::~Tokenizer()
