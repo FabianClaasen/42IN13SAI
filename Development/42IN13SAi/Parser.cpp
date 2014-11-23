@@ -151,7 +151,7 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 			identifierSymbol = new Symbol(identifier.Value, identifier.Type, SymbolKind::Local);
 		}
 
-		if (compiler->GetSubroutine() != nullptr)
+		if (!compiler->GetSubroutine()->isEmpty)
 		{
 			compiler->GetSubroutine()->AddLocal(*identifierSymbol);
 

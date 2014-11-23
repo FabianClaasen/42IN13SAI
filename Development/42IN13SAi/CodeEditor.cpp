@@ -1,17 +1,21 @@
 #include "CodeEditor.h"
-#include <QPainter>
-#include <QTextBlock>
 #include <QCompleter>
-#include <qabstractitemview.h>
-#include <qapplication.h>
-#include <qstringlistmodel.h>
-#include <qscrollbar.h>
 
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 {
+	QString resourceDir = QDir::currentPath().append("/Resources/");
+	// Add font to the font database
 	QFontDatabase fontDatabase;
-	fontDatabase.addApplicationFont(":/Menlo-Regular.ttf");
-	this->setFont(QFont("Menlo-Regular", 10));
+	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf");
+	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf");
+	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf");
+	
+	// Set the font
+	QFont ideFont = QFont("DejaVu Sans Mono", 10);
+	ideFont.setStyleStrategy(QFont::PreferAntialias);
+
+	// Set editor font
+	this->setFont(ideFont);
 	
 	// Editor colours
 	QPalette pallete = this->palette();
@@ -26,7 +30,7 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 
 	const int tabStop = 3;
 
-	QFontMetrics metrics(QFont("Menlo-Regular", 10));
+	QFontMetrics metrics(ideFont);
 	setTabStopWidth(tabStop * metrics.width(' '));
 
 	lineNumberArea = new LineNumberArea(this);

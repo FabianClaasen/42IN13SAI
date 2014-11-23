@@ -874,6 +874,11 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\DejaVuSansMono-Bold.ttf" />
+    <Font Include="Resources\DejaVuSansMono-Oblique.ttf" />
+    <Font Include="Resources\DejaVuSansMono.ttf" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0F8E62D6-F5A0-4C66-AD23-F45D847EB1FE}</ProjectGuid>
     <RootNamespace>My42IN13SAi</RootNamespace>
@@ -1001,7 +1006,7 @@ xcopy "$(ProjectDir)Resources\words.txt" "$(TargetDir)\*" /c /r /y</Command>
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" Qt5Version_x0020_Win32="qt_5" />
+      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" Qt5Version_x0020_Win32="msvc2013_opengl" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
