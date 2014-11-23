@@ -24,7 +24,7 @@ void Compiler::Compile()
 // Check what the next token is
 Token* Compiler::PeekNext()
 {
-    Token* token = &tokenizerTokens.at(currentIndex + 1);
+	Token* token = &tokenizerTokens.at(currentIndex + 1);
 	return token;
 }
 
@@ -85,7 +85,7 @@ void Compiler::AddSymbol(Symbol symbol)
 // Add a compiler node
 void Compiler::AddCompilerNode(std::shared_ptr<CompilerNode> node)
 {
-    std::shared_ptr<CompilerNode> sNode = std::shared_ptr<CompilerNode>(node);
+	std::shared_ptr<CompilerNode> sNode = std::shared_ptr<CompilerNode>(node);
 	compilerNodes.push_back(sNode);
 }
 
@@ -157,24 +157,24 @@ void Compiler::ParseStatement()
 	case MyTokenType::Var:
 		Parser(this).ParseAssignmentStatement(false);
 		break;
-    case MyTokenType::MainFunction:
+	case MyTokenType::MainFunction:
 	case MyTokenType::Function:
 		Parser(this).ParseFunction();
 		break;
-    case MyTokenType::Return:	
-        Parser(this).ParseReturn();
-        break;
+	case MyTokenType::Return:	
+		Parser(this).ParseReturn();
+		break;
 	case MyTokenType::PrintLine:
 		if (!currentSubroutine.isEmpty)
 			currentSubroutine.AddCompilerNode(std::shared_ptr<CompilerNode>(InternalFunction(this).GetInternalFunction(MyTokenType::PrintLine)));
-            Match(MyTokenType::EOL);
+			Match(MyTokenType::EOL);
 		//else
 			//std::runtime_error("");
 		break;
 	case MyTokenType::Stop:
 		if (!currentSubroutine.isEmpty)
 			currentSubroutine.AddCompilerNode(std::shared_ptr<CompilerNode>(InternalFunction(this).GetInternalFunction(MyTokenType::Stop)));
-            Match(MyTokenType::EOL);
+			Match(MyTokenType::EOL);
 		//else
 		//std::runtime_error("");
 		break;

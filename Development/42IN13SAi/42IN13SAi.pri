@@ -9,7 +9,6 @@ message("You are running qmake on a generated .pro file. This may not work!")
 
 HEADERS += ./Grammar.h \
     ./LabelStack.h \
-    ./Parser.h \
     ./RegexMatcher.h \
     ./Token.h \
     ./TokenDefinition.h \
@@ -17,20 +16,25 @@ HEADERS += ./Grammar.h \
     ./TokenizerController.h \
     ./TokenPartner.h \
     ./MyTokenType.h \
+    ./Compiler.h \
+    ./CompilerNode.h \
+    ./InternalFunction.h \
+    ./Parser.h \
     ./Symbol.h \
     ./SymbolTable.h \
     ./SymbolKind.h \
     ./Subroutine.h \
     ./SubroutineKind.h \
     ./SubroutineTable.h \
-    ./Compiler.h \
-    ./CompilerNode.h \
-    ./InternalFunction.h \
     ./VirtualMachine.h \
     ./FunctionCaller.h \
+    ./LinkedList.h \
+    ./ListIterator.h \
+    ./ListNode.h \
     ./CodeEditor.h \
     ./MainWindow.h \
     ./Highlighter.h \
+    ./OutputWindow.h \
     ./ParseException.h \
     ./PartnerNotFoundException.h \
     ./SymbolNotFoundException.h \
@@ -43,39 +47,53 @@ HEADERS += ./Grammar.h \
     ./UnexpectedKeywordException.h \
     ./UnexpectedTypeException.h \
     ./VariableNotFoundException.h \
+    ./FunctionNameExpectedException.h \
+    ./MissingCompilerNodeException.h \
+    ./MissingMainFunctionException.h \
+    ./SubroutineNotFoundException.h \
+    ./UnknownExpressionException.h \
     ./FileIO.h \
     ./MainController.h
 SOURCES += ./main.cpp \
     ./Grammar.cpp \
     ./LabelStack.cpp \
-    ./Parser.cpp \
     ./RegexMatcher.cpp \
     ./Token.cpp \
     ./TokenDefinition.cpp \
     ./Tokenizer.cpp \
     ./TokenizerController.cpp \
     ./TokenPartner.cpp \
+    ./Compiler.cpp \
+    ./CompilerNode.cpp \
+    ./InternalFunction.cpp \
+    ./Parser.cpp \
     ./Symbol.cpp \
     ./SymbolTable.cpp \
     ./Subroutine.cpp \
     ./SubroutineTable.cpp \
-    ./Compiler.cpp \
-    ./CompilerNode.cpp \
-    ./InternalFunction.cpp \
+    ./LinkedList.cpp \
+    ./ListIterator.cpp \
+    ./ListNode.cpp \
     ./VirtualMachine.cpp \
     ./FunctionCaller.cpp \
     ./CodeEditor.cpp \
     ./Highlighter.cpp \
     ./MainWindow.cpp \
+    ./OutputWindow.cpp \
+    ./FunctionNameExpectedException.cpp \
     ./IdentifierException.cpp \
+    ./MissingCompilerNodeException.cpp \
+    ./MissingMainFunctionException.cpp \
     ./MissingTokenException.cpp \
     ./ParameterNameException.cpp \
     ./ParseException.cpp \
     ./PartnerNotFoundException.cpp \
     ./StatementNotFoundException.cpp \
+    ./SubroutineNotFoundException.cpp \
     ./SymbolNotFoundException.cpp \
     ./UnexpectedKeywordException.cpp \
     ./UnexpectedTypeException.cpp \
+    ./UnknownExpressionException.cpp \
     ./VariableNotFoundException.cpp \
     ./ParameterException.cpp \
     ./FileIO.cpp \

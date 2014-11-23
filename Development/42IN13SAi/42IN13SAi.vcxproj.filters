@@ -44,22 +44,7 @@
     <ClCompile Include="VirtualMachine.cpp">
       <Filter>Source Files\VirtualMachine</Filter>
     </ClCompile>
-    <ClCompile Include="Parser.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
     <ClCompile Include="RegexMatcher.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Subroutine.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="SubroutineTable.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Symbol.cpp">
-      <Filter>Source Files\Tokenizer</Filter>
-    </ClCompile>
-    <ClCompile Include="SymbolTable.cpp">
       <Filter>Source Files\Tokenizer</Filter>
     </ClCompile>
     <ClCompile Include="Token.cpp">
@@ -104,11 +89,47 @@
     <ClCompile Include="MainController.cpp">
       <Filter>Source Files\Controller</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_MainController.cpp">
-      <Filter>Generated Files\Debug</Filter>
+    <ClCompile Include="SymbolTable.cpp">
+      <Filter>Source Files\Compiler</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_MainController.cpp">
-      <Filter>Generated Files\Release</Filter>
+    <ClCompile Include="Symbol.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="SubroutineTable.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Subroutine.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="MissingCompilerNodeException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="MissingMainFunctionException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionNameExpectedException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="SubroutineNotFoundException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="UnknownExpressionException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkedList.cpp">
+      <Filter>Source Files\VirtualMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="ListNode.cpp">
+      <Filter>Source Files\VirtualMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="ListIterator.cpp">
+      <Filter>Source Files\VirtualMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWindow.cpp">
+      <Filter>Source Files\Qt</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_CodeEditor.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -128,9 +149,20 @@
     <ClCompile Include="GeneratedFiles\Release\moc_MainWindow.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_OutputWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_OutputWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MainController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MainController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="packages.config" />
     <CustomBuild Include="CodeEditor.h">
       <Filter>Header Files\Qt</Filter>
     </CustomBuild>
@@ -179,28 +211,7 @@
     <CustomBuild Include="VirtualMachine.h">
       <Filter>Header Files\VirtualMachine</Filter>
     </CustomBuild>
-    <CustomBuild Include="Parser.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </CustomBuild>
     <CustomBuild Include="RegexMatcher.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Subroutine.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SubroutineKind.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SubroutineTable.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Symbol.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SymbolKind.h">
-      <Filter>Header Files\Tokenizer</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SymbolTable.h">
       <Filter>Header Files\Tokenizer</Filter>
     </CustomBuild>
     <CustomBuild Include="Token.h">
@@ -244,6 +255,63 @@
     </CustomBuild>
     <CustomBuild Include="FileIO.h">
       <Filter>Header Files\Services</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Parser.h">
+      <Filter>Header Files\Compiler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Subroutine.h">
+      <Filter>Header Files\Compiler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SubroutineKind.h">
+      <Filter>Header Files\Compiler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SubroutineTable.h">
+      <Filter>Header Files\Compiler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Symbol.h">
+      <Filter>Header Files\Compiler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SymbolKind.h">
+      <Filter>Header Files\Compiler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SymbolTable.h">
+      <Filter>Header Files\Compiler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FunctionNameExpectedException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MissingCompilerNodeException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MissingMainFunctionException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SubroutineNotFoundException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UnknownExpressionException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="resource.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="LinkedList.h">
+      <Filter>Header Files\VirtualMachine</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ListIterator.h">
+      <Filter>Header Files\VirtualMachine</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ListNode.h">
+      <Filter>Header Files\VirtualMachine</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Resources\words.txt">
+      <Filter>Resources</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Resources\Menlo-Regular.ttf">
+      <Filter>Resources</Filter>
+    </CustomBuild>
+    <CustomBuild Include="OutputWindow.h">
+      <Filter>Header Files\Qt</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -307,17 +375,18 @@
       <UniqueIdentifier>{d4b013db-11d1-499b-aa6b-47decf0d5d1a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resources">
-      <UniqueIdentifier>{ec082187-1796-44a6-b0da-d464e11ac9a1}</UniqueIdentifier>
+      <UniqueIdentifier>{2266cff4-c5c6-48ed-a6f4-b5b29367529b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="words.txt">
+    <Font Include="Resources\DejaVuSansMono.ttf">
       <Filter>Resources</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
+    </Font>
+    <Font Include="Resources\DejaVuSansMono-Bold.ttf">
+      <Filter>Resources</Filter>
+    </Font>
+    <Font Include="Resources\DejaVuSansMono-Oblique.ttf">
+      <Filter>Resources</Filter>
+    </Font>
   </ItemGroup>
 </Project>

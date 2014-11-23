@@ -3,9 +3,7 @@
 MainController::MainController() : QObject()
 {
 	mainWindow.setWindowTitle(QObject::tr("Short C Editor"));
-	mainWindow.resize(640, 360);
-	mainWindow.show();
-
+	mainWindow.showMaximized();
 	Setup();
 }
 
@@ -13,23 +11,28 @@ void MainController::Setup()
 {
 	QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_F5), &mainWindow);
 	connect(shortcut, SIGNAL(activated()), this, SLOT(Execute()));
-    
+	
 #ifndef _WIN32
-    // Mac OS X cmd + R for running program like in xcode
-    QShortcut *macShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_R), &mainWindow);
-    connect(macShortcut, SIGNAL(activated()), this, SLOT(Execute()));
+	// Mac OS X cmd + R for running program like in xcode
+	QShortcut *macShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_R), &mainWindow);
+	connect(macShortcut, SIGNAL(activated()), this, SLOT(Execute()));
 #endif
 
 	connect(mainWindow.GetRunAction(), SIGNAL(triggered()), this, SLOT(Execute()));
 	connect(mainWindow.GetClearAction(), SIGNAL(triggered()), this, SLOT(ClearConsole()));
+	connect(mainWindow.GetNewAction(), SIGNAL(triggered()), this, SLOT(NewFile()));
 	connect(mainWindow.GetLoadAction(), SIGNAL(triggered()), this, SLOT(LoadFile()));
 	connect(mainWindow.GetSaveAction(), SIGNAL(triggered()), this, SLOT(SaveFile()));
 	connect(mainWindow.GetSaveAsAction(), SIGNAL(triggered()), this, SLOT(SaveAsFile()));
 	connect(mainWindow.GetQuitAction(), SIGNAL(triggered()), this, SLOT(Quit()));
+	connect(mainWindow.GetTabWidget(), SIGNAL(tabCloseRequested(int)), this, SLOT(CloseTab(int)));
 }
 
 void MainController::Execute()
 {
+	//Clear the output window
+	mainWindow.clearOutput();
+
 	// Excute typed code
 	// Get the file from the stream and convert to std::string
 	std::string input(GetFileFromStream());
@@ -43,7 +46,7 @@ void MainController::Execute()
 	catch (const std::exception& e)
 	{
 		delete(tokenizer_controller);
-		puts(e.what());
+		mainWindow.addOutput(e.what());
 		return;
 	}
 
@@ -57,15 +60,31 @@ void MainController::Execute()
 	catch (const std::exception& e)
 	{
 		delete(tokenizer_controller);
-		puts(e.what());
+		mainWindow.addOutput(e.what());
 		return;
 	}
 	// Delete the tokenizer controller
 	delete(tokenizer_controller);
 
 	// Run the virtual machine with the compilernodes
-	VirtualMachine virtual_machine = VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), compiler.GetCompilerNodes());
-	virtual_machine.ExecuteCode();
+	std::list<std::shared_ptr<CompilerNode>> nodesList = compiler.GetCompilerNodes();
+	std::shared_ptr<LinkedList> nodesLinkedList = std::make_shared<LinkedList>(nodesList);
+	VirtualMachine virtual_machine = VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), nodesLinkedList);
+
+	try
+	{
+		virtual_machine.ExecuteCode();
+		std::vector<std::string> output = virtual_machine.getOutput();
+		for (std::vector<std::string>::iterator it = output.begin(); it != output.end(); ++it) {
+			mainWindow.addOutput(*it);
+		}
+	}
+	catch (const std::exception& e)
+	{
+		delete(tokenizer_controller);
+		mainWindow.addOutput(e.what());
+		return;
+	}
 }
 
 void MainController::ClearConsole()
@@ -78,6 +97,12 @@ std::string MainController::GetFileFromStream()
 	QString gen_code = mainWindow.GetText();
 
 	std::shared_ptr<QFile> file;
+	std::shared_ptr<QFile> currentFile;
+	if (currentFiles.size() > mainWindow.GetCurrentTabPosition() - 1)
+	{
+		currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition() - 1);
+	}
+
 	if (currentFile)
 	{
 		file = currentFile;
@@ -105,22 +130,40 @@ std::string MainController::GetFileFromStream()
 	return filepath_std;
 }
 
+void MainController::NewFile()
+{
+	mainWindow.AddNewTab();
+}
+
 void MainController::LoadFile()
 {
 	QString URI = mainWindow.OpenLoadDialog();
 	QString text = FileIO::LoadFile(URI);
-	mainWindow.SetText(text);
 
-	// Set the current file
-	currentFile = std::shared_ptr<QFile>(new QFile(URI));
+	// Check if the first file is not the start file
+	if (currentFiles.size() <= 0)
+		mainWindow.RemoveTab(0);
+	
+	// Add the loaded file
+	currentFiles.push_back(std::shared_ptr<QFile>(new QFile(URI)));
+	QFileInfo* fileInfo = new QFileInfo(URI);
+	mainWindow.AddFile(fileInfo, text);
 }
 
 void MainController::SaveFile()
 {
+	std::shared_ptr<QFile> currentFile;
+	if (currentFiles.size() > mainWindow.GetCurrentTabPosition() - 1)
+	{
+		currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition() - 1);
+	}
+
 	if (!currentFile)
 	{
 		QString URI = mainWindow.OpenSaveDialog();
 		FileIO::SaveFile(URI, mainWindow.GetText());
+		QFileInfo* fileInfo = new QFileInfo(URI);
+		mainWindow.SetTabTitle(fileInfo);
 	}
 	else
 	{
@@ -132,11 +175,22 @@ void MainController::SaveAsFile()
 {
 	QString URI = mainWindow.OpenSaveDialog();
 	FileIO::SaveFile(URI, mainWindow.GetText());
+	QFileInfo* fileInfo = new QFileInfo(URI);
+	mainWindow.SetTabTitle(fileInfo);
 }
 
 void MainController::Quit()
 {
 	std::exit(0);
+}
+
+void MainController::CloseTab(int index)
+{
+	mainWindow.RemoveTab(index);
+	
+	// Remove the file on the current position
+	if (currentFiles.size() > index)
+		currentFiles.erase(currentFiles.begin() + index);
 }
 
 MainController::~MainController()

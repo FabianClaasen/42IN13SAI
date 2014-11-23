@@ -1,0 +1,11 @@
+cos
+float
+func
+if
+Main
+prnt
+sin
+stop
+ret
+var
+while

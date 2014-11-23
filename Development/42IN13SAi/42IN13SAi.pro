@@ -4,17 +4,32 @@
 
 TEMPLATE = app
 TARGET = 42IN13SAi
-DESTDIR = ../Debug
+DESTDIR = ../Release
 QT += core opengl widgets gui
 CONFIG += debug
-DEFINES += $(NOINHERIT)
+DEFINES += _MBCS _CRT_SECURE_NO_WARNINGS QT_DLL QT_OPENGL_LIB QT_WIDGETS_LIB
 INCLUDEPATH += ../../../../../../../../Boost/include/boost-1_56 \
-    ./GeneratedFiles/Debug
-LIBS += -lopengl32 \
+    ./GeneratedFiles/Release
+LIBS += -lkernel32 \
+    -luser32 \
+    -lgdi32 \
+    -lwinspool \
+    -lcomdlg32 \
+    -ladvapi32 \
+    -lshell32 \
+    -lole32 \
+    -loleaut32 \
+    -luuid \
+    -lodbc32 \
+    -lodbccp32 \
+    -lopengl32 \
     -lglu32
+	
+SOURCES += plugin_import.cpp
+LIBS += Qt5PlatformSupportd.lib windowsd.lib rpcrt4.lib
 DEPENDPATH += .
-MOC_DIR += ./GeneratedFiles/debug
-OBJECTS_DIR += debug
+MOC_DIR += ./GeneratedFiles/release
+OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 RCC_DIR += ./GeneratedFiles
 include(42IN13SAi.pri)

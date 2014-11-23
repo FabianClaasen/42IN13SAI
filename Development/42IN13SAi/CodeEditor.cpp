@@ -1,23 +1,37 @@
-#include <QtGui>
 #include "CodeEditor.h"
-#include <iostream>
-#include <QAbstractItemView>
 #include <QCompleter>
-#include <QScrollBar>
-#include <QKeyEvent>
-#include <QListView>
-#include <QStringListModel>
-#include <QApplication>
 
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 {
-    this->setFont(QFont("Consolas", 9));
-#ifndef _WIN32
-    // Set font to bigger size for readability on Mac OS X
-	this->setFont(QFont("Consolas", 12));
-#endif
+	QString resourceDir = QDir::currentPath().append("/Resources/");
+	// Add font to the font database
+	QFontDatabase fontDatabase;
+	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf");
+	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf");
+	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf");
+	
+	// Set the font
+	QFont ideFont = QFont("DejaVu Sans Mono", 10);
+	ideFont.setStyleStrategy(QFont::PreferAntialias);
 
-	this->setTabStopWidth(20);
+	// Set editor font
+	this->setFont(ideFont);
+	
+	// Editor colours
+	QPalette pallete = this->palette();
+
+	pallete.setColor(QPalette::Active, QPalette::Base, QColor(253, 246, 227));
+	pallete.setColor(QPalette::Inactive, QPalette::Base, QColor(253, 246, 227));
+	pallete.setColor(QPalette::Text, QColor(101, 123, 131));
+	pallete.setColor(QPalette::Highlight, QColor(225, 219, 200));
+	pallete.setColor(QPalette::HighlightedText, QColor(101, 123, 131)); 
+
+	this->setPalette(pallete);
+
+	const int tabStop = 3;
+
+	QFontMetrics metrics(ideFont);
+	setTabStopWidth(tabStop * metrics.width(' '));
 
 	lineNumberArea = new LineNumberArea(this);
 
@@ -27,12 +41,6 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 
 	updateLineNumberAreaWidth(0);
 	highlightCurrentLine();
-
-	//connect(listView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(completeText(const QModelIndex &)));
-	listView = new QListView(this);
-	//listView->model()->insertRow(0,)
-	listView->setWindowFlags(Qt::ToolTip);
-	listView->setModel(modelFromFile("C:\\Users\\stefan\\Desktop\\words.txt"));
 }
 
 int CodeEditor::lineNumberAreaWidth()
@@ -90,7 +98,7 @@ void CodeEditor::highlightCurrentLine()
 	{
 		QTextEdit::ExtraSelection selection;
 
-		QColor lineColor = QColor(Qt::yellow).lighter(160);
+		QColor lineColor = QColor(238, 232, 213);
 
 		selection.format.setBackground(lineColor);
 		selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -138,112 +146,122 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 {
 	int key = e->key();
 	bool isEnterAndListVisible;
+	bool setIndexAfterPrefix = false;
+	//std::cout << e->key() << std::endl;
 	int row = 0;
-	if (!listView->isHidden())
+	if (compl->popup()->isVisible())
 	{
-		int count = listView->model()->rowCount();
-		QModelIndex currentIndex = listView->currentIndex();
-
-		if (key == Qt::Key_Down || key == Qt::Key_Up)
-		{
-			row = currentIndex.row();
-			switch (key) {
-			case Qt::Key_Down:
-				if (++row >= count)
-					row = 0;
-				break;
-			case Qt::Key_Up:
-				if (--row < 0)
-					row = count - 1;
-				break;
-			}
-
-			if (listView->isEnabled())
-			{
-				QModelIndex index = listView->model()->index(row, 0);
-				listView->setCurrentIndex(index);
-			}
-		}
-		else if ((Qt::Key_Tab == key) && listView->isEnabled())
-		{
-			if (currentIndex.isValid())
-			{
-				QString text = currentIndex.data().toString();
-				//setText(text + " ");
-				isEnterAndListVisible = (key == Qt::Key_Tab) && listView->isVisible();
-
-				if (!isEnterAndListVisible)
-					QPlainTextEdit::keyPressEvent(e);
-
-				listView->hide();
-				//setCompleter(this->text());
-				insertCompletion(text);
-				return;
-			}
-		}
-	}
-
-	if (listView->isVisible())
-	{
+		// if backspace or space key are pressed when popup is visible, hide it
 		switch (key)
 		{
-		case 16777220: // enter key
-		case 16777219: // backspace key
-		case 32: // space key
-			listView->hide();
-			break;
+		case Qt::Key_Space:
+		case Qt::Key_Backspace: 
+		case Qt::Key_Escape:
+			compl->popup()->hide();
+			return;
+		}
+		// If tab key is pressed, fill in the completion
+		if ((Qt::Key_Tab == key || key == Qt::Key_Return) && compl->popup()->isEnabled())
+		{
+			QModelIndex currentIndex = compl->popup()->currentIndex();
+			QString text = currentIndex.data().toString();
+			isEnterAndListVisible = (key == Qt::Key_Tab || key == Qt::Key_Return) && compl->popup()->isVisible();
+
+			if (!isEnterAndListVisible)
+				QPlainTextEdit::keyPressEvent(e);
+
+			compl->popup()->hide();
+			insertCompletion(text);
+
+			return;
+		}
+		// for runtime behaviour
+		else
+		{
+			setCompletionPrefix("");
+			setIndexAfterPrefix = true;
+		}
+	}
+	else 
+	{
+		// FOR THE ENTER TAB?
+		/*int space;
+		if (key == Qt::Key_Return)
+		{
+			space = checkPreviousCharacters(e);
+			QPlainTextEdit::keyPressEvent(e);
+			insertPlainText("\n");
+			std::cout << space << std::endl;
+			for (int i = 0; i < space; i++)
+				insertPlainText(" ");
+		}*/
+			
+	}
+	
+	if (key == Qt::Key_ParenRight)
+	{
+		QTextCursor tc = textCursor();
+		QString result = completeCloseParentesis();
+		if (result == ")")
+		{
+			tc.movePosition(QTextCursor::EndOfBlock);
+			insertPlainText(")");
+			tc.deletePreviousChar();
+			return;
 		}
 	}
 
+	// Shift behaviour as normal shift
 	bool isShiftEnter = ((e->modifiers() & Qt::ShiftModifier) && e->key() == Qt::Key_Return);
-
 	if (isShiftEnter)
 		e = new QKeyEvent(e->type(), e->key(), e->modifiers()&Qt::MetaModifier&Qt::KeypadModifier, e->text(), e->isAutoRepeat(), (ushort)e->count());
 
+	// Check if ctrl space is clicked
 	bool isCtrlSpace = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space);
 	if (!isCtrlSpace)
 		QPlainTextEdit::keyPressEvent(e);
 
-	const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
-	if (!compl || (ctrlOrShift && e->text().isEmpty()))
-		return;
+	QString completionPrefixs = textUnderCursor();
 
-	static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
-	bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
-	QString completionPrefix = textUnderCursor();
-
-	if (!isCtrlSpace && (hasModifier || e->text().isEmpty() || completionPrefix.length() < 3
-		|| eow.contains(e->text().right(1)))) {
-		//listView->hide();
-		return;
-	}
-
-	if (completionPrefix != compl->completionPrefix())
+	// this one is for first the completerview and then fill in the text (runtime filling)
+	if (setIndexAfterPrefix)
 	{
-		QAbstractItemModel* model = listView->model();
-		int extra = 0;
-		for (int i = 0; i < model->rowCount(); i++)
+		int count = compl->model()->rowCount();
+		for (int i = 0; i < count; i++)
 		{
-			QString variable = model->index(i, 0).data(Qt::DisplayRole).toString();
-			if (!variable.contains(completionPrefix))
+			QString key = compl->completionModel()->index(i, 0).data().toString();
+			if (key.startsWith(completionPrefix, Qt::CaseSensitive))
 			{
-				extra++;
+				QModelIndex new_index = compl->completionModel()->index(i, 0);
+				compl->popup()->setCurrentIndex(new_index);
+				compl->popup()->hide();
+				setCompletionPrefix(completionPrefix);
+				cr = getCompleterView();
+				compl->complete(cr);
+				return;
 			}
-			else
-				break;
 		}
-		if (extra == model->rowCount())
-			listView->hide();
-
-		listView->setCurrentIndex(listView->model()->index(extra, 0));
-	}
-	else
-	{
-		listView->setCurrentIndex(listView->model()->index(0, 0));
+		// hide when case sensitive startswith is not found
+		compl->popup()->hide();
 	}
 
+	//checkPreviousCharacters(e);
+	checkBracketCharacter(e);
+	
+	setCompletionPrefix(completionPrefix);
+	cr = getCompleterView();
 	if ((e->modifiers() & Qt::ControlModifier) && (e->key() == Qt::Key_Space))
-		listView->show();
+	{
+		QModelIndex index = compl->popup()->currentIndex();
+		int count = compl->completionCount();
+		if (count == 1)
+		{
+			QString text = index.data().toString();
+			insertCompletion(text);
+		}
+		else
+			compl->complete(cr);
+	}
 }
 
 QAbstractItemModel* CodeEditor::modelFromFile(const QString& fileName)
@@ -269,6 +287,133 @@ QAbstractItemModel* CodeEditor::modelFromFile(const QString& fileName)
 	return new QStringListModel(words, compl);
 }
 
+//int CodeEditor::checkPreviousCharacters(QKeyEvent *e)
+//{
+//	QString text;
+//	int pos;
+//	int spaces = 0;
+//	pos = textCursor().block().firstLineNumber();
+//
+//	text = document()->findBlockByLineNumber(pos).text();
+//
+//	for (int i = 0; i < text.count(); i++)
+//	{
+//		if (text[i] == ' ' || text[i] == '\t')
+//		{
+//			spaces++;
+//			//insertPlainText(" ");
+//		}
+//		else
+//			break;
+//	}
+//	return spaces;
+//}
+
+void CodeEditor::checkBracketCharacter(QKeyEvent *e)
+{
+	std::cout << e->key() << std::endl;
+	if (e->key() == Qt::Key_BracketLeft || Qt::Key_ParenLeft)
+	{
+		QTextCursor tmpCursor;
+		QString text;
+		QString insertNewValue;
+		QTextBlock block;
+		int pos = 0;
+		int spaces = 0;
+		QString last;
+		switch (e->key())
+		{
+			case Qt::Key_BracketLeft:
+				addBrackets(tmpCursor, pos, text, last, spaces);
+				break;
+			case Qt::Key_ParenLeft:
+				insertPlainText(")");
+				tmpCursor = textCursor();
+				tmpCursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 1);
+				setTextCursor(tmpCursor);
+				break;
+		}
+	}
+}
+
+void CodeEditor::addBrackets(QTextCursor tmpCursor, int pos, QString text, QString last, int spaces)
+{
+	pos = textCursor().block().firstLineNumber();
+
+	text = document()->findBlockByLineNumber(pos).text();
+
+	std::cout << text.count() << std::endl;
+	text.remove(text.count() - 1, 1);
+	if (text.size() == 0)
+	{
+		last = " ";
+	}
+	else
+	{
+		last = text[text.length() - 1];
+	}
+
+	if (last.isEmpty() || last == " " || last == "\t")
+	{
+
+		for (int l = 0; l < text.count(); l++)
+		{
+			if (text[l] == ' ')
+			{
+				spaces++;
+			}
+			else if (text[l] == '\t')
+				spaces = spaces + 3;
+		}
+	}
+	else
+	{
+		textCursor().deletePreviousChar();
+		insertPlainText("\n");
+		for (int i = 0; i < text.count(); i++)
+		{
+			if (text[i] == ' ')
+			{
+				spaces++;
+				insertPlainText(" ");
+			}
+			else if (text[i] == '\t')
+			{
+				spaces = spaces + 3;
+				insertPlainText("   ");
+			}
+			else
+				break;
+		}
+		insertPlainText("[");
+	}
+
+
+	insertPlainText("\n\n");
+	for (int j = 0; j < spaces; j++)
+		insertPlainText(" ");
+	insertPlainText("]");
+
+	tmpCursor = textCursor();
+	tmpCursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor, 1);
+	setTextCursor(tmpCursor);
+	if (spaces > 0)
+	{
+		for (int s = 0; s < spaces; s++)
+			insertPlainText(" ");
+	}
+	insertPlainText("   ");
+}
+
+QString CodeEditor::completeCloseParentesis()
+{
+	int pos = textCursor().block().firstLineNumber();
+
+	QString text = document()->findBlockByLineNumber(pos).text();
+	QString result = text.at(text.count() - 1);
+	return result;
+}
+
 void CodeEditor::setCompleter(QCompleter *completer)
 {
 	if (compl)
@@ -281,9 +426,29 @@ void CodeEditor::setCompleter(QCompleter *completer)
 
 	compl->setWidget(this);
 	compl->setCompletionMode(QCompleter::PopupCompletion);
-	compl->setCaseSensitivity(Qt::CaseInsensitive);
+	compl->setCaseSensitivity(Qt::CaseSensitive);
+
 	QObject::connect(compl, SIGNAL(activated(QString)),
 		this, SLOT(insertCompletion(QString)));
+}
+
+void CodeEditor::setCompletionPrefix(QString completionPrefix)
+{
+	if (completionPrefix != compl->completionPrefix())
+	{
+		compl->setCompletionPrefix(completionPrefix);
+		compl->popup()->setCurrentIndex(compl->completionModel()->index(0, 0));
+	}
+}
+
+QRect CodeEditor::getCompleterView()
+{
+	QRect cr = cursorRect();
+	cr.setX(20);
+	cr.setWidth(compl->popup()->sizeHintForColumn(0)
+		+ compl->popup()->verticalScrollBar()->sizeHint().width());
+
+	return cr;
 }
 
 void CodeEditor::insertCompletion(const QString &text)
@@ -306,19 +471,9 @@ QString CodeEditor::textUnderCursor() const
 	return tc.selectedText();
 }
 
-//void CodeEditor::focusInEvent(QFocusEvent *e)
-//{
-//	if (compl)
-//		compl->setWidget(this);
-//
-//	QPlainTextEdit::focusInEvent(e);
-//}
-
 QCompleter *CodeEditor::getCompleter() const
 {
 	return compl;
 }
-
-
 
 #pragma endregion codeCompletion

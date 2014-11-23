@@ -1,11 +1,19 @@
 #pragma once
+#include <memory>
+#include <iostream>
 
 #include <QPlainTextEdit>
 #include <QObject>
-#include <qcompleter.h>
-#include <memory>
+#include <qdir.h>
+#include <QPainter>
+#include <QTextBlock>
+#include <qabstractitemview.h>
+#include <qapplication.h>
+#include <qstringlistmodel.h>
+#include <qscrollbar.h>
+#include <qabstractitemmodel.h>
 
-class QListView;
+class QCompleter;
 class CodeEditor : public QPlainTextEdit
 {
 	Q_OBJECT
@@ -34,17 +42,25 @@ public:
 
 		// for codecompletion
 		void insertCompletion(const QString &completion);
+
 	private:
 		QWidget *lineNumberArea;
-
-		QListView *listView;
-		QStringList words;
-		QAbstractItemModel* modelFromFile(const QString& fileName);
 
 		// for codecompletion
 		QString textUnderCursor() const;
 		QCompleter* compl;
 		QTextEdit* textEdit;
+
+		void checkBracketCharacter(QKeyEvent *e);
+		//int checkPreviousCharacters(QKeyEvent *e);
+		void setCompletionPrefix(QString text);
+
+		QRect getCompleterView();
+		QRect cr;
+		QAbstractItemModel* modelFromFile(const QString& fileName);
+
+		void addBrackets(QTextCursor tmpCursor, int pos, QString text, QString last, int spaces);
+		QString completeCloseParentesis();
 };
 
 class LineNumberArea : public QWidget

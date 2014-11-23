@@ -1,0 +1,5 @@
+func Main()
+[
+	var x = 12;
+	prnt(x);
+]

@@ -1,30 +1,37 @@
-#include <QtWidgets>
-#include <QMenu>
-
 #include "MainWindow.h"
 #include "CodeEditor.h"
 #include "TokenizerController.h"
 #include "Compiler.h"
 #include "VirtualMachine.h"
+
 #include <QKeyEvent>
+#include <string>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
 {
 	ShowMenuBar();
-	codeEditor = new CodeEditor();
 
-	// set the completer
-	completer = new QCompleter(this);
-	completer->setModel(modelFromFile("C:\\Users\\stefan\\Desktop\\words.txt"));
-	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-	completer->setCaseSensitivity(Qt::CaseInsensitive);
-	completer->setWrapAround(false);
-	codeEditor->setCompleter(completer);
-	codeEditor->installEventFilter(this);
-	// set the highlighter
-	highlighter = new Highlighter(codeEditor->document());
+	// Create code editor
+	CodeEditor* codeEditor = CreateEditor();
+	codeEditorVector.push_back(codeEditor);
 
-	this->setCentralWidget(codeEditor);
+	// Set the tabs
+	tabs = new QTabWidget();
+	tabs->setTabsClosable(true);
+	tabs->addTab(codeEditor, "New*");
+
+	outputWindow = CreateOutputWindow();
+
+	//Make a layout to add different widgets
+	QVBoxLayout* layout = new QVBoxLayout();
+	layout->addWidget(tabs);
+	layout->addWidget(outputWindow);
+
+	//make a central widget set the layout and add it on the mainwindow
+	QWidget* mainWidget = new QWidget();
+	mainWidget->setLayout(layout);
+	this->setCentralWidget(mainWidget);
 }
 
 void MainWindow::ShowMenuBar()
@@ -35,12 +42,13 @@ void MainWindow::ShowMenuBar()
 	#ifdef _WIN32
 		menu = new QMenuBar();
 	#else
-        // Mac OS X needs menubar without a parent
+		// Mac OS X needs menubar without a parent
 		menu = new QMenuBar(0);
 	#endif
 
 	// Create action and connect
 	fileMenu = menu->addMenu("File");
+	newAction = fileMenu->addAction("New");
 	openAction = fileMenu->addAction("Open");
 	saveAction = fileMenu->addAction("Save");
 	saveAsAction = fileMenu->addAction("Save as");
@@ -50,10 +58,10 @@ void MainWindow::ShowMenuBar()
 	quitAction = menu->addAction("Quit");
 
 	#ifndef _WIN32
-        // Also needs a menu to show the items, doesn't work with only actions
-        QMenu* mainMenu = menu->addMenu("Debug");
-    
-        // Add the actions to the menu
+		// Also needs a menu to show the items, doesn't work with only actions
+		QMenu* mainMenu = menu->addMenu("Debug");
+	
+		// Add the actions to the menu
 		mainMenu->addAction(runAction);
 		mainMenu->addAction(clearAction);
 	#endif
@@ -61,6 +69,36 @@ void MainWindow::ShowMenuBar()
 	// Set the menu bar on ui from left to right
 	this->setMenuBar(menu);
 	menu->setLayoutDirection(Qt::LeftToRight);
+}
+
+CodeEditor* MainWindow::CreateEditor()
+{
+	CodeEditor* codeEditor = new CodeEditor();
+
+	// Set the completer
+	completer = new QCompleter(this);
+
+	QString str = QDir::currentPath();
+	str.append("/Resources/words.txt");
+
+	completer->setModel(modelFromFile(str));
+	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+	completer->setCaseSensitivity(Qt::CaseSensitive);
+	completer->setWrapAround(false);
+	codeEditor->setCompleter(completer);
+	codeEditor->installEventFilter(this);
+
+	// Set the highlighter
+	highlighter = new Highlighter(codeEditor->document());
+
+	return codeEditor;
+}
+
+OutputWindow* MainWindow::CreateOutputWindow()
+{
+	OutputWindow* outputWindow = new OutputWindow();
+
+	return outputWindow;
 }
 
 QAction* MainWindow::GetRunAction()
@@ -71,6 +109,11 @@ QAction* MainWindow::GetRunAction()
 QAction* MainWindow::GetClearAction()
 {
 	return clearAction;
+}
+
+QAction* MainWindow::GetNewAction()
+{
+	return newAction;
 }
 
 QAction* MainWindow::GetLoadAction()
@@ -88,6 +131,41 @@ QAction* MainWindow::GetSaveAsAction()
 	return saveAsAction;
 }
 
+QTabWidget* MainWindow::GetTabWidget()
+{
+	return tabs;
+}
+
+int MainWindow::GetCurrentTabPosition()
+{
+	return tabs->currentIndex();
+}
+
+void MainWindow::RemoveTab(int index)
+{
+	tabs->removeTab(index);
+}
+
+void MainWindow::AddNewTab()
+{
+	tabs->addTab(CreateEditor(), "New*");
+}
+
+void MainWindow::addOutput(std::string output)
+{
+	outputWindow->addOutput(output);
+}
+
+void MainWindow::clearOutput()
+{
+	outputWindow->clearOutput();
+}
+
+void MainWindow::SetTabTitle(QFileInfo* info)
+{
+	tabs->setTabText(tabs->currentIndex(), info->baseName());
+}
+
 QAction* MainWindow::GetQuitAction()
 {
 	return quitAction;
@@ -95,6 +173,7 @@ QAction* MainWindow::GetQuitAction()
 
 QString MainWindow::GetText()
 {
+	CodeEditor* codeEditor = codeEditorVector.at(tabs->currentIndex());
 	return codeEditor->toPlainText();
 }
 
@@ -131,10 +210,15 @@ QString MainWindow::OpenSaveDialog()
 	return QFileDialog::getSaveFileName(this, tr("Save file"), "", tr("Text Files (*.txt)"));
 }
 
-void MainWindow::SetText(QString text)
+void MainWindow::AddFile(QFileInfo* info, QString text)
 {
-	codeEditor->clear();
-	codeEditor->insertPlainText(text);
+	// Create code editor
+	CodeEditor* codeEditor = CreateEditor();
+	codeEditor->setPlainText(text);
+	codeEditorVector.push_back(codeEditor);
+
+	// Remove tab if only the new file is existing...
+	tabs->addTab(codeEditor, info->baseName());
 }
 
 MainWindow::~MainWindow()

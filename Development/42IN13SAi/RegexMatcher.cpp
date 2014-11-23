@@ -3,11 +3,11 @@
 RegexMatcher::RegexMatcher()
 {}
 
-RegexMatcher::RegexMatcher(std::string regexString) : Regex("^(" + regexString + ")", boost::regex_constants::optimize)
+RegexMatcher::RegexMatcher(std::string regexstring) : Regex("^(" + regexstring + ")", boost::regex_constants::optimize), regexString(regexstring)
 {
 }
 
-RegexMatcher::RegexMatcher(const RegexMatcher& other) :Regex(other.Regex)
+RegexMatcher::RegexMatcher(const RegexMatcher& other) : Regex(other.Regex), regexString(other.regexString)
 {
 }
 
@@ -18,4 +18,9 @@ int RegexMatcher::Match(std::string text)
         return 0;
     else
         return (int)item.length();
+}
+
+std::string RegexMatcher::GetRegexString()
+{
+	return regexString;
 }
