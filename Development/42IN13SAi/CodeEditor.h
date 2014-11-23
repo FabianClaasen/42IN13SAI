@@ -1,9 +1,16 @@
 #pragma once
+#include <memory>
+#include <iostream>
 
 #include <QPlainTextEdit>
 #include <QObject>
-#include <memory>
-#include <iostream>
+#include <qdir.h>
+#include <QPainter>
+#include <QTextBlock>
+#include <qabstractitemview.h>
+#include <qapplication.h>
+#include <qstringlistmodel.h>
+#include <qscrollbar.h>
 #include <qabstractitemmodel.h>
 
 class QCompleter;

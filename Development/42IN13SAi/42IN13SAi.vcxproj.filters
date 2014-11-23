@@ -378,4 +378,15 @@
       <UniqueIdentifier>{2266cff4-c5c6-48ed-a6f4-b5b29367529b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\DejaVuSansMono.ttf">
+      <Filter>Resources</Filter>
+    </Font>
+    <Font Include="Resources\DejaVuSansMono-Bold.ttf">
+      <Filter>Resources</Filter>
+    </Font>
+    <Font Include="Resources\DejaVuSansMono-Oblique.ttf">
+      <Filter>Resources</Filter>
+    </Font>
+  </ItemGroup>
 </Project>
