@@ -939,13 +939,16 @@
       <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5OpenGLd.lib;opengl32.lib;glu32.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y</Command>
+      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y
+xcopy "$(ProjectDir)Resources\words.txt" "$(TargetDir)\*" /c /r /y</Command>
     </PostBuildEvent>
     <PreLinkEvent>
-      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y</Command>
+      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y
+xcopy "$(ProjectDir)Resources\words.txt" "$(TargetDir)\*" /c /r /y</Command>
     </PreLinkEvent>
     <PreBuildEvent>
-      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y</Command>
+      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y
+xcopy "$(ProjectDir)Resources\words.txt" "$(TargetDir)\*" /c /r /y</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -974,13 +977,16 @@
       <OutputManifestFile>C:\Games\hello.exe.manifest</OutputManifestFile>
     </Manifest>
     <PostBuildEvent>
-      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y</Command>
+      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y
+xcopy "$(ProjectDir)Resources\words.txt" "$(TargetDir)\*" /c /r /y</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y</Command>
+      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y
+xcopy "$(ProjectDir)Resources\words.txt" "$(TargetDir)\*" /c /r /y</Command>
     </PreBuildEvent>
     <PreLinkEvent>
-      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y</Command>
+      <Command>xcopy "C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\*.dll" "$(TargetDir)\*" /c /r /y
+xcopy "$(ProjectDir)Resources\words.txt" "$(TargetDir)\*" /c /r /y</Command>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
