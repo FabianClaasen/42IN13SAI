@@ -108,7 +108,7 @@ void Tokenizer::CheckClosingPartners()
 		if (ShouldFindPartnerR(t.Type))
 		{
 			try {
-				TryFindPartner(t.Type, t.Level);
+				TryFindPartner(t);
 			}
 			catch (const PartnerNotFoundException &e) {
 				// Catch the exception and rethrow
@@ -152,17 +152,17 @@ Token* Tokenizer::FindPartner(MyTokenType &type, int level)
 // @param
 //  type: this is the type of the token where you need to find a match for.
 //	level: this is the level of the myTokenType, the partner needs to be on the same level.
-void Tokenizer::TryFindPartner(MyTokenType &type, int level)
+void Tokenizer::TryFindPartner(Token &token)
 {
 	std::list<TokenPartner>::const_iterator token_partner;
 	for (TokenPartner tokenPartner : tokenPartners)
 	{
-		if (tokenPartner.partner == type)
+		if (tokenPartner.partner == token.Type)
 		{
 			std::vector<Token>::iterator tokenIt;
 			for (tokenIt = tokenVector.begin(); tokenIt != tokenVector.end(); ++tokenIt)
 			{
-				if (tokenIt->Type == tokenPartner.token && tokenIt->Level == level)
+				if (tokenIt->Type == tokenPartner.token && tokenIt->Level == token.Level)
 				{	// FOUND A PARTNER
 					return;
 				}
@@ -174,9 +174,9 @@ void Tokenizer::TryFindPartner(MyTokenType &type, int level)
 	char buffer[1024];
 
 #ifdef _WIN32
-	_snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(type).c_str(), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
+	_snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(token.Type).c_str(), std::to_string(token.LineNumber).c_str(), std::to_string(token.LinePosition).c_str());
 #else
-	snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(type).c_str(), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
+	snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(token.Type).c_str(), std::to_string(token.LineNumber).c_str(), std::to_string(token.LinePosition).c_str());
 #endif
 
 	throw PartnerNotFoundException(buffer);

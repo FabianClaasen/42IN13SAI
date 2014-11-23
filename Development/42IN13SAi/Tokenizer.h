@@ -42,7 +42,7 @@ private:
     Token* FindPartner(MyTokenType &type, int level);
 	bool ShouldFindPartner(MyTokenType &type);
 	bool ShouldFindPartnerR(MyTokenType &type);
-	void TryFindPartner(MyTokenType &myTokenType, int level);
+	void TryFindPartner(Token &token);
 	void CheckClosingPartners();
 
 	std::string TokenToString(MyTokenType type);
