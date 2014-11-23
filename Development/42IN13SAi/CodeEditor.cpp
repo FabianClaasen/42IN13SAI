@@ -197,16 +197,18 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		}*/
 			
 	}
-
+	
 	if (key == Qt::Key_ParenRight)
 	{
 		QTextCursor tc = textCursor();
 		QString result = completeCloseParentesis();
 		if (result == ")")
 		{
-			tc.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 2);
+			tc.movePosition(QTextCursor::EndOfBlock);
+			insertPlainText(")");
 			tc.deletePreviousChar();
-		}	
+			return;
+		}
 	}
 
 	// Shift behaviour as normal shift
@@ -219,7 +221,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	if (!isCtrlSpace)
 		QPlainTextEdit::keyPressEvent(e);
 
-	QString completionPrefix = textUnderCursor();
+	QString completionPrefixs = textUnderCursor();
 
 	// this one is for first the completerview and then fill in the text (runtime filling)
 	if (setIndexAfterPrefix)
