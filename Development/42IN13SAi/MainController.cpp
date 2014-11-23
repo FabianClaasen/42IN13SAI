@@ -81,7 +81,6 @@ void MainController::Execute()
 	}
 	catch (const std::exception& e)
 	{
-		delete(tokenizer_controller);
 		mainWindow.addOutput(e.what());
 		return;
 	}

@@ -221,7 +221,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	if (!isCtrlSpace)
 		QPlainTextEdit::keyPressEvent(e);
 
-	QString completionPrefixs = textUnderCursor();
+	QString completionPrefix = textUnderCursor();
 
 	// this one is for first the completerview and then fill in the text (runtime filling)
 	if (setIndexAfterPrefix)
