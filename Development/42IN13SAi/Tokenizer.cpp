@@ -148,10 +148,10 @@ Token* Tokenizer::FindPartner(MyTokenType &type, int level)
 	throw PartnerNotFoundException(buffer);
 }
 
-// Find a partner for the current token.
+// Try to find a partner for the current token.
+// Throws PartnerNotFoundException when a partner can't be found.
 // @param
-//  type: this is the type of the token where you need to find a match for.
-//	level: this is the level of the myTokenType, the partner needs to be on the same level.
+//  token: this is the token where you need to find a match for.
 void Tokenizer::TryFindPartner(Token &token)
 {
 	std::list<TokenPartner>::const_iterator token_partner;
