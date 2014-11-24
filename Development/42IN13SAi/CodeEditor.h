@@ -52,6 +52,7 @@ public:
 		QTextEdit* textEdit;
 
 		void checkBracketCharacter(QKeyEvent *e);
+		void checkRightParenthesis();
 		//int checkPreviousCharacters(QKeyEvent *e);
 		void setCompletionPrefix(QString text);
 

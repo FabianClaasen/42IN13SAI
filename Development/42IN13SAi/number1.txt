@@ -1,0 +1,4 @@
+func Main(dgffdsggdfs)
+[
+   prnt(1);
+]

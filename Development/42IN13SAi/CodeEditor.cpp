@@ -172,7 +172,6 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 
 			compl->popup()->hide();
 			insertCompletion(text);
-
 			return;
 		}
 		// for runtime behaviour
@@ -195,22 +194,15 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 			for (int i = 0; i < space; i++)
 				insertPlainText(" ");
 		}*/
-			
-	}
-	
-	if (key == Qt::Key_ParenRight)
-	{
-		QTextCursor tc = textCursor();
-		QString result = completeCloseParentesis();
-		if (result == ")")
-		{
-			tc.movePosition(QTextCursor::EndOfBlock);
-			insertPlainText(")");
-			tc.deletePreviousChar();
-			return;
-		}
+		
 	}
 
+	if (key == Qt::Key_ParenRight)
+	{
+		checkRightParenthesis();
+		return;
+	}
+	
 	// Shift behaviour as normal shift
 	bool isShiftEnter = ((e->modifiers() & Qt::ShiftModifier) && e->key() == Qt::Key_Return);
 	if (isShiftEnter)
@@ -244,10 +236,9 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		// hide when case sensitive startswith is not found
 		compl->popup()->hide();
 	}
-
-	//checkPreviousCharacters(e);
-	checkBracketCharacter(e);
 	
+	checkBracketCharacter(e);
+
 	setCompletionPrefix(completionPrefix);
 	cr = getCompleterView();
 	if ((e->modifiers() & Qt::ControlModifier) && (e->key() == Qt::Key_Space))
@@ -309,6 +300,22 @@ QAbstractItemModel* CodeEditor::modelFromFile(const QString& fileName)
 //	return spaces;
 //}
 
+void CodeEditor::checkRightParenthesis()
+{
+	QString prevChar = toPlainText().at(textCursor().position() - 1);
+	QTextCursor tc = textCursor();
+	QString result = completeCloseParentesis();
+	if (result == ")" && prevChar != ")")
+	{
+		tc.movePosition(QTextCursor::EndOfBlock);
+		insertPlainText(")");
+		tc.deletePreviousChar();
+	}
+	else if (prevChar == ")" || prevChar != "(")
+	{
+		insertPlainText(")");
+	}
+}
 void CodeEditor::checkBracketCharacter(QKeyEvent *e)
 {
 	std::cout << e->key() << std::endl;
