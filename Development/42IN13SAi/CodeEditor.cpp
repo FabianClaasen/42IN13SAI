@@ -194,7 +194,23 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 			for (int i = 0; i < space; i++)
 				insertPlainText(" ");
 		}*/
-		
+		if (textCursor().position() > 0)
+		{
+			QString previousCharacter = toPlainText().at(textCursor().position() - 1);
+			QString nextCharacter = completeCloseParentesis();
+			QTextCursor tmpCursor = textCursor();
+			if (key == Qt::Key_Tab && previousCharacter == "(" && nextCharacter == ")")
+			{
+				tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
+				setTextCursor(tmpCursor);
+				insertPlainText("[");
+				//insertPlainText("\n");
+				addBrackets(tmpCursor, 0, "", "", 0);
+				//return;
+				//QPlainTextEdit::keyPressEvent(e);
+				return;
+			}
+		}
 	}
 
 	if (key == Qt::Key_ParenRight)
