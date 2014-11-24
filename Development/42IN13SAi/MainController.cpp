@@ -26,6 +26,9 @@ void MainController::Setup()
 	connect(mainWindow.GetSaveAsAction(), SIGNAL(triggered()), this, SLOT(SaveAsFile()));
 	connect(mainWindow.GetQuitAction(), SIGNAL(triggered()), this, SLOT(Quit()));
 	connect(mainWindow.GetTabWidget(), SIGNAL(tabCloseRequested(int)), this, SLOT(CloseTab(int)));
+
+	// Create a first new file
+	NewFile();
 }
 
 void MainController::Execute()
@@ -108,7 +111,7 @@ std::string MainController::GetFileFromStream()
 	}
 	else
 	{
-		file = std::shared_ptr<QFile>(new QFile("number1.txt"));
+		file = std::make_shared<QFile>("number1.txt");
 	}
 
 	if (file->exists())
@@ -131,6 +134,7 @@ std::string MainController::GetFileFromStream()
 
 void MainController::NewFile()
 {
+	currentFiles.push_back(std::make_shared<QFile>(nullptr));
 	mainWindow.AddNewTab();
 }
 
@@ -138,10 +142,6 @@ void MainController::LoadFile()
 {
 	QString URI = mainWindow.OpenLoadDialog();
 	QString text = FileIO::LoadFile(URI);
-
-	// Check if the first file is not the start file
-	if (currentFiles.size() <= 0)
-		mainWindow.RemoveTab(0);
 	
 	// Add the loaded file
 	currentFiles.push_back(std::shared_ptr<QFile>(new QFile(URI)));

@@ -313,6 +313,15 @@
     <CustomBuild Include="OutputWindow.h">
       <Filter>Header Files\Qt</Filter>
     </CustomBuild>
+    <CustomBuild Include="Resources\DejaVuSansMono-Bold.ttf">
+      <Filter>Resources</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Resources\DejaVuSansMono-Oblique.ttf">
+      <Filter>Resources</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Resources\DejaVuSansMono.ttf">
+      <Filter>Resources</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -377,16 +386,5 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{2266cff4-c5c6-48ed-a6f4-b5b29367529b}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="Resources\DejaVuSansMono.ttf">
-      <Filter>Resources</Filter>
-    </Font>
-    <Font Include="Resources\DejaVuSansMono-Bold.ttf">
-      <Filter>Resources</Filter>
-    </Font>
-    <Font Include="Resources\DejaVuSansMono-Oblique.ttf">
-      <Filter>Resources</Filter>
-    </Font>
   </ItemGroup>
 </Project>

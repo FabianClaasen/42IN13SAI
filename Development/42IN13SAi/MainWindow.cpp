@@ -12,14 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ShowMenuBar();
 
-	// Create code editor
-	CodeEditor* codeEditor = CreateEditor();
-	codeEditorVector.push_back(codeEditor);
-
 	// Set the tabs
 	tabs = new QTabWidget();
 	tabs->setTabsClosable(true);
-	tabs->addTab(codeEditor, "New*");
 
 	outputWindow = CreateOutputWindow();
 
@@ -148,7 +143,9 @@ void MainWindow::RemoveTab(int index)
 
 void MainWindow::AddNewTab()
 {
-	tabs->addTab(CreateEditor(), "New*");
+	CodeEditor* codeEditor = CreateEditor();
+	codeEditorVector.push_back(codeEditor);
+	tabs->addTab(codeEditor, "New*");
 }
 
 void MainWindow::addOutput(std::string output)
