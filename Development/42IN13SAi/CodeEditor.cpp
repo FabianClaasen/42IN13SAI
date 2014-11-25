@@ -195,7 +195,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 				insertPlainText(" ");
 		}*/
 		if (textCursor().position() > 0)
-		{
+		{			
 			QString previousCharacter = toPlainText().at(textCursor().position() - 1);
 			QString nextCharacter = completeCloseParentesis();
 			QTextCursor tmpCursor = textCursor();
@@ -334,7 +334,6 @@ void CodeEditor::checkRightParenthesis()
 }
 void CodeEditor::checkBracketCharacter(QKeyEvent *e)
 {
-	std::cout << e->key() << std::endl;
 	if (e->key() == Qt::Key_BracketLeft || Qt::Key_ParenLeft)
 	{
 		QTextCursor tmpCursor;
@@ -365,7 +364,6 @@ void CodeEditor::addBrackets(QTextCursor tmpCursor, int pos, QString text, QStri
 
 	text = document()->findBlockByLineNumber(pos).text();
 
-	std::cout << text.count() << std::endl;
 	text.remove(text.count() - 1, 1);
 	if (text.size() == 0)
 	{
@@ -433,7 +431,10 @@ QString CodeEditor::completeCloseParentesis()
 	int pos = textCursor().block().firstLineNumber();
 
 	QString text = document()->findBlockByLineNumber(pos).text();
-	QString result = text.at(text.count() - 1);
+	QString result = "";
+	if (text != "")
+		result = text.at(text.count() - 1);
+
 	return result;
 }
 
