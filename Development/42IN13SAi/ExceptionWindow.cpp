@@ -8,6 +8,8 @@ ExceptionWindow::ExceptionWindow(QWidget *parent) : QListView(parent)
 	this->setFont(QFont("Consolas", 12));
 #endif
 
+	setStyleSheet("color:red;");
+
 	setMaximumHeight(100);
 	setEditTriggers(QAbstractItemView::NoEditTriggers);
 	setSelectionMode(QAbstractItemView::NoSelection);

@@ -1,7 +1,4 @@
 func Main()
 [
- 	prnt(5);  
-prnt(5);  
-prnt(5);  
-prnt(5)
-]
+prnt(5);
+   ]
