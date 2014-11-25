@@ -41,6 +41,8 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 
 	updateLineNumberAreaWidth(0);
 	highlightCurrentLine();
+
+	setFocus(Qt::OtherFocusReason);
 }
 
 int CodeEditor::lineNumberAreaWidth()
@@ -183,17 +185,6 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	}
 	else 
 	{
-		// FOR THE ENTER TAB?
-		/*int space;
-		if (key == Qt::Key_Return)
-		{
-			space = checkPreviousCharacters(e);
-			QPlainTextEdit::keyPressEvent(e);
-			insertPlainText("\n");
-			std::cout << space << std::endl;
-			for (int i = 0; i < space; i++)
-				insertPlainText(" ");
-		}*/
 		if (textCursor().position() > 0)
 		{			
 			QString previousCharacter = toPlainText().at(textCursor().position() - 1);
@@ -204,10 +195,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 				tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
 				setTextCursor(tmpCursor);
 				insertPlainText("[");
-				//insertPlainText("\n");
 				addBrackets(tmpCursor, 0, "", "", 0);
-				//return;
-				//QPlainTextEdit::keyPressEvent(e);
 				return;
 			}
 		}
@@ -230,6 +218,8 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		QPlainTextEdit::keyPressEvent(e);
 
 	QString completionPrefix = textUnderCursor();
+	if (completionPrefix.contains("(") || completionPrefix.contains(")"))
+		completionPrefix = "";
 
 	// this one is for first the completerview and then fill in the text (runtime filling)
 	if (setIndexAfterPrefix)
@@ -293,28 +283,6 @@ QAbstractItemModel* CodeEditor::modelFromFile(const QString& fileName)
 #endif
 	return new QStringListModel(words, compl);
 }
-
-//int CodeEditor::checkPreviousCharacters(QKeyEvent *e)
-//{
-//	QString text;
-//	int pos;
-//	int spaces = 0;
-//	pos = textCursor().block().firstLineNumber();
-//
-//	text = document()->findBlockByLineNumber(pos).text();
-//
-//	for (int i = 0; i < text.count(); i++)
-//	{
-//		if (text[i] == ' ' || text[i] == '\t')
-//		{
-//			spaces++;
-//			//insertPlainText(" ");
-//		}
-//		else
-//			break;
-//	}
-//	return spaces;
-//}
 
 void CodeEditor::checkRightParenthesis()
 {
@@ -467,8 +435,8 @@ void CodeEditor::setCompletionPrefix(QString completionPrefix)
 
 QRect CodeEditor::getCompleterView()
 {
-	QRect cr = cursorRect();
-	cr.setX(20);
+	QMargins margin = QMargins(-19, 0, 0, 0);
+	QRect cr = cursorRect().marginsAdded(margin);
 	cr.setWidth(compl->popup()->sizeHintForColumn(0)
 		+ compl->popup()->verticalScrollBar()->sizeHint().width());
 
@@ -482,8 +450,6 @@ void CodeEditor::insertCompletion(const QString &text)
 
 	QTextCursor tc = textCursor();
 	int extra = text.length() - compl->completionPrefix().length();
-	tc.movePosition(QTextCursor::Left);
-	tc.movePosition(QTextCursor::EndOfWord);
 	tc.insertText(text.right(extra));
 	setTextCursor(tc);
 }
@@ -498,6 +464,14 @@ QString CodeEditor::textUnderCursor() const
 QCompleter *CodeEditor::getCompleter() const
 {
 	return compl;
+}
+
+void CodeEditor::focusInEvent(QFocusEvent *e)
+{
+	if (compl)
+		compl->setWidget(this);
+
+	QPlainTextEdit::focusInEvent(e);
 }
 
 #pragma endregion codeCompletion

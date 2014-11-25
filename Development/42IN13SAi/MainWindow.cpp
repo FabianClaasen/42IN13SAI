@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 	//make a central widget set the layout and add it on the mainwindow
 	QWidget* mainWidget = new QWidget();
 	mainWidget->setLayout(layout);
+	mainWidget->setFocus(Qt::OtherFocusReason);
 	this->setCentralWidget(mainWidget);
 }
 
@@ -81,8 +82,8 @@ CodeEditor* MainWindow::CreateEditor()
 	completer->setCaseSensitivity(Qt::CaseSensitive);
 	completer->setWrapAround(false);
 	codeEditor->setCompleter(completer);
+	codeEditor->setFocus(Qt::OtherFocusReason);
 	codeEditor->installEventFilter(this);
-
 	// Set the highlighter
 	highlighter = new Highlighter(codeEditor->document());
 

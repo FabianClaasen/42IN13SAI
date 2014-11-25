@@ -1,0 +1,4 @@
+func Main()
+[
+   prnt(cos(sin(8)));
+]

@@ -33,7 +33,7 @@ public:
 
 		// for codecompletion
 		virtual void keyPressEvent(QKeyEvent* e);
-		//virtual void focusInEvent(QFocusEvent *e);
+		virtual void focusInEvent(QFocusEvent *e);
 
 	private slots:
 		void updateLineNumberAreaWidth(int newBlockCount);
@@ -53,7 +53,6 @@ public:
 
 		void checkBracketCharacter(QKeyEvent *e);
 		void checkRightParenthesis();
-		//int checkPreviousCharacters(QKeyEvent *e);
 		void setCompletionPrefix(QString text);
 
 		QRect getCompleterView();
