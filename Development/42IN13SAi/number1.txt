@@ -1,4 +1,7 @@
 func Main()
 [
-   prnt(cos(sin(8)));
+ 	prnt(5);  
+prnt(5);  
+prnt(5);  
+prnt(5)
 ]

@@ -6,17 +6,17 @@
 #include <qstringlistmodel.h>
 #include <QAbstractItemView>
 
-class OutputWindow : public QListView
+class ExceptionWindow : public QListView
 {
 	Q_OBJECT
 public:
-	OutputWindow(QWidget *parent = 0);
-	~OutputWindow();
+	ExceptionWindow(QWidget *parent = 0);
+	~ExceptionWindow();
 
-	void addOutput(std::string strOutput);
-	void clearOutput();
-
+	void addException(std::string exception);
+	void clearExceptions();
+	
 private:
-	QStringList output;
+	QStringList exceptions;
 	QStringListModel* listModel;
 };

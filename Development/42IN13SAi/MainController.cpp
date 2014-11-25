@@ -33,8 +33,9 @@ void MainController::Setup()
 
 void MainController::Execute()
 {
-	//Clear the output window
+	//Clear the output windows
 	mainWindow.clearOutput();
+	mainWindow.clearExceptions();
 
 	// Excute typed code
 	// Get the file from the stream and convert to std::string
@@ -49,7 +50,7 @@ void MainController::Execute()
 	catch (const std::exception& e)
 	{
 		delete(tokenizer_controller);
-		mainWindow.addOutput(e.what());
+		mainWindow.addException(e.what());
 		return;
 	}
 
@@ -63,7 +64,7 @@ void MainController::Execute()
 	catch (const std::exception& e)
 	{
 		delete(tokenizer_controller);
-		mainWindow.addOutput(e.what());
+		mainWindow.addException(e.what());
 		return;
 	}
 	// Delete the tokenizer controller
@@ -84,7 +85,7 @@ void MainController::Execute()
 	}
 	catch (const std::exception& e)
 	{
-		mainWindow.addOutput(e.what());
+		mainWindow.addException(e.what());
 		return;
 	}
 }

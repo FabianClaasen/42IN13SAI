@@ -18,6 +18,7 @@
 #include "VirtualMachine.h"
 #include "Highlighter.h"
 #include "OutputWindow.h"
+#include "ExceptionWindow.h"
 
 class CodeEditor;
 
@@ -32,6 +33,8 @@ public:
 		void RemoveTab(int index);
 		void AddNewTab();
 		void addOutput(std::string output);
+		void addException(std::string exception);
+		void clearExceptions();
 		void clearOutput();
 		void AddFile(QFileInfo* info, QString text);
 		void SetTabTitle(QFileInfo* info);
@@ -50,15 +53,15 @@ public:
 	private:
 		int position;
 		OutputWindow* outputWindow;
+		ExceptionWindow* exceptionWindow;
 		std::vector<CodeEditor*> codeEditorVector;
 		Highlighter* highlighter;
 		QCompleter* completer;
 		QTabWidget* tabs;
+		QTabWidget* outputTab;
 
 		QAbstractItemModel *modelFromFile(const QString& fileName);
 		CodeEditor* CreateEditor();
-		
-		OutputWindow* CreateOutputWindow();
 
 		// Menu include all menu items
 		QMenu *fileMenu;

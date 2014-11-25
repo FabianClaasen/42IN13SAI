@@ -16,9 +16,9 @@ OutputWindow::OutputWindow(QWidget *parent) : QListView(parent)
 	setModel(listModel);
 }
 
-void OutputWindow::addOutput(std::string exception)
+void OutputWindow::addOutput(std::string strOutput)
 {
-	QString str = QString::fromUtf8(exception.c_str());
+	QString str = QString::fromUtf8(strOutput.c_str());
 	output << str;
 
 	listModel->setStringList(output);
