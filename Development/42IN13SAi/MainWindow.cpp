@@ -36,9 +36,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::ShowMenuBar()
 {
-	// Create menu bar
-	QMenuBar* menu = nullptr;
-
 	#ifdef _WIN32
 		menu = new QMenuBar();
 	#else
@@ -230,5 +227,5 @@ void MainWindow::AddFile(QFileInfo* info, QString text)
 
 MainWindow::~MainWindow()
 {
-	// Keep empty, Qobject is cleaning everything for you :)
+	delete menu;
 }

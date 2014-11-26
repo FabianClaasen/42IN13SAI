@@ -65,6 +65,7 @@ public:
 
 		// Menu include all menu items
 		QMenu *fileMenu;
+		QMenuBar* menu;
 		QAction *runAction, 
 				*clearAction, 
 				*newAction, 
