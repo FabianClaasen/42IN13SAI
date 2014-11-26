@@ -301,9 +301,6 @@
     <CustomBuild Include="UnknownExpressionException.h">
       <Filter>Header Files\Exceptions</Filter>
     </CustomBuild>
-    <CustomBuild Include="resource.h">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="LinkedList.h">
       <Filter>Header Files\VirtualMachine</Filter>
     </CustomBuild>
@@ -332,6 +329,9 @@
       <Filter>Resources</Filter>
     </CustomBuild>
     <CustomBuild Include="ExceptionWindow.h">
+      <Filter>Header Files\Qt</Filter>
+    </CustomBuild>
+    <CustomBuild Include="resource.h">
       <Filter>Header Files\Qt</Filter>
     </CustomBuild>
   </ItemGroup>

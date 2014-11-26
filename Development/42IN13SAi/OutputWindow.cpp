@@ -32,4 +32,5 @@ void OutputWindow::clearOutput()
 
 OutputWindow::~OutputWindow()
 {
+	delete listModel;
 }
