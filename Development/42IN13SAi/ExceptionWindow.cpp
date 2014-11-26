@@ -34,4 +34,5 @@ void ExceptionWindow::clearExceptions()
 
 ExceptionWindow::~ExceptionWindow()
 {
+	delete listModel;
 }
