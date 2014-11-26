@@ -42,7 +42,7 @@ std::shared_ptr<CompilerNode> InternalFunction::GetInternalFunction(MyTokenType 
 		return getCompilerNode("$rad", 1);
 	case MyTokenType::Percent:
 		return getCompilerNode("$perc", 2);
-	case  MyTokenType::PerMillage:
+	case  MyTokenType::Permillage:
 		return getCompilerNode("$prom", 2);
 	case MyTokenType::NormalLog:
 		return getCompilerNode("$log", 2); // or 1
@@ -67,7 +67,7 @@ std::vector<std::shared_ptr<CompilerNode>> InternalFunction::parseParameters(int
 		expectedParams--;
         if (expectedParams > 0)
         {
-            compiler->Match(MyTokenType::Seperator);
+            compiler->Match(MyTokenType::Separator);
         }
 	}
 	compiler->Match(MyTokenType::CloseBracket);

@@ -70,6 +70,16 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteSinOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteCosOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteTanOperation(CompilerNode compilerNode);
+
+	std::shared_ptr<CompilerNode> ExecuteDegreeOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteRadiantOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecutePercentOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecutePermillageOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteNormalLogOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteNLogOperation(CompilerNode compilerNode);
+	//std::shared_ptr<CompilerNode> ExecuteModuloOperation(CompilerNode compilerNode);
+
+
 	
 	//return the output (for showing it in the IDE)
 	std::vector<std::string> getOutput() { return output; };
@@ -89,6 +99,9 @@ private:
 	// Function call methods
 	std::shared_ptr<CompilerNode> CallFunction(CompilerNode node);
 	std::unique_ptr<FunctionCaller> function_caller;
+	
+	// Check and return parameters
+	std::vector<std::shared_ptr<CompilerNode>> CheckParameters(CompilerNode &compilerNode, int amount);
 
 	// Nodes 
 	std::shared_ptr<LinkedList> globalsList;

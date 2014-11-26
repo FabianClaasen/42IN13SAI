@@ -219,7 +219,7 @@ bool Compiler::IsInternalFunction(MyTokenType type)
 		case MyTokenType::Degree:
 		case MyTokenType::Radiant:
 		case MyTokenType::Percent:
-		case MyTokenType::PerMillage:
+		case MyTokenType::Permillage:
 		case MyTokenType::NormalLog:
 		case MyTokenType::NormaltwoLog:
 		case MyTokenType::Nlog:
@@ -274,6 +274,8 @@ std::string Compiler::TokenToString(MyTokenType type)
 		return "]";
 	case MyTokenType::EOL:
 		return ";";
+	case MyTokenType::Separator:
+		return "|";
 	default:
 		return "undefined";
 	}
