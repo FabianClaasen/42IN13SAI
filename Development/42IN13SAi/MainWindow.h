@@ -1,16 +1,19 @@
 #pragma once
 
+#include <Qt>
 #include <QMainWindow>
 #include <QObject>
 #include <QCompleter>
 #include <QKeyEvent>
 #include <QTabWidget>
 #include <QFileInfo>
-#include <memory>
-#include <vector>
 #include <QtWidgets>
 #include <QMenu>
 #include <QKeyEvent>
+#include <memory>
+#include <vector>
+#include <string>
+#include <iostream>
 
 #include "CodeEditor.h"
 #include "TokenizerController.h"
@@ -59,6 +62,7 @@ public:
 		std::vector<CodeEditor*> codeEditorVector;
 		Highlighter* highlighter;
 		QCompleter* completer;
+		QSplitter *splitter;
 		QTabWidget* tabs;
 		QTabWidget* outputTab;
 		Themer themer;
