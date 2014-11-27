@@ -30,6 +30,7 @@ class MainWindow : public QMainWindow
 public:
 		MainWindow(QWidget *parent = 0);
 		virtual ~MainWindow();
+		void SaveThemeSettings();
 		int GetCurrentTabPosition();
 		void RemoveTab(int index);
 		void AddNewTab();
@@ -69,8 +70,11 @@ public:
 		void CreateThemeMenu();
 
 		// Menu include all menu items
+		QMenuBar *menu;
+
 		QMenu *fileMenu,
 			  *themeMenu;
+
 		QAction *runAction, 
 				*clearAction, 
 				*newAction, 

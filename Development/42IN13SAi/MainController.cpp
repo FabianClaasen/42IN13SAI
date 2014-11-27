@@ -181,6 +181,7 @@ void MainController::SaveAsFile()
 
 void MainController::Quit()
 {
+	mainWindow.SaveThemeSettings();
 	std::exit(0);
 }
 

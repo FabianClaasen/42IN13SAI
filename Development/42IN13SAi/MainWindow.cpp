@@ -260,6 +260,11 @@ void MainWindow::AddFile(QFileInfo* info, QString text)
 	tabs->addTab(codeEditor, info->baseName());
 }
 
+void MainWindow::SaveThemeSettings()
+{
+	themer.SaveCurrentTheme();
+}
+
 MainWindow::~MainWindow()
 {
 	delete menu;

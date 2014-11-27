@@ -2,6 +2,7 @@
 
 Themer::Themer()
 {
+	settingsPath = QDir::currentPath().toStdString() + "\\Resources\\settings.json";
 	LoadThemes();
 	LoadSettings();
 }
@@ -19,6 +20,21 @@ void Themer::AddEditor(CodeEditor* codeEditor)
 void Themer::RemoveEditor(int index)
 {
 	editors.erase(editors.begin() + index);
+}
+
+void Themer::SaveCurrentTheme()
+{
+	settings["user_theme_set"] = true;
+	settings["user_theme"] = currentThemeName;
+
+	// Create styled writer for fancy output
+	Json::StyledWriter writer;
+
+	// Save the settings in the file
+	std::ofstream settingsFile;
+	settingsFile.open(settingsPath);
+	settingsFile << writer.write(settings);
+	settingsFile.close();
 }
 
 void Themer::SetTheme(std::string themeName)
@@ -118,14 +134,12 @@ void Themer::SetEditor(CodeEditor* editor)
 
 void Themer::LoadSettings()
 {
-	std::string settingsPath = QDir::currentPath().toStdString() + "\\Resources\\settings.json";
 	if (fs::exists(settingsPath))
 	{
 		// Get the settings file contents
 		std::string settingsString = getFileString(settingsPath);
 
 		// Parse it to a JSON document
-		Json::Value settings;
 		Json::Reader reader;
 
 		bool parseSucces = reader.parse(settingsString, settings);
@@ -145,9 +159,6 @@ void Themer::LoadSettings()
 	}
 	else
 	{
-		// Load a buffer and a writer
-		Json::Value settings;
-
 		// Write the data to the root
 		settings["default_theme"] = "Solarized Light";
 		settings["user_theme_set"] = false;
