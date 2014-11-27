@@ -196,6 +196,91 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	}
 	else 
 	{
+		QTextCursor curs = textCursor();
+
+		// Handle tab selection
+		if (key == Qt::Key_Tab)
+		{
+			if (curs.hasSelection())
+			{
+				e->ignore();
+
+				int spos = curs.anchor();
+				int epos = curs.position();
+
+				if (spos > epos)
+				{
+					std::swap(spos, epos);
+				}
+
+				curs.setPosition(spos, QTextCursor::MoveAnchor);
+				int sblock = curs.block().blockNumber();
+
+				curs.setPosition(epos, QTextCursor::MoveAnchor);
+				int eblock = curs.block().blockNumber();
+
+				curs.setPosition(spos, QTextCursor::MoveAnchor);
+				curs.beginEditBlock();
+
+				for (int i = 0; i <= (eblock - sblock); ++i)
+				{
+					curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+
+					curs.insertText("\t");
+
+					curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+				}
+
+				curs.endEditBlock();
+
+				curs.setPosition(spos, QTextCursor::MoveAnchor);
+				curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+
+				while (curs.block().blockNumber() < eblock)
+				{
+					curs.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+				}
+
+				curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+
+				setTextCursor(curs);
+
+				return;
+			}
+		}
+		else if (key == Qt::Key_Return) // Enter
+		{
+			e->ignore();
+
+			QTextCursor updateCursor = this->textCursor();
+
+			updateCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+			updateCursor.insertText("\n");
+
+			this->setTextCursor(updateCursor);
+
+			QString data = toPlainText();
+
+			int cursorPosition = updateCursor.position();
+			int i;
+
+			for (i = updateCursor.position() - 2; i >= 0; i--)
+			{
+				if (data.mid(i, 1) == "\n")
+				{
+					break;
+				}
+			}
+
+			while (data.mid(i + 1, 1) == "\t")
+			{
+				updateCursor.insertText("\t");
+				i++;
+			}
+
+			return;
+		}
+
 		if (textCursor().position() > 0)
 		{			
 			QString previousCharacter = toPlainText().at(textCursor().position() - 1);
