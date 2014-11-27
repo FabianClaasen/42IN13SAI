@@ -28,6 +28,8 @@ public:
 		void setCompleter(QCompleter *compl);
 		QCompleter *getCompleter() const;
 
+		void SetTheme(std::map<std::string, QColor> colors, std::string fontFamily, int fontSize);
+
 	protected:
 		void resizeEvent(QResizeEvent *event);
 
@@ -45,6 +47,11 @@ public:
 
 	private:
 		QWidget *lineNumberArea;
+		// Line number area styles
+		QColor lineNumberBackground;
+		QColor lineNumberText;
+		// Current line style
+		QColor currentLineBackground;
 
 		// for codecompletion
 		QString textUnderCursor() const;

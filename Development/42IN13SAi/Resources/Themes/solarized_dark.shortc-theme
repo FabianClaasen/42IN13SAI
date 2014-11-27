@@ -1,0 +1,19 @@
+{
+	"theme_name": "Solarized Dark",
+	"author": "Ethan Schoonover",
+	"author_url": "http://ethanschoonover.com/solarized",
+	"theme": {
+		"editor" : {
+			"background_color": [0, 43, 54],
+			"font_family": "DejaVu Sans Mono",
+			"font_size": 10,
+			"text_color": [131, 148, 150],
+			"selection_color": [9, 63, 77],
+			"selected_text_color": [131, 148, 150],
+			"linenumber_bar_color": [7, 54, 66],
+			"linenumber_text_color": [88, 110, 117],
+			"current_line_highlighter": true,
+			"current_line_highlighter_color": [7, 54, 66]
+		}
+	}
+}

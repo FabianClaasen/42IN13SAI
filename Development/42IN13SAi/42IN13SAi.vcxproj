@@ -55,6 +55,9 @@
     </ClCompile>
     <ClCompile Include="Highlighter.cpp" />
     <ClCompile Include="IdentifierException.cpp" />
+    <ClCompile Include="jsoncpp\json_reader.cpp" />
+    <ClCompile Include="jsoncpp\json_value.cpp" />
+    <ClCompile Include="jsoncpp\json_writer.cpp" />
     <ClCompile Include="LinkedList.cpp" />
     <ClCompile Include="ListIterator.cpp" />
     <ClCompile Include="ListNode.cpp" />
@@ -76,6 +79,7 @@
     <ClCompile Include="StatementNotFoundException.cpp" />
     <ClCompile Include="SubroutineNotFoundException.cpp" />
     <ClCompile Include="SymbolNotFoundException.cpp" />
+    <ClCompile Include="Themer.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="TokenDefinition.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
@@ -92,6 +96,7 @@
     <ClCompile Include="VirtualMachine.cpp" />
     <ClCompile Include="FunctionCaller.cpp" />
     <ClCompile Include="ParameterException.cpp" />
+    <ClCompile Include="ZeroDivideException.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Compiler.h">
@@ -852,24 +857,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="Resources\Menlo-Regular.ttf">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </AdditionalInputs>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
     <CustomBuild Include="OutputWindow.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing OutputWindow.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
@@ -942,6 +929,27 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_MBCS -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB "-IC:\Boost\include\boost-1_56" "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="jsoncpp\assertions.h" />
+    <ClInclude Include="jsoncpp\autolink.h" />
+    <ClInclude Include="jsoncpp\config.h" />
+    <ClInclude Include="jsoncpp\features.h" />
+    <ClInclude Include="jsoncpp\forwards.h" />
+    <ClInclude Include="jsoncpp\json.h" />
+    <ClInclude Include="jsoncpp\json_batchallocator.h" />
+    <ClInclude Include="jsoncpp\json_tool.h" />
+    <ClInclude Include="jsoncpp\reader.h" />
+    <ClInclude Include="jsoncpp\value.h" />
+    <ClInclude Include="jsoncpp\version.h" />
+    <ClInclude Include="jsoncpp\writer.h" />
+    <ClInclude Include="Themer.h" />
+    <ClInclude Include="ZeroDivideException.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="jsoncpp\json_internalarray.inl" />
+    <None Include="jsoncpp\json_internalmap.inl" />
+    <None Include="jsoncpp\json_valueiterator.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0F8E62D6-F5A0-4C66-AD23-F45D847EB1FE}</ProjectGuid>
@@ -1061,7 +1069,7 @@ xcopy "$(ProjectDir)Resources\words.txt" "$(TargetDir)\*" /c /r /y</Command>
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" Qt5Version_x0020_Win32="QT5" />
+      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

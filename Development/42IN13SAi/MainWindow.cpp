@@ -12,6 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ShowMenuBar();
 
+	// Set themer
+	Themer themer;
+
 	// Set the tabs
 	tabs = new QTabWidget();
 	tabs->setTabsClosable(true);
@@ -57,14 +60,18 @@ void MainWindow::ShowMenuBar()
 
 	quitAction = menu->addAction("Quit");
 
-	#ifndef _WIN32
-		// Also needs a menu to show the items, doesn't work with only actions
-		QMenu* mainMenu = menu->addMenu("Debug");
+#ifndef _WIN32
+	// Also needs a menu to show the items, doesn't work with only actions
+	QMenu* mainMenu = menu->addMenu("Debug");
 	
-		// Add the actions to the menu
-		mainMenu->addAction(runAction);
-		mainMenu->addAction(clearAction);
-	#endif
+	// Add the actions to the menu
+	mainMenu->addAction(runAction);
+	mainMenu->addAction(clearAction);
+#endif
+
+	// Add the Theme selection menu
+	themeMenu = menu->addMenu("Themes");
+	CreateThemeMenu();
 
 	// Set the menu bar on ui from left to right
 	this->setMenuBar(menu);
@@ -74,6 +81,7 @@ void MainWindow::ShowMenuBar()
 CodeEditor* MainWindow::CreateEditor()
 {
 	CodeEditor* codeEditor = new CodeEditor();
+	themer.AddEditor(codeEditor);
 
 	// Set the completer
 	completer = new QCompleter(this);
@@ -92,6 +100,31 @@ CodeEditor* MainWindow::CreateEditor()
 	highlighter = new Highlighter(codeEditor->document());
 
 	return codeEditor;
+}
+
+void MainWindow::CreateThemeMenu()
+{
+	std::vector<std::string> themeNames = themer.GetThemesVector();
+	std::string currentTheme = themer.GetCurrentTheme();
+
+	for (std::string themeName : themeNames)
+	{
+		QAction *action = themeMenu->addAction(themeName.c_str());
+		action->setCheckable(true);
+		action->setChecked(themeName == currentTheme);
+		connect(action, SIGNAL(triggered()), this, SLOT(ChangeTheme()));
+	}
+}
+
+void MainWindow::ChangeTheme()
+{
+	for (QAction *action : themeMenu->actions())
+	{
+		action->setChecked(false);
+	}
+	QAction* selectedAction = dynamic_cast<QAction*>(sender());
+	selectedAction->setChecked(true);
+	themer.SetTheme(selectedAction->text().toStdString());
 }
 
 QAction* MainWindow::GetRunAction()
@@ -137,11 +170,13 @@ int MainWindow::GetCurrentTabPosition()
 void MainWindow::RemoveTab(int index)
 {
 	tabs->removeTab(index);
+	themer.RemoveEditor(index);
 }
 
 void MainWindow::AddNewTab()
 {
 	CodeEditor* codeEditor = CreateEditor();
+	themer.AddEditor(codeEditor);
 	codeEditorVector.push_back(codeEditor);
 	tabs->addTab(codeEditor, "New*");
 }

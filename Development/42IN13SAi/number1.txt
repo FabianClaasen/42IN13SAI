@@ -1,4 +1,9 @@
 func Main()
 [
-prnt(5);
+	var x = 3;
+	if (x > 1 && x < 4)
+	[
+      x++;
    ]
+	prnt(x);
+]

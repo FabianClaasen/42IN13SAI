@@ -4,34 +4,11 @@
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 {
 	QString resourceDir = QDir::currentPath().append("/Resources/");
-	// Add font to the font database
+	// Add default font to the font database
 	QFontDatabase fontDatabase;
 	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf");
 	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf");
 	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf");
-	
-	// Set the font
-	QFont ideFont = QFont("DejaVu Sans Mono", 10);
-	ideFont.setStyleStrategy(QFont::PreferAntialias);
-
-	// Set editor font
-	this->setFont(ideFont);
-	
-	// Editor colours
-	QPalette pallete = this->palette();
-
-	pallete.setColor(QPalette::Active, QPalette::Base, QColor(253, 246, 227));
-	pallete.setColor(QPalette::Inactive, QPalette::Base, QColor(253, 246, 227));
-	pallete.setColor(QPalette::Text, QColor(101, 123, 131));
-	pallete.setColor(QPalette::Highlight, QColor(225, 219, 200));
-	pallete.setColor(QPalette::HighlightedText, QColor(101, 123, 131)); 
-
-	this->setPalette(pallete);
-
-	const int tabStop = 3;
-
-	QFontMetrics metrics(ideFont);
-	setTabStopWidth(tabStop * metrics.width(' '));
 
 	lineNumberArea = new LineNumberArea(this);
 
@@ -40,9 +17,42 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
 	connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
 
 	updateLineNumberAreaWidth(0);
-	highlightCurrentLine();
 
 	setFocus(Qt::OtherFocusReason);
+}
+
+void CodeEditor::SetTheme(std::map<std::string, QColor> colors, std::string fontFamily, int fontSize)
+{
+	// Set the font
+	QFont ideFont = QFont(QString::fromStdString(fontFamily), fontSize);
+	ideFont.setStyleStrategy(QFont::PreferAntialias);
+
+	// Set editor font
+	setFont(ideFont);
+	QFontMetrics metrics(ideFont);
+
+	// Set tabs
+	const int tabStop = 3;
+	setTabStopWidth(tabStop * metrics.width(' '));
+
+	// Editor colours
+	QPalette pallete;
+
+	pallete.setColor(QPalette::Active, QPalette::Base, colors["background"]);
+	pallete.setColor(QPalette::Inactive, QPalette::Base, colors["background"]);
+	pallete.setColor(QPalette::Text, colors["text"]);
+	pallete.setColor(QPalette::Highlight, colors["higlight"]);
+	pallete.setColor(QPalette::HighlightedText, colors["highlighted_text"]);
+
+	this->setPalette(pallete);
+
+	// Line number area
+	lineNumberBackground = colors["linenumber_background"];
+	lineNumberText = colors["linenumber_text"];
+
+	// Set the current line higlight
+	currentLineBackground = colors["currentline_background"];
+	highlightCurrentLine();
 }
 
 int CodeEditor::lineNumberAreaWidth()
@@ -95,12 +105,13 @@ void CodeEditor::resizeEvent(QResizeEvent *e)
 void CodeEditor::highlightCurrentLine()
 {
 	QList<QTextEdit::ExtraSelection> extraSelections;
+	setExtraSelections(extraSelections);
 
 	if (!isReadOnly())
 	{
 		QTextEdit::ExtraSelection selection;
 
-		QColor lineColor = QColor(238, 232, 213);
+		QColor lineColor = currentLineBackground;
 
 		selection.format.setBackground(lineColor);
 		selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -116,7 +127,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
 	
 	QPainter painter(lineNumberArea);
-	painter.fillRect(event->rect(), Qt::lightGray);
+	painter.fillRect(event->rect(), lineNumberBackground);
 
 	QTextBlock block = firstVisibleBlock();
 
@@ -129,7 +140,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 		if (block.isVisible() && bottom >= event->rect().top())
 		{
 			QString number = QString::number(blockNumber + 1);
-			painter.setPen(Qt::black);
+			painter.setPen(lineNumberText);
 
 			painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(), Qt::AlignRight, number);
 		}

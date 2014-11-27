@@ -2,6 +2,7 @@
 
 #include "InternalFunction.h"
 #include "SymbolNotFoundException.h"
+#include "ZeroDivideException.h"
 #include "Compiler.h"
 #include <vector>
 
@@ -18,8 +19,8 @@ public:
 	void ParseIfStatement();
 	void ParseLoopStatement();
 	void ParseFunctionCall();
-    void ParseReturn();
-    
+	void ParseReturn();
+	
 	std::shared_ptr<CompilerNode> ParseExpression();
 	std::shared_ptr<CompilerNode> ParseRelationalExpression();
 	std::shared_ptr<CompilerNode> ParseAddExpression();
@@ -37,7 +38,7 @@ private:
 	bool IsNextTokenRelationalOp();
 	bool IsNextTokenLogicalOp();
 	bool IsNextTokenReturnType();
-    bool IsTokenReturnVarType(Token token);
+	bool IsTokenReturnVarType(Token token);
 
 	Symbol* GetSymbol(std::string identifier);
 };
