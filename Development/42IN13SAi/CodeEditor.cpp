@@ -465,7 +465,7 @@ void CodeEditor::addBrackets(QTextCursor tmpCursor, int pos, QString text, QStri
 			else if (text[i] == '\t')
 			{
 				spaces = spaces + 3;
-				insertPlainText("   ");
+				insertPlainText("\t");
 			}
 			else
 				break;
@@ -487,7 +487,7 @@ void CodeEditor::addBrackets(QTextCursor tmpCursor, int pos, QString text, QStri
 		for (int s = 0; s < spaces; s++)
 			insertPlainText(" ");
 	}
-	insertPlainText("   ");
+	insertPlainText("\t");
 }
 
 QString CodeEditor::completeCloseParentesis()
