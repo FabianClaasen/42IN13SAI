@@ -63,6 +63,10 @@ void FunctionCaller::fillFunctionMap()
 	functions.insert(functionMap::value_type("$sin", &VirtualMachine::ExecuteSinOperation));
 	functions.insert(functionMap::value_type("$cos", &VirtualMachine::ExecuteCosOperation));
 	functions.insert(functionMap::value_type("$tan", &VirtualMachine::ExecuteTanOperation));
+
+	// Complex Math Operations
+	functions.insert(functionMap::value_type("$rad", &VirtualMachine::ExecuteRadiantOperation));
+	functions.insert(functionMap::value_type("$deg", &VirtualMachine::ExecuteDegreeOperation));
 }
 
 FunctionCaller::~FunctionCaller()

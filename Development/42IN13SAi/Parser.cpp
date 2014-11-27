@@ -41,9 +41,9 @@ void Parser::ParseFunction()
 		// Set the parameters
 		while (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
 		{
-			if (compiler->PeekNext()->Type == MyTokenType::Seperator)
+			if (compiler->PeekNext()->Type == MyTokenType::Separator)
 			{
-				compiler->GetNext(); // remove seperator so you can add a new parameter
+				compiler->GetNext(); // remove Separator so you can add a new parameter
 			}
 			else
 			{
@@ -234,7 +234,7 @@ void Parser::ParseFunctionCall()
 	compiler->Match(MyTokenType::OpenBracket);
 	while (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
 	{
-		if (compiler->PeekNext()->Type == MyTokenType::Seperator)
+		if (compiler->PeekNext()->Type == MyTokenType::Separator)
 		{
 			currentToken = compiler->GetNext();
 		}
@@ -353,9 +353,9 @@ void Parser::ParseLoopStatement()
 	if (forLoop)
 	{
 		nodeParameters.push_back(ParseAssignmentStatement(true));
-		compiler->Match(MyTokenType::Seperator);
+		compiler->Match(MyTokenType::Separator);
 		nodeParameters.push_back(ParseExpression());
-		compiler->Match(MyTokenType::Seperator);
+		compiler->Match(MyTokenType::Separator);
 
 		// Check if it is a uni operator, if true it should parse an assign
 		if (compiler->PeekNext()->Type == MyTokenType::Identifier)
@@ -627,7 +627,7 @@ std::shared_ptr<CompilerNode> Parser::ParseFunctionCall(Token token)
 
 	while (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
 	{
-		if (compiler->PeekNext()->Type == MyTokenType::Seperator)
+		if (compiler->PeekNext()->Type == MyTokenType::Separator)
 		{
 			currentToken = compiler->GetNext();
 		}

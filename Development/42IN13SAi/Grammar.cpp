@@ -17,7 +17,7 @@ std::list<TokenDefinition> Grammar::getGrammar()
     // functions
     definitions.push_back(TokenDefinition("\\bfunc\\sMain\\b", MyTokenType::MainFunction));
     definitions.push_back(TokenDefinition("\\bfunc\\b", MyTokenType::Function));
-    definitions.push_back(TokenDefinition("\\|", MyTokenType::Seperator));
+    definitions.push_back(TokenDefinition("\\|", MyTokenType::Separator));
 
     //internal functions
     definitions.push_back(TokenDefinition("\\bprnt\\b", MyTokenType::PrintLine));
@@ -31,7 +31,7 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("\\bdeg\\b", MyTokenType::Degree));
     definitions.push_back(TokenDefinition("\\brad\\b", MyTokenType::Radiant));
     definitions.push_back(TokenDefinition("\\bperc\\b", MyTokenType::Percent));
-    definitions.push_back(TokenDefinition("\\bprom\\b", MyTokenType::PerMillage));
+    definitions.push_back(TokenDefinition("\\bprom\\b", MyTokenType::Permillage));
     definitions.push_back(TokenDefinition("\\blog\\b", MyTokenType::NormalLog));
     definitions.push_back(TokenDefinition("\\bln\\b", MyTokenType::Nlog));
     definitions.push_back(TokenDefinition("\\bmod\\b", MyTokenType::Modulo));

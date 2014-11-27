@@ -10,7 +10,6 @@ ExceptionWindow::ExceptionWindow(QWidget *parent) : QListView(parent)
 
 	setStyleSheet("color:red;");
 
-	setMaximumHeight(100);
 	setEditTriggers(QAbstractItemView::NoEditTriggers);
 	setSelectionMode(QAbstractItemView::NoSelection);
 
@@ -34,4 +33,5 @@ void ExceptionWindow::clearExceptions()
 
 ExceptionWindow::~ExceptionWindow()
 {
+	delete listModel;
 }
