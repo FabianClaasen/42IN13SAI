@@ -67,6 +67,12 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteNotEqualCondition(CompilerNode compilerNode);
 
 	// Complexer math operations
+	std::shared_ptr<CompilerNode> ExecuteSqrOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteCbcOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecutePowOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteSqrtOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteCbrtOperation(CompilerNode compilerNode);
+
 	std::shared_ptr<CompilerNode> ExecuteSinOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteCosOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteTanOperation(CompilerNode compilerNode);
@@ -75,8 +81,10 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteRadiantOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecutePercentOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecutePermillageOperation(CompilerNode compilerNode);
-	std::shared_ptr<CompilerNode> ExecuteNormalLogOperation(CompilerNode compilerNode);
-	std::shared_ptr<CompilerNode> ExecuteNLogOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteCommonLogOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteBinaryLogOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteNaturalLogOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteLogOperation(CompilerNode compilerNode);
 	//std::shared_ptr<CompilerNode> ExecuteModuloOperation(CompilerNode compilerNode);
 
 

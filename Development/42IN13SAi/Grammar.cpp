@@ -23,6 +23,8 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("\\bprnt\\b", MyTokenType::PrintLine));
     definitions.push_back(TokenDefinition("\\bstop\\b", MyTokenType::Stop));
     definitions.push_back(TokenDefinition("\\bsqr\\b", MyTokenType::Square));
+	definitions.push_back(TokenDefinition("\\bcbc\\b", MyTokenType::Cube));
+	definitions.push_back(TokenDefinition("\\bpow\\b", MyTokenType::Power));
     definitions.push_back(TokenDefinition("\\bsqrt\\b", MyTokenType::SquareRoot));
     definitions.push_back(TokenDefinition("\\bcbrt\\b", MyTokenType::CubeRoot));
     definitions.push_back(TokenDefinition("\\bsin\\b", MyTokenType::Sine));
@@ -31,9 +33,11 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("\\bdeg\\b", MyTokenType::Degree));
     definitions.push_back(TokenDefinition("\\brad\\b", MyTokenType::Radiant));
     definitions.push_back(TokenDefinition("\\bperc\\b", MyTokenType::Percent));
-    definitions.push_back(TokenDefinition("\\bprom\\b", MyTokenType::Permillage));
-    definitions.push_back(TokenDefinition("\\blog\\b", MyTokenType::NormalLog));
-    definitions.push_back(TokenDefinition("\\bln\\b", MyTokenType::Nlog));
+    definitions.push_back(TokenDefinition("\\bperm\\b", MyTokenType::Permillage));
+    definitions.push_back(TokenDefinition("\\blog10\\b", MyTokenType::CommonLog));
+	definitions.push_back(TokenDefinition("\\blog2\\b", MyTokenType::BinaryLog));
+	definitions.push_back(TokenDefinition("\\blog\\b", MyTokenType::Log));
+    definitions.push_back(TokenDefinition("\\bln\\b", MyTokenType::NaturalLog));
     definitions.push_back(TokenDefinition("\\bmod\\b", MyTokenType::Modulo));
     
     // return

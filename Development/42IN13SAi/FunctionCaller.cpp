@@ -64,9 +64,22 @@ void FunctionCaller::fillFunctionMap()
 	functions.insert(functionMap::value_type("$cos", &VirtualMachine::ExecuteCosOperation));
 	functions.insert(functionMap::value_type("$tan", &VirtualMachine::ExecuteTanOperation));
 
-	// Complex Math Operations
+	functions.insert(functionMap::value_type("$sqr", &VirtualMachine::ExecuteSqrOperation));
+	functions.insert(functionMap::value_type("$cbc", &VirtualMachine::ExecuteCbcOperation));
+	functions.insert(functionMap::value_type("$pow", &VirtualMachine::ExecutePowOperation));
+	functions.insert(functionMap::value_type("$sqrt", &VirtualMachine::ExecuteSqrtOperation));
+	functions.insert(functionMap::value_type("$cbrt", &VirtualMachine::ExecuteCbrtOperation));
+
 	functions.insert(functionMap::value_type("$rad", &VirtualMachine::ExecuteRadiantOperation));
 	functions.insert(functionMap::value_type("$deg", &VirtualMachine::ExecuteDegreeOperation));
+
+	functions.insert(functionMap::value_type("$perc", &VirtualMachine::ExecutePercentOperation));
+	functions.insert(functionMap::value_type("$perm", &VirtualMachine::ExecutePermillageOperation));
+
+	functions.insert(functionMap::value_type("$log10", &VirtualMachine::ExecuteCommonLogOperation));
+	functions.insert(functionMap::value_type("$log2", &VirtualMachine::ExecuteBinaryLogOperation));
+	functions.insert(functionMap::value_type("$ln", &VirtualMachine::ExecuteNaturalLogOperation));
+	functions.insert(functionMap::value_type("$log", &VirtualMachine::ExecuteLogOperation));
 }
 
 FunctionCaller::~FunctionCaller()

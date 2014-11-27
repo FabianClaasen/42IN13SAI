@@ -58,6 +58,7 @@ enum class MyTokenType : int {
 	Sine,
 	Tangent,
 	Square,
+	Cube,
 	Power,
 	SquareRoot,
 	CubeRoot,
@@ -65,8 +66,9 @@ enum class MyTokenType : int {
 	Radiant,
 	Percent,
 	Permillage,
-	NormalLog, 
-	NormaltwoLog,
-	Nlog,
+	CommonLog, 
+	BinaryLog,
+	NaturalLog,
+	Log,
 	Modulo
 };

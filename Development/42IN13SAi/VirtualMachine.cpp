@@ -612,6 +612,80 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteUniPlusOperation(CompilerNo
 #pragma endregion SimpleMath
 
 #pragma region ComplexMath
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSqrOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+
+	float output = std::pow(num1, 2);
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCbcOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+
+	float output = std::pow(num1, 3);
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecutePowOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+
+	// TODO CHECKS
+
+	float output = std::pow(num1, num2);
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSqrtOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+
+	float output = std::sqrt(num1);
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCbrtOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+
+	float output = std::cbrt(num1);
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSinOperation(CompilerNode compilerNode)
 {
@@ -678,8 +752,107 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteRadiantOperation(CompilerNo
 	// Parse the parameters to a float for mathmatic operation
 	float num1 = atof(param1->GetValue().c_str());
 	float output = num1 * (M_PI / 180);
-
 	// Create a new value compilernode to return
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecutePercentOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+	if (num2 == 0)
+	{
+		//TODO: Throw division by zero exception
+	}
+	float output = (num1 / num2) * 100;
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecutePermillageOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+	if (num2 == 0)
+	{
+		//TODO: Throw division by zero exception
+	}
+	float output = (num1 / num2) * 1000;
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCommonLogOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	
+	float output = std::log10(num1);
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteBinaryLogOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+
+	float output = std::log2(num1);
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNaturalLogOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+
+	float output = std::log(num1);
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLogOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+
+	// TODO CHECKS
+
+	float output = std::log(num1) / std::log(num2);
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+
 #pragma endregion ComplexMath

@@ -30,6 +30,8 @@ std::shared_ptr<CompilerNode> InternalFunction::GetInternalFunction(MyTokenType 
 		return getCompilerNode("$tan", 1);
 	case MyTokenType::Square:
 		return getCompilerNode("$sqr", 1);
+	case MyTokenType::Cube:
+		return getCompilerNode("$cbc", 1);
 	case MyTokenType::Power:
 		return getCompilerNode("$pow", 2);
 	case MyTokenType::SquareRoot:
@@ -43,11 +45,15 @@ std::shared_ptr<CompilerNode> InternalFunction::GetInternalFunction(MyTokenType 
 	case MyTokenType::Percent:
 		return getCompilerNode("$perc", 2);
 	case  MyTokenType::Permillage:
-		return getCompilerNode("$prom", 2);
-	case MyTokenType::NormalLog:
-		return getCompilerNode("$log", 2); // or 1
-	case MyTokenType::Nlog:
+		return getCompilerNode("$perm", 2);
+	case MyTokenType::CommonLog:
+		return getCompilerNode("$log10", 1); 
+	case MyTokenType::BinaryLog:
+		return getCompilerNode("$log2", 1);
+	case MyTokenType::NaturalLog:
 		return getCompilerNode("$ln", 1);
+	case MyTokenType::Log:
+		return getCompilerNode("$log", 2);
 	case MyTokenType::Modulo:
 		return getCompilerNode("$mod", 2);
 	default:

@@ -213,6 +213,7 @@ bool Compiler::IsInternalFunction(MyTokenType type)
 		case MyTokenType::Sine:
 		case MyTokenType::Tangent:
 		case MyTokenType::Square:
+		case MyTokenType::Cube:
 		case MyTokenType::Power:
 		case MyTokenType::SquareRoot:
 		case MyTokenType::CubeRoot:
@@ -220,9 +221,10 @@ bool Compiler::IsInternalFunction(MyTokenType type)
 		case MyTokenType::Radiant:
 		case MyTokenType::Percent:
 		case MyTokenType::Permillage:
-		case MyTokenType::NormalLog:
-		case MyTokenType::NormaltwoLog:
-		case MyTokenType::Nlog:
+		case MyTokenType::CommonLog:
+		case MyTokenType::BinaryLog:
+		case MyTokenType::NaturalLog:
+		case MyTokenType::Log:
 		case MyTokenType::Modulo:
 			return true;
 		default:
