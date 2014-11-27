@@ -205,6 +205,8 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 			{
 				e->ignore();
 
+				e->setAccepted(true);
+
 				int spos = curs.anchor();
 				int epos = curs.position();
 
