@@ -20,6 +20,7 @@
 #include "UnexpectedKeywordException.h"
 #include "ParameterNameException.h"
 #include "IdentifierException.h"
+#include "UnexpectedParameterException.h"
 
 class InternalFunction;
 class Parser;

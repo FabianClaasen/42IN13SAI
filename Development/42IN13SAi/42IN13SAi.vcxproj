@@ -90,6 +90,7 @@
     <ClCompile Include="Subroutine.cpp" />
     <ClCompile Include="SubroutineTable.cpp" />
     <ClCompile Include="UnexpectedKeywordException.cpp" />
+    <ClCompile Include="UnexpectedParameterException.cpp" />
     <ClCompile Include="UnexpectedTypeException.cpp" />
     <ClCompile Include="UnknownExpressionException.cpp" />
     <ClCompile Include="VariableNotFoundException.cpp" />
@@ -944,6 +945,7 @@
     <ClInclude Include="jsoncpp\version.h" />
     <ClInclude Include="jsoncpp\writer.h" />
     <ClInclude Include="Themer.h" />
+    <ClInclude Include="UnexpectedParameterException.h" />
     <ClInclude Include="ZeroDivideException.h" />
   </ItemGroup>
   <ItemGroup>

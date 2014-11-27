@@ -39,6 +39,9 @@ void Parser::ParseFunction()
 		compiler->Match(MyTokenType::OpenBracket);
 
 		// Set the parameters
+		if (currentToken.Type == MyTokenType::MainFunction && compiler->PeekNext()->Type != MyTokenType::CloseBracket)
+			throw UnexpectedParameterException("Main function can't contain parameters (line " + std::to_string(currentToken.LineNumber) + ")");
+
 		while (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
 		{
 			if (compiler->PeekNext()->Type == MyTokenType::Separator)

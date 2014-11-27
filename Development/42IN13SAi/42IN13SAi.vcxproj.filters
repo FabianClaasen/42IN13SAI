@@ -185,6 +185,9 @@
     <ClCompile Include="jsoncpp\json_writer.cpp">
       <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
+    <ClCompile Include="UnexpectedParameterException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="CodeEditor.h">
@@ -456,6 +459,9 @@
     </ClInclude>
     <ClInclude Include="jsoncpp\writer.h">
       <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="UnexpectedParameterException.h">
+      <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
