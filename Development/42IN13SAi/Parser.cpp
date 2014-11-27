@@ -102,11 +102,6 @@ void Parser::ParseReturn()
 //Also parse (standard) Arithmetical operations
 std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 {
-#ifdef _WIN32
-	// Memory leaks notifier
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-#endif
-
 	std::string expression = "";
 	std::vector<std::shared_ptr<CompilerNode>> nodeParameters;
 	std::shared_ptr<CompilerNode> endNode = nullptr;
@@ -524,11 +519,19 @@ std::shared_ptr<CompilerNode> Parser::ParseMulExpression()
 		case MyTokenType::OperatorDivide:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
+			if (term->GetValue() == "0" || secondTerm->GetValue() == "0")
+			{
+				throw ZeroDivideException("Can't divide by zero or divide zero");
+			}
 			term = std::make_shared<CompilerNode>("$div", parameters, nullptr, false);
 			break;
 		case MyTokenType::OperatorRaised:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
+			if (secondTerm->GetValue() == "0")
+			{
+				throw ZeroDivideException("Can't raise by zero");
+			}
 			term = std::make_shared<CompilerNode>("$raise", parameters, nullptr, false);
 			break;
 		}

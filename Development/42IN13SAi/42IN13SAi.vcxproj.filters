@@ -170,6 +170,21 @@
     <ClCompile Include="GeneratedFiles\Release\moc_ExceptionWindow.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="ZeroDivideException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Themer.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="jsoncpp\json_reader.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="jsoncpp\json_value.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="jsoncpp\json_writer.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="CodeEditor.h">
@@ -313,9 +328,6 @@
     <CustomBuild Include="Resources\words.txt">
       <Filter>Resources</Filter>
     </CustomBuild>
-    <CustomBuild Include="Resources\Menlo-Regular.ttf">
-      <Filter>Resources</Filter>
-    </CustomBuild>
     <CustomBuild Include="OutputWindow.h">
       <Filter>Header Files\Qt</Filter>
     </CustomBuild>
@@ -398,5 +410,63 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{2266cff4-c5c6-48ed-a6f4-b5b29367529b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\jsoncpp">
+      <UniqueIdentifier>{95af4f7e-a7ba-48ce-9847-ab6d1c57e586}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ZeroDivideException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Themer.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json_batchallocator.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json_tool.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\assertions.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\autolink.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\config.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\features.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\forwards.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\reader.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\value.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\version.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\writer.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="jsoncpp\json_internalarray.inl">
+      <Filter>Source Files\jsoncpp</Filter>
+    </None>
+    <None Include="jsoncpp\json_internalmap.inl">
+      <Filter>Source Files\jsoncpp</Filter>
+    </None>
+    <None Include="jsoncpp\json_valueiterator.inl">
+      <Filter>Source Files\jsoncpp</Filter>
+    </None>
   </ItemGroup>
 </Project>

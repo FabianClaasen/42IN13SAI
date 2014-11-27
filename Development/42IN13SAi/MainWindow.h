@@ -19,6 +19,7 @@
 #include "Highlighter.h"
 #include "OutputWindow.h"
 #include "ExceptionWindow.h"
+#include "Themer.h"
 
 class CodeEditor;
 
@@ -29,6 +30,7 @@ class MainWindow : public QMainWindow
 public:
 		MainWindow(QWidget *parent = 0);
 		virtual ~MainWindow();
+		void SaveThemeSettings();
 		int GetCurrentTabPosition();
 		void RemoveTab(int index);
 		void AddNewTab();
@@ -59,13 +61,20 @@ public:
 		QCompleter* completer;
 		QTabWidget* tabs;
 		QTabWidget* outputTab;
+		Themer themer;
 
 		QAbstractItemModel *modelFromFile(const QString& fileName);
 		CodeEditor* CreateEditor();
 
+		// Theme 
+		void CreateThemeMenu();
+
 		// Menu include all menu items
-		QMenu *fileMenu;
-		QMenuBar* menu;
+		QMenuBar *menu;
+
+		QMenu *fileMenu,
+			  *themeMenu;
+
 		QAction *runAction, 
 				*clearAction, 
 				*newAction, 
@@ -75,4 +84,7 @@ public:
 				*quitAction;
 
 		void ShowMenuBar();
+
+	private slots:
+		void ChangeTheme();
 };
