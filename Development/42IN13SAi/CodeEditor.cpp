@@ -66,9 +66,19 @@ int CodeEditor::lineNumberAreaWidth()
 		++digits;
 	}
 
-	int width = fontMetrics().width(QLatin1Char('9')) * digits;
+	int fontWidth = fontMetrics().width(QLatin1Char('9'));
+	int width;
 
-	return width + 10;
+	if (digits < 5)
+	{
+		width = fontWidth * 4;
+	}
+	else
+	{
+		width = fontWidth * digits;
+	}
+
+	return width;
 }
 
 void CodeEditor::updateLineNumberAreaWidth(int)
