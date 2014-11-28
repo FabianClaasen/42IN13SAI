@@ -10,6 +10,7 @@
 #include <QtWidgets>
 #include <QMenu>
 #include <QKeyEvent>
+#include <QList>
 #include <memory>
 #include <vector>
 #include <string>
