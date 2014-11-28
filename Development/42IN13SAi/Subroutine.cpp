@@ -76,7 +76,7 @@ std::vector<std::shared_ptr<CompilerNode>> Subroutine::GetCompilerNodeVector()
 {
 	std::vector<std::shared_ptr<CompilerNode>> nodeVector;
 
-	for (ListIterator it = subroutineCompilerNodes->begin(); it == subroutineCompilerNodes->end(); ++it)
+	for (ListIterator it = subroutineCompilerNodes->begin(); it != subroutineCompilerNodes->end(); ++it)
 	{
 		nodeVector.push_back(*it);
 	}
