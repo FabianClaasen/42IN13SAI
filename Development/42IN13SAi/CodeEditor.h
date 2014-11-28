@@ -61,13 +61,14 @@ public:
 
 		void checkBracketCharacter(QKeyEvent *e);
 		void checkRightParenthesis();
+		QString getSentenceFromLine();
 		void setCompletionPrefix(QString text);
-		void addEnterIndent();
+		void addSpecialIndent(bool isEnter, bool isBracket);
 		QRect getCompleterView();
 		QRect cr;
 		QAbstractItemModel* modelFromFile(const QString& fileName);
 
-		void addBrackets(QTextCursor tmpCursor, int pos, QString text, QString last, int spaces);
+		//void addBrackets(QTextCursor tmpCursor, int pos, QString text, QString last, int spaces);
 		QString completeCloseParentesis();
 };
 

@@ -67,16 +67,9 @@ int CodeEditor::lineNumberAreaWidth()
 	}
 
 	int fontWidth = fontMetrics().width(QLatin1Char('9'));
-	int width;
+	int width = 0;
 
-	if (digits < 5)
-	{
-		width = fontWidth * 4;
-	}
-	else
-	{
-		width = fontWidth * digits;
-	}
+	(digits < 5) ? width = fontWidth * 4 : width = fontWidth * digits;
 
 	return width;
 }
@@ -88,14 +81,7 @@ void CodeEditor::updateLineNumberAreaWidth(int)
 
 void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 {
-	if (dy)
-	{
-		lineNumberArea->scroll(0, dy);
-	}
-	else
-	{
-		lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
-	}
+	(dy) ? lineNumberArea->scroll(0, dy) : lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
 
 	if (rect.contains(viewport()->rect()))
 	{
@@ -168,22 +154,21 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 void CodeEditor::keyPressEvent(QKeyEvent *e)
 {
 	int key = e->key();
+	// For a better behaviour of completer and enter
 	bool isEnterAndListVisible;
 	bool setIndexAfterPrefix = false;
-	//std::cout << e->key() << std::endl;
-	int row = 0;
+	// Check if completer is visible
 	if (compl->popup()->isVisible())
 	{
-		// if backspace or space key are pressed when popup is visible, hide it
+		// if space or escape is pressed when popup is visible, hide it
 		switch (key)
 		{
 		case Qt::Key_Space:
-		case Qt::Key_Backspace: 
 		case Qt::Key_Escape:
 			compl->popup()->hide();
 			return;
 		}
-		// If tab key is pressed, fill in the completion
+		// If tab key or enter is pressed, fill in the completion and return
 		if ((Qt::Key_Tab == key || key == Qt::Key_Return) && compl->popup()->isEnabled())
 		{
 			QModelIndex currentIndex = compl->popup()->currentIndex();
@@ -209,112 +194,70 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		QTextCursor curs = textCursor();
 
 		// Handle tab selection
-		if (key == Qt::Key_Tab)
+		if (key == Qt::Key_Tab && curs.hasSelection())
 		{
-			if (curs.hasSelection())
+			e->ignore();
+
+			e->setAccepted(true);
+
+			int spos = curs.anchor();
+			int epos = curs.position();
+
+			if (spos > epos)
 			{
-				e->ignore();
+				std::swap(spos, epos);
+			}
 
-				e->setAccepted(true);
+			curs.setPosition(spos, QTextCursor::MoveAnchor);
+			int sblock = curs.block().blockNumber();
 
-				int spos = curs.anchor();
-				int epos = curs.position();
+			curs.setPosition(epos, QTextCursor::MoveAnchor);
+			int eblock = curs.block().blockNumber();
 
-				if (spos > epos)
-				{
-					std::swap(spos, epos);
-				}
+			curs.setPosition(spos, QTextCursor::MoveAnchor);
+			curs.beginEditBlock();
 
-				curs.setPosition(spos, QTextCursor::MoveAnchor);
-				int sblock = curs.block().blockNumber();
-
-				curs.setPosition(epos, QTextCursor::MoveAnchor);
-				int eblock = curs.block().blockNumber();
-
-				curs.setPosition(spos, QTextCursor::MoveAnchor);
-				curs.beginEditBlock();
-
-				for (int i = 0; i <= (eblock - sblock); ++i)
-				{
-					curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-
-					curs.insertText("\t");
-
-					curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
-				}
-
-				curs.endEditBlock();
-
-				curs.setPosition(spos, QTextCursor::MoveAnchor);
+			for (int i = 0; i <= (eblock - sblock); ++i)
+			{
 				curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
 
-				while (curs.block().blockNumber() < eblock)
-				{
-					curs.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
-				}
+				curs.insertText("\t");
 
-				curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-
-				setTextCursor(curs);
-
-				return;
+				curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
 			}
-		}
-		else if (key == Qt::Key_Return) // Enter
-		{
-			
-			return;
-			//e->ignore();
 
-			//QTextCursor updateCursor = this->textCursor();
+			curs.endEditBlock();
 
-			//updateCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-			//updateCursor.insertText("\n");
+			curs.setPosition(spos, QTextCursor::MoveAnchor);
+			curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
 
-			//this->setTextCursor(updateCursor);
-
-			//int pos = textCursor().block().firstLineNumber();
-
-			//QString data = document()->findBlockByLineNumber(pos).text();
-			////QString data = toPlainText();
-
-			//int cursorPosition = updateCursor.position();
-			//int i;
-
-			//for (i = updateCursor.position() - 2; i >= 0; i--)
-			//{
-			//	if (data.mid(i, 1) == "\n")
-			//	{
-			//		break;
-			//	}
-			//}
-
-			//while (data.mid(i + 1, 1) == "\t")
-			//{
-			//	updateCursor.insertText("\t");
-			//	i++;
-			//}
-
-			//return;
-		}
-
-		if (textCursor().position() > 0)
-		{
-			//switch (key)
-			//{
-			//	case Qt::Key_Tab:
-			//		// TO set tab completion and tab indent
-			//}
-			//addEnterIndent();
-			QString previousCharacter = toPlainText().at(textCursor().position() - 1);
-			QString nextCharacter = completeCloseParentesis();
-			QTextCursor tmpCursor = textCursor();
-			if (key == Qt::Key_Tab && previousCharacter == "(" && nextCharacter == ")")
+			while (curs.block().blockNumber() < eblock)
 			{
-				tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
-				setTextCursor(tmpCursor);
-				insertPlainText("[");
-				addBrackets(tmpCursor, 0, "", "", 0);
+				curs.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+			}
+
+			curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+
+			setTextCursor(curs);
+
+			return;
+		}
+		// Check for special indents
+		if (key == Qt::Key_Tab || key == Qt::Key_Return)
+		{
+			QTextCursor tmpCursor = textCursor();
+			if (tmpCursor.positionInBlock() > 0)
+			{
+				QString line = getSentenceFromLine();
+				if (key == Qt::Key_Tab && line.contains("(") && line.contains(")"))
+				{
+					tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
+					setTextCursor(tmpCursor);
+					insertPlainText("[");
+					addSpecialIndent(false, true);
+				}
+				if (key == Qt::Key_Return)
+					addSpecialIndent(true, false);
 				return;
 			}
 		}
@@ -336,36 +279,16 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	if (!isCtrlSpace)
 		QPlainTextEdit::keyPressEvent(e);
 
+	// get completion prefix
 	QString completionPrefix = textUnderCursor();
 	if (completionPrefix.contains("(") || completionPrefix.contains(")"))
 		completionPrefix = "";
-
-	// this one is for first the completerview and then fill in the text (runtime filling)
-	if (setIndexAfterPrefix)
-	{
-		int count = compl->model()->rowCount();
-		for (int i = 0; i < count; i++)
-		{
-			QString key = compl->completionModel()->index(i, 0).data().toString();
-			if (key.startsWith(completionPrefix, Qt::CaseSensitive))
-			{
-				QModelIndex new_index = compl->completionModel()->index(i, 0);
-				compl->popup()->setCurrentIndex(new_index);
-				compl->popup()->hide();
-				setCompletionPrefix(completionPrefix);
-				cr = getCompleterView();
-				compl->complete(cr);
-				return;
-			}
-		}
-		// hide when case sensitive startswith is not found
-		compl->popup()->hide();
-	}
 	
 	checkBracketCharacter(e);
 
 	setCompletionPrefix(completionPrefix);
 	cr = getCompleterView();
+	// Check for automatic completion or not
 	if ((e->modifiers() & Qt::ControlModifier) && (e->key() == Qt::Key_Space))
 	{
 		QModelIndex index = compl->popup()->currentIndex();
@@ -377,6 +300,25 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		}
 		else
 			compl->complete(cr);
+	}
+	else if (setIndexAfterPrefix)
+	{
+		int count = compl->model()->rowCount();
+		for (int i = 0; i < count; i++)
+		{
+			QString key = compl->completionModel()->index(i, 0).data().toString();
+			if (key.startsWith(completionPrefix, Qt::CaseSensitive))
+			{
+				QModelIndex new_index = compl->completionModel()->index(i, 0);
+				compl->popup()->setCurrentIndex(new_index);
+				setCompletionPrefix(completionPrefix);
+				cr = getCompleterView();
+				compl->complete(cr);
+				return;
+			}
+		}
+		// hide when case sensitive startswith is not found
+		compl->popup()->hide();
 	}
 }
 
@@ -417,29 +359,31 @@ void CodeEditor::checkRightParenthesis()
 	else if (prevChar == ")" || prevChar != "(")
 	{
 		insertPlainText(")");
-	}
+	} 
 }
 
-void CodeEditor::addEnterIndent()
+QString CodeEditor::getSentenceFromLine()
 {
+	QTextCursor tmpCursor = textCursor();
+	int pos = textCursor().block().firstLineNumber();
+	QString text = document()->findBlockByLineNumber(pos).text();
+	return text;
+}
+
+void CodeEditor::addSpecialIndent(bool isEnter, bool isBracket)
+{
+	QTextCursor tmpCursor = textCursor();
 	int pos = textCursor().block().firstLineNumber();
 	int spaces = 0;
-
-	QTextCursor tmpCursor = textCursor();
+	
 	QString last;
 	QString text = document()->findBlockByLineNumber(pos).text();
 
-	text.remove(text.count() - 1, 1);
-	if (text.size() == 0)
-	{
-		last = " ";
-	}
-	else
-	{
-		last = text[text.length() - 1];
-	}
+	if(isBracket) text.remove(text.count() - 1, 1);
+	(text.size() == 0) ? last = "" : last = text[text.length() - 1];
 
-	insertPlainText("\n");
+	if (isEnter) insertPlainText("\n");
+
 	if (last.isEmpty() || last == " " || last == "\t")
 	{
 		
@@ -455,127 +399,69 @@ void CodeEditor::addEnterIndent()
 	}
 	else
 	{
-		//insertPlainText("\n");
+		if (isBracket)
+		{
+			textCursor().deletePreviousChar();
+			insertPlainText("\n");
+		}
+
 		for (int i = 0; i < text.count(); i++)
 		{
 			if (text[i] == ' ')
 			{
 				spaces++;
-				//insertPlainText(" ");
+				if(isBracket) insertPlainText(" ");
 			}
 			else if (text[i] == '\t')
 			{
 				spaces = spaces + 3;
-				//insertPlainText("\t");
+				if(isBracket) insertPlainText("\t");
 			}
 			else
 				break;
 		}
+		if (isBracket) insertPlainText("[");
 	}
 
-	//tmpCursor = textCursor();
-	//tmpCursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, 1);
-	setTextCursor(tmpCursor);
+	if (isBracket)
+	{
+		insertPlainText("\n\n");
+		for (int j = 0; j < spaces; j++)
+			insertPlainText(" ");
+		insertPlainText("]");
+
+		tmpCursor = textCursor();
+		tmpCursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor, 1);
+		setTextCursor(tmpCursor);
+	}
+
 	if (spaces > 0)
 	{
 		for (int s = 0; s < spaces; s++)
 			insertPlainText(" ");
+		
 	}
-	//insertPlainText("\t");
+	if(isBracket) insertPlainText("\t");
 }
 
 void CodeEditor::checkBracketCharacter(QKeyEvent *e)
 {
 	if (e->key() == Qt::Key_BracketLeft || Qt::Key_ParenLeft)
 	{
-		QTextCursor tmpCursor;
-		QString text;
-		QString insertNewValue;
-		QTextBlock block;
-		int pos = 0;
-		int spaces = 0;
-		QString last;
 		switch (e->key())
 		{
 			case Qt::Key_BracketLeft:
-				addBrackets(tmpCursor, pos, text, last, spaces);
+				//addBrackets(tmpCursor, pos, text, last, spaces);
+				addSpecialIndent(false, true);
 				break;
 			case Qt::Key_ParenLeft:
 				insertPlainText(")");
-				tmpCursor = textCursor();
+				QTextCursor tmpCursor = textCursor();
 				tmpCursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 1);
 				setTextCursor(tmpCursor);
 				break;
 		}
 	}
-}
-
-void CodeEditor::addBrackets(QTextCursor tmpCursor, int pos, QString text, QString last, int spaces)
-{
-	pos = textCursor().block().firstLineNumber();
-
-	text = document()->findBlockByLineNumber(pos).text();
-
-	text.remove(text.count() - 1, 1);
-	if (text.size() == 0)
-	{
-		last = " ";
-	}
-	else
-	{
-		last = text[text.length() - 1];
-	}
-
-	if (last.isEmpty() || last == " " || last == "\t")
-	{
-
-		for (int l = 0; l < text.count(); l++)
-		{
-			if (text[l] == ' ')
-			{
-				spaces++;
-			}
-			else if (text[l] == '\t')
-				spaces = spaces + 3;
-		}
-	}
-	else
-	{
-		textCursor().deletePreviousChar();
-		insertPlainText("\n");
-		for (int i = 0; i < text.count(); i++)
-		{
-			if (text[i] == ' ')
-			{
-				spaces++;
-				insertPlainText(" ");
-			}
-			else if (text[i] == '\t')
-			{
-				spaces = spaces + 3;
-				insertPlainText("\t");
-			}
-			else
-				break;
-		}
-		insertPlainText("[");
-	}
-
-
-	insertPlainText("\n\n");
-	for (int j = 0; j < spaces; j++)
-		insertPlainText(" ");
-	insertPlainText("]");
-
-	tmpCursor = textCursor();
-	tmpCursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor, 1);
-	setTextCursor(tmpCursor);
-	if (spaces > 0)
-	{
-		for (int s = 0; s < spaces; s++)
-			insertPlainText(" ");
-	}
-	insertPlainText("\t");
 }
 
 QString CodeEditor::completeCloseParentesis()
