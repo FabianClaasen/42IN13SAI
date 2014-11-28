@@ -25,6 +25,9 @@ MainWindow::MainWindow(QWidget *parent)
 	splitter = new QSplitter();
 	splitter->setLayout(layout);
 	splitter->setOrientation(Qt::Vertical);
+	splitter->setHandleWidth(10);
+	splitter->setCollapsible(0, false);
+	splitter->setSizes(QList<int>() = { 500, 10 });
 
 	this->setCentralWidget(splitter);
 }
