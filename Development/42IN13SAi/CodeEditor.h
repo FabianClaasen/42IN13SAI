@@ -3,6 +3,7 @@
 #include <memory>
 #include <iostream>
 
+#include <QCoreApplication>
 #include <QPlainTextEdit>
 #include <QObject>
 #include <qdir.h>
@@ -26,7 +27,7 @@ public:
 		int lineNumberAreaWidth();
 
 		// for codecompletion
-		void setCompleter(QCompleter *compl);
+		void setCompleter(QCompleter *completer);
 		QCompleter *getCompleter() const;
 
 		void SetTheme(std::map<std::string, QColor> colors, std::string fontFamily, int fontSize);
@@ -56,7 +57,7 @@ public:
 
 		// for codecompletion
 		QString textUnderCursor() const;
-		QCompleter* compl;
+		QCompleter* completer;
 		QTextEdit* textEdit;
 
 		void checkBracketCharacter(QKeyEvent *e);

@@ -86,7 +86,6 @@ void Tokenizer::Tokenize()
 		if (!match)
 		{
 			throw ParseException("Unrecognized character '" + lineRemaining.substr(0) + "' on line " + std::to_string(lineNumber) + " at position " + std::to_string(linePosition));
-			lineRemaining = "";
 		}
 	}
 

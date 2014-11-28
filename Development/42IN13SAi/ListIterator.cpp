@@ -1,7 +1,4 @@
 #include "ListIterator.h"
-#include "ListNode.h"
-#include "CompilerNode.h"
-
 
 ListIterator::ListIterator() : listNode(std::make_shared<ListNode>())
 {
@@ -22,14 +19,19 @@ std::shared_ptr<CompilerNode> ListIterator::operator*()
 	return reinterpret_cast<ListNode*>(&listNode)->GetData();
 }
 
-bool ListIterator::operator == (ListIterator& other)
+bool ListIterator::operator == (const ListIterator& rvalue)
 {
-	return *other == operator*();
+	return operator*() == rvalue.GetCompilerNode();
 }
 
-bool ListIterator::operator != (ListIterator& other)
+bool ListIterator::operator != (const ListIterator& rvalue)
 {
-	return !operator==(other);
+	return !operator==(rvalue);
+}
+
+std::shared_ptr<CompilerNode> ListIterator::GetCompilerNode() const
+{
+    return listNode->GetData();
 }
 
 ListIterator::~ListIterator()

@@ -2,7 +2,11 @@
 
 Themer::Themer()
 {
-	settingsPath = QDir::currentPath().toStdString() + "\\Resources\\settings.json";
+    settingsPath = QDir::currentPath().toStdString() + "\\Resources\\settings.json";
+#ifndef _WIN32
+    settingsPath = QCoreApplication::applicationDirPath().toStdString() + "/settings.json";
+#endif
+    
 	LoadThemes();
 	LoadSettings();
 }
@@ -180,7 +184,11 @@ void Themer::LoadSettings()
 
 void Themer::LoadThemes()
 {
-	std::string themesPath = QDir::currentPath().toStdString() + "\\Resources\\Themes";
+    std::string themesPath;
+    themesPath = QDir::currentPath().toStdString() + "\\Resources\\Themes";
+#ifndef _WIN32
+    themesPath = QCoreApplication::applicationDirPath().toStdString() + "/Themes";
+#endif
 
 	if (fs::exists(themesPath))
 	{

@@ -1,9 +1,13 @@
 #include "CodeEditor.h"
 #include <QCompleter>
 
-CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), compl(0)
+CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), completer(0)
 {
 	QString resourceDir = QDir::currentPath().append("/Resources/");
+#ifndef _WIN32
+    resourceDir = QCoreApplication::applicationDirPath() + "/";
+#endif
+    
 	// Add default font to the font database
 	QFontDatabase fontDatabase;
 	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf");
@@ -158,27 +162,27 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	bool isEnterAndListVisible;
 	bool setIndexAfterPrefix = false;
 	// Check if completer is visible
-	if (compl->popup()->isVisible())
+	if (completer->popup()->isVisible())
 	{
 		// if space or escape is pressed when popup is visible, hide it
 		switch (key)
 		{
 		case Qt::Key_Space:
 		case Qt::Key_Escape:
-			compl->popup()->hide();
+			completer->popup()->hide();
 			return;
 		}
 		// If tab key or enter is pressed, fill in the completion and return
-		if ((Qt::Key_Tab == key || key == Qt::Key_Return) && compl->popup()->isEnabled())
+		if ((Qt::Key_Tab == key || key == Qt::Key_Return) && completer->popup()->isEnabled())
 		{
-			QModelIndex currentIndex = compl->popup()->currentIndex();
+			QModelIndex currentIndex = completer->popup()->currentIndex();
 			QString text = currentIndex.data().toString();
-			isEnterAndListVisible = (key == Qt::Key_Tab || key == Qt::Key_Return) && compl->popup()->isVisible();
+			isEnterAndListVisible = (key == Qt::Key_Tab || key == Qt::Key_Return) && completer->popup()->isVisible();
 
 			if (!isEnterAndListVisible)
 				QPlainTextEdit::keyPressEvent(e);
 
-			compl->popup()->hide();
+			completer->popup()->hide();
 			insertCompletion(text);
 			return;
 		}
@@ -291,34 +295,34 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	// Check for automatic completion or not
 	if ((e->modifiers() & Qt::ControlModifier) && (e->key() == Qt::Key_Space))
 	{
-		QModelIndex index = compl->popup()->currentIndex();
-		int count = compl->completionCount();
+		QModelIndex index = completer->popup()->currentIndex();
+		int count = completer->completionCount();
 		if (count == 1)
 		{
 			QString text = index.data().toString();
 			insertCompletion(text);
 		}
 		else
-			compl->complete(cr);
+			completer->complete(cr);
 	}
 	else if (setIndexAfterPrefix)
 	{
-		int count = compl->model()->rowCount();
+		int count = completer->model()->rowCount();
 		for (int i = 0; i < count; i++)
 		{
-			QString key = compl->completionModel()->index(i, 0).data().toString();
+			QString key = completer->completionModel()->index(i, 0).data().toString();
 			if (key.startsWith(completionPrefix, Qt::CaseSensitive))
 			{
-				QModelIndex new_index = compl->completionModel()->index(i, 0);
-				compl->popup()->setCurrentIndex(new_index);
+				QModelIndex new_index = completer->completionModel()->index(i, 0);
+				completer->popup()->setCurrentIndex(new_index);
 				setCompletionPrefix(completionPrefix);
 				cr = getCompleterView();
-				compl->complete(cr);
+				completer->complete(cr);
 				return;
 			}
 		}
 		// hide when case sensitive startswith is not found
-		compl->popup()->hide();
+		completer->popup()->hide();
 	}
 }
 
@@ -326,7 +330,7 @@ QAbstractItemModel* CodeEditor::modelFromFile(const QString& fileName)
 {
 	QFile file(fileName);
 	if (!file.open(QFile::ReadOnly))
-		return new QStringListModel(compl);
+		return new QStringListModel(completer);
 
 #ifndef QT_NO_CURSOR
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -342,7 +346,7 @@ QAbstractItemModel* CodeEditor::modelFromFile(const QString& fileName)
 #ifndef QT_NO_CURSOR
 	QApplication::restoreOverrideCursor();
 #endif
-	return new QStringListModel(words, compl);
+	return new QStringListModel(words, completer);
 }
 
 void CodeEditor::checkRightParenthesis()
@@ -476,30 +480,30 @@ QString CodeEditor::completeCloseParentesis()
 	return result;
 }
 
-void CodeEditor::setCompleter(QCompleter *completer)
+void CodeEditor::setCompleter(QCompleter *completerNew)
 {
-	if (compl)
-		QObject::disconnect(completer, 0, this, 0);
+	if (completer)
+		QObject::disconnect(completerNew, 0, this, 0);
 
-	compl = completer;
+	completer = completerNew;
 
-	if (!compl)
+	if (!completer)
 		return;
 
-	compl->setWidget(this);
-	compl->setCompletionMode(QCompleter::PopupCompletion);
-	compl->setCaseSensitivity(Qt::CaseSensitive);
+	completer->setWidget(this);
+	completer->setCompletionMode(QCompleter::PopupCompletion);
+	completer->setCaseSensitivity(Qt::CaseSensitive);
 
-	QObject::connect(compl, SIGNAL(activated(QString)),
+	QObject::connect(completer, SIGNAL(activated(QString)),
 		this, SLOT(insertCompletion(QString)));
 }
 
 void CodeEditor::setCompletionPrefix(QString completionPrefix)
 {
-	if (completionPrefix != compl->completionPrefix())
+	if (completionPrefix != completer->completionPrefix())
 	{
-		compl->setCompletionPrefix(completionPrefix);
-		compl->popup()->setCurrentIndex(compl->completionModel()->index(0, 0));
+		completer->setCompletionPrefix(completionPrefix);
+		completer->popup()->setCurrentIndex(completer->completionModel()->index(0, 0));
 	}
 }
 
@@ -507,19 +511,19 @@ QRect CodeEditor::getCompleterView()
 {
 	QMargins margin = QMargins(-19, 0, 0, 0);
 	QRect cr = cursorRect().marginsAdded(margin);
-	cr.setWidth(compl->popup()->sizeHintForColumn(0)
-		+ compl->popup()->verticalScrollBar()->sizeHint().width());
+	cr.setWidth(completer->popup()->sizeHintForColumn(0)
+		+ completer->popup()->verticalScrollBar()->sizeHint().width());
 
 	return cr;
 }
 
 void CodeEditor::insertCompletion(const QString &text)
 {
-	if (compl->widget() != this)
+	if (completer->widget() != this)
 		return;
 
 	QTextCursor tc = textCursor();
-	int extra = text.length() - compl->completionPrefix().length();
+	int extra = text.length() - completer->completionPrefix().length();
 	tc.insertText(text.right(extra));
 	setTextCursor(tc);
 }
@@ -533,13 +537,13 @@ QString CodeEditor::textUnderCursor() const
 
 QCompleter *CodeEditor::getCompleter() const
 {
-	return compl;
+	return completer;
 }
 
 void CodeEditor::focusInEvent(QFocusEvent *e)
 {
-	if (compl)
-		compl->setWidget(this);
+	if (completer)
+		completer->setWidget(this);
 
 	QPlainTextEdit::focusInEvent(e);
 }

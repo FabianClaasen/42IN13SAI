@@ -8,8 +8,9 @@
 #include <vector>
 
 #include <qdir.h>
-#include <boost\filesystem.hpp>
-#include "jsoncpp\json.h"
+#include <QCoreApplication>
+#include <boost/filesystem.hpp>
+#include "jsoncpp/json.h"
 
 #include "Highlighter.h"
 #include "CodeEditor.h"
