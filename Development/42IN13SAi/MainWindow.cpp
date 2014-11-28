@@ -1,12 +1,4 @@
 #include "MainWindow.h"
-#include "CodeEditor.h"
-#include "TokenizerController.h"
-#include "Compiler.h"
-#include "VirtualMachine.h"
-
-#include <QKeyEvent>
-#include <string>
-#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
 {
@@ -30,11 +22,14 @@ MainWindow::MainWindow(QWidget *parent)
 	layout->addWidget(tabs);
 	layout->addWidget(outputTab);
 
-	//make a central widget set the layout and add it on the mainwindow
-	QWidget* mainWidget = new QWidget();
-	mainWidget->setLayout(layout);
-	mainWidget->setFocus(Qt::OtherFocusReason);
-	this->setCentralWidget(mainWidget);
+	splitter = new QSplitter();
+	splitter->setLayout(layout);
+	splitter->setOrientation(Qt::Vertical);
+	splitter->setHandleWidth(10);
+	splitter->setCollapsible(0, false);
+	splitter->setSizes(QList<int>() = { 500, 10 });
+
+	this->setCentralWidget(splitter);
 }
 
 void MainWindow::ShowMenuBar()
