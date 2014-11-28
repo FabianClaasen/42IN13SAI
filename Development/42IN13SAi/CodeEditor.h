@@ -62,7 +62,7 @@ public:
 		void checkBracketCharacter(QKeyEvent *e);
 		void checkRightParenthesis();
 		void setCompletionPrefix(QString text);
-
+		void addEnterIndent();
 		QRect getCompleterView();
 		QRect cr;
 		QAbstractItemModel* modelFromFile(const QString& fileName);
