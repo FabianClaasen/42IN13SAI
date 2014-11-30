@@ -565,22 +565,6 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDivideOperation(CompilerNod
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-//std::shared_ptr<CompilerNode> VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
-//{
-//	// Get the Node parameters
-//	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
-//	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
-//	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
-//
-//	// Parse the parameters to a float for mathmatic operation
-//	float num1 = atof(param1->GetValue().c_str());
-//	float num2 = atof(param2->GetValue().c_str());
-//	float output = fmod(num1, num2);
-//
-//	// Create a new value compilernode to return
-//	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
-//}
-
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteUniMinOperation(CompilerNode compilerNode)
 {
 	// Get the Node parameters

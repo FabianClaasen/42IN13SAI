@@ -56,7 +56,6 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteMinusOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteMultiplyOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteDivideOperation(CompilerNode compilerNode);
-	std::shared_ptr<CompilerNode> ExecuteModuloOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteUniPlusOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteUniMinOperation(CompilerNode compilerNode);
 	
@@ -87,7 +86,7 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteBinaryLogOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteNaturalLogOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteLogOperation(CompilerNode compilerNode);
-	//std::shared_ptr<CompilerNode> ExecuteModuloOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteModuloOperation(CompilerNode compilerNode);
 
 
 	

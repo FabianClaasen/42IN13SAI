@@ -55,7 +55,6 @@ void FunctionCaller::fillFunctionMap()
 	functions.insert(functionMap::value_type("$min", &VirtualMachine::ExecuteMinusOperation));
 	functions.insert(functionMap::value_type("$mul", &VirtualMachine::ExecuteMultiplyOperation));
 	functions.insert(functionMap::value_type("$div", &VirtualMachine::ExecuteDivideOperation));
-	functions.insert(functionMap::value_type("$mod", &VirtualMachine::ExecuteModuloOperation));
 	functions.insert(functionMap::value_type("$uniMin", &VirtualMachine::ExecuteUniMinOperation));
 	functions.insert(functionMap::value_type("$uniPlus", &VirtualMachine::ExecuteUniPlusOperation));
 
@@ -80,6 +79,8 @@ void FunctionCaller::fillFunctionMap()
 	functions.insert(functionMap::value_type("$log2", &VirtualMachine::ExecuteBinaryLogOperation));
 	functions.insert(functionMap::value_type("$ln", &VirtualMachine::ExecuteNaturalLogOperation));
 	functions.insert(functionMap::value_type("$log", &VirtualMachine::ExecuteLogOperation));
+
+	functions.insert(functionMap::value_type("$mod", &VirtualMachine::ExecuteModuloOperation));
 }
 
 FunctionCaller::~FunctionCaller()
