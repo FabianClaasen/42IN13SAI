@@ -17,6 +17,8 @@
 #include "FunctionNameExpectedException.h"
 #include "SubroutineNotFoundException.h"
 #include "UnknownExpressionException.h"
+#include "InvalidInputException.h"
+#include "ZeroDivideException.h"
 
 class VirtualMachine
 {	

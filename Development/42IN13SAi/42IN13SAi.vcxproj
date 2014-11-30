@@ -55,6 +55,7 @@
     </ClCompile>
     <ClCompile Include="Highlighter.cpp" />
     <ClCompile Include="IdentifierException.cpp" />
+    <ClCompile Include="InvalidInputException.cpp" />
     <ClCompile Include="jsoncpp\json_reader.cpp" />
     <ClCompile Include="jsoncpp\json_value.cpp" />
     <ClCompile Include="jsoncpp\json_writer.cpp" />
@@ -932,6 +933,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InvalidInputException.h" />
     <ClInclude Include="jsoncpp\assertions.h" />
     <ClInclude Include="jsoncpp\autolink.h" />
     <ClInclude Include="jsoncpp\config.h" />

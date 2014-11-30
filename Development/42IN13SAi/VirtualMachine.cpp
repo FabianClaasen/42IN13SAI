@@ -565,21 +565,21 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDivideOperation(CompilerNod
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
-std::shared_ptr<CompilerNode> VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
-{
-	// Get the Node parameters
-	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
-	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
-	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
-
-	// Parse the parameters to a float for mathmatic operation
-	float num1 = atof(param1->GetValue().c_str());
-	float num2 = atof(param2->GetValue().c_str());
-	float output = fmod(num1, num2);
-
-	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
-}
+//std::shared_ptr<CompilerNode> VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
+//{
+//	// Get the Node parameters
+//	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+//	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+//	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+//
+//	// Parse the parameters to a float for mathmatic operation
+//	float num1 = atof(param1->GetValue().c_str());
+//	float num2 = atof(param2->GetValue().c_str());
+//	float output = fmod(num1, num2);
+//
+//	// Create a new value compilernode to return
+//	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+//}
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteUniMinOperation(CompilerNode compilerNode)
 {
@@ -803,6 +803,10 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCommonLogOperation(Compiler
 	// Parse the parameters to a float for mathmatic operation
 	float num1 = atof(param1->GetValue().c_str());
 	
+	if (num1 == 0)
+		throw InvalidInputException("Invalid Input");
+
+
 	float output = std::log10(num1);
 	// Create a new value compilernode to return
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
@@ -817,6 +821,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteBinaryLogOperation(Compiler
 	// Parse the parameters to a float for mathmatic operation
 	float num1 = atof(param1->GetValue().c_str());
 
+	if (num1 == 0)
+		throw InvalidInputException("Invalid Input");
+
 	float output = std::log2(num1);
 	// Create a new value compilernode to return
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
@@ -830,6 +837,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNaturalLogOperation(Compile
 
 	// Parse the parameters to a float for mathmatic operation
 	float num1 = atof(param1->GetValue().c_str());
+
+	if (num1 == 0)
+		throw InvalidInputException("Invalid Input");
 
 	float output = std::log(num1);
 	// Create a new value compilernode to return
@@ -847,9 +857,29 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLogOperation(CompilerNode c
 	float num1 = atof(param1->GetValue().c_str());
 	float num2 = atof(param2->GetValue().c_str());
 
-	// TODO CHECKS
+	if (num1 == 0 || num2 == 0)
+		throw InvalidInputException("Invalid Input");
 
 	float output = std::log(num1) / std::log(num2);
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+
+	if (num2 == 0)
+		throw ZeroDivideException("Division by 0 exception occured.");
+
+	float output = std::fmod(num1,num2);
 	// Create a new value compilernode to return
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }

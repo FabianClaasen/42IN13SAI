@@ -188,6 +188,9 @@
     <ClCompile Include="UnexpectedParameterException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="InvalidInputException.cpp">
+      <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="CodeEditor.h">
@@ -461,6 +464,9 @@
       <Filter>Source Files\jsoncpp</Filter>
     </ClInclude>
     <ClInclude Include="UnexpectedParameterException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="InvalidInputException.h">
       <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
