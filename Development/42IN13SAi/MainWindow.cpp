@@ -45,10 +45,11 @@ void MainWindow::ShowMenuBar()
 	openAction = fileMenu->addAction("Open");
 	saveAction = fileMenu->addAction("Save");
 	saveAsAction = fileMenu->addAction("Save as");
+	quitAction = fileMenu->addAction("Quit");
 	runAction = menu->addAction("Run");
 	clearAction = menu->addAction("Clear console");
 
-	quitAction = menu->addAction("Quit");
+	
 
 #ifndef _WIN32
 	// Also needs a menu to show the items, doesn't work with only actions

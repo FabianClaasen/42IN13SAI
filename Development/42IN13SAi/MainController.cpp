@@ -79,12 +79,18 @@ void MainController::Execute()
 	{
 		virtual_machine.ExecuteCode();
 		std::vector<std::string> output = virtual_machine.getOutput();
+		QString text;
 		for (std::vector<std::string>::iterator it = output.begin(); it != output.end(); ++it) {
 			mainWindow.addOutput(*it);
+			text.append(QString::fromStdString(*it));
 		}
 
+		// Create the log files directory if it doesn't exists
+		if (!QDir("Log files").exists())
+			QDir().mkdir("Log files");
+
 		// Save the output in an output file
-		FileIO::SaveFile("output.txt", mainWindow.GetText());
+		FileIO::SaveFile("Log files//output.txt", text);
 	}
 	catch (const std::exception& e)
 	{
