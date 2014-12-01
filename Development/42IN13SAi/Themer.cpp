@@ -227,7 +227,8 @@ std::string Themer::getFileString(std::string filePath)
 {
 	std::ifstream file(filePath);
 	std::stringstream fileString;
-	fileString << file.rdbuf();
+    fileString << file.rdbuf();
+    file.close();
 
 	return fileString.str();
 }

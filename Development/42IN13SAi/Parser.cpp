@@ -522,9 +522,9 @@ std::shared_ptr<CompilerNode> Parser::ParseMulExpression()
 		case MyTokenType::OperatorDivide:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
-			if (term->GetValue() == "0" || secondTerm->GetValue() == "0")
+			if (secondTerm->GetValue() == "0")
 			{
-				throw ZeroDivideException("Can't divide by zero or divide zero");
+				throw ZeroDivideException("Can't divide by zero");
 			}
 			term = std::make_shared<CompilerNode>("$div", parameters, nullptr, false);
 			break;
