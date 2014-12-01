@@ -7,7 +7,7 @@
 #include <map>
 #include <vector>
 
-#include <qdir.h>
+#include <QDir>
 #include <QCoreApplication>
 #include <boost/filesystem.hpp>
 #include "jsoncpp/json.h"
@@ -26,7 +26,7 @@ public:
 	void RemoveEditor(int index);
 	void SetTheme(std::string themeName);
 	void LoadThemes();
-	void SaveCurrentTheme();
+	void SaveCurrentTheme(std::string settingsPath);
 	std::vector<std::string> GetThemesVector();
 	std::string GetCurrentTheme();
 private:
@@ -34,7 +34,7 @@ private:
 	std::string defaultTheme;
 	std::string userTheme;
 	Json::Value settings;
-	std::string settingsPath;
+	//std::string settingsPath;
 	std::string currentThemeName;
 	Json::Value currentTheme;
 	std::map<std::string, std::string> themes;
@@ -50,7 +50,7 @@ private:
 
 	// load functions
 	void LoadTheme(fs::path filePath);
-	void LoadSettings();
+	void LoadSettings(std::string settingsPath);
 
 	// set the editor and highlighter themes
 	void SetEditors();

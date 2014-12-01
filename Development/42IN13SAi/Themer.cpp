@@ -1,14 +1,15 @@
 #include "Themer.h"
-
+#include <qbytearray.h>
 Themer::Themer()
 {
-    settingsPath = QDir::currentPath().toStdString() + "\\Resources\\settings.json";
+	//std::string newPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
+	std::string settingsPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
 #ifndef _WIN32
     settingsPath = QCoreApplication::applicationDirPath().toStdString() + "/settings.json";
 #endif
     
 	LoadThemes();
-	LoadSettings();
+	LoadSettings(settingsPath);
 }
 
 Themer::~Themer()
@@ -26,7 +27,7 @@ void Themer::RemoveEditor(int index)
 	editors.erase(editors.begin() + index);
 }
 
-void Themer::SaveCurrentTheme()
+void Themer::SaveCurrentTheme(std::string settingsPath)
 {
 	settings["user_theme_set"] = true;
 	settings["user_theme"] = currentThemeName;
@@ -136,7 +137,7 @@ void Themer::SetEditor(CodeEditor* editor)
 	editor->SetTheme(colors, fontFamily, fontSize);
 }
 
-void Themer::LoadSettings()
+void Themer::LoadSettings(std::string settingsPath)
 {
 	if (fs::exists(settingsPath))
 	{
@@ -178,14 +179,14 @@ void Themer::LoadSettings()
 		settingsFile.close();
 
 		// Call the settings again for loading
-		LoadSettings();
+		LoadSettings(settingsPath);
 	}
 }
 
 void Themer::LoadThemes()
 {
     std::string themesPath;
-    themesPath = QDir::currentPath().toStdString() + "\\Resources\\Themes";
+	themesPath = QDir::currentPath().append("/Resources/Themes").toLocal8Bit().constData();
 #ifndef _WIN32
     themesPath = QCoreApplication::applicationDirPath().toStdString() + "/Themes";
 #endif

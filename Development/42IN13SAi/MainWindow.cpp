@@ -118,7 +118,8 @@ void MainWindow::ChangeTheme()
 	}
 	QAction* selectedAction = dynamic_cast<QAction*>(sender());
 	selectedAction->setChecked(true);
-	themer.SetTheme(selectedAction->text().toStdString());
+	std::string newTheme = selectedAction->text().toLocal8Bit().constData();
+	themer.SetTheme(newTheme);
 }
 
 QAction* MainWindow::GetRunAction()
@@ -259,7 +260,8 @@ void MainWindow::AddFile(QFileInfo* info, QString text)
 
 void MainWindow::SaveThemeSettings()
 {
-	themer.SaveCurrentTheme();
+	std::string settingsPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
+	themer.SaveCurrentTheme(settingsPath);
 }
 
 MainWindow::~MainWindow()

@@ -31,10 +31,16 @@ HEADERS += ./Grammar.h \
     ./LinkedList.h \
     ./ListIterator.h \
     ./ListNode.h \
+    ./Themer.h \
     ./CodeEditor.h \
     ./MainWindow.h \
     ./Highlighter.h \
+    ./resource.h \
     ./OutputWindow.h \
+    ./ExceptionWindow.h \
+    ./InvalidInputException.h \
+    ./UnexpectedParameterException.h \
+    ./ZeroDivideException.h \
     ./ParseException.h \
     ./PartnerNotFoundException.h \
     ./SymbolNotFoundException.h \
@@ -53,7 +59,19 @@ HEADERS += ./Grammar.h \
     ./SubroutineNotFoundException.h \
     ./UnknownExpressionException.h \
     ./FileIO.h \
-    ./MainController.h
+    ./MainController.h \
+    ./jsoncpp/assertions.h \
+    ./jsoncpp/autolink.h \
+    ./jsoncpp/config.h \
+    ./jsoncpp/features.h \
+    ./jsoncpp/forwards.h \
+    ./jsoncpp/json.h \
+    ./jsoncpp/json_batchallocator.h \
+    ./jsoncpp/json_tool.h \
+    ./jsoncpp/reader.h \
+    ./jsoncpp/value.h \
+    ./jsoncpp/version.h \
+    ./jsoncpp/writer.h
 SOURCES += ./main.cpp \
     ./Grammar.cpp \
     ./LabelStack.cpp \
@@ -77,11 +95,14 @@ SOURCES += ./main.cpp \
     ./VirtualMachine.cpp \
     ./FunctionCaller.cpp \
     ./CodeEditor.cpp \
+    ./ExceptionWindow.cpp \
     ./Highlighter.cpp \
     ./MainWindow.cpp \
     ./OutputWindow.cpp \
+    ./Themer.cpp \
     ./FunctionNameExpectedException.cpp \
     ./IdentifierException.cpp \
+    ./InvalidInputException.cpp \
     ./MissingCompilerNodeException.cpp \
     ./MissingMainFunctionException.cpp \
     ./MissingTokenException.cpp \
@@ -92,9 +113,14 @@ SOURCES += ./main.cpp \
     ./SubroutineNotFoundException.cpp \
     ./SymbolNotFoundException.cpp \
     ./UnexpectedKeywordException.cpp \
+    ./UnexpectedParameterException.cpp \
     ./UnexpectedTypeException.cpp \
     ./UnknownExpressionException.cpp \
     ./VariableNotFoundException.cpp \
     ./ParameterException.cpp \
+    ./ZeroDivideException.cpp \
     ./FileIO.cpp \
-    ./MainController.cpp
+    ./MainController.cpp \
+    ./jsoncpp/json_reader.cpp \
+    ./jsoncpp/json_value.cpp \
+    ./jsoncpp/json_writer.cpp

@@ -24,9 +24,6 @@ LIBS += -lkernel32 \
     -lodbccp32 \
     -lopengl32 \
     -lglu32
-	
-SOURCES += plugin_import.cpp
-LIBS += Qt5PlatformSupportd.lib windowsd.lib rpcrt4.lib
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/release
 OBJECTS_DIR += release
