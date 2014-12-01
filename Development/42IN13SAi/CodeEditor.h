@@ -60,6 +60,10 @@ public:
 		QCompleter* completer;
 		QTextEdit* textEdit;
 
+		int lineNumberAtPos(int pos);
+		QString CodeEditor::getLine(int lineNumber) const;
+		bool CodeEditor::replaceLine(int lineNumber, const QString& str);
+
 		void checkBracketCharacter(QKeyEvent *e);
 		void checkRightParenthesis();
 		QString getSentenceFromLine();
