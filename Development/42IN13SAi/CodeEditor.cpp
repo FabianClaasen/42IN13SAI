@@ -318,7 +318,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 			if (tmpCursor.positionInBlock() > 0)
 			{
 				QString line = getSentenceFromLine();
-				if (key == Qt::Key_Tab && line.contains("(") && line.contains(")"))
+				if (key == Qt::Key_Tab && line.contains("(") && line.contains(")") && line.contains("func"))
 				{
 					tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
 					setTextCursor(tmpCursor);
