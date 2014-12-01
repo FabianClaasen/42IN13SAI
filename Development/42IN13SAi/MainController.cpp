@@ -82,6 +82,9 @@ void MainController::Execute()
 		for (std::vector<std::string>::iterator it = output.begin(); it != output.end(); ++it) {
 			mainWindow.addOutput(*it);
 		}
+
+		// Save the output in an output file
+		FileIO::SaveFile("output.txt", mainWindow.GetText());
 	}
 	catch (const std::exception& e)
 	{
@@ -112,7 +115,7 @@ std::string MainController::GetFileFromStream()
 	}
 	else
 	{
-		file = std::make_shared<QFile>("number1.txt");
+		file = std::make_shared<QFile>("number1.sc");
 	}
 
 	if (file->exists())
@@ -142,28 +145,36 @@ void MainController::NewFile()
 void MainController::LoadFile()
 {
 	QString URI = mainWindow.OpenLoadDialog();
-	QString text = FileIO::LoadFile(URI);
-	
-	// Add the loaded file
-	currentFiles.push_back(std::shared_ptr<QFile>(new QFile(URI)));
-	QFileInfo* fileInfo = new QFileInfo(URI);
-	mainWindow.AddFile(fileInfo, text);
+
+	if (!URI.isEmpty())
+	{
+		QString text = FileIO::LoadFile(URI);
+
+		// Add the loaded file
+		currentFiles.push_back(std::shared_ptr<QFile>(new QFile(URI)));
+		QFileInfo* fileInfo = new QFileInfo(URI);
+		mainWindow.AddFile(fileInfo, text);
+	}
 }
 
 void MainController::SaveFile()
 {
 	std::shared_ptr<QFile> currentFile;
-	if (currentFiles.size() > mainWindow.GetCurrentTabPosition() - 1)
+
+	if (currentFiles.size() > mainWindow.GetCurrentTabPosition())
 	{
-		currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition() - 1);
+		currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition());
 	}
 
 	if (!currentFile)
 	{
 		QString URI = mainWindow.OpenSaveDialog();
-		FileIO::SaveFile(URI, mainWindow.GetText());
-		QFileInfo* fileInfo = new QFileInfo(URI);
-		mainWindow.SetTabTitle(fileInfo);
+		if (!URI.isEmpty())
+		{
+			FileIO::SaveFile(URI, mainWindow.GetText());
+			QFileInfo* fileInfo = new QFileInfo(URI);
+			mainWindow.SetTabTitle(fileInfo);
+		}
 	}
 	else
 	{
@@ -174,9 +185,12 @@ void MainController::SaveFile()
 void MainController::SaveAsFile()
 {
 	QString URI = mainWindow.OpenSaveDialog();
-	FileIO::SaveFile(URI, mainWindow.GetText());
-	QFileInfo* fileInfo = new QFileInfo(URI);
-	mainWindow.SetTabTitle(fileInfo);
+	if (!URI.isEmpty())
+	{
+		FileIO::SaveFile(URI, mainWindow.GetText());
+		QFileInfo* fileInfo = new QFileInfo(URI);
+		mainWindow.SetTabTitle(fileInfo);
+	}
 }
 
 void MainController::Quit()

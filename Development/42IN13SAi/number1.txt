@@ -1,4 +1,6 @@
+var x = "Hoi dit is tekst";
+
 func Main()
 [
-	prnt(mod(6|4));
+	
 ]
