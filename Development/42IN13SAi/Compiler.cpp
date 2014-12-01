@@ -175,8 +175,11 @@ void Compiler::ParseStatement()
 		if (!currentSubroutine.isEmpty)
 			currentSubroutine.AddCompilerNode(std::shared_ptr<CompilerNode>(InternalFunction(this).GetInternalFunction(MyTokenType::Stop)));
 			Match(MyTokenType::EOL);
-		//else
-		//std::runtime_error("");
+		break;
+	case MyTokenType::AbcFormula:
+		if (!currentSubroutine.isEmpty)
+			currentSubroutine.AddCompilerNode(std::shared_ptr<CompilerNode>(InternalFunction(this).GetInternalFunction(MyTokenType::AbcFormula)));
+			Match(MyTokenType::EOL);
 		break;
 	default:
 		throw StatementNotFoundException("A StatementNotFoundException occurred at line " + std::to_string(PeekNext()->LineNumber) +" on position " + std::to_string(PeekNext()->LinePosition)+".");
@@ -226,6 +229,9 @@ bool Compiler::IsInternalFunction(MyTokenType type)
 		case MyTokenType::NaturalLog:
 		case MyTokenType::Log:
 		case MyTokenType::Modulo:
+		case MyTokenType::Gcd:
+		case MyTokenType::Discriminant:
+		case MyTokenType::AbcFormula:
 			return true;
 		default:
 			return false;

@@ -70,5 +70,8 @@ enum class MyTokenType : int {
 	BinaryLog,
 	NaturalLog,
 	Log,
-	Modulo
+	Modulo,
+	Gcd,
+	Discriminant,
+	AbcFormula
 };

@@ -19,6 +19,7 @@
 #include "UnknownExpressionException.h"
 #include "InvalidInputException.h"
 #include "ZeroDivideException.h"
+#include "UnexpectedTypeException.h"
 
 class VirtualMachine
 {	
@@ -87,6 +88,10 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteNaturalLogOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteLogOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteModuloOperation(CompilerNode compilerNode);
+
+	std::shared_ptr<CompilerNode> ExecuteGcdOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteDiscriminantOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteAbcOperation(CompilerNode compilerNode);
 
 
 	

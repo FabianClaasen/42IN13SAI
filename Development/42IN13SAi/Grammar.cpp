@@ -39,6 +39,9 @@ std::list<TokenDefinition> Grammar::getGrammar()
 	definitions.push_back(TokenDefinition("\\blog\\b", MyTokenType::Log));
     definitions.push_back(TokenDefinition("\\bln\\b", MyTokenType::NaturalLog));
     definitions.push_back(TokenDefinition("\\bmod\\b", MyTokenType::Modulo));
+	definitions.push_back(TokenDefinition("\\bgcd\\b", MyTokenType::Gcd));
+	definitions.push_back(TokenDefinition("\\bdis\\b", MyTokenType::Discriminant));
+	definitions.push_back(TokenDefinition("\\babc\\b", MyTokenType::AbcFormula));
     
     // return
     definitions.push_back(TokenDefinition("\\bret\\b", MyTokenType::Return));

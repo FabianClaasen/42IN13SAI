@@ -56,6 +56,13 @@ std::shared_ptr<CompilerNode> InternalFunction::GetInternalFunction(MyTokenType 
 		return getCompilerNode("$log", 2);
 	case MyTokenType::Modulo:
 		return getCompilerNode("$mod", 2);
+	case MyTokenType::Gcd:
+		return getCompilerNode("$gcd", 2);
+	case MyTokenType::Discriminant:
+		return getCompilerNode("$dis", 3);
+	case MyTokenType::AbcFormula:
+		compiler->Match(MyTokenType::AbcFormula);
+		return getCompilerNode("$abc", 3);
 	default:
 		break;
 	}

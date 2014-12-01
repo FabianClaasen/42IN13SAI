@@ -868,5 +868,87 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteModuloOperation(CompilerNod
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
 
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGcdOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+
+	int int1 = num1;
+	int int2 = num2;
+
+	if (num1 != int1 || num2 != int2)
+		throw UnexpectedTypeException("An UnexpectedTypeException occured in function 'gcd'. Expected integer parameters.");
+
+	float output = 0;
+
+	for (int i = 1; i <= num1&&i <= num2; i++)
+		if (int1%i == 0 && int2%i == 0)
+			output = i;
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDiscriminantOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 3);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+	std::shared_ptr<CompilerNode> param3 = parameters.at(2);
+
+	// Parse the parameters to a float for mathmatic operation
+	float numA = atof(param1->GetValue().c_str());
+	float numB = atof(param2->GetValue().c_str());
+	float numC = atof(param3->GetValue().c_str());
+
+	float output = std::pow(numB, 2) - (4 * numA * numC);
+
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 3);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+	std::shared_ptr<CompilerNode> param3 = parameters.at(2);
+
+	// Parse the parameters to a float for mathmatic operation
+	float numA = atof(param1->GetValue().c_str());
+	float numB = atof(param2->GetValue().c_str());
+	float numC = atof(param3->GetValue().c_str());
+	float disc = std::pow(numB, 2) - (4 * numA * numC);
+	float x1, x2;
+	std::string abcOutput = "The discriminant is " + std::to_string(disc) + ".\n";
+	if (disc < 0)
+	{
+		abcOutput = abcOutput + "There is no real root because the discriminant is negative.";
+	}
+	if (disc == 0)
+	{
+		x1 = -(numB / (2 * numA));
+		abcOutput = abcOutput + "There is one real root because the discriminant is zero.\nThe root is " + std::to_string(x1) + ".";
+	}
+	else if (disc > 0)
+	{
+		x1 = (-numB + std::sqrt(disc)) / (2 * numA);
+		x2 = (-numB - std::sqrt(disc)) / (2 * numA);
+		abcOutput = abcOutput + "There are two real roots because the discriminant is positive.\nThe roots are " + std::to_string(x1) + " and " + std::to_string(x2) + ".";
+	}
+	
+	output.push_back(abcOutput);
+
+	// Create a new value compilernode to return
+	return nullptr;
+}
+
+
 
 #pragma endregion ComplexMath

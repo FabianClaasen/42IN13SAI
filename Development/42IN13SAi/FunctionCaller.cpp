@@ -81,6 +81,13 @@ void FunctionCaller::fillFunctionMap()
 	functions.insert(functionMap::value_type("$log", &VirtualMachine::ExecuteLogOperation));
 
 	functions.insert(functionMap::value_type("$mod", &VirtualMachine::ExecuteModuloOperation));
+
+	functions.insert(functionMap::value_type("$gcd", &VirtualMachine::ExecuteGcdOperation));
+	functions.insert(functionMap::value_type("$dis", &VirtualMachine::ExecuteDiscriminantOperation));
+	functions.insert(functionMap::value_type("$abc", &VirtualMachine::ExecuteAbcOperation));
+
+
+
 }
 
 FunctionCaller::~FunctionCaller()
