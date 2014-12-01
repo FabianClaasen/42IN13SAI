@@ -155,6 +155,64 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 #pragma region codeCompletion
 
+int CodeEditor::lineNumberAtPos(int pos)
+{
+	return toPlainText().left(pos).count("\n");
+}
+
+QString CodeEditor::getLine(int lineNumber) const
+{
+	QTextCursor curs(document());
+
+	if (lineNumber > 0)
+	{
+		if (curs.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, lineNumber) == false)
+		{
+			return QString::null;
+		}
+
+		curs.movePosition(QTextCursor::StartOfLine);
+	}
+
+	curs.anchor();
+	curs.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+
+	return curs.selectedText();
+}
+
+bool CodeEditor::replaceLine(int lineNumber, const QString& str)
+{
+	QTextCursor cursor(document());
+
+	bool replaced = true;
+	bool inPlace = true;
+
+	if (lineNumber > 0)
+	{
+		if (cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, lineNumber) == false)
+		{
+			inPlace = false;
+		}
+		else
+		{
+			cursor.movePosition(QTextCursor::StartOfLine);
+		}
+	}
+
+	if (inPlace)
+	{
+		cursor.anchor();
+
+		cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+		cursor.removeSelectedText();
+		cursor.insertText(str);
+
+		replaced = true;
+	}
+
+	return replaced;
+}
+
 void CodeEditor::keyPressEvent(QKeyEvent *e)
 {
 	int key = e->key();
@@ -197,55 +255,62 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	{
 		QTextCursor curs = textCursor();
 
-		// Handle tab selection
-		if (key == Qt::Key_Tab && curs.hasSelection())
+		if (curs.hasSelection())
 		{
 			e->ignore();
-
 			e->setAccepted(true);
 
-			int spos = curs.anchor();
-			int epos = curs.position();
-
-			if (spos > epos)
+			if (key == Qt::Key_Tab && !e->modifiers())
 			{
-				std::swap(spos, epos);
+				int startPos = curs.selectionStart();
+				int endPos = curs.selectionEnd();
+
+				curs.setPosition(startPos);
+				curs.movePosition(QTextCursor::StartOfLine);
+
+				while (curs.position() < endPos && curs.position() >= 0)
+				{
+					curs.insertText("\t");
+
+					curs.movePosition(QTextCursor::EndOfLine);
+					curs.movePosition(QTextCursor::NextCharacter);
+
+					endPos++;
+				}
+
+				return;
 			}
-
-			curs.setPosition(spos, QTextCursor::MoveAnchor);
-			int sblock = curs.block().blockNumber();
-
-			curs.setPosition(epos, QTextCursor::MoveAnchor);
-			int eblock = curs.block().blockNumber();
-
-			curs.setPosition(spos, QTextCursor::MoveAnchor);
-			curs.beginEditBlock();
-
-			for (int i = 0; i <= (eblock - sblock); ++i)
+			else if (key == Qt::Key_Backtab)
 			{
-				curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+				int startPos = curs.selectionStart();
+				int endPos = curs.selectionEnd();
 
-				curs.insertText("\t");
+				int lineStart = lineNumberAtPos(startPos);
+				int lineEnd = lineNumberAtPos(endPos);
 
-				curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+				for (int i = lineStart; i <= lineEnd; ++i)
+				{
+					QString line = getLine(i);
+
+					int length = std::min(1, line.length());
+					int tabs;
+
+					for (tabs = 0; tabs < length; ++tabs)
+					{
+						if (line[tabs] != '\t') break;
+					}
+
+					if (tabs > 0)
+					{
+						line.remove(0, tabs);
+						replaceLine(i, line);
+					}
+				}
+
+				return;
 			}
-
-			curs.endEditBlock();
-
-			curs.setPosition(spos, QTextCursor::MoveAnchor);
-			curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-
-			while (curs.block().blockNumber() < eblock)
-			{
-				curs.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
-			}
-
-			curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-
-			setTextCursor(curs);
-
-			return;
 		}
+
 		// Check for special indents
 		if (key == Qt::Key_Tab || key == Qt::Key_Return)
 		{

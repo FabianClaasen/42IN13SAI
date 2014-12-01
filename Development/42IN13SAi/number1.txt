@@ -1,4 +1,4 @@
 func Main()
 [
-	prnt(12);
+	prnt(mod(6|4));
 ]
