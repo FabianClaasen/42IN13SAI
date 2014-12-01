@@ -18,15 +18,11 @@ MainWindow::MainWindow(QWidget *parent)
 	outputTab->addTab(exceptionWindow, "Exceptions");
 
 	//Make a layout to add different widgets
-	QVBoxLayout* layout = new QVBoxLayout();
-	layout->addWidget(tabs);
-	layout->addWidget(outputTab);
-
 	splitter = new QSplitter();
-	splitter->setLayout(layout);
 	splitter->setOrientation(Qt::Vertical);
 	splitter->setHandleWidth(10);
-	splitter->setCollapsible(0, false);
+	splitter->addWidget(tabs);
+	splitter->addWidget(outputTab);
 
 	QList<int> sizes = QList<int>() << 500 << 10;
 	splitter->setSizes(sizes);
@@ -49,10 +45,11 @@ void MainWindow::ShowMenuBar()
 	openAction = fileMenu->addAction("Open");
 	saveAction = fileMenu->addAction("Save");
 	saveAsAction = fileMenu->addAction("Save as");
+	quitAction = fileMenu->addAction("Quit");
 	runAction = menu->addAction("Run");
 	clearAction = menu->addAction("Clear console");
 
-	quitAction = menu->addAction("Quit");
+	
 
 #ifndef _WIN32
 	// Also needs a menu to show the items, doesn't work with only actions
@@ -165,6 +162,7 @@ int MainWindow::GetCurrentTabPosition()
 void MainWindow::RemoveTab(int index)
 {
 	tabs->removeTab(index);
+	codeEditorVector.erase(codeEditorVector.begin() + index);
 	themer.RemoveEditor(index);
 }
 
@@ -239,12 +237,12 @@ QAbstractItemModel* MainWindow::modelFromFile(const QString& fileName)
 
 QString MainWindow::OpenLoadDialog()
 {
-	return QFileDialog::getOpenFileName(this, tr("Open file"), "", tr("Text Files (*.txt)"));
+	return QFileDialog::getOpenFileName(this, tr("Open file"), "", tr("Text Files (*.sc)"));
 }
 
 QString MainWindow::OpenSaveDialog()
 {
-	return QFileDialog::getSaveFileName(this, tr("Save file"), "", tr("Text Files (*.txt)"));
+	return QFileDialog::getSaveFileName(this, tr("Save file"), "", tr("Text Files (*.sc)"));
 }
 
 void MainWindow::AddFile(QFileInfo* info, QString text)
