@@ -352,6 +352,63 @@
     <CustomBuild Include="resource.h">
       <Filter>Header Files\Qt</Filter>
     </CustomBuild>
+    <CustomBuild Include="Themer.h">
+      <Filter>Header Files\Qt</Filter>
+    </CustomBuild>
+    <CustomBuild Include="InvalidInputException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UnexpectedParameterException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ZeroDivideException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\assertions.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\autolink.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\config.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\features.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\forwards.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\json.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\json_batchallocator.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\json_tool.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\reader.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\value.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\version.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\writer.h">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\json_internalarray.inl">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\json_internalmap.inl">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="jsoncpp\json_valueiterator.inl">
+      <Filter>Source Files\jsoncpp</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -419,66 +476,5 @@
     <Filter Include="Source Files\jsoncpp">
       <UniqueIdentifier>{95af4f7e-a7ba-48ce-9847-ab6d1c57e586}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ZeroDivideException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="Themer.h">
-      <Filter>Header Files\Qt</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\json_batchallocator.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\json_tool.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\assertions.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\autolink.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\config.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\features.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\forwards.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\json.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\reader.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\value.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\version.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\writer.h">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="UnexpectedParameterException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="InvalidInputException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="jsoncpp\json_internalarray.inl">
-      <Filter>Source Files\jsoncpp</Filter>
-    </None>
-    <None Include="jsoncpp\json_internalmap.inl">
-      <Filter>Source Files\jsoncpp</Filter>
-    </None>
-    <None Include="jsoncpp\json_valueiterator.inl">
-      <Filter>Source Files\jsoncpp</Filter>
-    </None>
   </ItemGroup>
 </Project>
