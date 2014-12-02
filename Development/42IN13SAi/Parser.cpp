@@ -608,6 +608,11 @@ std::shared_ptr<CompilerNode> Parser::ParseTerm()
 		compiler->Match(MyTokenType::CloseBracket);
 		return node;
 	}
+	else if (token.Type == MyTokenType::OperatorMinus && compiler->PeekNext()->Type == MyTokenType::Float)
+	{
+		token = compiler->GetNext();
+		node = std::make_shared<CompilerNode>("$value", "-" + token.Value, false);
+	}
 	else if (compiler->IsInternalFunction(token.Type) && !(token.Type==MyTokenType::PrintLine || token.Type==MyTokenType::Stop))
 	{
 		node = std::shared_ptr<CompilerNode>(InternalFunction(compiler).GetInternalFunction(token.Type));
