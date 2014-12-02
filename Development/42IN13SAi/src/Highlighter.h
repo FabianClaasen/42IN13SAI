@@ -1,5 +1,5 @@
 #pragma once
-#include <QSyntaxHighlighter>
+#include "QSyntaxHighlighter.h"
 
 class Highlighter : public QSyntaxHighlighter
 {

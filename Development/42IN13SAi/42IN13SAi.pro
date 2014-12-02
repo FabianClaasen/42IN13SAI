@@ -8,25 +8,15 @@ DESTDIR = ../Release
 QT += core opengl widgets gui
 CONFIG += debug
 DEFINES += _MBCS _CRT_SECURE_NO_WARNINGS QT_DLL QT_OPENGL_LIB QT_WIDGETS_LIB
-INCLUDEPATH += ../../../../../../../../Boost/include/boost-1_56 \
+INCLUDEPATH += ./usr/lib/include/boost \
     ./GeneratedFiles/Release
-LIBS += -lkernel32 \
-    -luser32 \
-    -lgdi32 \
-    -lwinspool \
-    -lcomdlg32 \
-    -ladvapi32 \
-    -lshell32 \
-    -lole32 \
-    -loleaut32 \
-    -luuid \
-    -lodbc32 \
-    -lodbccp32 \
-    -lopengl32 \
-    -lglu32
+LIBS += -L./usr/lib -lboost_system \
+    -L./usr/lib -lboost_filesystem \
+    -L./usr/lib -lboost_regex
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/release
 OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 RCC_DIR += ./GeneratedFiles
+CONFIG += c++11
 include(42IN13SAi.pri)
