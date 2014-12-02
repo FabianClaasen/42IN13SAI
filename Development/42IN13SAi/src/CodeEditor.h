@@ -61,8 +61,8 @@ public:
 		QTextEdit* textEdit;
 
 		int lineNumberAtPos(int pos);
-        QString getLine(int lineNumber) const;
-        bool replaceLine(int lineNumber, const QString& str);
+		QString CodeEditor::getLine(int lineNumber) const;
+		bool CodeEditor::replaceLine(int lineNumber, const QString& str);
 
 		void checkBracketCharacter(QKeyEvent *e);
 		void checkRightParenthesis();
