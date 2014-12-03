@@ -1,5 +1,7 @@
+var x = 10;
+
 func Main()
 [
-	var x = 3.0001;
-   prnt(x);
+	x += pow(10 | 2) * 10 + 5;
+	prnt(x);
 ]

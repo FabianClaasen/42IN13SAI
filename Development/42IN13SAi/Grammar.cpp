@@ -6,6 +6,7 @@ std::list<TokenDefinition> Grammar::getGrammar()
 {
     std::list<TokenDefinition> definitions;
     definitions.push_back(TokenDefinition("var\\b", MyTokenType::Var));
+	definitions.push_back(TokenDefinition("\\{\\}\\b", MyTokenType::Array));
     
     // Keywords
     definitions.push_back(TokenDefinition("\\belse if\\b", MyTokenType::ElseIf));

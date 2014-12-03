@@ -208,6 +208,41 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		std::shared_ptr<CompilerNode> node = ParseExpression();
 		nodeParameters.push_back(node);
 	}
+	else if (IsNextTokenAddOp() || IsNextTokenMulOp())
+	{
+		std::string command;
+		std::vector<std::shared_ptr<CompilerNode>> parameters;
+
+		// Set the command
+		Token Operator = compiler->GetNext();
+		switch (Operator.Type)
+		{
+		case MyTokenType::OperatorPlus:
+			command = "$add";
+			break;
+		case MyTokenType::OperatorMinus:
+			command = "$min";
+			break;
+		case MyTokenType::OperatorDivide:
+			command = "$div";
+			break;
+		case MyTokenType::OperatorMultiply:
+			command = "$mul";
+			break;
+		}
+
+		// Check if the function is an assignment
+		currentToken = compiler->GetNext();
+		if (currentToken.Type != MyTokenType::Equals)
+			throw IdentifierException("An IdentifierException occured. The token: " + currentToken.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
+
+		// Add the parameters to the parameters list
+		expression = "$assignment";
+		parameters.push_back(std::make_shared<CompilerNode>("$getVariable", identifier.Value, false));
+		parameters.push_back(ParseExpression());
+		nodeParameters.push_back(std::make_shared<CompilerNode>(CompilerNode(command, parameters, nullptr, false)));
+		endNode = std::make_shared<CompilerNode>(expression, nodeParameters, nullptr, false);
+	}
 
 	// Check if the code is closed
 	if (!forLoop)

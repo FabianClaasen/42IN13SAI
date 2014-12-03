@@ -9,6 +9,7 @@ enum class MyTokenType : int {
 	// Normal tokens
     KeyIdentifier,
     Var,
+	Array,
     MainFunction,
     Function,
     Identifier,
