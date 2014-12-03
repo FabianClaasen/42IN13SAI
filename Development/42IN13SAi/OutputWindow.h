@@ -14,6 +14,7 @@ public:
 	~OutputWindow();
 
 	void addOutput(std::string strOutput);
+	QString setOutputPrecision(QString str);
 	void clearOutput();
 
 private:

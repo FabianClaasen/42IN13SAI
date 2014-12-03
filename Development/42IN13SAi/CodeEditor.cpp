@@ -324,10 +324,13 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 					setTextCursor(tmpCursor);
 					insertPlainText("[");
 					addSpecialIndent(false, true);
-				}
-				if (key == Qt::Key_Return)
+					return;
+				}	
+				else if (key == Qt::Key_Return)
+				{
 					addSpecialIndent(true, false);
-				return;
+					return;
+				}
 			}
 		}
 	}
