@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cfloat>
 #include <qlistview.h>
 #include <qstringlist.h>
 #include <qstandarditemmodel.h>
