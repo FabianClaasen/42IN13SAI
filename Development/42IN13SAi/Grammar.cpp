@@ -18,7 +18,7 @@ std::list<TokenDefinition> Grammar::getGrammar()
     // functions
     definitions.push_back(TokenDefinition("\\bfunc\\sMain\\b", MyTokenType::MainFunction));
     definitions.push_back(TokenDefinition("\\bfunc\\b", MyTokenType::Function));
-    definitions.push_back(TokenDefinition("\\|", MyTokenType::Separator));
+    definitions.push_back(TokenDefinition("\\b\\|\\b", MyTokenType::Separator));
 
     //internal functions
     definitions.push_back(TokenDefinition("\\bprnt\\b", MyTokenType::PrintLine));
@@ -73,7 +73,7 @@ std::list<TokenDefinition> Grammar::getGrammar()
     
     // conditions
     definitions.push_back(TokenDefinition("&&", MyTokenType::And));
-    definitions.push_back(TokenDefinition("\\||", MyTokenType::Or));
+    definitions.push_back(TokenDefinition("\\|\\|", MyTokenType::Or));
     
     // bracket types
     definitions.push_back(TokenDefinition("\\[", MyTokenType::OpenMethod));

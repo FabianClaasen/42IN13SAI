@@ -99,7 +99,8 @@ SOURCES       = ../42IN13SAi/main.cpp \
 		../42IN13SAi/MainController.cpp \
 		../42IN13SAi/jsoncpp/json_reader.cpp \
 		../42IN13SAi/jsoncpp/json_value.cpp \
-		../42IN13SAi/jsoncpp/json_writer.cpp GeneratedFiles/release/moc_CodeEditor.cpp \
+		../42IN13SAi/jsoncpp/json_writer.cpp GeneratedFiles/qrc_Resources.cpp \
+		GeneratedFiles/release/moc_CodeEditor.cpp \
 		GeneratedFiles/release/moc_MainWindow.cpp \
 		GeneratedFiles/release/moc_Highlighter.cpp \
 		GeneratedFiles/release/moc_OutputWindow.cpp \
@@ -157,6 +158,7 @@ OBJECTS       = release/main.o \
 		release/json_reader.o \
 		release/json_value.o \
 		release/json_writer.o \
+		release/qrc_Resources.o \
 		release/moc_CodeEditor.o \
 		release/moc_MainWindow.o \
 		release/moc_Highlighter.o \
@@ -553,6 +555,7 @@ Makefile: ../42IN13SAi/42IN13SAi.pro ../../../Qt/5.4/gcc_64/mkspecs/linux-g++/qm
 		../../../Qt/5.4/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt/5.4/gcc_64/mkspecs/features/lex.prf \
 		../42IN13SAi/42IN13SAi.pro \
+		../42IN13SAi/Resources.qrc \
 		/home/fabian/Qt/5.4/gcc_64/lib/libQt5OpenGL.prl \
 		/home/fabian/Qt/5.4/gcc_64/lib/libQt5Widgets.prl \
 		/home/fabian/Qt/5.4/gcc_64/lib/libQt5Gui.prl \
@@ -680,6 +683,7 @@ Makefile: ../42IN13SAi/42IN13SAi.pro ../../../Qt/5.4/gcc_64/mkspecs/linux-g++/qm
 ../../../Qt/5.4/gcc_64/mkspecs/features/yacc.prf:
 ../../../Qt/5.4/gcc_64/mkspecs/features/lex.prf:
 ../42IN13SAi/42IN13SAi.pro:
+../42IN13SAi/Resources.qrc:
 /home/fabian/Qt/5.4/gcc_64/lib/libQt5OpenGL.prl:
 /home/fabian/Qt/5.4/gcc_64/lib/libQt5Widgets.prl:
 /home/fabian/Qt/5.4/gcc_64/lib/libQt5Gui.prl:
@@ -698,6 +702,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../42IN13SAi/Resources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../42IN13SAi/Grammar.h ../42IN13SAi/LabelStack.h ../42IN13SAi/RegexMatcher.h ../42IN13SAi/Token.h ../42IN13SAi/TokenDefinition.h ../42IN13SAi/Tokenizer.h ../42IN13SAi/TokenizerController.h ../42IN13SAi/TokenPartner.h ../42IN13SAi/MyTokenType.h ../42IN13SAi/Compiler.h ../42IN13SAi/CompilerNode.h ../42IN13SAi/InternalFunction.h ../42IN13SAi/Parser.h ../42IN13SAi/Symbol.h ../42IN13SAi/SymbolTable.h ../42IN13SAi/SymbolKind.h ../42IN13SAi/Subroutine.h ../42IN13SAi/SubroutineKind.h ../42IN13SAi/SubroutineTable.h ../42IN13SAi/VirtualMachine.h ../42IN13SAi/FunctionCaller.h ../42IN13SAi/LinkedList.h ../42IN13SAi/ListIterator.h ../42IN13SAi/ListNode.h ../42IN13SAi/Themer.h ../42IN13SAi/CodeEditor.h ../42IN13SAi/MainWindow.h ../42IN13SAi/Highlighter.h ../42IN13SAi/resource.h ../42IN13SAi/OutputWindow.h ../42IN13SAi/ExceptionWindow.h ../42IN13SAi/InvalidInputException.h ../42IN13SAi/UnexpectedParameterException.h ../42IN13SAi/ZeroDivideException.h ../42IN13SAi/ParseException.h ../42IN13SAi/PartnerNotFoundException.h ../42IN13SAi/SymbolNotFoundException.h ../42IN13SAi/ParameterException.h ../42IN13SAi/ParameterExceptionType.h ../42IN13SAi/IdentifierException.h ../42IN13SAi/MissingTokenException.h ../42IN13SAi/ParameterNameException.h ../42IN13SAi/StatementNotFoundException.h ../42IN13SAi/UnexpectedKeywordException.h ../42IN13SAi/UnexpectedTypeException.h ../42IN13SAi/VariableNotFoundException.h ../42IN13SAi/FunctionNameExpectedException.h ../42IN13SAi/MissingCompilerNodeException.h ../42IN13SAi/MissingMainFunctionException.h ../42IN13SAi/SubroutineNotFoundException.h ../42IN13SAi/UnknownExpressionException.h ../42IN13SAi/FileIO.h ../42IN13SAi/MainController.h ../42IN13SAi/jsoncpp/assertions.h ../42IN13SAi/jsoncpp/autolink.h ../42IN13SAi/jsoncpp/config.h ../42IN13SAi/jsoncpp/features.h ../42IN13SAi/jsoncpp/forwards.h ../42IN13SAi/jsoncpp/json.h ../42IN13SAi/jsoncpp/json_batchallocator.h ../42IN13SAi/jsoncpp/json_tool.h ../42IN13SAi/jsoncpp/reader.h ../42IN13SAi/jsoncpp/value.h ../42IN13SAi/jsoncpp/version.h ../42IN13SAi/jsoncpp/writer.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../42IN13SAi/main.cpp ../42IN13SAi/Grammar.cpp ../42IN13SAi/LabelStack.cpp ../42IN13SAi/RegexMatcher.cpp ../42IN13SAi/Token.cpp ../42IN13SAi/TokenDefinition.cpp ../42IN13SAi/Tokenizer.cpp ../42IN13SAi/TokenizerController.cpp ../42IN13SAi/TokenPartner.cpp ../42IN13SAi/Compiler.cpp ../42IN13SAi/CompilerNode.cpp ../42IN13SAi/InternalFunction.cpp ../42IN13SAi/Parser.cpp ../42IN13SAi/Symbol.cpp ../42IN13SAi/SymbolTable.cpp ../42IN13SAi/Subroutine.cpp ../42IN13SAi/SubroutineTable.cpp ../42IN13SAi/LinkedList.cpp ../42IN13SAi/ListIterator.cpp ../42IN13SAi/ListNode.cpp ../42IN13SAi/VirtualMachine.cpp ../42IN13SAi/FunctionCaller.cpp ../42IN13SAi/CodeEditor.cpp ../42IN13SAi/ExceptionWindow.cpp ../42IN13SAi/Highlighter.cpp ../42IN13SAi/MainWindow.cpp ../42IN13SAi/OutputWindow.cpp ../42IN13SAi/Themer.cpp ../42IN13SAi/FunctionNameExpectedException.cpp ../42IN13SAi/IdentifierException.cpp ../42IN13SAi/InvalidInputException.cpp ../42IN13SAi/MissingCompilerNodeException.cpp ../42IN13SAi/MissingMainFunctionException.cpp ../42IN13SAi/MissingTokenException.cpp ../42IN13SAi/ParameterNameException.cpp ../42IN13SAi/ParseException.cpp ../42IN13SAi/PartnerNotFoundException.cpp ../42IN13SAi/StatementNotFoundException.cpp ../42IN13SAi/SubroutineNotFoundException.cpp ../42IN13SAi/SymbolNotFoundException.cpp ../42IN13SAi/UnexpectedKeywordException.cpp ../42IN13SAi/UnexpectedParameterException.cpp ../42IN13SAi/UnexpectedTypeException.cpp ../42IN13SAi/UnknownExpressionException.cpp ../42IN13SAi/VariableNotFoundException.cpp ../42IN13SAi/ParameterException.cpp ../42IN13SAi/ZeroDivideException.cpp ../42IN13SAi/FileIO.cpp ../42IN13SAi/MainController.cpp ../42IN13SAi/jsoncpp/json_reader.cpp ../42IN13SAi/jsoncpp/json_value.cpp ../42IN13SAi/jsoncpp/json_writer.cpp $(DISTDIR)/
 
@@ -720,8 +725,12 @@ mocables: compiler_moc_header_make_all compiler_moc_source_make_all
 
 check: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: GeneratedFiles/qrc_Resources.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) GeneratedFiles/qrc_Resources.cpp
+GeneratedFiles/qrc_Resources.cpp: ../42IN13SAi/Resources.qrc
+	/home/fabian/Qt/5.4/gcc_64/bin/rcc -name Resources ../42IN13SAi/Resources.qrc -o GeneratedFiles/qrc_Resources.cpp
+
 compiler_moc_header_make_all: GeneratedFiles/release/moc_CodeEditor.cpp GeneratedFiles/release/moc_MainWindow.cpp GeneratedFiles/release/moc_Highlighter.cpp GeneratedFiles/release/moc_OutputWindow.cpp GeneratedFiles/release/moc_ExceptionWindow.cpp GeneratedFiles/release/moc_MainController.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) GeneratedFiles/release/moc_CodeEditor.cpp GeneratedFiles/release/moc_MainWindow.cpp GeneratedFiles/release/moc_Highlighter.cpp GeneratedFiles/release/moc_OutputWindow.cpp GeneratedFiles/release/moc_ExceptionWindow.cpp GeneratedFiles/release/moc_MainController.cpp
@@ -2287,7 +2296,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_header_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_header_clean 
 
 ####### Compile
 
@@ -4929,6 +4938,9 @@ release/json_writer.o: ../42IN13SAi/jsoncpp/json_writer.cpp ../42IN13SAi/jsoncpp
 		../42IN13SAi/jsoncpp/config.h \
 		../42IN13SAi/jsoncpp/json_tool.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/json_writer.o ../42IN13SAi/jsoncpp/json_writer.cpp
+
+release/qrc_Resources.o: GeneratedFiles/qrc_Resources.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/qrc_Resources.o GeneratedFiles/qrc_Resources.cpp
 
 release/moc_CodeEditor.o: GeneratedFiles/release/moc_CodeEditor.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_CodeEditor.o GeneratedFiles/release/moc_CodeEditor.cpp

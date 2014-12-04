@@ -3,7 +3,7 @@
 
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), completer(0)
 {
-	QString resourceDir = QDir::currentPath().append("/Resources/");
+    QString resourceDir = QDir::currentPath().append("/Resources/");
 #ifndef _WIN32
     resourceDir = QCoreApplication::applicationDirPath() + "/";
 #endif
@@ -22,7 +22,7 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), completer(0)
 
 	updateLineNumberAreaWidth(0);
 
-	setFocus(Qt::OtherFocusReason);
+	//setFocus(Qt::OtherFocusReason);
 }
 
 void CodeEditor::SetTheme(std::map<std::string, QColor> colors, std::string fontFamily, int fontSize)
@@ -325,7 +325,16 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 					insertPlainText("[");
 					addSpecialIndent(false, true);
 					return;
-				}	
+				}
+				if (key == Qt::Key_Tab && line.contains("(") && line.contains(")") && !line.contains("func"))
+				{
+					int position = tmpCursor.positionInBlock() - 1;
+					QString close_parenthesis = ")";
+					int pos_close = line.indexOf(close_parenthesis, position) - position;
+					tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, pos_close);
+					setTextCursor(tmpCursor);
+					return;
+				}
 				else if (key == Qt::Key_Return)
 				{
 					addSpecialIndent(true, false);
@@ -428,10 +437,8 @@ void CodeEditor::checkRightParenthesis()
 		insertPlainText(")");
 		tc.deletePreviousChar();
 	}
-	else if (prevChar == ")" || prevChar != "(")
-	{
+	else
 		insertPlainText(")");
-	} 
 }
 
 QString CodeEditor::getSentenceFromLine()

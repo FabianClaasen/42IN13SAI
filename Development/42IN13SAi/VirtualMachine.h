@@ -60,6 +60,10 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteUniPlusOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteUniMinOperation(CompilerNode compilerNode);
 	
+    // Condition add statements
+    std::shared_ptr<CompilerNode> ExecuteAnd(CompilerNode compilerNode);
+    std::shared_ptr<CompilerNode> ExecuteOr(CompilerNode compilerNode);
+    
 	//Conditional statements
 	std::shared_ptr<CompilerNode> ExecuteLessCondition(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteLessOrEqCondition(CompilerNode compilerNode);
@@ -93,6 +97,12 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteDiscriminantOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteAbcOperation(CompilerNode compilerNode);
 
+
+	
+	//return the output (for showing it in the IDE)
+    std::vector<std::string> getOutput() { return output; }
+    std::vector<std::string> getExceptions() { return exceptions; }
+
 private:
 	SymbolTable* globalsSymboltable; // Globals symboltable
 	SymbolTable* currentSymbolTable; // User function symboltable
@@ -101,6 +111,8 @@ private:
 	Subroutine* currentSubroutine; // User function subroutine table
 
 	std::streambuf* buffer;
+    std::vector<std::string> output;
+    std::vector<std::string> exceptions;
 
 	// Node methods
 	std::shared_ptr<CompilerNode> GetNext(std::shared_ptr<LinkedList> nodes);

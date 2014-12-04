@@ -53,6 +53,10 @@ public:
 	SymbolTable* GetSymbolTable();
 	SubroutineTable* GetSubroutineTable();
 	std::list<std::shared_ptr<CompilerNode>> GetCompilerNodes();
+
+    void addException(std::string exception) { exceptions.push_back(exception); }
+    std::vector<std::string> getExceptions() { return exceptions; }
+    std::vector<std::string> exceptions;
 	
 private:
 	// Variables
