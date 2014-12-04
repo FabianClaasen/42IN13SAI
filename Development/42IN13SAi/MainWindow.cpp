@@ -170,6 +170,7 @@ void MainWindow::AddNewTab()
 	themer.AddEditor(codeEditor);
 	codeEditorVector.push_back(codeEditor);
 	tabs->addTab(codeEditor, "New*");
+	tabs->setCurrentIndex(tabs->count() - 1);
     codeEditor->setFocus(Qt::OtherFocusReason);
 }
 
@@ -253,6 +254,7 @@ void MainWindow::AddFile(QFileInfo* info, QString text)
 
 	// Remove tab if only the new file is existing...
 	tabs->addTab(codeEditor, info->baseName());
+	tabs->setCurrentIndex(tabs->count() - 1);
 }
 
 void MainWindow::SaveThemeSettings()
