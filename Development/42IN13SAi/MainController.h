@@ -16,6 +16,7 @@
 #include "VirtualMachine.h"
 #include "FileIO.h"
 #include "ConsoleOutput.h"
+#include "ExceptionOutput.h"
 
 class ConsoleOutput;
 class MainController : public QObject

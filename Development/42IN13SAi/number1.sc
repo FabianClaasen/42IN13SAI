@@ -1,4 +1,4 @@
 func Main()
 [
-	prnt(pow(3|2) + cos(8+5));
+	var x = "asdf";
 ]

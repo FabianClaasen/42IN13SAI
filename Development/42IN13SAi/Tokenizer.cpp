@@ -18,8 +18,10 @@ Tokenizer::Tokenizer(std::string fileLocation, std::list<TokenDefinition> defini
 
 // The tokenize function will fill the tokenList with all the tokens
 // gathered from the code send to it.
-void Tokenizer::Tokenize()
+void Tokenizer::Tokenize(std::streambuf* buffer)
 {
+	this->buffer = buffer;
+
 	while (lineRemaining.length() != 0)
 	{
 		bool match = false;

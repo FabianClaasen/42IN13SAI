@@ -44,8 +44,9 @@ void Parser::ParseFunction()
 		compiler->Match(MyTokenType::OpenBracket);
 
 		// Set the parameters
-        if (currentToken.Type == MyTokenType::MainFunction && compiler->PeekNext()->Type != MyTokenType::CloseBracket)
-            compiler->addException("Main function can't contain parameters (line " + std::to_string(currentToken.LineNumber) + ")");
+		if (currentToken.Type == MyTokenType::MainFunction && compiler->PeekNext()->Type != MyTokenType::CloseBracket)
+			throw ParseException("Main function can't contain parameters (line " + std::to_string(currentToken.LineNumber) + ")");
+            //compiler->addException("Main function can't contain parameters (line " + std::to_string(currentToken.LineNumber) + ")");
 
 		while (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
 		{
@@ -67,7 +68,8 @@ void Parser::ParseFunction()
 					symbolTable.AddSymbol(parameterSymbol);
 				}
                 else
-                    compiler->addException("Parameter name: " + parameter.Value + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
+					throw ParseException("Parameter name: " + parameter.Value + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
+                    //compiler->addException("Parameter name: " + parameter.Value + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
 			}
 		}
 
@@ -94,7 +96,8 @@ void Parser::ParseFunction()
 		compiler->AddSubroutine();
 	}
     else
-        compiler->addException("Expected return type (line " + std::to_string(currentToken.LineNumber) + ")");
+		throw UnexpectedTypeException("Expected return type (line " + std::to_string(currentToken.LineNumber) + ")");
+        //compiler->addException("Expected return type (line " + std::to_string(currentToken.LineNumber) + ")");
 }
 
 void Parser::ParseReturn()
@@ -330,8 +333,8 @@ void Parser::ParseIfStatement()
 	}
 	else
     {
-        compiler->addException("An UnexpectedKeywordException occured. Expected an if keyword on line " + std::to_string(currentToken.LineNumber) + ".");
-        //throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected an if keyword on line " + std::to_string(currentToken.LineNumber) + ".");
+        //compiler->addException("An UnexpectedKeywordException occured. Expected an if keyword on line " + std::to_string(currentToken.LineNumber) + ".");
+        throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected an if keyword on line " + std::to_string(currentToken.LineNumber) + ".");
 	}
 
 	compiler->Match(MyTokenType::OpenBracket);
@@ -576,8 +579,8 @@ std::shared_ptr<CompilerNode> Parser::ParseMulExpression()
 			parameters.push_back(secondTerm);
 			if (secondTerm->GetValue() == "0")
             {
-                compiler->addException("Can't divide by zero");
-                //throw ZeroDivideException("Can't divide by zero");
+                //compiler->addException("Can't divide by zero");
+                throw ZeroDivideException("Can't divide by zero");
 			}
 			term = std::make_shared<CompilerNode>("$div", parameters, nullptr, false);
 			break;
@@ -645,8 +648,8 @@ std::shared_ptr<CompilerNode> Parser::ParseTerm()
 			Symbol* symbol = GetSymbol(identifier);
 
             if (symbol == nullptr)
-                compiler->addException("Symbol not found");
-                //throw SymbolNotFoundException("Symbol not found");
+                //compiler->addException("Symbol not found");
+                throw SymbolNotFoundException("Symbol not found");
 
 			node = std::make_shared<CompilerNode>("$getVariable", symbol->name, false);
 			return node;

@@ -43,15 +43,18 @@ void MainController::Execute()
 
 	TokenizerController *tokenizer_controller = new TokenizerController(input);
 
+	// Setup output buffer
+	std::streambuf* buffer = nullptr;
+
 	try
 	{
-		tokenizer_controller->Tokenize(); // Tokenize
-        /*std::vector<std::string> exceptions = tokenizer_controller->getExceptions();
-        QString text;
-        for (std::vector<std::string>::iterator it = exceptions.begin(); it != exceptions.end(); ++it) {
-            mainWindow.addException(*it);
-            text.append(QString::fromStdString(*it));
-        }*/
+		// Setup output buffer
+		bio::stream_buffer<ExceptionOutput> sb;
+		sb.open(ExceptionOutput(this));
+		buffer = std::clog.rdbuf(&sb);
+
+		// Tokenize
+		tokenizer_controller->Tokenize(buffer);
 	}
 	catch (const std::exception& e)
 	{
@@ -67,13 +70,13 @@ void MainController::Execute()
 
 	try
 	{
-		compiler.Compile();
-        /*std::vector<std::string> exceptions = compiler.getExceptions();
+		// Setup output buffer
+		bio::stream_buffer<ExceptionOutput> sb;
+		sb.open(ExceptionOutput(this));
+		buffer = std::clog.rdbuf(&sb);
 
-        for (std::vector<std::string>::iterator it = exceptions.begin(); it != exceptions.end(); ++it) {
-            mainWindow.addException(*it);
-            text.append(QString::fromStdString(*it));
-        }*/
+		// Compile
+		compiler.Compile(buffer);
 	}
 	catch (const std::exception& e)
 	{
@@ -81,6 +84,7 @@ void MainController::Execute()
 		mainWindow.addException(e.what());
 		return;
 	}
+
 	// Delete the tokenizer controller
 	delete(tokenizer_controller);
 
@@ -94,22 +98,10 @@ void MainController::Execute()
 		// Setup output buffer
 		bio::stream_buffer<ConsoleOutput> sb;
 		sb.open(ConsoleOutput(this));
-		std::streambuf* oldbuf = std::clog.rdbuf(&sb);
+		buffer = std::clog.rdbuf(&sb);
 		
 		// Execute VM
-		virtual_machine.ExecuteCode(oldbuf);/*
-		virtual_machine.ExecuteCode();
-        std::vector<std::string> output = virtual_machine.getOutput();
-        for (std::vector<std::string>::iterator it = output.begin(); it != output.end(); ++it) {
-            mainWindow.addOutput(*it);
-            text.append(QString::fromStdString(*it));
-        }
-
-        std::vector<std::string> exceptions = virtual_machine.getExceptions();
-        for (std::vector<std::string>::iterator it = exceptions.begin(); it != exceptions.end(); ++it) {
-            mainWindow.addException(*it);
-            text.append(QString::fromStdString(*it));
-        }*/
+		virtual_machine.ExecuteCode(buffer);
 
 		// Create the log files directory if it doesn't exists
 		if (!QDir("Log files").exists())
@@ -131,8 +123,8 @@ void MainController::WriteException(const char* output, std::streamsize size)
 	for (int i = 0; i < size; i++)
 		exception_text.append(1, output[i]);
 
-	//mainWindow.addOutput(exception_text);
-	//this->output.append(QString::fromStdString(output_text));
+	mainWindow.addException(exception_text);
+	//this->output.append(QString::fromUtf8(exception_text.c_str()));
 }
 
 void MainController::WriteOutput(const char* output, std::streamsize size)

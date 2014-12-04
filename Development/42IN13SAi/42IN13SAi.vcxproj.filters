@@ -192,7 +192,10 @@
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="ConsoleOutput.cpp">
-      <Filter>Generated Files</Filter>
+      <Filter>Source Files\VirtualMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="ExceptionOutput.cpp">
+      <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -482,7 +485,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleOutput.h">
-      <Filter>Generated Files</Filter>
+      <Filter>Header Files\VirtualMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="ExceptionOutput.h">
+      <Filter>Header Files\Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

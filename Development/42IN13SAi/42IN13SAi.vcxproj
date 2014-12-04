@@ -15,6 +15,7 @@
     <ClCompile Include="CompilerNode.cpp" />
     <ClCompile Include="CodeEditor.cpp" />
     <ClCompile Include="ConsoleOutput.cpp" />
+    <ClCompile Include="ExceptionOutput.cpp" />
     <ClCompile Include="ExceptionWindow.cpp" />
     <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="FunctionNameExpectedException.cpp" />
@@ -1243,6 +1244,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleOutput.h" />
+    <ClInclude Include="ExceptionOutput.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0F8E62D6-F5A0-4C66-AD23-F45D847EB1FE}</ProjectGuid>

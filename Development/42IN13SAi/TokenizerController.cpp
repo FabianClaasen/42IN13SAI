@@ -9,11 +9,11 @@ TokenizerController::TokenizerController(std::string filename)
 	tokenizer = new Tokenizer(filename, definitions, partners);
 }
 
-void TokenizerController::Tokenize()
+void TokenizerController::Tokenize(std::streambuf* buffer)
 {
 	
     //boost::posix_time::ptime start = boost::posix_time::microsec_clock::local_time( );
-    tokenizer->Tokenize();
+	tokenizer->Tokenize(buffer);
     /*boost::posix_time::ptime end = boost::posix_time::microsec_clock::local_time( );
     
     boost::posix_time::time_duration elapsed = end - start;

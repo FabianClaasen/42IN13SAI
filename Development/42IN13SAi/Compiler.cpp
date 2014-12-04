@@ -11,8 +11,10 @@ Compiler::~Compiler()
 }
 
 //keep parsing as long as there are tokens
-void Compiler::Compile()
+void Compiler::Compile(std::streambuf* buffer)
 {
+	this->buffer = buffer;
+
 	while (currentIndex != tokenizerTokens.size() - 1)
 	{
 		currentSubroutine = Subroutine();
@@ -40,11 +42,16 @@ Token Compiler::GetNext()
 	}
 	else
 	{
-        exceptions.push_back("A MissingTokenException occured");
-        //throw MissingTokenException("A MissingTokenException occured.");
+        //exceptions.push_back("A MissingTokenException occured");
+        throw MissingTokenException("A MissingTokenException occured.");
 	}
 
 	return token;
+}
+
+std::streambuf* Compiler::GetBuffer()
+{
+	return buffer;
 }
 
 // Set the tokenlist
@@ -109,7 +116,7 @@ void Compiler::Match(MyTokenType type)
 	if (currentToken.Type != type)
 	{
         //exceptions.push_back("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
-        throw UnexpectedTypeException("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
+		throw UnexpectedTypeException("An UnexpectedTypeException occured at line " + std::to_string(currentToken.LineNumber) + " on position " + std::to_string(currentToken.LinePosition) + ". Expected: " + TokenToString(type));
 	}
 }
 

@@ -24,7 +24,7 @@ public:
 	Tokenizer(std::string fileLocation, std::list<TokenDefinition> definitions, std::vector<TokenPartner> partners);
 	virtual ~Tokenizer();
 
-	void Tokenize();
+	void Tokenize(std::streambuf* buffer);
 	std::vector<Token> GetTokenList();
 private:
 	int lineNumber;
@@ -46,4 +46,5 @@ private:
 	void CheckClosingPartners();
 
 	std::string TokenToString(MyTokenType type);
+	std::streambuf* buffer;
 };

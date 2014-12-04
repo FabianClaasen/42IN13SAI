@@ -31,7 +31,7 @@ public:
 	virtual ~Compiler();
 
 	// Functions
-	void Compile();
+	void Compile(std::streambuf* buffer);
 	Token* PeekNext();
 	Token  GetNext();
 	Subroutine* GetSubroutine();
@@ -54,14 +54,13 @@ public:
 	SubroutineTable* GetSubroutineTable();
 	std::list<std::shared_ptr<CompilerNode>> GetCompilerNodes();
 
-    void addException(std::string exception) { exceptions.push_back(exception); }
-    std::vector<std::string> getExceptions() { return exceptions; }
-    std::vector<std::string> exceptions;
+	std::streambuf* GetBuffer();
 	
 private:
 	// Variables
 	//std::shared_ptr<InternalFunction> internalFunction;
 	//std::shared_ptr<Parser> parser;
+	std::streambuf* buffer;
 	std::vector<Token> tokenizerTokens;
 	std::list<std::shared_ptr<CompilerNode>> compilerNodes;
 	SymbolTable symbolTable;
