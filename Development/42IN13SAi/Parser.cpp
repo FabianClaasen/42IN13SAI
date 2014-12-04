@@ -584,14 +584,12 @@ std::shared_ptr<CompilerNode> Parser::ParseMulExpression()
 		case MyTokenType::OperatorRaised:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
-<<<<<<< 86de4cbf27f0831050b5bd322dcae6fe67b061e7
-=======
+
 			if (secondTerm->GetValue() == "0")
             {
                 compiler->addException("Can't raise by zero");
                 //throw ZeroDivideException("Can't raise by zero");
 			}
->>>>>>> ce0f32e7734bde5fd73103823c556300de1c6398
 			term = std::make_shared<CompilerNode>("$raise", parameters, nullptr, false);
 			break;
 		}
