@@ -142,7 +142,7 @@ void MainController::WriteOutput(const char* output, std::streamsize size)
 		output_text.append(1, output[i]);
 
 	mainWindow.addOutput(output_text);
-	this->output.append(QString::fromStdString(output_text));
+	this->output.append(QString::fromUtf8(output_text.c_str()));
 }
 
 void MainController::ClearConsole()
