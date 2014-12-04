@@ -1,12 +1,12 @@
 var x = 3;
 func Main()
 [
-	if(x != 4)
+	if(x == 3)
 	[
-   	x = 5;
+   	x = 4;
    ]
    else
    [
-   	x = 6;
+   	x = 5;
    ]
 ]
