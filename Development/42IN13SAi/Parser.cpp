@@ -35,6 +35,11 @@ void Parser::ParseFunction()
 			returnType = compiler->GetNext();
 			functionName = compiler->GetNext();
 		}
+        
+        if (compiler->GetSubroutineTable()->GetSubroutine(functionName.Value) != nullptr)
+        {
+            throw ParseException("Function: '" + functionName.Value + "' already exists");
+        }
 
 		compiler->Match(MyTokenType::OpenBracket);
 
@@ -57,7 +62,6 @@ void Parser::ParseFunction()
 
 				Symbol parameterSymbol = Symbol(parameter.Value, parameter.Type, kind);
 
-
 				if (!symbolTable.HasSymbol(parameterSymbol.name))
 				{
 					symbolTable.AddSymbol(parameterSymbol);
@@ -77,6 +81,10 @@ void Parser::ParseFunction()
 		// Set all the statements inside this subroutine
 		while (compiler->PeekNext()->Type != MyTokenType::CloseMethod && compiler->PeekNext()->Level > 1)
 		{
+            // Catch function in function exception
+            if (compiler->PeekNext()->Type == MyTokenType::Function || compiler->PeekNext()->Type == MyTokenType::MainFunction)
+                throw UnexpectedTypeException("Function in function not allowed (line " + std::to_string(compiler->PeekNext()->LineNumber) + ")");
+            
 			compiler->ParseStatement();
 		}
 
@@ -91,6 +99,9 @@ void Parser::ParseFunction()
 
 void Parser::ParseReturn()
 {
+    if (compiler->GetSubroutine()->returnType == MyTokenType::Void)
+        throw UnexpectedKeywordException("Unexpected return in void function (line "+ std::to_string(compiler->PeekNext()->LineNumber) + ")");
+    
 	compiler->Match(MyTokenType::Return);
 	
 	std::vector<std::shared_ptr<CompilerNode>> nodeParameters;
@@ -566,10 +577,6 @@ std::shared_ptr<CompilerNode> Parser::ParseMulExpression()
 		case MyTokenType::OperatorRaised:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
-			if (secondTerm->GetValue() == "0")
-			{
-				throw ZeroDivideException("Can't raise by zero");
-			}
 			term = std::make_shared<CompilerNode>("$raise", parameters, nullptr, false);
 			break;
 		}
