@@ -15,6 +15,7 @@ public:
 	std::shared_ptr<Token> Partner;
 
 	Token(int lineNumber, int linePosition, int level, std::string value, MyTokenType myTokenType, std::shared_ptr<Token> partner);
+    Token(const Token &);
 	Token();
 	~Token();
 };

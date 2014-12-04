@@ -11,7 +11,7 @@ class Parser
 {
 public:
 	Parser(Compiler* compiler);
-	Parser(Compiler* compiler, std::vector<Token> tokens);
+	Parser(Compiler* compiler, std::vector<std::shared_ptr<Token>> tokens);
 	virtual ~Parser();
 
 	// Functions

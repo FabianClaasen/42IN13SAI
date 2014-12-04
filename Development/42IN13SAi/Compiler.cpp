@@ -2,7 +2,7 @@
 #include "InternalFunction.h"
 #include "Parser.h"
 
-Compiler::Compiler(std::vector<Token> tokens) : tokenizerTokens(tokens)
+Compiler::Compiler(std::vector<std::shared_ptr<Token>> tokens) : tokenizerTokens(tokens)
 {
 }
 
@@ -24,9 +24,9 @@ void Compiler::Compile(std::streambuf* buffer)
 
 
 // Check what the next token is
-Token* Compiler::PeekNext()
+std::shared_ptr<Token> Compiler::PeekNext()
 {
-	Token* token = &tokenizerTokens.at(currentIndex + 1);
+	std::shared_ptr<Token> token = tokenizerTokens.at(currentIndex + 1);
 	return token;
 }
 
@@ -38,7 +38,7 @@ Token Compiler::GetNext()
 	Token token;
 	if (currentIndex != tokenizerTokens.size())
 	{
-		token = tokenizerTokens.at(currentIndex);
+		token = *tokenizerTokens.at(currentIndex);
 	}
 	else
 	{
@@ -55,7 +55,7 @@ std::streambuf* Compiler::GetBuffer()
 }
 
 // Set the tokenlist
-void Compiler::SetTokenList(std::vector<Token> tokens)
+void Compiler::SetTokenList(std::vector<std::shared_ptr<Token>> tokens)
 {
 	tokenizerTokens = tokens;
 }
@@ -156,6 +156,7 @@ void Compiler::ParseStatement()
 {
 	switch (PeekNext()->Type)
 	{
+    case MyTokenType::ElseIf:
 	case MyTokenType::If:
 		Parser(this).ParseIfStatement();
 		break;
@@ -201,7 +202,7 @@ void Compiler::ParseStatement()
 
 void Compiler::ParseFunctionOrAssignment()
 {
-	Token temp = GetNext();
+	std::shared_ptr<Token> temp = std::shared_ptr<Token>(new Token(GetNext()));
 	if (PeekNext()->Type == MyTokenType::OpenBracket)
 	{
 		tokenizerTokens.insert(tokenizerTokens.begin(), temp);

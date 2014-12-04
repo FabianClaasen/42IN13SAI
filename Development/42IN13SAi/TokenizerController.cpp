@@ -20,7 +20,7 @@ void TokenizerController::Tokenize(std::streambuf* buffer)
     std::cout << elapsed << std::endl;*/
 }
 
-std::vector<Token> TokenizerController::GetCompilerTokens()
+std::vector<std::shared_ptr<Token>> TokenizerController::GetCompilerTokens()
 {
 	return tokenizer->GetTokenList();
 }

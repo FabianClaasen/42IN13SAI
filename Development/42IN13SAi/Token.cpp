@@ -6,7 +6,12 @@ Token::Token(int lineNumber, int linePosition, int level, std::string value, MyT
 	Partner = partner;
 }
 
-Token::Token() : LineNumber(0), LinePosition(0), Level(0), Value(""), Partner(nullptr)
+Token::Token(const Token & other): LineNumber(other.LineNumber), LinePosition(other.LinePosition), Level(other.Level), Value(other.Value), Type(other.Type), Partner(other.Partner)
+{
+    
+}
+
+Token::Token() : LineNumber(0), LinePosition(0), Level(0), Value(""), Partner(std::shared_ptr<Token>())
 {
 }
 

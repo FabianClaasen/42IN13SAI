@@ -27,16 +27,16 @@ class Parser;
 class Compiler
 {
 public:
-	Compiler(std::vector<Token> tokens);
+	Compiler(std::vector<std::shared_ptr<Token>> tokens);
 	virtual ~Compiler();
 
 	// Functions
 	void Compile(std::streambuf* buffer);
-	Token* PeekNext();
+	std::shared_ptr<Token> PeekNext();
 	Token  GetNext();
 	Subroutine* GetSubroutine();
 	Symbol* GetSymbol(std::string name);
-	void SetTokenList(std::vector<Token> tokens);
+	void SetTokenList(std::vector<std::shared_ptr<Token>> tokens);
 	void SetSubroutine(Subroutine subroutine);
 	void AddSubroutine();
 	void AddSymbol(Symbol symbol);
@@ -61,7 +61,7 @@ private:
 	//std::shared_ptr<InternalFunction> internalFunction;
 	//std::shared_ptr<Parser> parser;
 	std::streambuf* buffer;
-	std::vector<Token> tokenizerTokens;
+	std::vector<std::shared_ptr<Token>> tokenizerTokens;
 	std::list<std::shared_ptr<CompilerNode>> compilerNodes;
 	SymbolTable symbolTable;
 	SubroutineTable subroutineTable;

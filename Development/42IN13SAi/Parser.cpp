@@ -4,7 +4,7 @@ Parser::Parser(Compiler* compiler) : compiler(compiler)
 {
 }
 
-Parser::Parser(Compiler* compiler, std::vector<Token> tokens) : compiler(compiler)
+Parser::Parser(Compiler* compiler, std::vector<std::shared_ptr<Token>> tokens) : compiler(compiler)
 {
 	compiler->SetTokenList(tokens);
 }
@@ -347,14 +347,14 @@ void Parser::ParseIfStatement()
 	//Make a do nothing compilerNode to jump to if the statement is false
 	std::vector<std::string> doNothing;
 	std::shared_ptr<CompilerNode> jumpTo = std::make_shared<CompilerNode>("$doNothing", "", false);
-	statementNode->SetJumpTo(jumpTo);
 
 	//Create the endNode before parsing the statements in the if/else
 	std::vector<std::shared_ptr<CompilerNode>> params;
 	params.push_back(statementNode);
-	endNode = std::make_shared<CompilerNode>("$if", params, nullptr, false);
+	endNode = std::make_shared<CompilerNode>("$if", params, jumpTo, false);
 	compiler->GetSubroutine()->AddCompilerNode(endNode);
-
+    
+    // Parse the statements for a true condition
 	while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
 	{
 		compiler->ParseStatement();
@@ -362,21 +362,22 @@ void Parser::ParseIfStatement()
 
 	compiler->Match(MyTokenType::CloseMethod);
 
+    //Add the donothing to jump to if condition is false
+    compiler->GetSubroutine()->AddCompilerNode(jumpTo);
+    
+    // If there is a else / else if parse that after the do nothing
 	if (hasPartner)
 	{
-		compiler->Match(MyTokenType::Else);
-		compiler->Match(MyTokenType::OpenMethod);
-
-		while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
-		{
-			compiler->ParseStatement();
-		}
-
-		compiler->Match(MyTokenType::CloseMethod);
+        compiler->Match(MyTokenType::Else);
+        compiler->Match(MyTokenType::OpenMethod);
+        
+        while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
+        {
+            compiler->ParseStatement();
+        }
+        
+        compiler->Match(MyTokenType::CloseMethod);
 	}
-
-	//Finally add the do nothing CompilerNode to jump to if the statement is false
-	compiler->GetSubroutine()->AddCompilerNode(jumpTo);
 }
 
 /*
