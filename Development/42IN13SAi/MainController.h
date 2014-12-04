@@ -27,6 +27,7 @@ class MainController : public QObject
 		virtual ~MainController();
 
 		void WriteOutput(const char* s, std::streamsize size);
+		void WriteException(const char* output, std::streamsize size);
 
 	private:
 		// Variables

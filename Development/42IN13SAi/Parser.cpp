@@ -137,8 +137,8 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 
 	// Check if the identifier is a identifier
     if (identifier.Type != MyTokenType::Identifier)
-        compiler->addException("An IdentifierException occured. Identifier expected. (line " + std::to_string(currentToken.LineNumber) + ")");
-        //throw IdentifierException("An IdentifierException occured. Identifier expected. (line " + std::to_string(currentToken.LineNumber) + ")");
+        //compiler->addException("An IdentifierException occured. Identifier expected. (line " + std::to_string(currentToken.LineNumber) + ")");
+        throw IdentifierException("An IdentifierException occured. Identifier expected. (line " + std::to_string(currentToken.LineNumber) + ")");
 
 	// Check if the identifier exists
 	if (!newIdentifier)
@@ -146,8 +146,8 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		Symbol* symbol = GetSymbol(identifier.Value);
 
         if (symbol == nullptr)
-            compiler->addException("An IdentifierException occured. The identifier: " + identifier.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
-            //throw IdentifierException("An IdentifierException occured. The identifier: " + identifier.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
+            //compiler->addException("An IdentifierException occured. The identifier: " + identifier.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
+            throw IdentifierException("An IdentifierException occured. The identifier: " + identifier.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
 	}
 	else
 	{
@@ -180,8 +180,8 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		{
 			delete identifierSymbol;
             identifierSymbol = nullptr;
-            compiler->addException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
-            //throw IdentifierException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
+            //compiler->addException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
+            throw IdentifierException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
 		}
 	}
 
@@ -248,8 +248,8 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		// Check if the function is an assignment
 		currentToken = compiler->GetNext();
 		if (currentToken.Type != MyTokenType::Equals)
-            compiler->addException("An IdentifierException occured. The token: " + currentToken.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
-            //throw IdentifierException("An IdentifierException occured. The token: " + currentToken.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
+            //compiler->addException("An IdentifierException occured. The token: " + currentToken.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
+            throw IdentifierException("An IdentifierException occured. The token: " + currentToken.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
 
 		// Add the parameters to the parameters list
 		expression = "$assignment";
@@ -399,8 +399,8 @@ void Parser::ParseLoopStatement()
 	}
 	else
 	{
-        compiler->addException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");
-        //throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");
+        //compiler->addException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");
+        throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");
 	}
 
 	compiler->Match(MyTokenType::OpenBracket);
