@@ -22,7 +22,7 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), completer(0)
 
 	updateLineNumberAreaWidth(0);
 
-	setFocus(Qt::OtherFocusReason);
+	//setFocus(Qt::OtherFocusReason);
 }
 
 void CodeEditor::SetTheme(std::map<std::string, QColor> colors, std::string fontFamily, int fontSize)
@@ -428,10 +428,8 @@ void CodeEditor::checkRightParenthesis()
 		insertPlainText(")");
 		tc.deletePreviousChar();
 	}
-	else if (prevChar == ")" || prevChar != "(")
-	{
+	else
 		insertPlainText(")");
-	} 
 }
 
 QString CodeEditor::getSentenceFromLine()
