@@ -31,7 +31,7 @@ public:
 	virtual ~Compiler();
 
 	// Functions
-	void Compile(std::streambuf* buffer);
+	void Compile();
 	std::shared_ptr<Token> PeekNext();
 	Token  GetNext();
 	Subroutine* GetSubroutine();
@@ -53,14 +53,11 @@ public:
 	SymbolTable* GetSymbolTable();
 	SubroutineTable* GetSubroutineTable();
 	std::list<std::shared_ptr<CompilerNode>> GetCompilerNodes();
-
-	std::streambuf* GetBuffer();
 	
 private:
 	// Variables
 	//std::shared_ptr<InternalFunction> internalFunction;
 	//std::shared_ptr<Parser> parser;
-	std::streambuf* buffer;
 	std::vector<std::shared_ptr<Token>> tokenizerTokens;
 	std::list<std::shared_ptr<CompilerNode>> compilerNodes;
 	SymbolTable symbolTable;

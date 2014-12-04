@@ -18,6 +18,8 @@
 #include "ConsoleOutput.h"
 #include "ExceptionOutput.h"
 
+#include "Log.h"
+
 class ConsoleOutput;
 class MainController : public QObject
 {

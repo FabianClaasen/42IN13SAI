@@ -15,7 +15,7 @@ public:
 	TokenizerController(std::string filename);
 	virtual ~TokenizerController();
 
-	void Tokenize(std::streambuf* buffer);
+	void Tokenize();
 	std::vector<std::shared_ptr<Token>> GetCompilerTokens();
 
     std::vector<std::string> getExceptions() { return exceptions; }

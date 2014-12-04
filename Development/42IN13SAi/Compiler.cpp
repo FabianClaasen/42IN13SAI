@@ -11,10 +11,8 @@ Compiler::~Compiler()
 }
 
 //keep parsing as long as there are tokens
-void Compiler::Compile(std::streambuf* buffer)
+void Compiler::Compile()
 {
-	this->buffer = buffer;
-
 	while (currentIndex != tokenizerTokens.size() - 1)
 	{
 		currentSubroutine = Subroutine();
@@ -47,11 +45,6 @@ Token Compiler::GetNext()
 	}
 
 	return token;
-}
-
-std::streambuf* Compiler::GetBuffer()
-{
-	return buffer;
 }
 
 // Set the tokenlist

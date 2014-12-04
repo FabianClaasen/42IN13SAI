@@ -9,7 +9,7 @@
 #include "CompilerNode.h"
 #include "FunctionCaller.h"
 #include "LinkedList.h"
-
+#include "Log.h"
 
 #include "ParameterException.h"
 #include "MissingCompilerNodeException.h"
@@ -29,7 +29,7 @@ public:
 	VirtualMachine& operator=(const VirtualMachine &other);
 	virtual ~VirtualMachine();
 
-	void ExecuteCode(std::streambuf* buffer);
+	void ExecuteCode();
 	std::shared_ptr<CompilerNode> ExecuteNodes(std::shared_ptr<LinkedList> nodes);
 	std::shared_ptr<CompilerNode> ExecuteNodes(std::list<std::shared_ptr<CompilerNode>> nodes, int currentIndex);
 
@@ -103,8 +103,6 @@ private:
 
 	SubroutineTable* subroutineTable; // Main subroutineTable
 	Subroutine* currentSubroutine; // User function subroutine table
-
-	std::streambuf* buffer;
 
 	// Node methods
 	std::shared_ptr<CompilerNode> GetNext(std::shared_ptr<LinkedList> nodes);

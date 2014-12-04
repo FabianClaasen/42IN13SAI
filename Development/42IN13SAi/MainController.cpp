@@ -9,6 +9,17 @@ MainController::MainController() : QObject()
 
 void MainController::Setup()
 {
+    QString resourceDir = QDir::currentPath().append("/Resources/");
+#ifndef _WIN32
+    resourceDir = QCoreApplication::applicationDirPath() + "/";
+#endif
+    
+    // Add default font to the font database
+    QFontDatabase fontDatabase;
+    fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf");
+    fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf");
+    fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf");
+    
 	QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_F5), &mainWindow);
 	connect(shortcut, SIGNAL(activated()), this, SLOT(Execute()));
 	
@@ -43,18 +54,15 @@ void MainController::Execute()
 
 	TokenizerController *tokenizer_controller = new TokenizerController(input);
 
-	// Setup output buffer
-	std::streambuf* buffer = nullptr;
-
 	try
 	{
 		// Setup output buffer
 		bio::stream_buffer<ExceptionOutput> sb;
 		sb.open(ExceptionOutput(this));
-		buffer = std::clog.rdbuf(&sb);
+		std::clog.rdbuf(&sb);
 
 		// Tokenize
-		tokenizer_controller->Tokenize(buffer);
+		tokenizer_controller->Tokenize();
 	}
 	catch (const std::exception& e)
 	{
@@ -73,10 +81,10 @@ void MainController::Execute()
 		// Setup output buffer
 		bio::stream_buffer<ExceptionOutput> sb;
 		sb.open(ExceptionOutput(this));
-		buffer = std::clog.rdbuf(&sb);
+		std::clog.rdbuf(&sb);
 
 		// Compile
-		compiler.Compile(buffer);
+		compiler.Compile();
 	}
 	catch (const std::exception& e)
 	{
@@ -98,10 +106,10 @@ void MainController::Execute()
 		// Setup output buffer
 		bio::stream_buffer<ConsoleOutput> sb;
 		sb.open(ConsoleOutput(this));
-		buffer = std::clog.rdbuf(&sb);
+		std::clog.rdbuf(&sb);
 		
 		// Execute VM
-		virtual_machine.ExecuteCode(buffer);
+		virtual_machine.ExecuteCode();
 
 		// Create the log files directory if it doesn't exists
 		if (!QDir("Log files").exists())

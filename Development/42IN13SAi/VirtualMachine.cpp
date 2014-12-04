@@ -45,10 +45,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::GetNext(std::shared_ptr<LinkedList
 }
 
 
-void VirtualMachine::ExecuteCode(std::streambuf* buffer)
+void VirtualMachine::ExecuteCode()
 {
-	this->buffer = buffer;
-
 	// Only when there are compilernodes for global vars
 	if (globalsList->size() > 0)
 	{
@@ -296,7 +294,6 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePrint(CompilerNode compiler
 
 	//Add the value to print to the output
 	std::clog << valueToPrint << std::endl;
-	std::clog.rdbuf(buffer);
 
 	return nullptr;
 }
@@ -990,7 +987,6 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 	
 	// Print value
 	std::clog << abcOutput << std::endl;
-	std::clog.rdbuf(buffer);
 
 	// Create a new value compilernode to return
 	return nullptr;
