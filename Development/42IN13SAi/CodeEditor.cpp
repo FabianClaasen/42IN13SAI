@@ -325,7 +325,16 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 					insertPlainText("[");
 					addSpecialIndent(false, true);
 					return;
-				}	
+				}
+				if (key == Qt::Key_Tab && line.contains("(") && line.contains(")") && !line.contains("func"))
+				{
+					int position = tmpCursor.positionInBlock() - 1;
+					QString close_parenthesis = ")";
+					int pos_close = line.indexOf(close_parenthesis, position) - position;
+					tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, pos_close);
+					setTextCursor(tmpCursor);
+					return;
+				}
 				else if (key == Qt::Key_Return)
 				{
 					addSpecialIndent(true, false);
