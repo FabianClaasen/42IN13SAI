@@ -179,6 +179,7 @@ void Themer::SetEditor(CodeEditor* editor)
 {
     // Set the style for only one editor
     editor->SetTheme(colors, fontFamily, fontSize);
+    SetHighlighter(editor);
 }
 
 std::vector<std::string> Themer::GetThemesVector()

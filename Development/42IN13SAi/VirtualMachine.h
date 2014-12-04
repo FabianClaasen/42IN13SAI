@@ -29,7 +29,7 @@ public:
 	VirtualMachine& operator=(const VirtualMachine &other);
 	virtual ~VirtualMachine();
 
-	void ExecuteCode();
+	void ExecuteCode(std::streambuf* buffer);
 	std::shared_ptr<CompilerNode> ExecuteNodes(std::shared_ptr<LinkedList> nodes);
 	std::shared_ptr<CompilerNode> ExecuteNodes(std::list<std::shared_ptr<CompilerNode>> nodes, int currentIndex);
 
@@ -110,6 +110,7 @@ private:
 	SubroutineTable* subroutineTable; // Main subroutineTable
 	Subroutine* currentSubroutine; // User function subroutine table
 
+	std::streambuf* buffer;
     std::vector<std::string> output;
     std::vector<std::string> exceptions;
 

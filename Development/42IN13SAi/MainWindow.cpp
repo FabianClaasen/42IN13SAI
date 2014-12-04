@@ -170,6 +170,7 @@ void MainWindow::AddNewTab()
 	themer.AddEditor(codeEditor);
 	codeEditorVector.push_back(codeEditor);
 	tabs->addTab(codeEditor, "New*");
+    codeEditor->setFocus(Qt::OtherFocusReason);
 }
 
 void MainWindow::addOutput(std::string output)

@@ -91,6 +91,13 @@ void MainController::Execute()
 
 	try
 	{
+		// Setup output buffer
+		bio::stream_buffer<ConsoleOutput> sb;
+		sb.open(ConsoleOutput(this));
+		std::streambuf* oldbuf = std::clog.rdbuf(&sb);
+		
+		// Execute VM
+		virtual_machine.ExecuteCode(oldbuf);
 		virtual_machine.ExecuteCode();
         std::vector<std::string> output = virtual_machine.getOutput();
         for (std::vector<std::string>::iterator it = output.begin(); it != output.end(); ++it) {
@@ -109,13 +116,23 @@ void MainController::Execute()
 			QDir().mkdir("Log files");
 
 		// Save the output in an output file
-		FileIO::SaveFile("Log files//output.txt", text);
+		FileIO::SaveFile("Log files//output.txt", this->output);
 	}
 	catch (const std::exception& e)
 	{
 		mainWindow.addException(e.what());
 		return;
 	}
+}
+
+void MainController::WriteOutput(const char* output, std::streamsize size)
+{
+	std::string output_text;
+	for (int i = 0; i < size; i++)
+		output_text.append(1, output[i]);
+
+	mainWindow.addOutput(output_text);
+	this->output.append(QString::fromStdString(output_text));
 }
 
 void MainController::ClearConsole()
