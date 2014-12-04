@@ -4,6 +4,7 @@
 #include "SymbolNotFoundException.h"
 #include "ZeroDivideException.h"
 #include "Compiler.h"
+#include "ParseException.h"
 #include <vector>
 
 class Parser

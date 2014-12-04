@@ -35,6 +35,11 @@ void Parser::ParseFunction()
 			returnType = compiler->GetNext();
 			functionName = compiler->GetNext();
 		}
+        
+        if (compiler->GetSubroutineTable()->GetSubroutine(functionName.Value) != nullptr)
+        {
+            throw ParseException("Function: '" + functionName.Value + "' already exists");
+        }
 
 		compiler->Match(MyTokenType::OpenBracket);
 
@@ -566,10 +571,6 @@ std::shared_ptr<CompilerNode> Parser::ParseMulExpression()
 		case MyTokenType::OperatorRaised:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
-			if (secondTerm->GetValue() == "0")
-			{
-				throw ZeroDivideException("Can't raise by zero");
-			}
 			term = std::make_shared<CompilerNode>("$raise", parameters, nullptr, false);
 			break;
 		}

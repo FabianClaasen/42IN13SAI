@@ -51,7 +51,7 @@ void Tokenizer::Tokenize()
 				{
 					try {
 						Token* temp = FindPartner(definition.myTokenType, level);
-						if (temp->Partner != nullptr)
+						if (temp->Partner == nullptr)
 							partner = temp;
 					}
 					catch (const PartnerNotFoundException &e) {

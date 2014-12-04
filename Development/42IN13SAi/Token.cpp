@@ -12,11 +12,4 @@ Token::Token() : LineNumber(0), LinePosition(0), Level(0), Value(""), Partner(nu
 
 Token::~Token()
 {
-	try{
-		delete Partner;
-	}
-	catch (...)
-	{
-		throw;
-	}
 }

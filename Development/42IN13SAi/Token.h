@@ -12,7 +12,7 @@ public:
     int Level;
     std::string Value;
     MyTokenType Type;
-	Token* Partner;
+    Token* Partner;
     
     Token(int lineNumber, int linePosition, int level, std::string value, MyTokenType myTokenType, Token* partner);
     Token();
