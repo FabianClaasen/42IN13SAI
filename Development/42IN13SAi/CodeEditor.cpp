@@ -10,9 +10,9 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), completer(0)
     
 	// Add default font to the font database
 	QFontDatabase fontDatabase;
-	std::cout << fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf") << std::endl;
-	std::cout << fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf") << std::endl;
-	std::cout << fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf") << std::endl;
+	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf");
+	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf");
+	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf");
 
 	lineNumberArea = new LineNumberArea(this);
 
