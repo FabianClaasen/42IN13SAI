@@ -1,12 +1,9 @@
-var x = 3;
 func Main()
 [
-	if(x != 4)
-	[
-   	x = 5;
-   ]
-   else
+	var x = 12;
+	while(x < 2000)
    [
-   	x = 6;
+   	prnt(x);
+   	x++;
    ]
 ]

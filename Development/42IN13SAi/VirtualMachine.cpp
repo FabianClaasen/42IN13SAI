@@ -45,8 +45,10 @@ std::shared_ptr<CompilerNode> VirtualMachine::GetNext(std::shared_ptr<LinkedList
 }
 
 
-void VirtualMachine::ExecuteCode()
+void VirtualMachine::ExecuteCode(std::streambuf* buffer)
 {
+	this->buffer = buffer;
+
 	// Only when there are compilernodes for global vars
 	if (globalsList->size() > 0)
 	{
@@ -293,11 +295,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePrint(CompilerNode compiler
 	std::string valueToPrint = param1->GetValue();
 
 	//Add the value to print to the output
-	output.push_back(valueToPrint);
-
-	// Print te new value
-	//std::cout << valueToPrint << std::endl;
-	//std::cin.get();
+	std::clog << valueToPrint << std::endl;
+	std::clog.rdbuf(buffer);
 
 	return nullptr;
 }
@@ -989,7 +988,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 		abcOutput = abcOutput + "There are two real roots because the discriminant is positive.\nThe roots are " + std::to_string(x1) + " and " + std::to_string(x2) + ".";
 	}
 	
-	output.push_back(abcOutput);
+	// Print value
+	std::clog << abcOutput << std::endl;
+	std::clog.rdbuf(buffer);
 
 	// Create a new value compilernode to return
 	return nullptr;
