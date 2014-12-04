@@ -46,6 +46,12 @@ void MainController::Execute()
 	try
 	{
 		tokenizer_controller->Tokenize(); // Tokenize
+        std::vector<std::string> exceptions = tokenizer_controller->getExceptions();
+        QString text;
+        for (std::vector<std::string>::iterator it = exceptions.begin(); it != exceptions.end(); ++it) {
+            mainWindow.addException(*it);
+            text.append(QString::fromStdString(*it));
+        }
 	}
 	catch (const std::exception& e)
 	{
@@ -54,12 +60,20 @@ void MainController::Execute()
 		return;
 	}
 
+    QString text;
+
 	// Run the compiler
 	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
 
 	try
 	{
 		compiler.Compile();
+        std::vector<std::string> exceptions = compiler.getExceptions();
+
+        for (std::vector<std::string>::iterator it = exceptions.begin(); it != exceptions.end(); ++it) {
+            mainWindow.addException(*it);
+            text.append(QString::fromStdString(*it));
+        }
 	}
 	catch (const std::exception& e)
 	{
@@ -78,12 +92,17 @@ void MainController::Execute()
 	try
 	{
 		virtual_machine.ExecuteCode();
-		std::vector<std::string> output = virtual_machine.getOutput();
-		QString text;
-		for (std::vector<std::string>::iterator it = output.begin(); it != output.end(); ++it) {
-			mainWindow.addOutput(*it);
-			text.append(QString::fromStdString(*it));
-		}
+        std::vector<std::string> output = virtual_machine.getOutput();
+        for (std::vector<std::string>::iterator it = output.begin(); it != output.end(); ++it) {
+            mainWindow.addOutput(*it);
+            text.append(QString::fromStdString(*it));
+        }
+
+        std::vector<std::string> exceptions = virtual_machine.getExceptions();
+        for (std::vector<std::string>::iterator it = exceptions.begin(); it != exceptions.end(); ++it) {
+            mainWindow.addException(*it);
+            text.append(QString::fromStdString(*it));
+        }
 
 		// Create the log files directory if it doesn't exists
 		if (!QDir("Log files").exists())

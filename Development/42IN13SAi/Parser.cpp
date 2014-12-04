@@ -44,8 +44,8 @@ void Parser::ParseFunction()
 		compiler->Match(MyTokenType::OpenBracket);
 
 		// Set the parameters
-		if (currentToken.Type == MyTokenType::MainFunction && compiler->PeekNext()->Type != MyTokenType::CloseBracket)
-			throw UnexpectedParameterException("Main function can't contain parameters (line " + std::to_string(currentToken.LineNumber) + ")");
+        if (currentToken.Type == MyTokenType::MainFunction && compiler->PeekNext()->Type != MyTokenType::CloseBracket)
+            compiler->addException("Main function can't contain parameters (line " + std::to_string(currentToken.LineNumber) + ")");
 
 		while (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
 		{
@@ -66,8 +66,8 @@ void Parser::ParseFunction()
 				{
 					symbolTable.AddSymbol(parameterSymbol);
 				}
-				else
-					throw ParameterNameException("Parameter name: " + parameter.Value + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
+                else
+                    compiler->addException("Parameter name: " + parameter.Value + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
 			}
 		}
 
@@ -93,8 +93,8 @@ void Parser::ParseFunction()
 		compiler->Match(MyTokenType::CloseMethod);
 		compiler->AddSubroutine();
 	}
-	else
-		throw UnexpectedTypeException("Expected return type (line " + std::to_string(currentToken.LineNumber) + ")");
+    else
+        compiler->addException("Expected return type (line " + std::to_string(currentToken.LineNumber) + ")");
 }
 
 void Parser::ParseReturn()
@@ -136,16 +136,18 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 	}
 
 	// Check if the identifier is a identifier
-	if (identifier.Type != MyTokenType::Identifier)
-		throw IdentifierException("An IdentifierException occured. Identifier expected. (line " + std::to_string(currentToken.LineNumber) + ")");
+    if (identifier.Type != MyTokenType::Identifier)
+        compiler->addException("An IdentifierException occured. Identifier expected. (line " + std::to_string(currentToken.LineNumber) + ")");
+        //throw IdentifierException("An IdentifierException occured. Identifier expected. (line " + std::to_string(currentToken.LineNumber) + ")");
 
 	// Check if the identifier exists
 	if (!newIdentifier)
 	{
 		Symbol* symbol = GetSymbol(identifier.Value);
 
-		if (symbol == nullptr)
-			throw IdentifierException("An IdentifierException occured. The identifier: " + identifier.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
+        if (symbol == nullptr)
+            compiler->addException("An IdentifierException occured. The identifier: " + identifier.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
+            //throw IdentifierException("An IdentifierException occured. The identifier: " + identifier.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
 	}
 	else
 	{
@@ -177,8 +179,9 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		else
 		{
 			delete identifierSymbol;
-			identifierSymbol = nullptr;
-			throw IdentifierException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
+            identifierSymbol = nullptr;
+            compiler->addException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
+            //throw IdentifierException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
 		}
 	}
 
@@ -245,7 +248,8 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		// Check if the function is an assignment
 		currentToken = compiler->GetNext();
 		if (currentToken.Type != MyTokenType::Equals)
-			throw IdentifierException("An IdentifierException occured. The token: " + currentToken.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
+            compiler->addException("An IdentifierException occured. The token: " + currentToken.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
+            //throw IdentifierException("An IdentifierException occured. The token: " + currentToken.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
 
 		// Add the parameters to the parameters list
 		expression = "$assignment";
@@ -325,8 +329,9 @@ void Parser::ParseIfStatement()
 		}
 	}
 	else
-	{
-		throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected an if keyword on line " + std::to_string(currentToken.LineNumber) + ".");
+    {
+        compiler->addException("An UnexpectedKeywordException occured. Expected an if keyword on line " + std::to_string(currentToken.LineNumber) + ".");
+        //throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected an if keyword on line " + std::to_string(currentToken.LineNumber) + ".");
 	}
 
 	compiler->Match(MyTokenType::OpenBracket);
@@ -394,7 +399,8 @@ void Parser::ParseLoopStatement()
 	}
 	else
 	{
-		throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");		
+        compiler->addException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");
+        //throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");
 	}
 
 	compiler->Match(MyTokenType::OpenBracket);
@@ -569,14 +575,23 @@ std::shared_ptr<CompilerNode> Parser::ParseMulExpression()
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
 			if (secondTerm->GetValue() == "0")
-			{
-				throw ZeroDivideException("Can't divide by zero");
+            {
+                compiler->addException("Can't divide by zero");
+                //throw ZeroDivideException("Can't divide by zero");
 			}
 			term = std::make_shared<CompilerNode>("$div", parameters, nullptr, false);
 			break;
 		case MyTokenType::OperatorRaised:
 			parameters.push_back(term);
 			parameters.push_back(secondTerm);
+<<<<<<< 86de4cbf27f0831050b5bd322dcae6fe67b061e7
+=======
+			if (secondTerm->GetValue() == "0")
+            {
+                compiler->addException("Can't raise by zero");
+                //throw ZeroDivideException("Can't raise by zero");
+			}
+>>>>>>> ce0f32e7734bde5fd73103823c556300de1c6398
 			term = std::make_shared<CompilerNode>("$raise", parameters, nullptr, false);
 			break;
 		}
@@ -637,8 +652,9 @@ std::shared_ptr<CompilerNode> Parser::ParseTerm()
 
 			Symbol* symbol = GetSymbol(identifier);
 
-			if (symbol == nullptr)
-				throw SymbolNotFoundException("");
+            if (symbol == nullptr)
+                compiler->addException("Symbol not found");
+                //throw SymbolNotFoundException("Symbol not found");
 
 			node = std::make_shared<CompilerNode>("$getVariable", symbol->name, false);
 			return node;

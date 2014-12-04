@@ -37,7 +37,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::GetNext(std::shared_ptr<LinkedList
 	if (!node)
 	{
 		node.reset();
-		throw MissingCompilerNodeException("Compilernode missing");
+        //throw MissingCompilerNodeException("Compilernode missing");
+        exceptions.push_back("Compilernode missing");
 	}
 
 	return node->GetData();
@@ -64,7 +65,8 @@ void VirtualMachine::ExecuteCode()
 	currentSubroutine = subroutineTable->GetSubroutine("main");
 	
 	if (currentSubroutine == nullptr)
-		throw MissingMainFunctionException("No main function found");
+        exceptions.push_back("No main function found");
+        //throw MissingMainFunctionException("No main function found");
 	
 	currentSymbolTable = currentSubroutine->GetSymbolTable();
 	
@@ -163,12 +165,14 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 
 	// Check if node contains the functionname
 	if (functionNode->GetExpression() != "$functionName")
-		throw FunctionNameExpectedException("Expected function name");
+        exceptions.push_back("Expected function name");
+        //throw FunctionNameExpectedException("Expected function name");
 
 	// Get the subroutine table and check if exists
 	currentSubroutine = subroutineTable->GetSubroutine(functionNode->GetValue());
 	if (currentSubroutine == nullptr)
-		throw SubroutineNotFoundException("Function " + functionNode->GetValue() + " does not exist");
+        exceptions.push_back("Function " + functionNode->GetValue() + " does not exist");
+        //throw SubroutineNotFoundException("Function " + functionNode->GetValue() + " does not exist");
 
 	// Set the currentSymbolTable
 	currentSymbolTable = currentSubroutine->GetSymbolTable();
@@ -176,7 +180,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 	// Get parameter count and check if enough parameters are given
 	int parameterCount = currentSymbolTable->ParameterSize();
 	if (parameters.size() - 1 != parameterCount)
-		throw ParameterException((int)parameters.size() - 1, parameterCount, ParameterExceptionType::IncorrectParameters);
+        exceptions.push_back("Incorrect parameters");
+        //throw ParameterException((int)parameters.size() - 1, parameterCount, ParameterExceptionType::IncorrectParameters);
 
 	// Set the currentSymbolTable symbol values
 	int paramNum = 1;
@@ -307,7 +312,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteStop(CompilerNode compilerN
 			throw UnknownExpressionException("Unknown expression type");
 	}
 	else
-		throw new ParameterException(0, ParameterExceptionType::IncorrectParameters);
+        exceptions.push_back("Incorrect parameters");
+        //throw new ParameterException(0, ParameterExceptionType::IncorrectParameters);
 }
 
 #pragma endregion DefaultOperations
