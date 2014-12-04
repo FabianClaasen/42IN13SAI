@@ -1,5 +1,6 @@
 #include "Compiler.h"
 #include "InternalFunction.h"
+#include "Constant.h"
 #include "Parser.h"
 
 Compiler::Compiler(std::vector<Token> tokens) : tokenizerTokens(tokens)
@@ -238,11 +239,31 @@ bool Compiler::IsInternalFunction(MyTokenType type)
 	}
 }
 
+// Internal functions
+bool Compiler::IsConstant(MyTokenType type)
+{
+	//check if type is an internal function
+	switch (type)
+	{
+		// Default functions
+	case MyTokenType::Math_E:
+	case MyTokenType::Math_PI:
+		return true;
+	default:
+		return false;
+	}
+}
+
+
 CompilerNode Compiler::ParseInternalFunction()
 {
 	return *InternalFunction(this).GetInternalFunction(PeekNext()->Type);
 }
 
+CompilerNode Compiler::ParseConstant()
+{
+	return *Constant(this).GetConstant(PeekNext()->Type);
+}
 
 
 //Get symbol table for the VM

@@ -14,6 +14,7 @@
     <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="CompilerNode.cpp" />
     <ClCompile Include="CodeEditor.cpp" />
+    <ClCompile Include="Constant.cpp" />
     <ClCompile Include="ExceptionWindow.cpp" />
     <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="FunctionNameExpectedException.cpp" />
@@ -1239,6 +1240,9 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </AdditionalInputs>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Constant.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0F8E62D6-F5A0-4C66-AD23-F45D847EB1FE}</ProjectGuid>

@@ -952,3 +952,16 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 
 
 #pragma endregion ComplexMath
+
+#pragma region MathConstants
+// PI
+std::shared_ptr<CompilerNode> VirtualMachine::ExecutePiConstant(CompilerNode compilerNode)
+{
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(M_PI), false));	
+}
+// EULER
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteEConstant(CompilerNode compilerNode)
+{
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(M_E), false));
+}
+#pragma endregion

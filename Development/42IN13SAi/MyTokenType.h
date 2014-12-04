@@ -74,5 +74,9 @@ enum class MyTokenType : int {
 	Modulo,
 	Gcd,
 	Discriminant,
-	AbcFormula
+	AbcFormula,
+
+	// Constants
+	Math_PI,
+	Math_E
 };

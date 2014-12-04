@@ -653,6 +653,11 @@ std::shared_ptr<CompilerNode> Parser::ParseTerm()
 		node = std::shared_ptr<CompilerNode>(InternalFunction(compiler).GetInternalFunction(token.Type));
 			return node;
 	}
+	else if (compiler->IsConstant(token.Type))
+	{
+		node = std::shared_ptr<CompilerNode>(Constant(compiler).GetConstant(token.Type));
+			return node;
+	}
 	else if (compiler->PeekNext()->Type == MyTokenType::OpenBracket)
 	{
 		return ParseFunctionCall(token);

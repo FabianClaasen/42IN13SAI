@@ -43,6 +43,11 @@ std::list<TokenDefinition> Grammar::getGrammar()
 	definitions.push_back(TokenDefinition("\\bgcd\\b", MyTokenType::Gcd));
 	definitions.push_back(TokenDefinition("\\bdis\\b", MyTokenType::Discriminant));
 	definitions.push_back(TokenDefinition("\\babc\\b", MyTokenType::AbcFormula));
+
+	// math constants
+	definitions.push_back(TokenDefinition("\\bM_PI\\b", MyTokenType::Math_PI));
+	definitions.push_back(TokenDefinition("\\bM_E\\b", MyTokenType::Math_E));
+
     
     // return
     definitions.push_back(TokenDefinition("\\bret\\b", MyTokenType::Return));

@@ -93,7 +93,9 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteDiscriminantOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteAbcOperation(CompilerNode compilerNode);
 
-
+	std::shared_ptr<CompilerNode> ExecutePiConstant(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteEConstant(CompilerNode compilerNode);
+	
 	
 	//return the output (for showing it in the IDE)
 	std::vector<std::string> getOutput() { return output; };

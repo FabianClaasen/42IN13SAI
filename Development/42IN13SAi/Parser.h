@@ -1,6 +1,7 @@
 #pragma once
 
 #include "InternalFunction.h"
+#include "Constant.h"
 #include "SymbolNotFoundException.h"
 #include "ZeroDivideException.h"
 #include "Compiler.h"
