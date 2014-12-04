@@ -29,7 +29,7 @@ public:
 	VirtualMachine& operator=(const VirtualMachine &other);
 	virtual ~VirtualMachine();
 
-	void ExecuteCode();
+	void ExecuteCode(std::streambuf* buffer);
 	std::shared_ptr<CompilerNode> ExecuteNodes(std::shared_ptr<LinkedList> nodes);
 	std::shared_ptr<CompilerNode> ExecuteNodes(std::list<std::shared_ptr<CompilerNode>> nodes, int currentIndex);
 
@@ -93,11 +93,6 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteDiscriminantOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteAbcOperation(CompilerNode compilerNode);
 
-
-	
-	//return the output (for showing it in the IDE)
-	std::vector<std::string> getOutput() { return output; };
-
 private:
 	SymbolTable* globalsSymboltable; // Globals symboltable
 	SymbolTable* currentSymbolTable; // User function symboltable
@@ -105,7 +100,7 @@ private:
 	SubroutineTable* subroutineTable; // Main subroutineTable
 	Subroutine* currentSubroutine; // User function subroutine table
 
-	std::vector<std::string> output;
+	std::streambuf* buffer;
 
 	// Node methods
 	std::shared_ptr<CompilerNode> GetNext(std::shared_ptr<LinkedList> nodes);

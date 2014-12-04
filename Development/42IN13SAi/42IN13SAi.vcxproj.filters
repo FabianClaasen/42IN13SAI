@@ -191,6 +191,9 @@
     <ClCompile Include="InvalidInputException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="ConsoleOutput.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="CodeEditor.h">
@@ -476,5 +479,10 @@
     <Filter Include="Source Files\jsoncpp">
       <UniqueIdentifier>{95af4f7e-a7ba-48ce-9847-ab6d1c57e586}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ConsoleOutput.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

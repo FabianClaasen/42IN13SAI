@@ -1,7 +1,9 @@
-var x = 10;
-
 func Main()
 [
-	x += pow(10 | 2) * 10 + 5;
-	prnt(x);
+	var x = 12;
+	while(x < 2000)
+   [
+   	prnt(x);
+   	x++;
+   ]
 ]
