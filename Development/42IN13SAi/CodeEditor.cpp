@@ -3,7 +3,7 @@
 
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), completer(0)
 {
-	QString resourceDir = QDir::currentPath().append("/Resources/");
+    QString resourceDir = QDir::currentPath().append("/Resources/");
 #ifndef _WIN32
     resourceDir = QCoreApplication::applicationDirPath() + "/";
 #endif

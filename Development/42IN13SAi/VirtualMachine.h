@@ -96,7 +96,8 @@ public:
 
 	
 	//return the output (for showing it in the IDE)
-	std::vector<std::string> getOutput() { return output; };
+    std::vector<std::string> getOutput() { return output; }
+    std::vector<std::string> getExceptions() { return exceptions; }
 
 private:
 	SymbolTable* globalsSymboltable; // Globals symboltable
@@ -105,7 +106,8 @@ private:
 	SubroutineTable* subroutineTable; // Main subroutineTable
 	Subroutine* currentSubroutine; // User function subroutine table
 
-	std::vector<std::string> output;
+    std::vector<std::string> output;
+    std::vector<std::string> exceptions;
 
 	// Node methods
 	std::shared_ptr<CompilerNode> GetNext(std::shared_ptr<LinkedList> nodes);
