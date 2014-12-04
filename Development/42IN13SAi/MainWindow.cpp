@@ -53,11 +53,11 @@ void MainWindow::ShowMenuBar()
 
 #ifndef _WIN32
 	// Also needs a menu to show the items, doesn't work with only actions
-	QMenu* mainMenu = menu->addMenu("Debug");
+	macDebugMenu = menu->addMenu("Debug");
 	
 	// Add the actions to the menu
-	mainMenu->addAction(runAction);
-	mainMenu->addAction(clearAction);
+	macDebugMenu->addAction(runAction);
+	macDebugMenu->addAction(clearAction);
 #endif
 
 	// Add the Theme selection menu
@@ -87,8 +87,6 @@ CodeEditor* MainWindow::CreateEditor()
 	codeEditor->setCompleter(completer);
 	codeEditor->setFocus(Qt::OtherFocusReason);
 	codeEditor->installEventFilter(this);
-	// Set the highlighter
-	highlighter = new Highlighter(codeEditor->document());
 
 	return codeEditor;
 }
@@ -258,8 +256,7 @@ void MainWindow::AddFile(QFileInfo* info, QString text)
 
 void MainWindow::SaveThemeSettings()
 {
-	std::string settingsPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
-	themer.SaveCurrentTheme(settingsPath);
+	themer.SaveCurrentTheme();
 }
 
 MainWindow::~MainWindow()
