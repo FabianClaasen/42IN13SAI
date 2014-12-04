@@ -148,6 +148,7 @@ void MainController::WriteOutput(const char* output, std::streamsize size)
 void MainController::ClearConsole()
 {
 	system("cls");
+	mainWindow.clearOutput();
 }
 
 std::string MainController::GetFileFromStream()

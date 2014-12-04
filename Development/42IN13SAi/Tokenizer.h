@@ -39,7 +39,7 @@ private:
     std::vector<Token> tokenVector;
     
     void NextLine();
-    Token* FindPartner(MyTokenType &type, int level);
+    std::shared_ptr<Token> FindPartner(MyTokenType &type, int level);
 	bool ShouldFindPartner(MyTokenType &type);
 	bool ShouldFindPartnerR(MyTokenType &type);
 	void TryFindPartner(Token &token);

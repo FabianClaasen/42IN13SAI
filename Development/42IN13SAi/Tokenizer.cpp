@@ -46,11 +46,11 @@ void Tokenizer::Tokenize()
 					level++;
 
 				// Find a partner
-				Token* partner = nullptr;
+				std::shared_ptr<Token> partner = nullptr;
 				if (ShouldFindPartner(definition.myTokenType))
 				{
 					try {
-						Token* temp = FindPartner(definition.myTokenType, level);
+						std::shared_ptr<Token> temp = FindPartner(definition.myTokenType, level);
 						if (temp->Partner == nullptr)
 							partner = temp;
 					}
@@ -66,7 +66,7 @@ void Tokenizer::Tokenize()
                 
                 // if partner found, give this token to partner
                 if (partner)
-                    partner->Partner = &tokenVector.back();
+                    partner->Partner = std::make_shared<Token>(tokenVector.back());
 
 				// Check if the level should be lowered
 				if (definition.myTokenType == MyTokenType::CloseBracket || definition.myTokenType == MyTokenType::CloseCurlyBracket || definition.myTokenType == MyTokenType::CloseMethod)
@@ -121,7 +121,7 @@ void Tokenizer::CheckClosingPartners()
 // @param
 //  type: this is the type of the token where you need to find a match for.
 //	level: this is the level of the myTokenType, the partner needs to be on the same level.
-Token* Tokenizer::FindPartner(MyTokenType &type, int level)
+std::shared_ptr<Token> Tokenizer::FindPartner(MyTokenType &type, int level)
 {
     std::list<TokenPartner>::const_iterator token_partner;
     for (TokenPartner tokenPartner : tokenPartners)
@@ -132,7 +132,7 @@ Token* Tokenizer::FindPartner(MyTokenType &type, int level)
             for (tokenIt = tokenVector.rbegin(); tokenIt != tokenVector.rend(); ++tokenIt)
             {
                 if (tokenIt->Type == tokenPartner.partner && tokenIt->Level == level)
-                    return &(*tokenIt);
+                    return std::make_shared<Token>(*tokenIt);
             }
         }
     }
