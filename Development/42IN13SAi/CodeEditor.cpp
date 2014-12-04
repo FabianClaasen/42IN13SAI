@@ -1,6 +1,6 @@
 #include "CodeEditor.h"
 #include <QCompleter>
-
+#include <iostream>
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), completer(0)
 {
     QString resourceDir = QDir::currentPath().append("/Resources/");
@@ -10,9 +10,9 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), completer(0)
     
 	// Add default font to the font database
 	QFontDatabase fontDatabase;
-	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf");
-	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf");
-	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf");
+	std::cout << fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf") << std::endl;
+	std::cout << fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf") << std::endl;
+	std::cout << fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf") << std::endl;
 
 	lineNumberArea = new LineNumberArea(this);
 
@@ -28,7 +28,8 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), completer(0)
 void CodeEditor::SetTheme(std::map<std::string, QColor> colors, std::string fontFamily, int fontSize)
 {
 	// Set the font
-	QFont ideFont = QFont(QString::fromStdString(fontFamily), fontSize);
+	QString outputString = QString::fromUtf8(fontFamily.c_str());
+	QFont ideFont = QFont(outputString, fontSize);
 	ideFont.setStyleStrategy(QFont::PreferAntialias);
 
 	// Set editor font
