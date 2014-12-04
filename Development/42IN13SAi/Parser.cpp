@@ -664,6 +664,10 @@ std::shared_ptr<CompilerNode> Parser::ParseTerm()
 	{
 		return ParseFunctionCall(token);
 	}
+    else if (token.Type == MyTokenType::Return)
+    {
+        throw ParameterNameException("Return used as variable (line " + std::to_string(token.LineNumber) + ")");
+    }
 	return node;
 }
 
