@@ -19,6 +19,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 			case MyTokenType::Var:
 			case MyTokenType::Void:
 			case MyTokenType::FloatReturn:
+            case MyTokenType::Return:
 				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, QColor(203, 75, 22));
 				break;
 			case MyTokenType::If:

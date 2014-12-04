@@ -99,6 +99,9 @@ void Parser::ParseFunction()
 
 void Parser::ParseReturn()
 {
+    if (compiler->GetSubroutine()->returnType == MyTokenType::Void)
+        throw UnexpectedKeywordException("Unexpected return in void function (line "+ std::to_string(compiler->PeekNext()->LineNumber) + ")");
+    
 	compiler->Match(MyTokenType::Return);
 	
 	std::vector<std::shared_ptr<CompilerNode>> nodeParameters;
