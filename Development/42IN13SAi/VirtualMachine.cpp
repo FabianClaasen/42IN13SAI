@@ -498,6 +498,45 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNotEqualCondition(CompilerN
 	// Set boolean to true if num1 != num2, else return false (inside the node)
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteOr(CompilerNode compilerNode)
+{
+    // Check if nodeparams are not empty
+    if (compilerNode.GetNodeparameters().empty())
+        throw ParameterException(2, ParameterExceptionType::NoParameters);
+    
+    std::vector<std::shared_ptr<CompilerNode> > parameters = compilerNode.GetNodeparameters();
+    // Check if count of params is not right
+    if (parameters.size() < 2)
+        throw ParameterException(2, parameters.size(), ParameterExceptionType::IncorrectParameters);
+    
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+    if (param1->GetExpression() != "$value")
+        param1 = CallFunction(*param1);
+    
+    if (param1->GetValue() == "1")
+        return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(true), false));
+    
+    std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+    if (param2->GetExpression() != "$value")
+        param2 = CallFunction(*param2);
+    
+    if (param2->GetValue() == "1")
+        return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(true), false));
+    
+    return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(false), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAnd(CompilerNode compilerNode)
+{
+    std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+    std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+    std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+    
+    bool output = (param1->GetValue() == "1" && param2->GetValue() == "1");
+    return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
 #pragma endregion ConditionalStatements
 
 #pragma region SimpleMath

@@ -50,6 +50,9 @@ void FunctionCaller::fillFunctionMap()
 	functions.insert(functionMap::value_type("$greaterOrEq", &VirtualMachine::ExecuteGreaterOrEqCondition));
 	functions.insert(functionMap::value_type("$equals", &VirtualMachine::ExecuteEqualCondition));
 	functions.insert(functionMap::value_type("$notEquals", &VirtualMachine::ExecuteNotEqualCondition));
+    functions.insert(functionMap::value_type("$and", &VirtualMachine::ExecuteAnd));
+    functions.insert(functionMap::value_type("$or", &VirtualMachine::ExecuteOr));
+    
 	// Simple Math Operations
 	functions.insert(functionMap::value_type("$add", &VirtualMachine::ExecuteAddOperation));
 	functions.insert(functionMap::value_type("$min", &VirtualMachine::ExecuteMinusOperation));

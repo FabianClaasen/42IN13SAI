@@ -60,6 +60,10 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteUniPlusOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteUniMinOperation(CompilerNode compilerNode);
 	
+    // Condition add statements
+    std::shared_ptr<CompilerNode> ExecuteAnd(CompilerNode compilerNode);
+    std::shared_ptr<CompilerNode> ExecuteOr(CompilerNode compilerNode);
+    
 	//Conditional statements
 	std::shared_ptr<CompilerNode> ExecuteLessCondition(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteLessOrEqCondition(CompilerNode compilerNode);
