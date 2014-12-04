@@ -31,7 +31,7 @@ QString OutputWindow::setOutputPrecision(QString str)
     float to_format = ::atof(str.toStdString().c_str());
     
     // Get the size needed for the float digits (copied from internal to_string calculation)
-    int max_digits = std::numeric_limits<float>::max_exponent10 + 20;
+    const int max_digits = std::numeric_limits<float>::max_exponent10 + 20;
     char buffer[max_digits];
 
 #ifndef _WIN32
