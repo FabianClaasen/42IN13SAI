@@ -1,7 +1,12 @@
-var x = 10;
-
+var x = 3;
 func Main()
 [
-	x += pow(10 | 2) * 10 + 5;
-	prnt(x);
+	if(x != 4)
+	[
+   	x = 5;
+   ]
+   else
+   [
+   	x = 6;
+   ]
 ]

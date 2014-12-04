@@ -185,8 +185,7 @@ void Themer::LoadSettings(std::string settingsPath)
 
 void Themer::LoadThemes()
 {
-    std::string themesPath;
-	themesPath = QDir::currentPath().append("/Resources/Themes").toLocal8Bit().constData();
+    std::string themesPath = QDir::currentPath().append("/Resources/Themes").toLocal8Bit().constData();
 #ifndef _WIN32
     themesPath = QCoreApplication::applicationDirPath().toStdString() + "/Themes";
 #endif
@@ -230,6 +229,8 @@ std::string Themer::getFileString(std::string filePath)
 	std::stringstream fileString;
     fileString << file.rdbuf();
     file.close();
+	std::string stringFile = fileString.str();
+	fileString.clear();
 
-	return fileString.str();
+	return stringFile;
 }

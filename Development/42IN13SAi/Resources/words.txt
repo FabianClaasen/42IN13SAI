@@ -1,11 +1,12 @@
-cos
+cos(x)
 float
 func
 if
 Main
-prnt
-sin
-stop
+pow(x | y)
+prnt(x)
+sin(x)
+stop()
 ret
 var
 while
