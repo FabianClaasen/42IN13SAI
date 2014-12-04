@@ -62,7 +62,6 @@ void Parser::ParseFunction()
 
 				Symbol parameterSymbol = Symbol(parameter.Value, parameter.Type, kind);
 
-
 				if (!symbolTable.HasSymbol(parameterSymbol.name))
 				{
 					symbolTable.AddSymbol(parameterSymbol);
@@ -82,6 +81,10 @@ void Parser::ParseFunction()
 		// Set all the statements inside this subroutine
 		while (compiler->PeekNext()->Type != MyTokenType::CloseMethod && compiler->PeekNext()->Level > 1)
 		{
+            // Catch function in function exception
+            if (compiler->PeekNext()->Type == MyTokenType::Function || compiler->PeekNext()->Type == MyTokenType::MainFunction)
+                throw UnexpectedTypeException("Function in function not allowed (line " + std::to_string(compiler->PeekNext()->LineNumber) + ")");
+            
 			compiler->ParseStatement();
 		}
 
