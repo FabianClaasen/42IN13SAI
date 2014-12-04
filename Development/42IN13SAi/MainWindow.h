@@ -78,7 +78,8 @@ public:
 		QMenuBar *menu;
 
 		QMenu *fileMenu,
-			  *themeMenu;
+			  *themeMenu,
+              *macDebugMenu;
 
 		QAction *runAction, 
 				*clearAction, 

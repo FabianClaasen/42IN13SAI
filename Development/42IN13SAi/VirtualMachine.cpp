@@ -313,7 +313,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteStop(CompilerNode compilerN
 	}
 	else
         exceptions.push_back("Incorrect parameters");
-        //throw new ParameterException(0, ParameterExceptionType::IncorrectParameters);
+        //throw ParameterException(0, ParameterExceptionType::IncorrectParameters);
+    return std::make_shared<CompilerNode>();
 }
 
 #pragma endregion DefaultOperations

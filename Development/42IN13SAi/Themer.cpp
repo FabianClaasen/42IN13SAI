@@ -3,13 +3,13 @@
 Themer::Themer()
 {
 	//std::string newPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
-	std::string settingsPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
+	settingsPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
 #ifndef _WIN32
     settingsPath = QCoreApplication::applicationDirPath().toStdString() + "/settings.json";
 #endif
     
 	LoadThemes();
-	LoadSettings(settingsPath);
+	LoadSettings();
 }
 
 Themer::~Themer()
@@ -27,7 +27,7 @@ void Themer::RemoveEditor(int index)
 	editors.erase(editors.begin() + index);
 }
 
-void Themer::SaveCurrentTheme(std::string settingsPath)
+void Themer::SaveCurrentTheme()
 {
 	settings["user_theme_set"] = true;
 	settings["user_theme"] = currentThemeName;
@@ -44,65 +44,141 @@ void Themer::SaveCurrentTheme(std::string settingsPath)
 
 void Themer::SetTheme(std::string themeName)
 {
-	if (themes.count(themeName))
-	{
-		currentThemeName = themeName;
-	}
-	// Load the theme from file
-	std::string themeString = getFileString(themes[currentThemeName]);
+    if (themes.count(themeName))
+    {
+        currentThemeName = themeName;
+    }
+    // Load the theme from file
+    std::string themeString = getFileString(themes[currentThemeName]);
+    
+    // Create the JSON document
+    Json::Reader jsonReader;
+    
+    jsonReader.parse(themeString, currentTheme);
+    Json::Value themeStyles = currentTheme["theme"];
+    
+    // Set editor node and call the function
+    Json::Value editorStyles = themeStyles["editor"];
+    SetEditorStyles(editorStyles);
+    
+    // Set highlighter node and call the function
+    Json::Value highlighterStyles = themeStyles["syntax"];
+    SetHighlighterStyles(highlighterStyles);
+    
+    SetEditors();
+    SetHighlighters();
+}
 
-	// Create the JSON document
-	Json::Reader jsonReader;
+void Themer::SetEditorStyles(Json::Value editorStyles)
+{
+    // Create the color map
+    colors.clear();
+    
+    // Set the background QColor and add to map
+    Json::Value bgColors = editorStyles["background_color"];
+    QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+    colors.insert(std::map<std::string, QColor>::value_type("background", bg));
+    
+    // Set the text QColor and add to map
+    Json::Value textColors = editorStyles["text_color"];
+    QColor text(textColors[0].asInt(), textColors[1].asInt(), textColors[2].asInt());
+    colors.insert(std::map<std::string, QColor>::value_type("text", text));
+    
+    // Set the higlight QColor and add to map
+    Json::Value higlightColors = editorStyles["selection_color"];
+    QColor higlight(higlightColors[0].asInt(), higlightColors[1].asInt(), higlightColors[2].asInt());
+    colors.insert(std::map<std::string, QColor>::value_type("higlight", higlight));
+    
+    // Set the highlighted text QColor and add to map
+    Json::Value higlighttColors = editorStyles["selection_text_color"];
+    QColor highlighted_text(higlighttColors[0].asInt(), higlighttColors[1].asInt(), higlighttColors[2].asInt());
+    colors.insert(std::map<std::string, QColor>::value_type("highlighted_text", highlighted_text));
+    
+    // Set the linenumber bar background QColor and add to map
+    Json::Value numberbarColors = editorStyles["linenumber_bar_color"];
+    QColor linenumber_background(numberbarColors[0].asInt(), numberbarColors[1].asInt(), numberbarColors[2].asInt());
+    colors.insert(std::map<std::string, QColor>::value_type("linenumber_background", linenumber_background));
+    
+    // Set the linenumber bar text QColor and add to map
+    Json::Value numberColors = editorStyles["linenumber_text_color"];
+    QColor linenumber_text(numberColors[0].asInt(), numberColors[1].asInt(), numberColors[2].asInt());
+    colors.insert(std::map<std::string, QColor>::value_type("linenumber_text", linenumber_text));
+    
+    // Set the line highlighter QColor and add to map
+    Json::Value lineColors = editorStyles["current_line_highlighter_color"];
+    QColor currentline_background(lineColors[0].asInt(), lineColors[1].asInt(), lineColors[2].asInt());
+    colors.insert(std::map<std::string, QColor>::value_type("currentline_background", currentline_background));
+    
+    // Set the Font family
+    fontFamily = editorStyles["font_family"].asString();
+    
+    // Set the font size
+    fontSize = editorStyles["font_size"].asInt();
+}
 
-	jsonReader.parse(themeString, currentTheme);
-	Json::Value themeStyles = currentTheme["theme"];
-	Json::Value editorStyles = themeStyles["editor"];
+void Themer::SetHighlighterStyles(Json::Value highlighterStyles)
+{
+    syntaxColors.clear();
+    
+    // Return types colors
+    Json::Value returnColors = highlighterStyles["return_types"];
+    QColor return_types(returnColors[0].asInt(), returnColors[1].asInt(), returnColors[2].asInt());
+    syntaxColors.insert(std::map<std::string, QColor>::value_type("return_types", return_types));
+    
+    // Identifier colors
+    Json::Value identColors = highlighterStyles["identifiers"];
+    QColor identifiers(identColors[0].asInt(), identColors[1].asInt(), identColors[2].asInt());
+    syntaxColors.insert(std::map<std::string, QColor>::value_type("identifiers", identifiers));
+    
+    // Function colors
+    Json::Value functionsColors = highlighterStyles["functions"];
+    QColor functions(functionsColors[0].asInt(), functionsColors[1].asInt(), functionsColors[2].asInt());
+    syntaxColors.insert(std::map<std::string, QColor>::value_type("functions", functions));
+    
+    // Operators colors
+    Json::Value operatorsColors = highlighterStyles["operators"];
+    QColor operators(operatorsColors[0].asInt(), operatorsColors[1].asInt(), operatorsColors[2].asInt());
+    syntaxColors.insert(std::map<std::string, QColor>::value_type("operators", operators));
+    
+    // Variable type colors
+    Json::Value variableColors = highlighterStyles["variable_types"];
+    QColor variable_types(variableColors[0].asInt(), variableColors[1].asInt(), variableColors[2].asInt());
+    syntaxColors.insert(std::map<std::string, QColor>::value_type("variable_types", variable_types));
+}
 
-	// Create the color map 
-	colors.clear();
+void Themer::SetHighlighters()
+{
+    // create vector for new Highlighters
+    std::vector<Highlighter*> newHighlighters;
+    for (Highlighter* highlighter : highlighters)
+    {
+        // Get the document out of the highlighter
+        QTextDocument* document = highlighter->document();
+        newHighlighters.push_back(new Highlighter(syntaxColors, document));
+    }
+    // Replace the highlighters with the new highlighters
+    highlighters = newHighlighters;
+}
 
-	// Set the background QColor and add to map
-	Json::Value bgColors = editorStyles["background_color"];
-	QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
-	colors.insert(std::map<std::string, QColor>::value_type("background", bg));
+void Themer::SetHighlighter(CodeEditor* editor)
+{
+    // Push the new highlighter
+    highlighters.push_back(new Highlighter(syntaxColors, editor->document()));
+}
 
-	// Set the text QColor and add to map
-	Json::Value textColors = editorStyles["text_color"];
-	QColor text(textColors[0].asInt(), textColors[1].asInt(), textColors[2].asInt());
-	colors.insert(std::map<std::string, QColor>::value_type("text", text));
+void Themer::SetEditors()
+{
+    // Loop through editors and set the styles
+    for (CodeEditor* editor : editors)
+    {
+        editor->SetTheme(colors, fontFamily, fontSize);
+    }
+}
 
-	// Set the higlight QColor and add to map
-	Json::Value higlightColors = editorStyles["selection_color"];
-	QColor higlight(higlightColors[0].asInt(), higlightColors[1].asInt(), higlightColors[2].asInt());
-	colors.insert(std::map<std::string, QColor>::value_type("higlight", higlight));
-
-	// Set the highlighted text QColor and add to map
-	Json::Value higlighttColors = editorStyles["selection_text_color"];
-	QColor highlighted_text(higlighttColors[0].asInt(), higlighttColors[1].asInt(), higlighttColors[2].asInt());
-	colors.insert(std::map<std::string, QColor>::value_type("highlighted_text", highlighted_text));
-
-	// Set the linenumber bar background QColor and add to map
-	Json::Value numberbarColors = editorStyles["linenumber_bar_color"];
-	QColor linenumber_background(numberbarColors[0].asInt(), numberbarColors[1].asInt(), numberbarColors[2].asInt());
-	colors.insert(std::map<std::string, QColor>::value_type("linenumber_background", linenumber_background));
-
-	// Set the linenumber bar text QColor and add to map
-	Json::Value numberColors = editorStyles["linenumber_text_color"];
-	QColor linenumber_text(numberColors[0].asInt(), numberColors[1].asInt(), numberColors[2].asInt());
-	colors.insert(std::map<std::string, QColor>::value_type("linenumber_text", linenumber_text));
-
-	// Set the line highlighter QColor and add to map
-	Json::Value lineColors = editorStyles["current_line_highlighter_color"];
-	QColor currentline_background(lineColors[0].asInt(), lineColors[1].asInt(), lineColors[2].asInt());
-	colors.insert(std::map<std::string, QColor>::value_type("currentline_background", currentline_background));
-
-	// Set the Font family
-	fontFamily = editorStyles["font_family"].asString();
-
-	// Set the font size
-	fontSize = editorStyles["font_size"].asInt();
-
-	SetEditors();
+void Themer::SetEditor(CodeEditor* editor)
+{
+    // Set the style for only one editor
+    editor->SetTheme(colors, fontFamily, fontSize);
 }
 
 std::vector<std::string> Themer::GetThemesVector()
@@ -122,22 +198,7 @@ std::string Themer::GetCurrentTheme()
 	return currentThemeName;
 }
 
-void Themer::SetEditors()
-{
-	// Loop through editors and set the styles
-	for (CodeEditor* editor : editors)
-	{
-		editor->SetTheme(colors, fontFamily, fontSize);
-	}
-}
-
-void Themer::SetEditor(CodeEditor* editor)
-{
-	// Set the style for only one editor
-	editor->SetTheme(colors, fontFamily, fontSize);
-}
-
-void Themer::LoadSettings(std::string settingsPath)
+void Themer::LoadSettings()
 {
 	if (fs::exists(settingsPath))
 	{
@@ -179,20 +240,15 @@ void Themer::LoadSettings(std::string settingsPath)
 		settingsFile.close();
 
 		// Call the settings again for loading
-		LoadSettings(settingsPath);
+		LoadSettings();
 	}
 }
 
 void Themer::LoadThemes()
 {
-    std::string themesPath = QDir::currentPath().append("/Resources/Themes").toLocal8Bit().constData();
-#ifndef _WIN32
-=======
-    std::string themesPath;
 	themesPath = QDir::currentPath().append("/Resources/Themes").toLocal8Bit().constData();
 
 #ifdef __APPLE__
->>>>>>> ce0f32e7734bde5fd73103823c556300de1c6398
     themesPath = QCoreApplication::applicationDirPath().toStdString() + "/Themes";
 #endif
 
@@ -238,10 +294,6 @@ std::string Themer::getFileString(std::string filePath)
 	std::string stringFile = fileString.str();
 	fileString.clear();
 
-<<<<<<< 86de4cbf27f0831050b5bd322dcae6fe67b061e7
 	return stringFile;
 }
-=======
-	return fileString.str();
-}
->>>>>>> ce0f32e7734bde5fd73103823c556300de1c6398
+
