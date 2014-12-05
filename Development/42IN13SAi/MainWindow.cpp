@@ -63,7 +63,7 @@ void MainWindow::ShowMenuBar()
 	saveAsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
 	quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
 	runAction->setShortcut(QKeySequence(Qt::Key_F5));
-	clearAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R)); // --> Ctrl + c werkt niet om een of andere reden???
+	clearAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E)); // --> Ctrl + c werkt niet om een of andere reden???
 
 #ifndef _WIN32
 	// Also needs a menu to show the items, doesn't work with only actions

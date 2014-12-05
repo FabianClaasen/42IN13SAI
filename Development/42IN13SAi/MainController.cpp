@@ -144,7 +144,10 @@ void MainController::WriteOutput(const char* output, std::streamsize size)
 
 void MainController::ClearConsole()
 {
+#ifdef _WIN32
 	system("cls");
+#endif
+    
 	mainWindow.clearOutput();
 }
 
