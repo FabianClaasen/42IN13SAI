@@ -191,6 +191,9 @@
     <ClCompile Include="InvalidInputException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="Constant.cpp">
+      <Filter>Generated Files</Filter>	  
+    </ClCompile>
     <ClCompile Include="ConsoleOutput.cpp">
       <Filter>Source Files\VirtualMachine</Filter>
     </ClCompile>
@@ -484,6 +487,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constant.h">
+      <Filter>Generated Files</Filter>
+	</ClInclude>
     <ClInclude Include="ConsoleOutput.h">
       <Filter>Header Files\VirtualMachine</Filter>
     </ClInclude>

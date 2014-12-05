@@ -89,6 +89,9 @@ void FunctionCaller::fillFunctionMap()
 	functions.insert(functionMap::value_type("$dis", &VirtualMachine::ExecuteDiscriminantOperation));
 	functions.insert(functionMap::value_type("$abc", &VirtualMachine::ExecuteAbcOperation));
 
+	// Math Constants
+	functions.insert(functionMap::value_type("$mathpi", &VirtualMachine::ExecutePiConstant));
+	functions.insert(functionMap::value_type("$mathe", &VirtualMachine::ExecuteEConstant));
 
 
 }

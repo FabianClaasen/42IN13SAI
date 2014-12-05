@@ -14,6 +14,7 @@
     <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="CompilerNode.cpp" />
     <ClCompile Include="CodeEditor.cpp" />
+    <ClCompile Include="Constant.cpp" />
     <ClCompile Include="ConsoleOutput.cpp" />
     <ClCompile Include="ExceptionOutput.cpp" />
     <ClCompile Include="ExceptionWindow.cpp" />
@@ -1243,6 +1244,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constant.h" />
     <ClInclude Include="ConsoleOutput.h" />
     <ClInclude Include="ExceptionOutput.h" />
   </ItemGroup>

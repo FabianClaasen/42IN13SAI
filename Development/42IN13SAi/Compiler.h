@@ -45,7 +45,9 @@ public:
 	void ParseGlobalStatement();
 	void ParseStatement();
 	bool IsInternalFunction(MyTokenType type);
+	bool IsConstant(MyTokenType type);
 	CompilerNode ParseInternalFunction();
+	CompilerNode ParseConstant();
 
 	void Match(MyTokenType type);
 
