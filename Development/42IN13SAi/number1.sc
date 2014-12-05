@@ -1,4 +1,4 @@
 func Main()
 [
-	var x = "asdf";
+	prnt(2);
 ]

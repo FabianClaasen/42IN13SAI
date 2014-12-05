@@ -100,7 +100,7 @@ void Themer::SetWindowStyles(Json::Value mainStyles)
     // Output windows background color
     Json::Value obgColors = mainStyles["output_windows"];
     std::string obg = bgColors[0].asString() + "," + bgColors[1].asString() + "," + bgColors[2].asString();
-    outputColors.insert(std::map<std::string, QString>::value_type("background", QString::fromStdString(obg)));
+    outputColors.insert(std::map<std::string, QString>::value_type("background", QString::fromUtf8(obg.c_str())));
 }
 
 void Themer::SetEditorStyles(Json::Value editorStyles)
