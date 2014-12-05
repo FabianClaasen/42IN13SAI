@@ -97,7 +97,7 @@ void LinkedList::SetCurrent(std::shared_ptr<CompilerNode> node, bool isLoopEnd)
 std::shared_ptr<ListNode> LinkedList::findNode(std::shared_ptr<CompilerNode> node)
 {
 	std::shared_ptr<ListNode> listNode = head;
-	
+    
 	while (listNode != std::shared_ptr<ListNode>())
 	{
 		if (listNode->GetData()->GetJumpTo() == node->GetJumpTo())

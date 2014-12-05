@@ -9,7 +9,7 @@
 #include "CompilerNode.h"
 #include "FunctionCaller.h"
 #include "LinkedList.h"
-
+#include "Log.h"
 
 #include "ParameterException.h"
 #include "MissingCompilerNodeException.h"
@@ -60,6 +60,10 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteUniPlusOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteUniMinOperation(CompilerNode compilerNode);
 	
+    // Condition add statements
+    std::shared_ptr<CompilerNode> ExecuteAnd(CompilerNode compilerNode);
+    std::shared_ptr<CompilerNode> ExecuteOr(CompilerNode compilerNode);
+    
 	//Conditional statements
 	std::shared_ptr<CompilerNode> ExecuteLessCondition(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteLessOrEqCondition(CompilerNode compilerNode);
@@ -93,6 +97,7 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteDiscriminantOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteAbcOperation(CompilerNode compilerNode);
 
+<<<<<<< HEAD
 	std::shared_ptr<CompilerNode> ExecutePiConstant(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteEConstant(CompilerNode compilerNode);
 	
@@ -100,14 +105,14 @@ public:
 	//return the output (for showing it in the IDE)
 	std::vector<std::string> getOutput() { return output; };
 
+=======
+>>>>>>> 0d60c68fc53060ae6dc04772dfae9cc1b9f756fd
 private:
 	SymbolTable* globalsSymboltable; // Globals symboltable
 	SymbolTable* currentSymbolTable; // User function symboltable
 
 	SubroutineTable* subroutineTable; // Main subroutineTable
 	Subroutine* currentSubroutine; // User function subroutine table
-
-	std::vector<std::string> output;
 
 	// Node methods
 	std::shared_ptr<CompilerNode> GetNext(std::shared_ptr<LinkedList> nodes);

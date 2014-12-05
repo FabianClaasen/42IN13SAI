@@ -14,6 +14,13 @@
 			"linenumber_text_color": [88, 110, 117],
 			"current_line_highlighter": true,
 			"current_line_highlighter_color": [7, 54, 66]
+		},
+		"syntax" : {
+			"return_types": [203, 75, 22],
+			"identifiers": [133, 153, 0],
+			"functions": [88, 110, 117],
+			"operators": [211, 54, 130],
+			"variable_types": [42, 161, 152]
 		}
 	}
 }

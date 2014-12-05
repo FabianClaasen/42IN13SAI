@@ -53,11 +53,11 @@ void MainWindow::ShowMenuBar()
 
 #ifndef _WIN32
 	// Also needs a menu to show the items, doesn't work with only actions
-	QMenu* mainMenu = menu->addMenu("Debug");
+	macDebugMenu = menu->addMenu("Debug");
 	
 	// Add the actions to the menu
-	mainMenu->addAction(runAction);
-	mainMenu->addAction(clearAction);
+	macDebugMenu->addAction(runAction);
+	macDebugMenu->addAction(clearAction);
 #endif
 
 	// Add the Theme selection menu
@@ -87,8 +87,6 @@ CodeEditor* MainWindow::CreateEditor()
 	codeEditor->setCompleter(completer);
 	codeEditor->setFocus(Qt::OtherFocusReason);
 	codeEditor->installEventFilter(this);
-	// Set the highlighter
-	highlighter = new Highlighter(codeEditor->document());
 
 	return codeEditor;
 }
@@ -172,6 +170,8 @@ void MainWindow::AddNewTab()
 	themer.AddEditor(codeEditor);
 	codeEditorVector.push_back(codeEditor);
 	tabs->addTab(codeEditor, "New*");
+	tabs->setCurrentIndex(tabs->count() - 1);
+    codeEditor->setFocus(Qt::OtherFocusReason);
 }
 
 void MainWindow::addOutput(std::string output)
@@ -254,12 +254,12 @@ void MainWindow::AddFile(QFileInfo* info, QString text)
 
 	// Remove tab if only the new file is existing...
 	tabs->addTab(codeEditor, info->baseName());
+	tabs->setCurrentIndex(tabs->count() - 1);
 }
 
 void MainWindow::SaveThemeSettings()
 {
-	std::string settingsPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
-	themer.SaveCurrentTheme(settingsPath);
+	themer.SaveCurrentTheme();
 }
 
 MainWindow::~MainWindow()

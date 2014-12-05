@@ -25,7 +25,7 @@ public:
 	virtual ~Tokenizer();
 
 	void Tokenize();
-	std::vector<Token> GetTokenList();
+	std::vector<std::shared_ptr<Token>> GetTokenList();
 private:
 	int lineNumber;
 	int linePosition;
@@ -36,13 +36,13 @@ private:
     std::list<TokenDefinition> tokenDefinitions;
     std::vector<TokenPartner> tokenPartners;
     
-    std::vector<Token> tokenVector;
+    std::vector<std::shared_ptr<Token>> tokenVector;
     
     void NextLine();
-    Token* FindPartner(MyTokenType &type, int level);
+    std::shared_ptr<Token> FindPartner(MyTokenType &type, int level);
 	bool ShouldFindPartner(MyTokenType &type);
 	bool ShouldFindPartnerR(MyTokenType &type);
-	void TryFindPartner(Token &token);
+	void TryFindPartner(std::shared_ptr<Token> token);
 	void CheckClosingPartners();
 
 	std::string TokenToString(MyTokenType type);

@@ -13,14 +13,14 @@ void TokenizerController::Tokenize()
 {
 	
     //boost::posix_time::ptime start = boost::posix_time::microsec_clock::local_time( );
-    tokenizer->Tokenize();
+	tokenizer->Tokenize();
     /*boost::posix_time::ptime end = boost::posix_time::microsec_clock::local_time( );
     
     boost::posix_time::time_duration elapsed = end - start;
     std::cout << elapsed << std::endl;*/
 }
 
-std::vector<Token> TokenizerController::GetCompilerTokens()
+std::vector<std::shared_ptr<Token>> TokenizerController::GetCompilerTokens()
 {
 	return tokenizer->GetTokenList();
 }

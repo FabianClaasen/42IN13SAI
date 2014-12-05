@@ -12,6 +12,7 @@ public:
 
 	// iterator methods
 	ListIterator& operator++();
+    ListIterator& operator--();
 	std::shared_ptr<CompilerNode> operator*();
 	bool operator==(const ListIterator& rvalue);
     bool operator!=(const ListIterator& rvalue);

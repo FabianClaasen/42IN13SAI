@@ -28,7 +28,7 @@ void OutputWindow::addOutput(std::string strOutput)
 QString OutputWindow::setOutputPrecision(QString str)
 {
     // parse the string
-    float to_format = ::atof(str.toStdString().c_str());
+    float to_format = ::atof(str.toUtf8());
     
     // Get the size needed for the float digits (copied from internal to_string calculation)
     const int max_digits = std::numeric_limits<float>::max_exponent10 + 20;
@@ -39,7 +39,7 @@ QString OutputWindow::setOutputPrecision(QString str)
 #else
     _snprintf(buffer, sizeof(buffer), "%g", to_format);
 #endif
-	return QString::fromStdString(buffer);
+	return QString::fromUtf8(buffer);
 }
 
 void OutputWindow::clearOutput()

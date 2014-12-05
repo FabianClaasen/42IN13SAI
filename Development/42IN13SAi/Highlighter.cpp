@@ -5,7 +5,7 @@
 #include "MyTokenType.h"
 #include <iterator>
 #include <qvector.h>
-Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
+Highlighter::Highlighter(std::map<std::string, QColor> colors, QTextDocument *parent) : QSyntaxHighlighter(parent)
 {
 	// get all definitions and iterate through that
 	std::list<TokenDefinition> definitions = Grammar::getGrammar();
@@ -16,35 +16,39 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 		// Check which tokentype it is and set current format
 		switch (iter->myTokenType)
 		{
-			case MyTokenType::Var:
-			case MyTokenType::Void:
-			case MyTokenType::FloatReturn:
-				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, QColor(203, 75, 22));
-				break;
-			case MyTokenType::If:
-			case MyTokenType::Else:
-			case MyTokenType::ElseIf:
-			case MyTokenType::While:
-			case MyTokenType::ForLoop:
-				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, QColor(133, 153, 0));
-				break;
-			case MyTokenType::Function:
-			case MyTokenType::MainFunction:
-				setCurrentFormat(currentFormat, rule, QRegExp("\\b(?!if|else|while|frl)[A-Za-z0-9_]+(?=\\()"), QFont::Bold, QColor(88, 110, 117));
-				break;
-			case MyTokenType::OperatorDivide:
-			case MyTokenType::OperatorMinus:
-			case MyTokenType::OperatorMultiply:
-			case MyTokenType::OperatorPlus:
-			case MyTokenType::OperatorRaised:
-			case MyTokenType::UniOperatorMinus:
-			case MyTokenType::UniOperatorPlus:
-				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, QColor(211, 54, 130));
-				break;
-			case MyTokenType::Float:
-				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, QColor(42, 161, 152));
-				break;
-			default:
+            case MyTokenType::Var:
+            case MyTokenType::Void:
+            case MyTokenType::FloatReturn:
+            case MyTokenType::Return:
+                setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["return_types"]);
+                break;
+            case MyTokenType::If:
+            case MyTokenType::Else:
+            case MyTokenType::ElseIf:
+            case MyTokenType::While:
+            case MyTokenType::ForLoop:
+                setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["identifiers"]);
+                break;
+            case MyTokenType::Function:
+            case MyTokenType::MainFunction:
+                setCurrentFormat(currentFormat, rule, QRegExp("\\b(?!if|else|while|frl)[A-Za-z0-9_]+(?=\\()"), QFont::Bold, colors["functions"]);
+                break;
+            case MyTokenType::OperatorDivide:
+            case MyTokenType::OperatorMinus:
+            case MyTokenType::OperatorMultiply:
+            case MyTokenType::OperatorPlus:
+            case MyTokenType::OperatorRaised:
+            case MyTokenType::UniOperatorMinus:
+            case MyTokenType::UniOperatorPlus:
+                setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["operators"]);
+                break;
+            case MyTokenType::Float:
+                setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["variable_types"]);
+                break;
+            default:
+                
+                break;
+
 				break;
 		}
 	}

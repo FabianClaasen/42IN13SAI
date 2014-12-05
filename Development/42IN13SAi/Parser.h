@@ -5,13 +5,14 @@
 #include "SymbolNotFoundException.h"
 #include "ZeroDivideException.h"
 #include "Compiler.h"
+#include "ParseException.h"
 #include <vector>
 
 class Parser
 {
 public:
 	Parser(Compiler* compiler);
-	Parser(Compiler* compiler, std::vector<Token> tokens);
+	Parser(Compiler* compiler, std::vector<std::shared_ptr<Token>> tokens);
 	virtual ~Parser();
 
 	// Functions

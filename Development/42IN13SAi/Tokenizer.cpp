@@ -46,12 +46,12 @@ void Tokenizer::Tokenize()
 					level++;
 
 				// Find a partner
-				Token* partner = nullptr;
+				std::shared_ptr<Token> partner = nullptr;
 				if (ShouldFindPartner(definition.myTokenType))
 				{
 					try {
-						Token* temp = FindPartner(definition.myTokenType, level);
-						if (temp->Partner != nullptr)
+						std::shared_ptr<Token> temp = FindPartner(definition.myTokenType, level);
+						if (temp->Partner == nullptr)
 							partner = temp;
 					}
 					catch (const PartnerNotFoundException &e) {
@@ -62,11 +62,11 @@ void Tokenizer::Tokenize()
 
 				// Create token
 				std::string token_value = lineRemaining.substr(0, matched);
-				tokenVector.push_back(Token(lineNumber, linePosition, level, token_value, definition.myTokenType, partner));
+                tokenVector.push_back(std::make_shared<Token>(lineNumber, linePosition, level, token_value, definition.myTokenType, partner));
                 
                 // if partner found, give this token to partner
                 if (partner)
-                    partner->Partner = &tokenVector.back();
+                    partner->Partner = std::shared_ptr<Token>(tokenVector.back());
 
 				// Check if the level should be lowered
 				if (definition.myTokenType == MyTokenType::CloseBracket || definition.myTokenType == MyTokenType::CloseCurlyBracket || definition.myTokenType == MyTokenType::CloseMethod)
@@ -102,9 +102,9 @@ void Tokenizer::Tokenize()
 // Check for closing partners missing
 void Tokenizer::CheckClosingPartners()
 {	
-	for (Token t : tokenVector)
+	for (std::shared_ptr<Token> t : tokenVector)
 	{
-		if (ShouldFindPartnerR(t.Type))
+		if (ShouldFindPartnerR(t->Type))
 		{
 			try {
 				TryFindPartner(t);
@@ -121,18 +121,18 @@ void Tokenizer::CheckClosingPartners()
 // @param
 //  type: this is the type of the token where you need to find a match for.
 //	level: this is the level of the myTokenType, the partner needs to be on the same level.
-Token* Tokenizer::FindPartner(MyTokenType &type, int level)
+std::shared_ptr<Token> Tokenizer::FindPartner(MyTokenType &type, int level)
 {
     std::list<TokenPartner>::const_iterator token_partner;
     for (TokenPartner tokenPartner : tokenPartners)
     {
 		if (tokenPartner.token == type)
         {
-            std::vector<Token>::reverse_iterator tokenIt;
+            std::vector<std::shared_ptr<Token>>::reverse_iterator tokenIt;
             for (tokenIt = tokenVector.rbegin(); tokenIt != tokenVector.rend(); ++tokenIt)
             {
-                if (tokenIt->Type == tokenPartner.partner && tokenIt->Level == level)
-                    return &(*tokenIt);
+                if ((*tokenIt)->Type == tokenPartner.partner && (*tokenIt)->Level == level)
+                    return (*tokenIt);
             }
         }
     }
@@ -151,20 +151,19 @@ Token* Tokenizer::FindPartner(MyTokenType &type, int level)
 // Throws PartnerNotFoundException when a partner can't be found.
 // @param
 //  token: this is the token where you need to find a match for.
-void Tokenizer::TryFindPartner(Token &token)
+void Tokenizer::TryFindPartner(std::shared_ptr<Token> token)
 {
 	std::list<TokenPartner>::const_iterator token_partner;
 	for (TokenPartner tokenPartner : tokenPartners)
 	{
-		if (tokenPartner.partner == token.Type)
+		if (tokenPartner.partner == token->Type)
 		{
-			std::vector<Token>::iterator tokenIt;
+			std::vector<std::shared_ptr<Token>>::iterator tokenIt;
 			for (tokenIt = tokenVector.begin(); tokenIt != tokenVector.end(); ++tokenIt)
 			{
-				if (tokenIt->Type == tokenPartner.token && tokenIt->Level == token.Level)
-				{	// FOUND A PARTNER
-					return;
-				}
+                if ((*tokenIt)->Type == tokenPartner.partner && (*tokenIt)->Level == token->Level)
+                    // Partner found
+                    return ;
 			}
 		}
 	}
@@ -173,9 +172,9 @@ void Tokenizer::TryFindPartner(Token &token)
 	char buffer[1024];
 
 #ifdef _WIN32
-	_snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(token.Type).c_str(), std::to_string(token.LineNumber).c_str(), std::to_string(token.LinePosition).c_str());
+	_snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(token->Type).c_str(), std::to_string(token->LineNumber).c_str(), std::to_string(token->LinePosition).c_str());
 #else
-	snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(token.Type).c_str(), std::to_string(token.LineNumber).c_str(), std::to_string(token.LinePosition).c_str());
+	snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(token->Type).c_str(), std::to_string(token->LineNumber).c_str(), std::to_string(token->LinePosition).c_str());
 #endif
 
 	throw PartnerNotFoundException(buffer);
@@ -212,7 +211,7 @@ void Tokenizer::NextLine()
 	}
 }
 
-std::vector<Token> Tokenizer::GetTokenList()
+std::vector<std::shared_ptr<Token>> Tokenizer::GetTokenList()
 {
     return tokenVector;
 }

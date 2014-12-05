@@ -78,7 +78,7 @@ std::list<TokenDefinition> Grammar::getGrammar()
     
     // conditions
     definitions.push_back(TokenDefinition("&&", MyTokenType::And));
-    definitions.push_back(TokenDefinition("\\||", MyTokenType::Or));
+    definitions.push_back(TokenDefinition("\\|\\|", MyTokenType::Or));
     
     // bracket types
     definitions.push_back(TokenDefinition("\\[", MyTokenType::OpenMethod));

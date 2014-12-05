@@ -3,7 +3,7 @@
 #include "Constant.h"
 #include "Parser.h"
 
-Compiler::Compiler(std::vector<Token> tokens) : tokenizerTokens(tokens)
+Compiler::Compiler(std::vector<std::shared_ptr<Token>> tokens) : tokenizerTokens(tokens)
 {
 }
 
@@ -23,9 +23,9 @@ void Compiler::Compile()
 
 
 // Check what the next token is
-Token* Compiler::PeekNext()
+std::shared_ptr<Token> Compiler::PeekNext()
 {
-	Token* token = &tokenizerTokens.at(currentIndex + 1);
+	std::shared_ptr<Token> token = tokenizerTokens.at(currentIndex + 1);
 	return token;
 }
 
@@ -37,18 +37,19 @@ Token Compiler::GetNext()
 	Token token;
 	if (currentIndex != tokenizerTokens.size())
 	{
-		token = tokenizerTokens.at(currentIndex);
+		token = *tokenizerTokens.at(currentIndex);
 	}
 	else
 	{
-		throw MissingTokenException("A MissingTokenException occured.");
+        //exceptions.push_back("A MissingTokenException occured");
+        throw MissingTokenException("A MissingTokenException occured.");
 	}
 
 	return token;
 }
 
 // Set the tokenlist
-void Compiler::SetTokenList(std::vector<Token> tokens)
+void Compiler::SetTokenList(std::vector<std::shared_ptr<Token>> tokens)
 {
 	tokenizerTokens = tokens;
 }
@@ -100,6 +101,7 @@ void Compiler::Match(MyTokenType type)
 {
 	if (Compiler::PeekNext() == nullptr)
 	{
+		//exceptions.push_back("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
 		throw UnexpectedTypeException("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
 	}
 
@@ -107,7 +109,8 @@ void Compiler::Match(MyTokenType type)
 
 	if (currentToken.Type != type)
 	{
-		throw UnexpectedTypeException("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
+        //exceptions.push_back("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
+		throw UnexpectedTypeException("An UnexpectedTypeException occured at line " + std::to_string(currentToken.LineNumber) + " on position " + std::to_string(currentToken.LinePosition) + ". Expected: " + TokenToString(type));
 	}
 }
 
@@ -136,7 +139,8 @@ void Compiler::ParseGlobalStatement()
 		Parser(this).ParseAssignmentStatement(false);
 		break;
 	default:
-		throw VariableNotFoundException("A VariableNotFoundException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ".");
+        //exceptions.push_back("A VariableNotFoundException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ".");
+        throw VariableNotFoundException("A VariableNotFoundException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ".");
 		break;
 	}
 }
@@ -146,6 +150,7 @@ void Compiler::ParseStatement()
 {
 	switch (PeekNext()->Type)
 	{
+    case MyTokenType::ElseIf:
 	case MyTokenType::If:
 		Parser(this).ParseIfStatement();
 		break;
@@ -183,14 +188,15 @@ void Compiler::ParseStatement()
 			Match(MyTokenType::EOL);
 		break;
 	default:
-		throw StatementNotFoundException("A StatementNotFoundException occurred at line " + std::to_string(PeekNext()->LineNumber) +" on position " + std::to_string(PeekNext()->LinePosition)+".");
+        //exceptions.push_back("A StatementNotFoundException occurred at line " + std::to_string(PeekNext()->LineNumber) +" on position " + std::to_string(PeekNext()->LinePosition)+".");
+        throw StatementNotFoundException("A StatementNotFoundException occurred at line " + std::to_string(PeekNext()->LineNumber) +" on position " + std::to_string(PeekNext()->LinePosition)+".");
 		break;
 	}
 }
 
 void Compiler::ParseFunctionOrAssignment()
 {
-	Token temp = GetNext();
+	std::shared_ptr<Token> temp = std::shared_ptr<Token>(new Token(GetNext()));
 	if (PeekNext()->Type == MyTokenType::OpenBracket)
 	{
 		tokenizerTokens.insert(tokenizerTokens.begin(), temp);

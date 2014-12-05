@@ -9,6 +9,17 @@ MainController::MainController() : QObject()
 
 void MainController::Setup()
 {
+    QString resourceDir = QDir::currentPath().append("/Resources/");
+#ifndef _WIN32
+    resourceDir = QCoreApplication::applicationDirPath() + "/";
+#endif
+    
+    // Add default font to the font database
+    QFontDatabase fontDatabase;
+    fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf");
+    fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf");
+    fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf");
+    
 	QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_F5), &mainWindow);
 	connect(shortcut, SIGNAL(activated()), this, SLOT(Execute()));
 	
@@ -45,7 +56,13 @@ void MainController::Execute()
 
 	try
 	{
-		tokenizer_controller->Tokenize(); // Tokenize
+		// Setup output buffer
+		bio::stream_buffer<ExceptionOutput> sb;
+		sb.open(ExceptionOutput(this));
+		std::clog.rdbuf(&sb);
+
+		// Tokenize
+		tokenizer_controller->Tokenize();
 	}
 	catch (const std::exception& e)
 	{
@@ -54,11 +71,19 @@ void MainController::Execute()
 		return;
 	}
 
+    QString text;
+
 	// Run the compiler
 	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
 
 	try
 	{
+		// Setup output buffer
+		bio::stream_buffer<ExceptionOutput> sb;
+		sb.open(ExceptionOutput(this));
+		std::clog.rdbuf(&sb);
+
+		// Compile
 		compiler.Compile();
 	}
 	catch (const std::exception& e)
@@ -67,6 +92,7 @@ void MainController::Execute()
 		mainWindow.addException(e.what());
 		return;
 	}
+
 	// Delete the tokenizer controller
 	delete(tokenizer_controller);
 
@@ -77,20 +103,20 @@ void MainController::Execute()
 
 	try
 	{
+		// Setup output buffer
+		bio::stream_buffer<ConsoleOutput> sb;
+		sb.open(ConsoleOutput(this));
+		std::clog.rdbuf(&sb);
+		
+		// Execute VM
 		virtual_machine.ExecuteCode();
-		std::vector<std::string> output = virtual_machine.getOutput();
-		QString text;
-		for (std::vector<std::string>::iterator it = output.begin(); it != output.end(); ++it) {
-			mainWindow.addOutput(*it);
-			text.append(QString::fromStdString(*it));
-		}
 
 		// Create the log files directory if it doesn't exists
 		if (!QDir("Log files").exists())
 			QDir().mkdir("Log files");
 
 		// Save the output in an output file
-		FileIO::SaveFile("Log files//output.txt", text);
+		FileIO::SaveFile("Log files//output.txt", this->output);
 	}
 	catch (const std::exception& e)
 	{
@@ -99,9 +125,30 @@ void MainController::Execute()
 	}
 }
 
+void MainController::WriteException(const char* output, std::streamsize size)
+{
+	std::string exception_text;
+	for (int i = 0; i < size; i++)
+		exception_text.append(1, output[i]);
+
+	mainWindow.addException(exception_text);
+	//this->output.append(QString::fromUtf8(exception_text.c_str()));
+}
+
+void MainController::WriteOutput(const char* output, std::streamsize size)
+{
+	std::string output_text;
+	for (int i = 0; i < size; i++)
+		output_text.append(1, output[i]);
+
+	mainWindow.addOutput(output_text);
+	this->output.append(QString::fromUtf8(output_text.c_str()));
+}
+
 void MainController::ClearConsole()
 {
 	system("cls");
+	mainWindow.clearOutput();
 }
 
 std::string MainController::GetFileFromStream()

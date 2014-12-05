@@ -6,7 +6,7 @@ class Highlighter : public QSyntaxHighlighter
 	Q_OBJECT
 
 public:
-	Highlighter(QTextDocument *parent = 0);
+	Highlighter(std::map<std::string, QColor> colors, QTextDocument *parent = 0);
 	virtual ~Highlighter();
 
 protected:

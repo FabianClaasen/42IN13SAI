@@ -14,6 +14,12 @@ ListIterator& ListIterator::operator++()
 	return *this;
 }
 
+ListIterator& ListIterator::operator--()
+{
+    listNode = listNode->GetPrev();
+    return *this;
+}
+
 std::shared_ptr<CompilerNode> ListIterator::operator*()
 {
 	return reinterpret_cast<ListNode*>(&listNode)->GetData();
