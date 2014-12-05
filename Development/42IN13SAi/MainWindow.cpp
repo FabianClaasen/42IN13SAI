@@ -52,8 +52,9 @@ void MainWindow::ShowMenuBar()
 	saveAction = fileMenu->addAction("Save");
 	saveAsAction = fileMenu->addAction("Save as");
 	quitAction = fileMenu->addAction("Quit");
+	viewMenu = menu->addMenu("View");
+	clearAction = viewMenu->addAction("Clear console");
 	runAction = menu->addAction("Run");
-	clearAction = menu->addAction("Clear console");
 
 	// Add shortcuts to the actions
 	newAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
@@ -62,7 +63,7 @@ void MainWindow::ShowMenuBar()
 	saveAsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
 	quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
 	runAction->setShortcut(QKeySequence(Qt::Key_F5));
-	clearAction->setShortcut(QKeySequence(Qt::Key_F1));
+	clearAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R)); // --> Ctrl + c werkt niet om een of andere reden???
 
 #ifndef _WIN32
 	// Also needs a menu to show the items, doesn't work with only actions
@@ -74,7 +75,7 @@ void MainWindow::ShowMenuBar()
 #endif
 
 	// Add the Theme selection menu
-	themeMenu = menu->addMenu("Themes");
+	themeMenu = viewMenu->addMenu("Themes");
 	CreateThemeMenu();
 
 	// Set the menu bar on ui from left to right

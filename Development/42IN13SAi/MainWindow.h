@@ -81,6 +81,7 @@ private:
     QMenuBar *menu;
 
     QMenu *fileMenu,
+		  *viewMenu,
           *themeMenu,
           *macDebugMenu;
 
