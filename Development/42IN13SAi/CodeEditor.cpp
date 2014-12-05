@@ -1,19 +1,8 @@
 #include "CodeEditor.h"
 #include <QCompleter>
-#include <iostream>
+
 CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), completer(0)
 {
-    QString resourceDir = QDir::currentPath().append("/Resources/");
-#ifndef _WIN32
-    resourceDir = QCoreApplication::applicationDirPath() + "/";
-#endif
-    
-	// Add default font to the font database
-	QFontDatabase fontDatabase;
-	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf");
-	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf");
-	fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf");
-
 	lineNumberArea = new LineNumberArea(this);
 
 	connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
@@ -21,8 +10,6 @@ CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent), completer(0)
 	connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
 
 	updateLineNumberAreaWidth(0);
-
-	//setFocus(Qt::OtherFocusReason);
 }
 
 void CodeEditor::SetTheme(std::map<std::string, QColor> colors, std::string fontFamily, int fontSize)
