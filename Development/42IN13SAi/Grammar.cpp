@@ -44,6 +44,12 @@ std::list<TokenDefinition> Grammar::getGrammar()
 	definitions.push_back(TokenDefinition("\\bdis\\b", MyTokenType::Discriminant));
 	definitions.push_back(TokenDefinition("\\babc\\b", MyTokenType::AbcFormula));
 
+	definitions.push_back(TokenDefinition("\\bdist\\b", MyTokenType::Distance));
+	definitions.push_back(TokenDefinition("\\bvelo\\b", MyTokenType::Velocity));
+	definitions.push_back(TokenDefinition("\\btime\\b", MyTokenType::Time));
+	definitions.push_back(TokenDefinition("\\bavgv\\b", MyTokenType::AverageVelocity));
+	definitions.push_back(TokenDefinition("\\baccl\\b", MyTokenType::Acceleration));
+
 	// math constants
 	definitions.push_back(TokenDefinition("\\bM_PI\\b", MyTokenType::Math_PI));
 	definitions.push_back(TokenDefinition("\\bM_E\\b", MyTokenType::Math_E));

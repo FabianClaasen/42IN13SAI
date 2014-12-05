@@ -96,12 +96,15 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteDiscriminantOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteAbcOperation(CompilerNode compilerNode);
 
+	std::shared_ptr<CompilerNode> ExecuteDistanceOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteVelocityOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteTimeOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteAverageVelocityOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteAccelerationOperation(CompilerNode compilerNode);
+
 	std::shared_ptr<CompilerNode> ExecutePiConstant(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteEConstant(CompilerNode compilerNode);
-		
-	//return the output (for showing it in the IDE)
-	//std::vector<std::string> getOutput() { return output; };
-
+	
 private:
 	SymbolTable* globalsSymboltable; // Globals symboltable
 	SymbolTable* currentSymbolTable; // User function symboltable
@@ -122,6 +125,4 @@ private:
 	// Nodes 
 	std::shared_ptr<LinkedList> globalsList;
 	std::map<std::string, std::shared_ptr<LinkedList>> nodeLists;
-
 };
-

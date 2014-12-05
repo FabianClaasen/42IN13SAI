@@ -89,6 +89,13 @@ void FunctionCaller::fillFunctionMap()
 	functions.insert(functionMap::value_type("$dis", &VirtualMachine::ExecuteDiscriminantOperation));
 	functions.insert(functionMap::value_type("$abc", &VirtualMachine::ExecuteAbcOperation));
 
+	// Physics functions
+	functions.insert(functionMap::value_type("$dist", &VirtualMachine::ExecuteDistanceOperation));
+	functions.insert(functionMap::value_type("$velo", &VirtualMachine::ExecuteVelocityOperation));
+	functions.insert(functionMap::value_type("$time", &VirtualMachine::ExecuteTimeOperation));
+	functions.insert(functionMap::value_type("$avgv", &VirtualMachine::ExecuteAverageVelocityOperation));
+	functions.insert(functionMap::value_type("$accl", &VirtualMachine::ExecuteAccelerationOperation));
+
 	// Math Constants
 	functions.insert(functionMap::value_type("$mathpi", &VirtualMachine::ExecutePiConstant));
 	functions.insert(functionMap::value_type("$mathe", &VirtualMachine::ExecuteEConstant));

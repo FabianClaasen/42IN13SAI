@@ -76,6 +76,13 @@ enum class MyTokenType : int {
 	Discriminant,
 	AbcFormula,
 
+	// Physics functions
+	Distance,
+	Velocity,
+	Time,
+	AverageVelocity,
+	Acceleration,
+
 	// Constants
 	Math_PI,
 	Math_E

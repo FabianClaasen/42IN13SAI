@@ -63,6 +63,16 @@ std::shared_ptr<CompilerNode> InternalFunction::GetInternalFunction(MyTokenType 
 	case MyTokenType::AbcFormula:
 		compiler->Match(MyTokenType::AbcFormula);
 		return getCompilerNode("$abc", 3);
+	case MyTokenType::Distance:
+		return getCompilerNode("$dist", 2);
+	case MyTokenType::Velocity:
+		return getCompilerNode("$velo", 2);
+	case MyTokenType::Time:
+		return getCompilerNode("$time", 2);
+	case MyTokenType::AverageVelocity:
+		return getCompilerNode("$avgv", 2);
+	case MyTokenType::Acceleration:
+		return getCompilerNode("$accl", 2);
 	default:
 		break;
 	}

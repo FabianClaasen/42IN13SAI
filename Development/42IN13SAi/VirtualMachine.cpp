@@ -793,9 +793,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePercentOperation(CompilerNo
 	float num1 = atof(param1->GetValue().c_str());
 	float num2 = atof(param2->GetValue().c_str());
 	if (num2 == 0)
-	{
-		//TODO: Throw division by zero exception
-	}
+		throw ZeroDivideException("Division by 0 exception occured.");
 	float output = (num1 / num2) * 100;
 	// Create a new value compilernode to return
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
@@ -812,9 +810,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePermillageOperation(Compile
 	float num1 = atof(param1->GetValue().c_str());
 	float num2 = atof(param2->GetValue().c_str());
 	if (num2 == 0)
-	{
-		//TODO: Throw division by zero exception
-	}
+		throw ZeroDivideException("Division by 0 exception occured.");
 	float output = (num1 / num2) * 1000;
 	// Create a new value compilernode to return
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
@@ -996,6 +992,89 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 
 #pragma endregion ComplexMath
 
+#pragma region Physics
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDistanceOperation(CompilerNode compilerNode){
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+	float output = num1*num2;
+// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteVelocityOperation(CompilerNode compilerNode){
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+	if (num2 == 0)
+		throw ZeroDivideException("Division by 0 exception occured.");
+	float output = num1/num2;
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteTimeOperation(CompilerNode compilerNode){
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+	if (num2 == 0)
+		throw ZeroDivideException("Division by 0 exception occured.");
+	float output = num1/num2;
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAverageVelocityOperation(CompilerNode compilerNode){
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+	if (num2 == 0)
+		throw ZeroDivideException("Division by 0 exception occured.");
+
+	float output = num1/num2;
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAccelerationOperation(CompilerNode compilerNode){
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	float num2 = atof(param2->GetValue().c_str());
+	if (num2 == 0)
+		throw ZeroDivideException("Division by 0 exception occured.");
+
+	float output = num1 / num2;
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+#pragma endregion Physics
+
 #pragma region MathConstants
 // PI
 std::shared_ptr<CompilerNode> VirtualMachine::ExecutePiConstant(CompilerNode compilerNode)
@@ -1007,4 +1086,4 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteEConstant(CompilerNode comp
 {
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(M_E), false));
 }
-#pragma endregion
+#pragma endregion MathConstants
