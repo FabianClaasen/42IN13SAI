@@ -19,9 +19,6 @@ void MainController::Setup()
     fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf");
     fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf");
     fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf");
-    
-	QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_F5), &mainWindow);
-	connect(shortcut, SIGNAL(activated()), this, SLOT(Execute()));
 	
 #ifndef _WIN32
 	// Mac OS X cmd + R for running program like in xcode
@@ -147,7 +144,10 @@ void MainController::WriteOutput(const char* output, std::streamsize size)
 
 void MainController::ClearConsole()
 {
+#ifdef _WIN32
 	system("cls");
+#endif
+    
 	mainWindow.clearOutput();
 }
 
@@ -157,12 +157,12 @@ std::string MainController::GetFileFromStream()
 
 	std::shared_ptr<QFile> file;
 	std::shared_ptr<QFile> currentFile;
-	if (currentFiles.size() > mainWindow.GetCurrentTabPosition() - 1)
+	if (currentFiles.size() > mainWindow.GetCurrentTabPosition())
 	{
-		currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition() - 1);
+		currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition());
 	}
 
-	if (currentFile)
+	if (currentFile->fileName().endsWith(".cs"))
 	{
 		file = currentFile;
 	}
@@ -219,15 +219,9 @@ void MainController::SaveFile()
 		currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition());
 	}
 
-	if (!currentFile)
+	if (!currentFile->fileName().endsWith(".cs"))
 	{
-		QString URI = mainWindow.OpenSaveDialog();
-		if (!URI.isEmpty())
-		{
-			FileIO::SaveFile(URI, mainWindow.GetText());
-			QFileInfo* fileInfo = new QFileInfo(URI);
-			mainWindow.SetTabTitle(fileInfo);
-		}
+		SaveAsFile();
 	}
 	else
 	{
