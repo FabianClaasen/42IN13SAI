@@ -19,9 +19,6 @@ void MainController::Setup()
     fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono.ttf");
     fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Bold.ttf");
     fontDatabase.addApplicationFont(resourceDir + "DejaVuSansMono-Oblique.ttf");
-    
-	QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_F5), &mainWindow);
-	connect(shortcut, SIGNAL(activated()), this, SLOT(Execute()));
 	
 #ifndef _WIN32
 	// Mac OS X cmd + R for running program like in xcode

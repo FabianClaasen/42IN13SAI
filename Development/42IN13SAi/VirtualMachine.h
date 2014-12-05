@@ -9,7 +9,7 @@
 #include "CompilerNode.h"
 #include "FunctionCaller.h"
 #include "LinkedList.h"
-#include "Log.h"
+//#include "Log.h"
 
 #include "ParameterException.h"
 #include "MissingCompilerNodeException.h"

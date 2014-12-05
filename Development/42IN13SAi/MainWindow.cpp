@@ -27,13 +27,13 @@ MainWindow::MainWindow(QWidget *parent)
 	this->setCentralWidget(splitter);
     
     // Set themer
-    Themer themer(this);
+    //Themer themer(this);
     
     // Set themes
-    std::map<std::string, QColor> mainStyles = themer.GetWindowStyles();
+    /*std::map<std::string, QColor> mainStyles = themer.GetWindowStyles();
     QPalette mainPalette(palette());
     mainPalette.setColor(QPalette::Background, mainStyles["background"]);
-    setPalette(mainPalette);
+    setPalette(mainPalette);*/
 }
 
 void MainWindow::ShowMenuBar()
@@ -55,7 +55,14 @@ void MainWindow::ShowMenuBar()
 	runAction = menu->addAction("Run");
 	clearAction = menu->addAction("Clear console");
 
-	
+	// Add shortcuts to the actions
+	newAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
+	openAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
+	saveAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+	saveAsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
+	quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
+	runAction->setShortcut(QKeySequence(Qt::Key_F5));
+	clearAction->setShortcut(QKeySequence(Qt::Key_F1));
 
 #ifndef _WIN32
 	// Also needs a menu to show the items, doesn't work with only actions
