@@ -1,7 +1,21 @@
 #include "Themer.h"
-#include <qbytearray.h>
+#include "MainWindow.h"
+
 Themer::Themer()
 {
+    settingsPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
+#ifndef _WIN32
+    settingsPath = QCoreApplication::applicationDirPath().toStdString() + "/settings.json";
+#endif
+    
+    LoadThemes();
+    LoadSettings();
+}
+
+Themer::Themer(MainWindow* p_main)
+{
+    main = p_main;
+    
 	//std::string newPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
 	settingsPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
 #ifndef _WIN32
@@ -57,6 +71,10 @@ void Themer::SetTheme(std::string themeName)
     jsonReader.parse(themeString, currentTheme);
     Json::Value themeStyles = currentTheme["theme"];
     
+    // Set main window node and call the function
+    Json::Value mainStyles = themeStyles["window"];
+    SetWindowStyles(mainStyles);
+    
     // Set editor node and call the function
     Json::Value editorStyles = themeStyles["editor"];
     SetEditorStyles(editorStyles);
@@ -65,8 +83,24 @@ void Themer::SetTheme(std::string themeName)
     Json::Value highlighterStyles = themeStyles["syntax"];
     SetHighlighterStyles(highlighterStyles);
     
+    SetWindow();
     SetEditors();
     SetHighlighters();
+}
+
+void Themer::SetWindowStyles(Json::Value mainStyles)
+{
+    mainColors.clear();
+    
+    // Set the background color
+    Json::Value bgColors = mainStyles["background_color"];
+    QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+    mainColors.insert(std::map<std::string, QColor>::value_type("background", bg));
+    
+    // Output windows background color
+    Json::Value obgColors = mainStyles["output_windows"];
+    std::string obg = bgColors[0].asString() + "," + bgColors[1].asString() + "," + bgColors[2].asString();
+    outputColors.insert(std::map<std::string, QString>::value_type("background", QString::fromStdString(obg)));
 }
 
 void Themer::SetEditorStyles(Json::Value editorStyles)
@@ -144,6 +178,16 @@ void Themer::SetHighlighterStyles(Json::Value highlighterStyles)
     Json::Value variableColors = highlighterStyles["variable_types"];
     QColor variable_types(variableColors[0].asInt(), variableColors[1].asInt(), variableColors[2].asInt());
     syntaxColors.insert(std::map<std::string, QColor>::value_type("variable_types", variable_types));
+}
+
+void Themer::SetWindow()
+{
+    main->SetOutputThemes(outputColors);
+}
+
+std::map<std::string, QColor> Themer::GetWindowStyles()
+{
+    return mainColors;
 }
 
 void Themer::SetHighlighters()

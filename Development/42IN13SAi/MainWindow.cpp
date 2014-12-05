@@ -4,9 +4,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ShowMenuBar();
 
-	// Set themer
-	Themer themer;
-
 	// Set the tabs
 	tabs = new QTabWidget();
 	tabs->setTabsClosable(true);
@@ -28,6 +25,15 @@ MainWindow::MainWindow(QWidget *parent)
 	splitter->setSizes(sizes);
 
 	this->setCentralWidget(splitter);
+    
+    // Set themer
+    Themer themer(this);
+    
+    // Set themes
+    std::map<std::string, QColor> mainStyles = themer.GetWindowStyles();
+    QPalette mainPalette(palette());
+    mainPalette.setColor(QPalette::Background, mainStyles["background"]);
+    setPalette(mainPalette);
 }
 
 void MainWindow::ShowMenuBar()
@@ -115,6 +121,18 @@ void MainWindow::ChangeTheme()
 	selectedAction->setChecked(true);
 	std::string newTheme = selectedAction->text().toLocal8Bit().constData();
 	themer.SetTheme(newTheme);
+}
+
+void MainWindow::SetTheme(std::map<std::string, QColor> mainStyles)
+{
+    QPalette mainPalette(palette());
+    mainPalette.setColor(QPalette::Background, mainStyles["background"]);
+    setPalette(mainPalette);
+}
+
+void MainWindow::SetOutputThemes(std::map<std::string, QString> outputColors)
+{
+    //outputWindow->SetTheme(outputColors);
 }
 
 QAction* MainWindow::GetRunAction()

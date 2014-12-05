@@ -13,14 +13,17 @@
 #include <boost/filesystem.hpp>
 #include "jsoncpp/json.h"
 
-#include "Highlighter.h"
 #include "CodeEditor.h"
+#include "Highlighter.h"
+
+class MainWindow;
 
 namespace fs = boost::filesystem;
 class Themer
 {
 public:
-	Themer();
+    Themer();
+	Themer(MainWindow* p_main);
     virtual ~Themer();
     
     // public editor addition and removal
@@ -35,7 +38,10 @@ public:
     // Get theme info for menu
     std::vector<std::string> GetThemesVector();
     std::string GetCurrentTheme();
+    std::map<std::string, QColor> GetWindowStyles();
 private:
+    MainWindow* main;
+    
 	bool userThemeSet = false;
 	std::string defaultTheme;
 	std::string userTheme;
@@ -51,6 +57,8 @@ private:
     // Theme settings
     std::map<std::string, QColor> colors;
     std::map<std::string, QColor> syntaxColors;
+    std::map<std::string, QColor> mainColors;
+    std::map<std::string, QString> outputColors;
     std::string fontFamily;
     int fontSize;
     
@@ -61,6 +69,10 @@ private:
     // load functions
     void LoadTheme(fs::path filePath);
     void LoadSettings();
+    
+    // Main window style setters
+    void SetWindow();
+    void SetWindowStyles(Json::Value mainStyles);
     
     // Editor style setters
     void SetEditors();

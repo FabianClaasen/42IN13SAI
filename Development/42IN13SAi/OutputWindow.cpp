@@ -12,7 +12,13 @@ OutputWindow::OutputWindow(QWidget *parent) : QListView(parent)
 	setSelectionMode(QAbstractItemView::NoSelection);
 
 	listModel = new QStringListModel(output, nullptr);
+    
 	setModel(listModel);
+}
+
+void OutputWindow::SetTheme(std::map<std::string, QString> colors)
+{
+    this->setStyleSheet("QTextEdit, QListWidget { color: white; background-color: rgb( "+ colors["background"] +"); border-style: solid; border-width: 1px; border-color: black; } QTabWidget::pane { background-color: rgb( "+ colors["background"] +") } QTabBar::tab { color: white; background-color: rgb( "+ colors["background"] +") border-style: solid; border-width: 1px; border-color: black; padding: 3px;} QTabBar::tab:selected { background-color: rgb( "+ colors["background"] +") }");
 }
 
 void OutputWindow::addOutput(std::string strOutput)
