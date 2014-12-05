@@ -995,7 +995,6 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 
 
 #pragma endregion ComplexMath
-<<<<<<< HEAD
 
 #pragma region MathConstants
 // PI
@@ -1009,5 +1008,3 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteEConstant(CompilerNode comp
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(M_E), false));
 }
 #pragma endregion
-=======
->>>>>>> 0d60c68fc53060ae6dc04772dfae9cc1b9f756fd

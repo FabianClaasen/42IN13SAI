@@ -9,7 +9,6 @@
 #include "CompilerNode.h"
 #include "FunctionCaller.h"
 #include "LinkedList.h"
-#include "Log.h"
 
 #include "ParameterException.h"
 #include "MissingCompilerNodeException.h"
@@ -97,16 +96,12 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteDiscriminantOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteAbcOperation(CompilerNode compilerNode);
 
-<<<<<<< HEAD
 	std::shared_ptr<CompilerNode> ExecutePiConstant(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteEConstant(CompilerNode compilerNode);
-	
-	
+		
 	//return the output (for showing it in the IDE)
-	std::vector<std::string> getOutput() { return output; };
+	//std::vector<std::string> getOutput() { return output; };
 
-=======
->>>>>>> 0d60c68fc53060ae6dc04772dfae9cc1b9f756fd
 private:
 	SymbolTable* globalsSymboltable; // Globals symboltable
 	SymbolTable* currentSymbolTable; // User function symboltable
