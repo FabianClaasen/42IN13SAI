@@ -17,7 +17,8 @@ public:
 	void addOutput(std::string strOutput);
 	QString setOutputPrecision(QString str);
 	void clearOutput();
-
+    
+    void SetTheme(std::map<std::string, QString> colors);
 private:
 	QStringList output;
 	QStringListModel* listModel;

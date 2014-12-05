@@ -181,10 +181,11 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		}
 		else
 		{
+            Symbol sym = *identifierSymbol;
 			delete identifierSymbol;
             identifierSymbol = nullptr;
             //compiler->addException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
-            throw IdentifierException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
+            throw IdentifierException("An IdentifierException occured. The identifier: " + std::to_string(sym.GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
 		}
 	}
 
