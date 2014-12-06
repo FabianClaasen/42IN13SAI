@@ -230,6 +230,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 
 			completer->popup()->hide();
 			insertCompletion(text);
+			setSelectionInternalFunction(text);
 			return;
 		}
 		// for runtime behaviour
@@ -366,6 +367,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		{
 			QString text = index.data().toString();
 			insertCompletion(text);
+			setSelectionInternalFunction(text);
 		}
 		else
 			completer->complete(cr);
@@ -589,6 +591,47 @@ void CodeEditor::insertCompletion(const QString &text)
 	int extra = text.length() - completer->completionPrefix().length();
 	tc.insertText(text.right(extra));
 	setTextCursor(tc);
+}
+
+void CodeEditor::setSelectionInternalFunction(QString check_text)
+{
+	QString current_text = check_text;
+	QTextCursor current_cursor = textCursor();
+	int index_of_left = current_text.indexOf("(");
+	int index_of_right = current_text.indexOf(")");
+	if (current_text.contains("(") && current_text.contains(")"))
+	{
+		int index_of_pipe = 0;
+		if (current_text.contains("|"))
+			index_of_pipe = current_text.indexOf("|");
+
+		if (index_of_left + 1 != index_of_right)
+		{
+			int current_pos = current_text.count() - (index_of_left + 1);
+			std::cout << "current pos " << current_pos << std::endl;
+			std::cout << "current pipe " << index_of_pipe << std::endl;
+			std::cout << "current right " << index_of_right+1 << std::endl;
+			current_cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, current_pos);
+
+			//setTextCursor(current_cursor);
+			// Now select first param
+			int selection_pos;
+			if (index_of_pipe != 0)
+				selection_pos = (index_of_pipe) - (index_of_left + 1);
+			else
+				selection_pos = (index_of_right) - (index_of_left+1);
+
+			std::cout << selection_pos << std::endl;
+			current_cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, selection_pos);
+			setTextCursor(current_cursor);
+		}
+	}
+
+	/*int position = tmpCursor.positionInBlock() - 1;
+	QString close_parenthesis = ")";
+	int pos_close = line.indexOf(close_parenthesis, position) - position;
+	tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, pos_close);
+	setTextCursor(tmpCursor);*/
 }
 
 QString CodeEditor::textUnderCursor() const

@@ -68,6 +68,7 @@ public:
 		void checkRightParenthesis();
 		QString getSentenceFromLine();
 		void setCompletionPrefix(QString text);
+		void setSelectionInternalFunction(QString check_text);
 		void addSpecialIndent(bool isEnter, bool isBracket);
 		QRect getCompleterView();
 		QRect cr;
