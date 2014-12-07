@@ -192,13 +192,22 @@
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="Constant.cpp">
-      <Filter>Generated Files</Filter>	  
+      <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="ConsoleOutput.cpp">
       <Filter>Source Files\VirtualMachine</Filter>
     </ClCompile>
     <ClCompile Include="ExceptionOutput.cpp">
       <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_StopExecuteDialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_StopExecuteDialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="StopExecuteDialog.cpp">
+      <Filter>Source Files\Qt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +427,18 @@
     <CustomBuild Include="jsoncpp\json_valueiterator.inl">
       <Filter>Source Files\jsoncpp</Filter>
     </CustomBuild>
+    <CustomBuild Include="ConsoleOutput.h">
+      <Filter>Header Files\VirtualMachine</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExceptionOutput.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Constant.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="StopExecuteDialog.h">
+      <Filter>Header Files\Qt</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -485,16 +506,5 @@
     <Filter Include="Source Files\jsoncpp">
       <UniqueIdentifier>{95af4f7e-a7ba-48ce-9847-ab6d1c57e586}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Constant.h">
-      <Filter>Generated Files</Filter>
-	</ClInclude>
-    <ClInclude Include="ConsoleOutput.h">
-      <Filter>Header Files\VirtualMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="ExceptionOutput.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

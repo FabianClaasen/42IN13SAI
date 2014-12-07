@@ -2,6 +2,7 @@
 
 #include <boost/iostreams/concepts.hpp> 
 #include <boost/iostreams/stream_buffer.hpp>
+#include <boost/thread.hpp>
 #include <iostream>
 #include <QObject>
 #include <QtWidgets>
@@ -17,6 +18,7 @@
 #include "FileIO.h"
 #include "ConsoleOutput.h"
 #include "ExceptionOutput.h"
+#include "StopExecuteDialog.h"
 
 class ConsoleOutput;
 class MainController : public QObject
@@ -34,11 +36,14 @@ class MainController : public QObject
 		// Variables
 		MainWindow mainWindow;
 		std::vector<std::shared_ptr<QFile>> currentFiles;
+		boost::thread* workerThread;
+		StopExecuteDialog* dialog;
 		QString output;
 
 		// Functions
 		std::string GetFileFromStream();
 		void Setup();
+		void ExecuteWorker();
 
 	private slots:
 		void Execute();
@@ -49,4 +54,6 @@ class MainController : public QObject
 		void SaveAsFile();
 		void Quit();
 		void CloseTab(int index);
+		void StopWorkerThread();
+		void HideDialog();
 };

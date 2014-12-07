@@ -1,4 +1,5 @@
 #include "OutputWindow.h"
+#include <iostream>
 
 OutputWindow::OutputWindow(QWidget *parent) : QListView(parent)
 {

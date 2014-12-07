@@ -41,10 +41,36 @@ void MainController::Setup()
 
 void MainController::Execute()
 {
-	//Clear the output windows
+	//Clear the output windows -- Temporary -- Not completed multithreading...
 	mainWindow.clearOutput();
 	mainWindow.clearExceptions();
+	ExecuteWorker();
 
+
+	// Multithreading code
+	//
+	//if (workerThread == nullptr)
+	//{
+	//	//Clear the output windows
+	//	mainWindow.clearOutput();
+	//	mainWindow.clearExceptions();
+
+	//	// Run the Executer
+	//	workerThread = new boost::thread(&MainController::ExecuteWorker, this);
+	//}
+	//else
+	//{
+	//	if (dialog == nullptr)
+	//		dialog = new StopExecuteDialog();
+
+	//	connect(dialog->GetCancelButton(), SIGNAL(released()), this, SLOT(HideDialog()));
+	//	connect(dialog->GetOkButton(), SIGNAL(released()), this, SLOT(StopWorkerThread()));
+	//	dialog->show();
+	//}
+}
+
+void MainController::ExecuteWorker()
+{
 	// Excute typed code
 	// Get the file from the stream and convert to std::string
 	std::string input(GetFileFromStream());
@@ -68,7 +94,7 @@ void MainController::Execute()
 		return;
 	}
 
-    QString text;
+	QString text;
 
 	// Run the compiler
 	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
@@ -104,7 +130,7 @@ void MainController::Execute()
 		bio::stream_buffer<ConsoleOutput> sb;
 		sb.open(ConsoleOutput(this));
 		std::clog.rdbuf(&sb);
-		
+
 		// Execute VM
 		virtual_machine.ExecuteCode();
 
@@ -120,6 +146,30 @@ void MainController::Execute()
 		mainWindow.addException(e.what());
 		return;
 	}
+
+	// Multithreading code
+	//
+	// Remove everything and reset the workerthread
+	//StopWorkerThread();
+}
+
+void MainController::StopWorkerThread()
+{
+	if (workerThread != nullptr)
+	{
+		workerThread->interrupt();
+		workerThread->join();
+		delete(workerThread);
+		workerThread = nullptr;
+	}
+
+	HideDialog();
+}
+
+void MainController::HideDialog()
+{
+	if (dialog != nullptr)
+		dialog->hide();
 }
 
 void MainController::WriteException(const char* output, std::streamsize size)
