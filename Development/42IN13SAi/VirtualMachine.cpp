@@ -988,8 +988,35 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 	return nullptr;
 }
 
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFibonacciOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
+	// Parse the parameters to a float for mathmatic operation
+	float num1 = atof(param1->GetValue().c_str());
+	int int1 = num1;
 
+	if (num1 != int1)
+		throw UnexpectedTypeException("An UnexpectedTypeException occured in function 'fib'. Expected integer parameter.");
+
+	int a = 1;
+	int b = 0;
+
+	int fib = 0;
+
+	for (int i = 0; i < int1; ++i) {
+		b = fib;
+		fib = a + b;
+		a = b;
+	}
+
+	float output = fib;
+
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
 #pragma endregion ComplexMath
 
 #pragma region Physics
