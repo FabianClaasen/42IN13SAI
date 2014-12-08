@@ -3,7 +3,7 @@ float
 func
 if
 Main
-pow(x | y)
+pow(x|y)
 prnt(x)
 sin(x)
 stop()

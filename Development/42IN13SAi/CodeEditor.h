@@ -59,6 +59,7 @@ public:
 		QString textUnderCursor() const;
 		QCompleter* completer;
 		QTextEdit* textEdit;
+		QString completion_text;
 
 		int lineNumberAtPos(int pos);
         QString getLine(int lineNumber) const;
@@ -71,6 +72,8 @@ public:
 		void setSelectionInternalFunction(QString check_text);
 		void addSpecialIndent(bool isEnter, bool isBracket);
 		QRect getCompleterView();
+		QString getLastCompletion();
+		void setLastCompletion(QString text);
 		QRect cr;
 		QAbstractItemModel* modelFromFile(const QString& fileName);
 

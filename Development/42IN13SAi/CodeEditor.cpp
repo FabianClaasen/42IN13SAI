@@ -317,6 +317,17 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 				}
 				if (key == Qt::Key_Tab && line.contains("(") && line.contains(")") && !line.contains("func"))
 				{
+					if (line.contains("|"))
+					{
+						tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
+						int position = tmpCursor.positionInBlock() - 1;
+						QString close_parenthesis = ")";
+						int pos_close = line.indexOf(close_parenthesis, position) - position;
+						tmpCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, pos_close - 1);
+						setTextCursor(tmpCursor);
+						return;
+					}
+
 					int position = tmpCursor.positionInBlock() - 1;
 					QString close_parenthesis = ")";
 					int pos_close = line.indexOf(close_parenthesis, position) - position;
@@ -582,6 +593,16 @@ QRect CodeEditor::getCompleterView()
 	return cr;
 }
 
+QString CodeEditor::getLastCompletion()
+{
+	return completion_text;
+}
+
+void CodeEditor::setLastCompletion(QString text)
+{
+	completion_text = text;
+}
+
 void CodeEditor::insertCompletion(const QString &text)
 {
 	if (completer->widget() != this)
@@ -591,6 +612,8 @@ void CodeEditor::insertCompletion(const QString &text)
 	int extra = text.length() - completer->completionPrefix().length();
 	tc.insertText(text.right(extra));
 	setTextCursor(tc);
+
+	setLastCompletion(text);
 }
 
 void CodeEditor::setSelectionInternalFunction(QString check_text)
@@ -608,12 +631,7 @@ void CodeEditor::setSelectionInternalFunction(QString check_text)
 		if (index_of_left + 1 != index_of_right)
 		{
 			int current_pos = current_text.count() - (index_of_left + 1);
-			std::cout << "current pos " << current_pos << std::endl;
-			std::cout << "current pipe " << index_of_pipe << std::endl;
-			std::cout << "current right " << index_of_right+1 << std::endl;
 			current_cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, current_pos);
-
-			//setTextCursor(current_cursor);
 			// Now select first param
 			int selection_pos;
 			if (index_of_pipe != 0)
@@ -621,17 +639,10 @@ void CodeEditor::setSelectionInternalFunction(QString check_text)
 			else
 				selection_pos = (index_of_right) - (index_of_left+1);
 
-			std::cout << selection_pos << std::endl;
 			current_cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, selection_pos);
 			setTextCursor(current_cursor);
 		}
 	}
-
-	/*int position = tmpCursor.positionInBlock() - 1;
-	QString close_parenthesis = ")";
-	int pos_close = line.indexOf(close_parenthesis, position) - position;
-	tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, pos_close);
-	setTextCursor(tmpCursor);*/
 }
 
 QString CodeEditor::textUnderCursor() const

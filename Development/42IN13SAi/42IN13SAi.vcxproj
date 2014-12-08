@@ -1428,7 +1428,7 @@ xcopy "$(ProjectDir)Resources\words.txt" "$(TargetDir)\*" /c /r /y</Command>
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" Qt5Version_x0020_Win32="qt5" />
+      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
