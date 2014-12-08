@@ -55,8 +55,7 @@ void Tokenizer::Tokenize()
 							partner = temp;
 					}
 					catch (const PartnerNotFoundException &e) {
-						// Catch the exception and rethrow
-						throw;
+                        std::clog << e.what() << std::endl;
 					}
 				}
 
@@ -82,20 +81,23 @@ void Tokenizer::Tokenize()
 			}
 		}
 
-		// Throw an exception if the target couldnt be parsed as a token.
-		if (!match)
-		{
-			throw ParseException("Unrecognized character '" + lineRemaining.substr(0) + "' on line " + std::to_string(lineNumber) + " at position " + std::to_string(linePosition));
-		}
+        try {
+            // Throw an exception if the target couldnt be parsed as a token.
+            if (!match)
+            {
+                throw ParseException("Unrecognized character '" + lineRemaining.substr(0, 1) + "' on line " + std::to_string(lineNumber) + " at position " + std::to_string(linePosition));
+            }
+        }
+        catch (const ParseException &e)
+        {
+            // Print the exception and continue tokenizing on next line
+            std::clog << e.what() << std::endl;
+            NextLine();
+        }
 	}
 
-	try {
-		CheckClosingPartners();
-	}
-	catch (const PartnerNotFoundException &e) {
-		// Catch the exception and rethrow
-		throw;
-	}
+	
+    CheckClosingPartners();
 }
 
 
@@ -110,8 +112,8 @@ void Tokenizer::CheckClosingPartners()
 				TryFindPartner(t);
 			}
 			catch (const PartnerNotFoundException &e) {
-				// Catch the exception and rethrow
-				throw;
+                // Print the exception and continue searching
+                std::clog << e.what() << std::endl;
 			}
 		}
 	}
@@ -161,7 +163,7 @@ void Tokenizer::TryFindPartner(std::shared_ptr<Token> token)
 			std::vector<std::shared_ptr<Token>>::iterator tokenIt;
 			for (tokenIt = tokenVector.begin(); tokenIt != tokenVector.end(); ++tokenIt)
 			{
-                if ((*tokenIt)->Type == tokenPartner.partner && (*tokenIt)->Level == token->Level)
+                if ((*tokenIt)->Type == tokenPartner.token && (*tokenIt)->Level == token->Level)
                     // Partner found
                     return ;
 			}
