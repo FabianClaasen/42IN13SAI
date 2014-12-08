@@ -12,7 +12,9 @@ INCLUDEPATH += ./usr/lib/include/boost \
     ./GeneratedFiles/Release
 LIBS += -L./usr/lib -lboost_system \
     -L./usr/lib -lboost_filesystem \
-    -L./usr/lib -lboost_regex
+    -L./usr/lib -lboost_regex \
+    -L./usr/lib -lboost_streams \
+    -L./usr/lib -lboost_thread
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/release
 OBJECTS_DIR += release
