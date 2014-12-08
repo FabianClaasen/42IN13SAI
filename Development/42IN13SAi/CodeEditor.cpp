@@ -317,20 +317,31 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 				}
 				if (key == Qt::Key_Tab && line.contains("(") && line.contains(")") && !line.contains("func"))
 				{
-					if (line.contains("|"))
+					QString seperator = "|";
+					QString close_parenthesis = ")";
+					int cur_pos = tmpCursor.positionInBlock() - 1;
+					int pos_close = line.indexOf(close_parenthesis, cur_pos) - cur_pos;
+					int pos_seperator = line.indexOf(seperator, cur_pos) - cur_pos;
+
+					tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, pos_seperator);
+					cur_pos += pos_seperator;
+					int newest_pos = line.indexOf(seperator, cur_pos+1) - cur_pos;
+					pos_seperator = newest_pos;
+
+					if (pos_seperator > 0)
 					{
-						tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
-						int position = tmpCursor.positionInBlock() - 1;
-						QString close_parenthesis = ")";
-						int pos_close = line.indexOf(close_parenthesis, position) - position;
-						tmpCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, pos_close - 1);
+						tmpCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, newest_pos-1);
+						setTextCursor(tmpCursor);
+						return;
+					}	
+					else
+					{
+						int new_pos_close = line.indexOf(close_parenthesis, cur_pos) - cur_pos;
+						tmpCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, new_pos_close - 1);
 						setTextCursor(tmpCursor);
 						return;
 					}
 
-					int position = tmpCursor.positionInBlock() - 1;
-					QString close_parenthesis = ")";
-					int pos_close = line.indexOf(close_parenthesis, position) - position;
 					tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, pos_close);
 					setTextCursor(tmpCursor);
 					return;
@@ -593,16 +604,6 @@ QRect CodeEditor::getCompleterView()
 	return cr;
 }
 
-QString CodeEditor::getLastCompletion()
-{
-	return completion_text;
-}
-
-void CodeEditor::setLastCompletion(QString text)
-{
-	completion_text = text;
-}
-
 void CodeEditor::insertCompletion(const QString &text)
 {
 	if (completer->widget() != this)
@@ -612,8 +613,6 @@ void CodeEditor::insertCompletion(const QString &text)
 	int extra = text.length() - completer->completionPrefix().length();
 	tc.insertText(text.right(extra));
 	setTextCursor(tc);
-
-	setLastCompletion(text);
 }
 
 void CodeEditor::setSelectionInternalFunction(QString check_text)

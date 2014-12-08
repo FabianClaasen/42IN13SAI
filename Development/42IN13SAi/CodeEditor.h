@@ -14,6 +14,7 @@
 #include <qstringlistmodel.h>
 #include <qscrollbar.h>
 #include <qabstractitemmodel.h>
+#include <qvector.h>
 
 class QCompleter;
 class CodeEditor : public QPlainTextEdit
@@ -72,8 +73,6 @@ public:
 		void setSelectionInternalFunction(QString check_text);
 		void addSpecialIndent(bool isEnter, bool isBracket);
 		QRect getCompleterView();
-		QString getLastCompletion();
-		void setLastCompletion(QString text);
 		QRect cr;
 		QAbstractItemModel* modelFromFile(const QString& fileName);
 
