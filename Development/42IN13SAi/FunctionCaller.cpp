@@ -87,7 +87,9 @@ void FunctionCaller::fillFunctionMap()
 
 	functions.insert(functionMap::value_type("$gcd", &VirtualMachine::ExecuteGcdOperation));
 	functions.insert(functionMap::value_type("$dis", &VirtualMachine::ExecuteDiscriminantOperation));
-	functions.insert(functionMap::value_type("$abc", &VirtualMachine::ExecuteAbcOperation));
+	functions.insert(functionMap::value_type("$abc", &VirtualMachine::ExecuteAbcOperation)); 
+	functions.insert(functionMap::value_type("$fib", &VirtualMachine::ExecuteFibonacciOperation));
+	
 
 	// Physics functions
 	functions.insert(functionMap::value_type("$dist", &VirtualMachine::ExecuteDistanceOperation));

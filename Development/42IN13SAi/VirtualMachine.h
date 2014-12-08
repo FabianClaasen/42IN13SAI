@@ -95,13 +95,14 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteGcdOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteDiscriminantOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteAbcOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteFibonacciOperation(CompilerNode compilerNode);
 
 	std::shared_ptr<CompilerNode> ExecuteDistanceOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteVelocityOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteTimeOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteAverageVelocityOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteAccelerationOperation(CompilerNode compilerNode);
-
+	
 	std::shared_ptr<CompilerNode> ExecutePiConstant(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteEConstant(CompilerNode compilerNode);
 	

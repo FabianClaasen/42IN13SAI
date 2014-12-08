@@ -237,6 +237,7 @@ bool Compiler::IsInternalFunction(MyTokenType type)
 		case MyTokenType::Log:
 		case MyTokenType::Modulo:
 		case MyTokenType::Gcd:
+		case MyTokenType::Fibonacci:
 		case MyTokenType::Distance:
 		case MyTokenType::Velocity:
 		case MyTokenType::Time:
