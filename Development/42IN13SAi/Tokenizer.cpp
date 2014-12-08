@@ -138,15 +138,10 @@ std::shared_ptr<Token> Tokenizer::FindPartner(MyTokenType &type, int level)
             }
         }
     }
-    char buffer[1024];
-    
-#ifdef _WIN32
-	_snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(type).c_str(), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
-#else
-	snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(type).c_str(), std::to_string(lineNumber).c_str(), std::to_string(linePosition).c_str());
-#endif
-    
-	throw PartnerNotFoundException(buffer);
+
+	throw PartnerNotFoundException("Partner not found for " + TokenToString(type) +
+                                   " on line " + std::to_string(lineNumber) +
+                                   " at position " + std::to_string(linePosition));
 }
 
 // Try to find a partner for the current token.
@@ -171,15 +166,9 @@ void Tokenizer::TryFindPartner(std::shared_ptr<Token> token)
 	}
 
 	// Didn't find a partner:
-	char buffer[1024];
-
-#ifdef _WIN32
-	_snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(token->Type).c_str(), std::to_string(token->LineNumber).c_str(), std::to_string(token->LinePosition).c_str());
-#else
-	snprintf(buffer, sizeof(buffer), "Partner not found for %s on line %s at position %s", TokenToString(token->Type).c_str(), std::to_string(token->LineNumber).c_str(), std::to_string(token->LinePosition).c_str());
-#endif
-
-	throw PartnerNotFoundException(buffer);
+	throw PartnerNotFoundException("Partner not found for " + TokenToString(token->Type) +
+                                   " on line " + std::to_string(token->LineNumber) +
+                                   " at position " + std::to_string(token->LinePosition));
 }
 
 // Check if the current token is able to have a partner
