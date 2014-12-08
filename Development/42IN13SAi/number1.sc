@@ -1,5 +1,5 @@
+var x = 1.3e20;
 func Main()
 [
-	var x = 13;
-   prnt(x+2);
+	prnt(x);
 ]

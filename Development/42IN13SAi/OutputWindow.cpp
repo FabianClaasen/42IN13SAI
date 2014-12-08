@@ -34,19 +34,31 @@ void OutputWindow::addOutput(std::string strOutput)
 
 QString OutputWindow::setOutputPrecision(QString str)
 {
-    // parse the string
-    float to_format = ::atof(str.toUtf8());
-    
-    // Get the size needed for the float digits (copied from internal to_string calculation)
-    const int max_digits = std::numeric_limits<float>::max_exponent10 + 20;
-    char buffer[max_digits];
+	std::vector<int> charsToRemove;
+	for (int i = 0; i < str.count(); i++)
+	{
+		if (str[i] == '.')
+		{
+			int k = i + 1;
+			for (int j = k; j < str.count(); j++)
+			{
+				if (str[j] == '0' || str[j] == '\n')
+					charsToRemove.push_back(j);
+				else
+					charsToRemove.clear();
+			}
+		}
+	}
 
-#ifndef _WIN32
-    snprintf(buffer, sizeof(buffer), "%g", to_format);
-#else
-    _snprintf(buffer, sizeof(buffer), "%g", to_format);
-#endif
-	return QString::fromUtf8(buffer);
+	for (int s = charsToRemove.size() - 1; s >= 0; s--)
+	{
+		str = str.remove(charsToRemove[s], 1);
+	}
+
+	if (str[str.count() - 1] == '.')
+		str = str.remove(str.count() - 1, 1);
+
+	return str;
 }
 
 void OutputWindow::clearOutput()
