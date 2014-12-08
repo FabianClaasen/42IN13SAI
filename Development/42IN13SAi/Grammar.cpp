@@ -64,8 +64,9 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("\\bfloat\\b", MyTokenType::FloatReturn));
     
     // types
-    definitions.push_back(TokenDefinition("[0-9]{1,12}(?:\\.[0-9]{1,12}|(?:e|E)-?[1-9]{1,3})?", MyTokenType::Float));
-    
+    //definitions.push_back(TokenDefinition("[0-9]{1,12}(?:\\.[0-9]{1,12}|(?:e|E)-?[1-9]{1,3})?", MyTokenType::Float));
+	definitions.push_back(TokenDefinition("[+-]?(?=[.]?[0-9])[0-9]*(?:[.][0-9]*)?(?:[Ee][+-]?[0-9]+)?", MyTokenType::Float));
+
     // comparators
     definitions.push_back(TokenDefinition(">=", MyTokenType::GreaterOrEqThan));
     definitions.push_back(TokenDefinition("<=", MyTokenType::LowerOrEqThan));
