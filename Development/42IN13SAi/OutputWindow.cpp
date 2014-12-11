@@ -24,9 +24,21 @@ void OutputWindow::SetTheme(std::map<std::string, QString> colors)
 
 void OutputWindow::addOutput(std::string strOutput)
 {
+	bool is_number = true;
+	try {
+		std::stof(strOutput);
+	}
+	catch (const std::exception& e)
+	{
+		is_number = false;
+	}
+
 	QString str = QString::fromUtf8(strOutput.c_str());
 	// Algoritm for output precision
-	str = setOutputPrecision(str);
+	if (is_number)
+	{
+		str = setOutputPrecision(str);
+	}
 	output << str;
 
 	listModel->setStringList(output);
