@@ -1,5 +1,7 @@
-var x = 1+1;
+#fsdsdffdsdfsfdsdfs
 func Main()
 [
-	prnt(x+213112.2);
+	#dnjdsnffskdadsjkdsnfdsajkdfsndnfdaadfs
+   var x = 3;
+   prnt(x); #sdsdffsdsdf
 ]

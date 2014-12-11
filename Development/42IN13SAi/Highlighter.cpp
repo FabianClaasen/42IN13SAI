@@ -45,10 +45,10 @@ Highlighter::Highlighter(std::map<std::string, QColor> colors, QTextDocument *pa
             case MyTokenType::Float:
                 setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["variable_types"]);
                 break;
+			case MyTokenType::Comment:
+				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["comments"]);
+				break;
             default:
-                
-                break;
-
 				break;
 		}
 	}

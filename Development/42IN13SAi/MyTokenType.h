@@ -44,6 +44,7 @@ enum class MyTokenType : int {
     OpenBracket,
     CloseBracket,
     Comparator,
+	Comment,
 
 	// Return types
 	Void,
@@ -76,6 +77,7 @@ enum class MyTokenType : int {
 	Discriminant,
 	AbcFormula,
 	Fibonacci,
+
 	// Physics functions
 	Distance,
 	Velocity,

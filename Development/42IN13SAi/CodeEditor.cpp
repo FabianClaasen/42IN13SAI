@@ -402,7 +402,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 		for (int i = 0; i < count; i++)
 		{
 			QString key = completer->completionModel()->index(i, 0).data().toString();
-			if (key.startsWith(completionPrefix, Qt::CaseSensitive))
+			if (key.startsWith(completionPrefix, Qt::CaseInsensitive))
 			{
 				QModelIndex new_index = completer->completionModel()->index(i, 0);
 				completer->popup()->setCurrentIndex(new_index);
@@ -581,7 +581,7 @@ void CodeEditor::setCompleter(QCompleter *completerNew)
 
 	completer->setWidget(this);
 	completer->setCompletionMode(QCompleter::PopupCompletion);
-	completer->setCaseSensitivity(Qt::CaseSensitive);
+	completer->setCaseSensitivity(Qt::CaseInsensitive);
 
 	QObject::connect(completer, SIGNAL(activated(QString)),
 		this, SLOT(insertCompletion(QString)));
@@ -612,8 +612,11 @@ void CodeEditor::insertCompletion(const QString &text)
 		return;
 
 	QTextCursor tc = textCursor();
-	int extra = text.length() - completer->completionPrefix().length();
-	tc.insertText(text.right(extra));
+	for (int count = 0; count < completer->completionPrefix().length(); count++)
+		tc.deletePreviousChar();
+
+	//int extra = text.length() - completer->completionPrefix().length();
+	tc.insertText(text);
 	setTextCursor(tc);
 }
 

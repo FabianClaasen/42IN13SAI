@@ -41,6 +41,13 @@ void Tokenizer::Tokenize()
 			{
 				match = true;
 
+				if (definition.myTokenType == MyTokenType::Comment)
+				{
+					lineRemaining = "";
+					NextLine();
+					break;
+				}
+				
 				// Check if the level should be raised
 				if (definition.myTokenType == MyTokenType::OpenBracket || definition.myTokenType == MyTokenType::OpenCurlyBracket || definition.myTokenType == MyTokenType::OpenMethod)
 					level++;

@@ -96,7 +96,8 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("\\(", MyTokenType::OpenBracket));
     definitions.push_back(TokenDefinition("\\)", MyTokenType::CloseBracket));
 
-    definitions.push_back(TokenDefinition("[#!@$%&*\"\\.]", MyTokenType::Special));
+    definitions.push_back(TokenDefinition("[!@$%&*\"\\.]", MyTokenType::Special));
+	definitions.push_back(TokenDefinition("\\#(.*)", MyTokenType::Comment));
     definitions.push_back(TokenDefinition("_?[a-zA-Z][a-zA-Z0-9_]*", MyTokenType::Identifier));
     
     definitions.push_back(TokenDefinition("\\;", MyTokenType::EOL));

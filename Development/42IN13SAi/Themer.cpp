@@ -178,6 +178,11 @@ void Themer::SetHighlighterStyles(Json::Value highlighterStyles)
     Json::Value variableColors = highlighterStyles["variable_types"];
     QColor variable_types(variableColors[0].asInt(), variableColors[1].asInt(), variableColors[2].asInt());
     syntaxColors.insert(std::map<std::string, QColor>::value_type("variable_types", variable_types));
+
+	// Comment colors
+	Json::Value commentColors = highlighterStyles["comments"];
+	QColor comments(commentColors[0].asInt(), commentColors[1].asInt(), commentColors[2].asInt());
+	syntaxColors.insert(std::map<std::string, QColor>::value_type("comments", comments));
 }
 
 void Themer::SetWindow()
