@@ -962,27 +962,37 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 	float numA = atof(param1->GetValue().c_str());
 	float numB = atof(param2->GetValue().c_str());
 	float numC = atof(param3->GetValue().c_str());
-	float disc = std::pow(numB, 2) - (4 * numA * numC);
-	float x1, x2;
-	std::string abcOutput = "The discriminant is " + std::to_string(disc) + ".\n";
-	if (disc < 0)
+
+	if (numA == 0)
 	{
-		abcOutput = abcOutput + "There is no real root because the discriminant is negative.";
+		throw UnexpectedTypeException("An UnexpectedTypeException occured in function 'abc'. 'A' cannot be 0");
 	}
-	if (disc == 0)
+	else
 	{
-		x1 = -(numB / (2 * numA));
-		abcOutput = abcOutput + "There is one real root because the discriminant is zero.\nThe root is " + std::to_string(x1) + ".";
+		float disc = std::pow(numB, 2) - (4 * numA * numC);
+		float x1, x2;
+		std::string abcOutput = "The discriminant is " + std::to_string(disc) + ".\n";
+		if (disc < 0)
+		{
+			abcOutput = abcOutput + "There is no real root because the discriminant is negative.";
+		}
+		if (disc == 0)
+		{
+			x1 = (-numB / (2 * numA));
+			if (x1 == -0)
+				x1 = 0;
+			abcOutput = abcOutput + "There is one real root because the discriminant is zero.\nThe root is " + std::to_string(x1) + ".";
+		}
+		else if (disc > 0)
+		{
+			x1 = (-numB + std::sqrt(disc)) / (2 * numA);
+			x2 = (-numB - std::sqrt(disc)) / (2 * numA);
+			abcOutput = abcOutput + "There are two real roots because the discriminant is positive.\nThe roots are " + std::to_string(x1) + " and " + std::to_string(x2) + ".";
+		}
+
+		// Print value
+		std::clog << abcOutput << std::endl;
 	}
-	else if (disc > 0)
-	{
-		x1 = (-numB + std::sqrt(disc)) / (2 * numA);
-		x2 = (-numB - std::sqrt(disc)) / (2 * numA);
-		abcOutput = abcOutput + "There are two real roots because the discriminant is positive.\nThe roots are " + std::to_string(x1) + " and " + std::to_string(x2) + ".";
-	}
-	
-	// Print value
-	std::clog << abcOutput << std::endl;
 
 	// Create a new value compilernode to return
 	return nullptr;
