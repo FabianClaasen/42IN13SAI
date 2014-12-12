@@ -12,6 +12,16 @@ VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subrou
 	currentSubroutine = nullptr;
 }
 
+void VirtualMachine::run()
+{
+	ExecuteCode();
+}
+
+void VirtualMachine::quit()
+{
+	is_running = false;
+}
+
 VirtualMachine::VirtualMachine(const VirtualMachine &other) : globalsSymboltable(other.globalsSymboltable), currentSubroutine(other.currentSubroutine), currentSymbolTable(other.currentSymbolTable), subroutineTable(other.subroutineTable), globalsList(other.globalsList)
 {
 	function_caller = std::unique_ptr<FunctionCaller>(new FunctionCaller(this));
@@ -47,6 +57,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::GetNext(std::shared_ptr<LinkedList
 
 void VirtualMachine::ExecuteCode()
 {
+	is_running = true;
+
 	// Only when there are compilernodes for global vars
 	if (globalsList->size() > 0)
 	{
@@ -58,7 +70,7 @@ void VirtualMachine::ExecuteCode()
 			std::string function_call = node->GetExpression();
 			function_caller->Call(function_call, *node);
 
-		} while (node != globalsList->GetTailData());
+		} while (node != globalsList->GetTailData() && is_running);
 	}
 	
 	// Find main subroutine
@@ -72,6 +84,9 @@ void VirtualMachine::ExecuteCode()
 	
 	// Get the main nodes and execute them
 	ExecuteNodes(std::shared_ptr<LinkedList>(currentSubroutine->GetCompilerNodeCollection()));
+
+	// Let the main thread know the thread is finished
+	emit Finished();
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::shared_ptr<LinkedList> nodes)
@@ -112,7 +127,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::shared_ptr<Linke
 					function_caller->Call(function_call, *node);
 			}
 
-		} while (node != std::shared_ptr<CompilerNode>());
+		} while (node != std::shared_ptr<CompilerNode>() && is_running);
 	}
 	
 	// Erase the LinkedList
@@ -293,7 +308,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePrint(CompilerNode compiler
 	std::string valueToPrint = param1->GetValue();
 
 	//Add the value to print to the output
-	std::clog << valueToPrint << std::endl;
+	//std::clog << valueToPrint << std::endl;
+	emit PrintOutput(QString::fromUtf8(valueToPrint.c_str()));
 
 	return nullptr;
 }

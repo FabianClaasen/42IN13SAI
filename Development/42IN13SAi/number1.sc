@@ -1,7 +1,10 @@
-#fsdsdffdsdfsfdsdfs
 func Main()
 [
-	#dnjdsnffskdadsjkdsnfdsajkdfsndnfdaadfs
-   var x = 3;
-   prnt(x); #sdsdffsdsdf
+	var x = 0;
+   
+   while( x< 12)
+   [
+   	prnt(x);
+      x++;
+   ]
 ]

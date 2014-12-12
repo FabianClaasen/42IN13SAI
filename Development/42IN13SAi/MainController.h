@@ -16,7 +16,6 @@
 #include "Compiler.h"
 #include "VirtualMachine.h"
 #include "FileIO.h"
-#include "ConsoleOutput.h"
 #include "ExceptionOutput.h"
 #include "StopExecuteDialog.h"
 
@@ -29,12 +28,15 @@ class MainController : public QObject
 		MainController();
 		virtual ~MainController();
 
-		void WriteOutput(const char* s, std::streamsize size);
+		//void WriteOutput(const char* s, std::streamsize size);
 		void WriteException(const char* output, std::streamsize size);
 
 	private:
 		// Variables
 		MainWindow mainWindow;
+		std::shared_ptr<TokenizerController> tokenizer_controller;
+		std::shared_ptr<Compiler> compiler;
+		std::shared_ptr<VirtualMachine> virtual_machine;
 		std::vector<std::shared_ptr<QFile>> currentFiles;
 		boost::thread* workerThread;
 		StopExecuteDialog* dialog;
@@ -43,7 +45,6 @@ class MainController : public QObject
 		// Functions
 		std::string GetFileFromStream();
 		void Setup();
-		void ExecuteWorker();
 
 	private slots:
 		void Execute();
@@ -54,6 +55,10 @@ class MainController : public QObject
 		void SaveAsFile();
 		void Quit();
 		void CloseTab(int index);
-		void StopWorkerThread();
 		void HideDialog();
+		void StopVirtualMachine();
+
+	public slots:
+		void PrintOutput(QString output);
+		void VirtualMachineFinished();
 };

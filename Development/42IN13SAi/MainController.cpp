@@ -41,129 +41,112 @@ void MainController::Setup()
 
 void MainController::Execute()
 {
-	//Clear the output windows -- Temporary -- Not completed multithreading...
-	mainWindow.clearOutput();
-	mainWindow.clearExceptions();
-	ExecuteWorker();
-
-
 	// Multithreading code
-	//
-	//if (workerThread == nullptr)
-	//{
-	//	//Clear the output windows
-	//	mainWindow.clearOutput();
-	//	mainWindow.clearExceptions();
+	if (virtual_machine == nullptr)
+	{
+		//Clear the output windows
+		mainWindow.clearOutput();
+		mainWindow.clearExceptions();
 
-	//	// Run the Executer
-	//	workerThread = new boost::thread(&MainController::ExecuteWorker, this);
-	//}
-	//else
-	//{
-	//	if (dialog == nullptr)
-	//		dialog = new StopExecuteDialog();
+		// Excute typed code
+		// Get the file from the stream and convert to std::string
+		std::string input(GetFileFromStream());
+		tokenizer_controller = std::make_shared<TokenizerController>(input);
 
-	//	connect(dialog->GetCancelButton(), SIGNAL(released()), this, SLOT(HideDialog()));
-	//	connect(dialog->GetOkButton(), SIGNAL(released()), this, SLOT(StopWorkerThread()));
-	//	dialog->show();
-	//}
+		try
+		{
+			// Setup output buffer
+			bio::stream_buffer<ExceptionOutput> sb;
+			sb.open(ExceptionOutput(this));
+			std::clog.rdbuf(&sb);
+
+			// Tokenize
+			tokenizer_controller->Tokenize();
+		}
+		catch (const std::exception& e)
+		{
+			mainWindow.addException(e.what());
+			return;
+		}
+
+		// Run the compiler
+		compiler = std::make_shared<Compiler>(tokenizer_controller->GetCompilerTokens());
+
+		try
+		{
+			// Setup output buffer
+			bio::stream_buffer<ExceptionOutput> sb;
+			sb.open(ExceptionOutput(this));
+			std::clog.rdbuf(&sb);
+
+			// Compile
+			compiler->Compile();
+		}
+		catch (const std::exception& e)
+		{
+			mainWindow.addException(e.what());
+			return;
+		}
+
+		// Run the virtual machine with the compilernodes
+		std::list<std::shared_ptr<CompilerNode>> nodesList = compiler->GetCompilerNodes();
+		std::shared_ptr<LinkedList> nodesLinkedList = std::make_shared<LinkedList>(nodesList);
+
+		virtual_machine = std::make_shared<VirtualMachine>(compiler->GetSymbolTable(), compiler->GetSubroutineTable(), nodesLinkedList);
+		connect(virtual_machine.get(), &VirtualMachine::PrintOutput, this, &MainController::PrintOutput);
+		connect(virtual_machine.get(), &VirtualMachine::Finished, this, &MainController::VirtualMachineFinished);
+
+		try
+		{
+			// Create the log files directory if it doesn't exists
+			if (!QDir("Log files").exists())
+				QDir().mkdir("Log files");
+
+			// Execute VM
+			virtual_machine->start();
+			mainWindow.CodeIsExecuting(true);
+		}
+		catch (const std::exception& e)
+		{
+			mainWindow.addException(e.what());
+			return;
+		}
+	}
+	else
+	{
+		if (dialog == nullptr)
+			dialog = new StopExecuteDialog();
+
+		connect(dialog->GetCancelButton(), SIGNAL(released()), this, SLOT(HideDialog()));
+		connect(dialog->GetOkButton(), SIGNAL(released()), this, SLOT(StopVirtualMachine()));
+		dialog->show();
+	}
 }
 
-void MainController::ExecuteWorker()
+void MainController::PrintOutput(QString output)
 {
-	// Excute typed code
-	// Get the file from the stream and convert to std::string
-	std::string input(GetFileFromStream());
-
-	TokenizerController *tokenizer_controller = new TokenizerController(input);
-
-	try
-	{
-		// Setup output buffer
-		bio::stream_buffer<ExceptionOutput> sb;
-		sb.open(ExceptionOutput(this));
-		std::clog.rdbuf(&sb);
-
-		// Tokenize
-		tokenizer_controller->Tokenize();
-	}
-	catch (const std::exception& e)
-	{
-		delete(tokenizer_controller);
-		mainWindow.addException(e.what());
-		return;
-	}
-
-	QString text;
-
-	// Run the compiler
-	Compiler compiler = Compiler(tokenizer_controller->GetCompilerTokens());
-
-	try
-	{
-		// Setup output buffer
-		bio::stream_buffer<ExceptionOutput> sb;
-		sb.open(ExceptionOutput(this));
-		std::clog.rdbuf(&sb);
-
-		// Compile
-		compiler.Compile();
-	}
-	catch (const std::exception& e)
-	{
-		delete(tokenizer_controller);
-		mainWindow.addException(e.what());
-		return;
-	}
-
-	// Delete the tokenizer controller
-	delete(tokenizer_controller);
-
-	// Run the virtual machine with the compilernodes
-	std::list<std::shared_ptr<CompilerNode>> nodesList = compiler.GetCompilerNodes();
-	std::shared_ptr<LinkedList> nodesLinkedList = std::make_shared<LinkedList>(nodesList);
-	VirtualMachine virtual_machine = VirtualMachine(compiler.GetSymbolTable(), compiler.GetSubroutineTable(), nodesLinkedList);
-
-	try
-	{
-		// Setup output buffer
-		bio::stream_buffer<ConsoleOutput> sb;
-		sb.open(ConsoleOutput(this));
-		std::clog.rdbuf(&sb);
-
-		// Execute VM
-		virtual_machine.ExecuteCode();
-
-		// Create the log files directory if it doesn't exists
-		if (!QDir("Log files").exists())
-			QDir().mkdir("Log files");
-
-		// Save the output in an output file
-		FileIO::SaveFile("Log files//output.txt", this->output);
-	}
-	catch (const std::exception& e)
-	{
-		mainWindow.addException(e.what());
-		return;
-	}
-
-	// Multithreading code
-	//
-	// Remove everything and reset the workerthread
-	//StopWorkerThread();
+	mainWindow.addOutput(output.toStdString());
+	this->output.append(output);
 }
 
-void MainController::StopWorkerThread()
+void MainController::StopVirtualMachine()
 {
-	if (workerThread != nullptr)
-	{
-		workerThread->interrupt();
-		workerThread->join();
-		delete(workerThread);
-		workerThread = nullptr;
-	}
-
+	virtual_machine->quit();
 	HideDialog();
+
+	// Save the output in an output file
+	FileIO::SaveFile("Log files//output.txt", this->output);
+}
+
+void MainController::VirtualMachineFinished()
+{
+	tokenizer_controller = nullptr;
+	compiler = nullptr;
+	virtual_machine = nullptr;
+	mainWindow.CodeIsExecuting(false);
+
+	// Save the output in an output file
+	FileIO::SaveFile("Log files//output.txt", this->output);
 }
 
 void MainController::HideDialog()
@@ -180,16 +163,6 @@ void MainController::WriteException(const char* output, std::streamsize size)
 
 	mainWindow.addException(exception_text);
 	//this->output.append(QString::fromUtf8(exception_text.c_str()));
-}
-
-void MainController::WriteOutput(const char* output, std::streamsize size)
-{
-	std::string output_text;
-	for (int i = 0; i < size; i++)
-		output_text.append(1, output[i]);
-
-	mainWindow.addOutput(output_text);
-	this->output.append(QString::fromUtf8(output_text.c_str()));
 }
 
 void MainController::ClearConsole()

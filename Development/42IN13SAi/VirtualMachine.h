@@ -3,6 +3,8 @@
 #include <math.h>
 #include <cmath>
 #include <memory>
+#include <QThread>
+#include <QObject>
 
 #include "SymbolTable.h"
 #include "SubroutineTable.h"
@@ -20,8 +22,10 @@
 #include "ZeroDivideException.h"
 #include "UnexpectedTypeException.h"
 
-class VirtualMachine
+class VirtualMachine : public QThread
 {	
+	Q_OBJECT
+
 public:
 	VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::shared_ptr<LinkedList> compiler_nodes);
 	VirtualMachine(const VirtualMachine &other);
@@ -105,7 +109,12 @@ public:
 	
 	std::shared_ptr<CompilerNode> ExecutePiConstant(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteEConstant(CompilerNode compilerNode);
-	
+
+	void run();
+	void quit();
+	void finished();
+	void exit();
+
 private:
 	SymbolTable* globalsSymboltable; // Globals symboltable
 	SymbolTable* currentSymbolTable; // User function symboltable
@@ -115,15 +124,22 @@ private:
 
 	// Node methods
 	std::shared_ptr<CompilerNode> GetNext(std::shared_ptr<LinkedList> nodes);
-	
+
 	// Function call methods
 	std::shared_ptr<CompilerNode> CallFunction(CompilerNode node);
 	std::unique_ptr<FunctionCaller> function_caller;
-	
+
 	// Check and return parameters
 	std::vector<std::shared_ptr<CompilerNode>> CheckParameters(CompilerNode &compilerNode, int amount);
 
 	// Nodes 
 	std::shared_ptr<LinkedList> globalsList;
 	std::map<std::string, std::shared_ptr<LinkedList>> nodeLists;
+
+	bool is_running;
+	
+signals:
+	void PrintOutput(QString);
+	void Finished();
+
 };

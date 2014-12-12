@@ -194,9 +194,6 @@
     <ClCompile Include="Constant.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleOutput.cpp">
-      <Filter>Source Files\VirtualMachine</Filter>
-    </ClCompile>
     <ClCompile Include="ExceptionOutput.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
@@ -208,6 +205,12 @@
     </ClCompile>
     <ClCompile Include="StopExecuteDialog.cpp">
       <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_VirtualMachine.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_VirtualMachine.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -426,9 +429,6 @@
     </CustomBuild>
     <CustomBuild Include="jsoncpp\json_valueiterator.inl">
       <Filter>Source Files\jsoncpp</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ConsoleOutput.h">
-      <Filter>Header Files\VirtualMachine</Filter>
     </CustomBuild>
     <CustomBuild Include="ExceptionOutput.h">
       <Filter>Header Files\Exceptions</Filter>

@@ -271,6 +271,14 @@ QString MainWindow::OpenSaveDialog()
 	return QFileDialog::getSaveFileName(this, tr("Save file"), "", tr("Text Files (*.sc)"));
 }
 
+void MainWindow::CodeIsExecuting(bool status)
+{
+	if (status)
+		runAction->setText("Stop");
+	else
+		runAction->setText("Run");
+}
+
 void MainWindow::AddFile(QFileInfo* info, QString text)
 {
 	// Create code editor

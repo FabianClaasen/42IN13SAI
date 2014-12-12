@@ -47,6 +47,7 @@ public:
     void clearOutput();
     void AddFile(QFileInfo* info, QString text);
     void SetTabTitle(QFileInfo* info);
+	void CodeIsExecuting(bool status);
     QString GetText();
     QAction* GetRunAction();
     QAction* GetClearAction();
