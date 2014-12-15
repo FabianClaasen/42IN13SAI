@@ -324,7 +324,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 					int pos_open = line.indexOf("(", cur_pos) - cur_pos;
 					int pos_seperator = line.indexOf(seperator, cur_pos) - cur_pos;
 
-					if (pos_open == 0)
+					if (pos_open <= 0)
 					{
 						QString updated = line.mid(cur_pos, line.count() - 1);
 						if (updated.contains("|"))
