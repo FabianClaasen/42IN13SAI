@@ -708,6 +708,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSqrtOperation(CompilerNode 
 
 	// Parse the parameters to a float for mathmatic operation
 	float num1 = atof(param1->GetValue().c_str());
+	if (num1 < 0)
+		throw InvalidInputException("InvalidInputException occured. Can't calculate square root of negative value.");
 
 	float output = std::sqrt(num1);
 	// Create a new value compilernode to return
@@ -841,7 +843,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCommonLogOperation(Compiler
 	// Parse the parameters to a float for mathmatic operation
 	float num1 = atof(param1->GetValue().c_str());
 	
-	if (num1 == 0)
+	if (num1 <= 0)
 		throw InvalidInputException("Invalid Input");
 
 
@@ -859,7 +861,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteBinaryLogOperation(Compiler
 	// Parse the parameters to a float for mathmatic operation
 	float num1 = atof(param1->GetValue().c_str());
 
-	if (num1 == 0)
+	if (num1 <= 0)
 		throw InvalidInputException("Invalid Input");
 
 	float output = std::log2(num1);
@@ -876,7 +878,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNaturalLogOperation(Compile
 	// Parse the parameters to a float for mathmatic operation
 	float num1 = atof(param1->GetValue().c_str());
 
-	if (num1 == 0)
+	if (num1 <= 0)
 		throw InvalidInputException("Invalid Input");
 
 	float output = std::log(num1);
@@ -895,7 +897,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLogOperation(CompilerNode c
 	float num1 = atof(param1->GetValue().c_str());
 	float num2 = atof(param2->GetValue().c_str());
 
-	if (num1 == 0 || num2 == 0)
+	if (num1 <= 0 || num2 <= 0 || num2 == 1)
 		throw InvalidInputException("Invalid Input");
 
 	float output = std::log(num1) / std::log(num2);
@@ -939,9 +941,14 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGcdOperation(CompilerNode c
 	if (num1 != int1 || num2 != int2)
 		throw UnexpectedTypeException("An UnexpectedTypeException occured in function 'gcd'. Expected integer parameters.");
 
+	if (int1 < 0)
+		int1 *= -1;
+	if (int2 < 0)
+		int2 *= -1;
+
 	float output = 0;
 
-	for (int i = 1; i <= num1&&i <= num2; i++)
+	for (int i = 1; i <= int1&&i <= int2; i++)
 		if (int1%i == 0 && int2%i == 0)
 			output = i;
 	// Create a new value compilernode to return
@@ -981,7 +988,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 
 	if (numA == 0)
 	{
-		throw UnexpectedTypeException("An UnexpectedTypeException occured in function 'abc'. 'A' cannot be 0");
+		throw InvalidInputException("An InvalidInputException occured in function 'abc'. 'A' cannot be 0");
 	}
 	else
 	{
@@ -1026,7 +1033,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFibonacciOperation(Compiler
 
 	if (num1 != int1)
 		throw UnexpectedTypeException("An UnexpectedTypeException occured in function 'fib'. Expected integer parameter.");
-
+	if (int1 < 0)
+		int1 *= -1;
 	int a = 1;
 	int b = 0;
 
