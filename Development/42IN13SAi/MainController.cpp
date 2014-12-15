@@ -48,6 +48,11 @@ void MainController::Execute()
 		mainWindow.clearOutput();
 		mainWindow.clearExceptions();
 
+        // Setup output buffer
+        bio::stream_buffer<ExceptionOutput> sb;
+        sb.open(ExceptionOutput(this));
+        std::clog.rdbuf(&sb);
+        
 		// Excute typed code
 		// Get the file from the stream and convert to std::string
 		std::string input(GetFileFromStream());
@@ -55,11 +60,6 @@ void MainController::Execute()
 
 		try
 		{
-			// Setup output buffer
-			bio::stream_buffer<ExceptionOutput> sb;
-			sb.open(ExceptionOutput(this));
-			std::clog.rdbuf(&sb);
-
 			// Tokenize
 			tokenizer_controller->Tokenize();
 		}
@@ -68,17 +68,16 @@ void MainController::Execute()
 			mainWindow.addException(e.what());
 			return;
 		}
+        
+        // Tokenizer has exceptions stop the build
+        if (tokenizer_controller->HasExceptions())
+            return;
 
 		// Run the compiler
 		compiler = std::make_shared<Compiler>(tokenizer_controller->GetCompilerTokens());
 
 		try
 		{
-			// Setup output buffer
-			bio::stream_buffer<ExceptionOutput> sb;
-			sb.open(ExceptionOutput(this));
-			std::clog.rdbuf(&sb);
-
 			// Compile
 			compiler->Compile();
 		}
@@ -87,6 +86,10 @@ void MainController::Execute()
 			mainWindow.addException(e.what());
 			return;
 		}
+        
+        // Compiler has exceptions stop the build
+        if (compiler->HasExceptions())
+            return;
 
 		// Run the virtual machine with the compilernodes
 		std::list<std::shared_ptr<CompilerNode>> nodesList = compiler->GetCompilerNodes();

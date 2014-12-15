@@ -1,5 +1,4 @@
 #include "TokenizerController.h"
-//#include <boost/date_time/posix_time/posix_time.hpp>
 
 TokenizerController::TokenizerController(std::string filename)
 {
@@ -11,18 +10,17 @@ TokenizerController::TokenizerController(std::string filename)
 
 void TokenizerController::Tokenize()
 {
-	
-    //boost::posix_time::ptime start = boost::posix_time::microsec_clock::local_time( );
 	tokenizer->Tokenize();
-    /*boost::posix_time::ptime end = boost::posix_time::microsec_clock::local_time( );
-    
-    boost::posix_time::time_duration elapsed = end - start;
-    std::cout << elapsed << std::endl;*/
 }
 
 std::vector<std::shared_ptr<Token>> TokenizerController::GetCompilerTokens()
 {
 	return tokenizer->GetTokenList();
+}
+
+bool TokenizerController::HasExceptions()
+{
+    return tokenizer->HasExceptions();
 }
 
 TokenizerController::~TokenizerController()
