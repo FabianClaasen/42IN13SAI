@@ -1,10 +1,5 @@
 func Main()
 [
-	var x = 0;
-   
-   while( x< 12)
-   [
-   	prnt(x);
-      x++;
-   ]
+	var x = pow(2|32);
+   prnt(x);
 ]

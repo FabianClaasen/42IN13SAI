@@ -94,6 +94,7 @@ void MainController::Execute()
 
 		virtual_machine = std::make_shared<VirtualMachine>(compiler->GetSymbolTable(), compiler->GetSubroutineTable(), nodesLinkedList);
 		connect(virtual_machine.get(), &VirtualMachine::PrintOutput, this, &MainController::PrintOutput);
+		connect(virtual_machine.get(), &VirtualMachine::PrintException, this, &MainController::PrintException);
 		connect(virtual_machine.get(), &VirtualMachine::Finished, this, &MainController::VirtualMachineFinished);
 
 		try
@@ -127,6 +128,11 @@ void MainController::PrintOutput(QString output)
 {
 	mainWindow.addOutput(output.toStdString());
 	this->output.append(output);
+}
+
+void MainController::PrintException(QString exception)
+{
+	mainWindow.addException(exception.toStdString());
 }
 
 void MainController::StopVirtualMachine()
