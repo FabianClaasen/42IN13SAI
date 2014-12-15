@@ -139,6 +139,7 @@ private:
 	bool is_running;
 	
 signals:
+	void PrintException(QString);
 	void PrintOutput(QString);
 	void Finished();
 

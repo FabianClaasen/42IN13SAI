@@ -59,6 +59,7 @@ class MainController : public QObject
 		void StopVirtualMachine();
 
 	public slots:
+		void PrintException(QString exception);
 		void PrintOutput(QString output);
 		void VirtualMachineFinished();
 };

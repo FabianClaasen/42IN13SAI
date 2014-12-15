@@ -14,7 +14,14 @@ VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subrou
 
 void VirtualMachine::run()
 {
-	ExecuteCode();
+	try 
+	{
+		ExecuteCode();
+	}
+	catch (const std::exception& e)
+	{
+		emit PrintException(e.what());
+	}
 }
 
 void VirtualMachine::quit()
