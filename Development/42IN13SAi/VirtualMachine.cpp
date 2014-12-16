@@ -21,6 +21,7 @@ void VirtualMachine::run()
 	catch (const std::exception& e)
 	{
 		emit PrintException(e.what());
+		emit Finished();
 	}
 }
 

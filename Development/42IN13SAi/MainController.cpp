@@ -106,7 +106,7 @@ void MainController::Execute()
 			// Execute VM
 			virtual_machine->start();
 			mainWindow.CodeIsExecuting(true);
-		}
+		} 
 		catch (const std::exception& e)
 		{
 			mainWindow.addException(e.what());
@@ -126,8 +126,12 @@ void MainController::Execute()
 
 void MainController::PrintOutput(QString output)
 {
+	//mutex.lock();
+
 	mainWindow.addOutput(output.toStdString());
 	this->output.append(output);
+	
+	//mutex.unlock();
 }
 
 void MainController::PrintException(QString exception)

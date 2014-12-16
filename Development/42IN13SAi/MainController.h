@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QtWidgets>
 #include <QShortcut>
+#include <QMutex>
 #include <QFileInfo>
 #include <memory>
 
@@ -41,6 +42,7 @@ class MainController : public QObject
 		boost::thread* workerThread;
 		StopExecuteDialog* dialog;
 		QString output;
+		QMutex mutex;
 
 		// Functions
 		std::string GetFileFromStream();
