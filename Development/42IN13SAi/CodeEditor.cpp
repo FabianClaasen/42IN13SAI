@@ -321,31 +321,37 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 					QString close_parenthesis = ")";
 					int cur_pos = tmpCursor.positionInBlock() - 1;
 					int pos_close = line.indexOf(close_parenthesis, cur_pos) - cur_pos;
+					int pos_open = line.indexOf("(", cur_pos) - cur_pos;
 					int pos_seperator = line.indexOf(seperator, cur_pos) - cur_pos;
-					QString updated = line.mid(cur_pos, line.count() - 1);
-					if (updated.contains("|"))
+
+					if (pos_open <= 0)
 					{
-						tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, pos_seperator);
-						pos_seperator = line.indexOf(seperator, cur_pos + 1) - cur_pos;
-						if (pos_seperator > 0)
+						QString updated = line.mid(cur_pos, line.count() - 1);
+						if (updated.contains("|"))
 						{
-							tmpCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, pos_seperator);
-							setTextCursor(tmpCursor);
-							return;
+							tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, pos_seperator);
+							pos_seperator = line.indexOf(seperator, cur_pos + 1) - cur_pos;
+							if (pos_seperator > 0)
+							{
+								tmpCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, pos_seperator);
+								setTextCursor(tmpCursor);
+								return;
+							}
+							else
+							{
+								int new_pos_close = line.indexOf(close_parenthesis, cur_pos) - cur_pos;
+								tmpCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, new_pos_close - 1);
+								setTextCursor(tmpCursor);
+								return;
+							}
 						}
 						else
 						{
-							int new_pos_close = line.indexOf(close_parenthesis, cur_pos) - cur_pos;
-							tmpCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, new_pos_close - 1);
+							tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, pos_close);
 							setTextCursor(tmpCursor);
 							return;
 						}
-					}
-					else
-					{
-						tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, pos_close);
-						setTextCursor(tmpCursor);
-						return;
+
 					}
 				}
 				else if (key == Qt::Key_Return)

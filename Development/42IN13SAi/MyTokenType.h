@@ -1,8 +1,8 @@
-//
-//  MyTokenType.h
-//  part of tokenizer
-//  Contains all the possible token types
-//
+///
+/// @file MyTokenType.h
+/// @brief Contains all the possible token types for Short-C
+/// @ingroup Tokenizer
+///
 #pragma once
 
 enum class MyTokenType : int {

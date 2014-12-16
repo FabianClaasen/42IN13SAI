@@ -16,8 +16,6 @@ Tokenizer::Tokenizer(std::string fileLocation, std::list<TokenDefinition> defini
     NextLine();
 }
 
-// The tokenize function will fill the tokenList with all the tokens
-// gathered from the code send to it.
 void Tokenizer::Tokenize()
 {
 	while (lineRemaining.length() != 0)
@@ -56,14 +54,12 @@ void Tokenizer::Tokenize()
 				std::shared_ptr<Token> partner = nullptr;
 				if (ShouldFindPartner(definition.myTokenType))
 				{
-					try {
-						std::shared_ptr<Token> temp = FindPartner(definition.myTokenType, level);
-						if (temp->Partner == nullptr)
-							partner = temp;
-					}
-					catch (const PartnerNotFoundException &e) {
-                        std::clog << e.what() << std::endl;
-					}
+                    std::shared_ptr<Token> temp = FindPartner(definition.myTokenType, level);
+                    if (temp)
+                    {
+                        if (temp->Partner == nullptr)
+                            partner = temp;
+                    }
 				}
 
 				// Create token
@@ -87,18 +83,11 @@ void Tokenizer::Tokenize()
 				break;
 			}
 		}
-
-        try {
-            // Throw an exception if the target couldnt be parsed as a token.
-            if (!match)
-            {
-                throw ParseException("Unrecognized character '" + lineRemaining.substr(0, 1) + "' on line " + std::to_string(lineNumber) + " at position " + std::to_string(linePosition));
-            }
-        }
-        catch (const ParseException &e)
+        // Throw an exception if the target couldnt be parsed as a token.
+        // Continue to next line, shouldn't tokenize anything after unkown character
+        if (!match)
         {
-            // Print the exception and continue tokenizing on next line
-            std::clog << e.what() << std::endl;
+            Diag(Token(), ExceptionEnum::err_unkown_char) << lineRemaining.substr(0, 1) << lineNumber << linePosition;
             NextLine();
         }
 	}
@@ -107,29 +96,17 @@ void Tokenizer::Tokenize()
     CheckClosingPartners();
 }
 
-
-// Check for closing partners missing
 void Tokenizer::CheckClosingPartners()
 {	
 	for (std::shared_ptr<Token> t : tokenVector)
 	{
 		if (ShouldFindPartnerR(t->Type))
 		{
-			try {
-				TryFindPartner(t);
-			}
-			catch (const PartnerNotFoundException &e) {
-                // Print the exception and continue searching
-                std::clog << e.what() << std::endl;
-			}
+            TryFindPartner(t);
 		}
 	}
 }
 
-// Find a partner for the current token.
-// @param
-//  type: this is the type of the token where you need to find a match for.
-//	level: this is the level of the myTokenType, the partner needs to be on the same level.
 std::shared_ptr<Token> Tokenizer::FindPartner(MyTokenType &type, int level)
 {
     std::list<TokenPartner>::const_iterator token_partner;
@@ -146,15 +123,10 @@ std::shared_ptr<Token> Tokenizer::FindPartner(MyTokenType &type, int level)
         }
     }
 
-	throw PartnerNotFoundException("Partner not found for " + TokenToString(type) +
-                                   " on line " + std::to_string(lineNumber) +
-                                   " at position " + std::to_string(linePosition));
+    Diag(Token(), ExceptionEnum::err_partner_not_found) << TokenToString(type) << lineNumber << linePosition;
+    return std::shared_ptr<Token>();
 }
 
-// Try to find a partner for the current token.
-// Throws PartnerNotFoundException when a partner can't be found.
-// @param
-//  token: this is the token where you need to find a match for.
 void Tokenizer::TryFindPartner(std::shared_ptr<Token> token)
 {
 	std::list<TokenPartner>::const_iterator token_partner;
@@ -173,30 +145,21 @@ void Tokenizer::TryFindPartner(std::shared_ptr<Token> token)
 	}
 
 	// Didn't find a partner:
-	throw PartnerNotFoundException("Partner not found for " + TokenToString(token->Type) +
-                                   " on line " + std::to_string(token->LineNumber) +
-                                   " at position " + std::to_string(token->LinePosition));
+    Diag(*token, ExceptionEnum::err_partner_not_found) << token->Value << token->LineNumber << token->LinePosition;
 }
 
-// Check if the current token is able to have a partner
-// @Param
-//	type: the function will check if this type can have a partner.
 bool Tokenizer::ShouldFindPartner(MyTokenType &type)
 {
     std::vector<MyTokenType> types{ MyTokenType::CloseCurlyBracket, MyTokenType::CloseMethod, MyTokenType::CloseBracket, MyTokenType::Else, MyTokenType::ElseIf };
 	return std::find(types.begin(), types.end(), type) != types.end();
 }
 
-// Check if the current token is able to have a partner
-// @Param
-//	type: the function will check if this type can have a partner.
 bool Tokenizer::ShouldFindPartnerR(MyTokenType &type)
 {
 	std::vector<MyTokenType> types{ MyTokenType::OpenCurlyBracket, MyTokenType::OpenMethod, MyTokenType::OpenBracket };
 	return std::find(types.begin(), types.end(), type) != types.end();
 }
 
-// This function will read a new line from the file.
 void Tokenizer::NextLine()
 {
 	while (std::getline(file, lineRemaining))
@@ -235,6 +198,17 @@ std::string Tokenizer::TokenToString(MyTokenType type)
 	default:
 		return "undefined";
 	}
+}
+
+bool Tokenizer::HasExceptions()
+{
+    return hasExceptions;
+}
+
+DiagnosticBuilder Tokenizer::Diag(Token token, ExceptionEnum exception)
+{
+    hasExceptions = true;
+    return DiagnosticBuilder(token, exception);
 }
 
 Tokenizer::~Tokenizer()
