@@ -191,9 +191,6 @@
     <ClCompile Include="InvalidInputException.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="Constant.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="ExceptionOutput.cpp">
       <Filter>Source Files\Exceptions</Filter>
     </ClCompile>
@@ -211,6 +208,12 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_VirtualMachine.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="DiagnosticsBuilder.cpp">
+      <Filter>Source Files\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="Constant.cpp">
+      <Filter>Source Files\Compiler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -433,11 +436,11 @@
     <CustomBuild Include="ExceptionOutput.h">
       <Filter>Header Files\Exceptions</Filter>
     </CustomBuild>
-    <CustomBuild Include="Constant.h">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="StopExecuteDialog.h">
       <Filter>Header Files\Qt</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Constant.h">
+      <Filter>Header Files\Controller</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -506,5 +509,10 @@
     <Filter Include="Source Files\jsoncpp">
       <UniqueIdentifier>{95af4f7e-a7ba-48ce-9847-ab6d1c57e586}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DiagnosticsBuilder.h">
+      <Filter>Header Files\Tokenizer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

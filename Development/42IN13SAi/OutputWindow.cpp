@@ -41,6 +41,10 @@ void OutputWindow::addOutput(std::string strOutput)
 	}
 	output << str;
 
+	// Remove the first item of the output if the size is bigger than 75
+	if (output.size() > 75)
+		output.removeFirst();
+
 	listModel->setStringList(output);
 }
 

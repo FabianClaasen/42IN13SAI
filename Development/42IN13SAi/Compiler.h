@@ -50,6 +50,7 @@ public:
 	CompilerNode ParseConstant();
 
 	void Match(MyTokenType type);
+	bool HasExceptions();
 
 	//Info to send to VM
 	SymbolTable* GetSymbolTable();

@@ -15,6 +15,7 @@
     <ClCompile Include="CompilerNode.cpp" />
     <ClCompile Include="CodeEditor.cpp" />
     <ClCompile Include="Constant.cpp" />
+    <ClCompile Include="DiagnosticsBuilder.cpp" />
     <ClCompile Include="ExceptionOutput.cpp" />
     <ClCompile Include="ExceptionWindow.cpp" />
     <ClCompile Include="FileIO.cpp" />
@@ -1292,6 +1293,9 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Qt\Qt5.3.2\5.3\msvc2013_opengl\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DiagnosticsBuilder.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0F8E62D6-F5A0-4C66-AD23-F45D847EB1FE}</ProjectGuid>

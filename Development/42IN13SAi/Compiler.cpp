@@ -321,3 +321,8 @@ std::string Compiler::TokenToString(MyTokenType type)
 		return "undefined";
 	}
 }
+
+bool Compiler::HasExceptions()
+{
+	return false;
+}
