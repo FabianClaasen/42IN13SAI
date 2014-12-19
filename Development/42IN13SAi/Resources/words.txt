@@ -23,6 +23,8 @@ perc(x|y)
 perm(x|y)
 pow(x|y)
 prnt(x)
+pyt(x|c)
+pyth(a|b)
 rad(x)
 ret
 sin(x)

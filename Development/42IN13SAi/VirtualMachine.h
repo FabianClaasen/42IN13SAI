@@ -100,6 +100,8 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteDiscriminantOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteAbcOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteFibonacciOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecutePythagoreanOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecutePythagoreanHOperation(CompilerNode compilerNode);
 
 	std::shared_ptr<CompilerNode> ExecuteDistanceOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteVelocityOperation(CompilerNode compilerNode);

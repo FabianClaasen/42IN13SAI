@@ -238,6 +238,8 @@ bool Compiler::IsInternalFunction(MyTokenType type)
 		case MyTokenType::Modulo:
 		case MyTokenType::Gcd:
 		case MyTokenType::Fibonacci:
+		case MyTokenType::Pythagoras:
+		case MyTokenType::PythagorasH:
 		case MyTokenType::Distance:
 		case MyTokenType::Velocity:
 		case MyTokenType::Time:

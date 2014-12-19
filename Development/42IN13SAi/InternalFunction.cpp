@@ -65,6 +65,10 @@ std::shared_ptr<CompilerNode> InternalFunction::GetInternalFunction(MyTokenType 
 		return getCompilerNode("$abc", 3);
 	case MyTokenType::Fibonacci:
 		return getCompilerNode("$fib", 1);
+	case MyTokenType::Pythagoras:
+		return getCompilerNode("$pyt", 2); 
+	case MyTokenType::PythagorasH:
+		return getCompilerNode("$pyth", 2); 
 	case MyTokenType::Distance:
 		return getCompilerNode("$dist", 2);
 	case MyTokenType::Velocity:

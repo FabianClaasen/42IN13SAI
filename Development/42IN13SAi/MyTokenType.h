@@ -77,6 +77,8 @@ enum class MyTokenType : int {
 	Discriminant,
 	AbcFormula,
 	Fibonacci,
+	Pythagoras,
+	PythagorasH,
 
 	// Physics functions
 	Distance,

@@ -1059,6 +1059,49 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFibonacciOperation(Compiler
 	// Create a new value compilernode to return
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecutePythagoreanOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float num = atof(param1->GetValue().c_str());
+	float numC = atof(param2->GetValue().c_str());
+
+	if (num <= 0 || numC <= 0 )
+		throw InvalidInputException("An InvalidInputException occured. Input for 'pyt' can't be negative.");
+
+	if (num > numC)
+		throw InvalidInputException("An InvalidInputException occured. Input 'c' can't be smaller than 'x'");
+
+	float output = std::sqrt(pow(numC, 2) - pow(num, 2));
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecutePythagoreanHOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 2);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
+
+	// Parse the parameters to a float for mathmatic operation
+	float numA = atof(param1->GetValue().c_str());
+	float numB = atof(param2->GetValue().c_str());
+
+	if (numA <= 0 || numB <= 0)
+		throw InvalidInputException("An InvalidInputException occured. Input for 'pyth' can't be negative.");
+
+	float output = std::sqrt(pow(numA, 2) + pow(numB, 2));
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+
 #pragma endregion ComplexMath
 
 #pragma region Physics
