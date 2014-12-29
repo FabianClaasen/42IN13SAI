@@ -255,7 +255,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 				int endPos = curs.selectionEnd();
 
 				curs.setPosition(startPos);
-				curs.movePosition(QTextCursor::StartOfLine);
+				curs.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
 
 				while (curs.position() < endPos && curs.position() >= 0)
 				{
@@ -266,7 +266,6 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 
 					endPos++;
 				}
-
 				return;
 			}
 			else if (key == Qt::Key_Backtab)
@@ -307,23 +306,28 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 			if (tmpCursor.positionInBlock() > 0)
 			{
 				QString line = getSentenceFromLine();
+
+				QString seperator = "|";
+				QString close_parenthesis = ")";
+				int cur_pos = tmpCursor.positionInBlock() - 1;
+				int pos_close = line.indexOf(close_parenthesis, cur_pos) - cur_pos;
+				int pos_open = line.indexOf("(", cur_pos) - cur_pos;
+				int pos_seperator = line.indexOf(seperator, cur_pos) - cur_pos;
+
 				if (key == Qt::Key_Tab && line.contains("(") && line.contains(")") && line.contains("func"))
 				{
-					tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
-					setTextCursor(tmpCursor);
-					insertPlainText("[");
-					addSpecialIndent(false, true);
-					return;
+					if (pos_open <= 0)
+					{
+						tmpCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
+						setTextCursor(tmpCursor);
+						insertPlainText("[");
+						addSpecialIndent(false, true);
+						return;
+					}
 				}
+
 				if (key == Qt::Key_Tab && line.contains("(") && line.contains(")") && !line.contains("func"))
 				{
-					QString seperator = "|";
-					QString close_parenthesis = ")";
-					int cur_pos = tmpCursor.positionInBlock() - 1;
-					int pos_close = line.indexOf(close_parenthesis, cur_pos) - cur_pos;
-					int pos_open = line.indexOf("(", cur_pos) - cur_pos;
-					int pos_seperator = line.indexOf(seperator, cur_pos) - cur_pos;
-
 					if (pos_open <= 0)
 					{
 						QString updated = line.mid(cur_pos, line.count() - 1);

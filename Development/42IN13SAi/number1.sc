@@ -1,5 +1,5 @@
 func Main()
 [
-	var x = pow(2|32);
+	var x =3;
    prnt(x);
 ]

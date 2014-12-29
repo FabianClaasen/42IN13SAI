@@ -10,6 +10,7 @@
 class OutputWindow : public QListView
 {
 	Q_OBJECT
+
 public:
 	OutputWindow(QWidget *parent = 0);
 	~OutputWindow();
