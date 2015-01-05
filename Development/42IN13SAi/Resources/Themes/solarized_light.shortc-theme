@@ -21,7 +21,11 @@
 		},
 		"output" : {
 			"background_color": [253, 246, 227],
-			"text_color": [101, 123, 131]
+			"text_color": [0, 0, 0]
+		},
+		"exception" : {
+			"background_color": [253, 246, 227],
+			"text_color": [255, 0, 0]
 		},
 		"syntax" : {
 			"return_types": [203, 75, 22],

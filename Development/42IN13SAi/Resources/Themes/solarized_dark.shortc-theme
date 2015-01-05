@@ -19,6 +19,10 @@
 			"background_color": [0, 43, 54],
 			"text_color": [131, 148, 150]
 		},
+		"exception" : {
+			"background_color": [0, 43, 54],
+			"text_color": [255, 0, 0]
+		},
 		"syntax" : {
 			"return_types": [203, 75, 22],
 			"identifiers": [133, 153, 0],

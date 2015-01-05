@@ -95,8 +95,10 @@ void Themer::SetTheme(std::string themeName)
     
 	// Set output/exception node and call the function
 	Json::Value outputStyles = themeStyles["output"];
+	Json::Value exceptionStyles = themeStyles["exception"];
+
 	SetOutputWindowStyles(outputStyles);
-	SetExceptionWindowStyles(outputStyles);
+	SetExceptionWindowStyles(exceptionStyles);
 
     // Set highlighter node and call the function
     Json::Value highlighterStyles = themeStyles["syntax"];
@@ -205,7 +207,12 @@ void Themer::SetOutputWindowStyles(Json::Value outputStyles)
 	// Set the background QColor and add to map
 	Json::Value bgColors = outputStyles["background_color"];
 	QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+
+	Json::Value textColors = outputStyles["text_color"];
+	QColor txt(textColors[0].asInt(), textColors[1].asInt(), textColors[2].asInt());
+
 	outputWindowColors.insert(std::map<std::string, QColor>::value_type("background", bg));
+	outputWindowColors.insert(std::map<std::string, QColor>::value_type("text", txt));
 }
 
 void Themer::SetExceptionWindowStyles(Json::Value exceptionStyles)
@@ -215,7 +222,12 @@ void Themer::SetExceptionWindowStyles(Json::Value exceptionStyles)
 	// Set the background QColor and add to map
 	Json::Value bgColors = exceptionStyles["background_color"];
 	QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+
+	Json::Value textColors = exceptionStyles["text_color"];
+	QColor txt(textColors[0].asInt(), textColors[1].asInt(), textColors[2].asInt());
+
 	exceptionWindowColors.insert(std::map<std::string, QColor>::value_type("background", bg));
+	exceptionWindowColors.insert(std::map<std::string, QColor>::value_type("text", txt));
 }
 
 std::map<std::string, QColor> Themer::GetWindowStyles()
