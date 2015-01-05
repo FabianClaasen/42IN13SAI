@@ -10,6 +10,7 @@
 #include <QMutex>
 #include <QFileInfo>
 #include <memory>
+#include <thread>
 
 #include "MainWindow.h"
 #include "MainController.h"
@@ -43,6 +44,9 @@ class MainController : public QObject
 		StopExecuteDialog* dialog;
 		QString output;
 		QMutex mutex;
+
+		double start_time;
+		bool output_thread_running;
 
 		// Functions
 		std::string GetFileFromStream();

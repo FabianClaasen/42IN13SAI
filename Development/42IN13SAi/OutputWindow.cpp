@@ -11,6 +11,7 @@ OutputWindow::OutputWindow(QWidget *parent) : QListView(parent)
 
 	setEditTriggers(QAbstractItemView::NoEditTriggers);
 	setSelectionMode(QAbstractItemView::NoSelection);
+	scrollToBottom();
 
 	listModel = new QStringListModel(output, nullptr);
     
@@ -27,8 +28,16 @@ void OutputWindow::SetTheme(std::map<std::string, QColor> colors)
 	this->setPalette(pallete);
 }
 
+void OutputWindow::PrintOutput()
+{
+	QMutexLocker locker(&mutex);
+	listModel->setStringList(output);
+	this->scrollToBottom();
+}
+
 void OutputWindow::addOutput(std::string strOutput)
 {
+	QMutexLocker locker(&mutex);
 	bool is_number = true;
 	try {
 		std::stof(strOutput);
@@ -47,10 +56,8 @@ void OutputWindow::addOutput(std::string strOutput)
 	output << str;
 
 	// Remove the first item of the output if the size is bigger than 75
-	if (output.size() > 75)
+	if (output.size() > 500)
 		output.removeFirst();
-
-	listModel->setStringList(output);
 }
 
 QString OutputWindow::setOutputPrecision(QString str)

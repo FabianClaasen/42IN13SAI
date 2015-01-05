@@ -108,6 +108,23 @@ void MainController::Execute()
 
 			// Execute VM
 			virtual_machine->start();
+
+			// Start timer to print output
+			//QThread* thread = new QThread();
+			std::thread* thread = new std::thread([&](){
+				output_thread_running = true;
+
+				start_time = std::clock();
+				while (output_thread_running)
+				{
+					if ((std::clock() - start_time) > 250)
+					{
+						mainWindow.PrintOutput();
+						start_time = std::clock();
+					}
+				}
+			});
+
 			mainWindow.CodeIsExecuting(true);
 		} 
 		catch (const std::exception& e)
@@ -147,6 +164,10 @@ void MainController::StopVirtualMachine()
 	virtual_machine->quit();
 	HideDialog();
 
+	// Stop the output thread and print output
+	output_thread_running = false;
+	mainWindow.PrintOutput();
+
 	// Save the output in an output file
 	FileIO::SaveFile("Log files//output.txt", this->output);
 }
@@ -157,6 +178,10 @@ void MainController::VirtualMachineFinished()
 	compiler = nullptr;
 	virtual_machine = nullptr;
 	mainWindow.CodeIsExecuting(false);
+
+	// Stop the output thread and print output
+	output_thread_running = false;
+	mainWindow.PrintOutput();
 
 	// Save the output in an output file
 	FileIO::SaveFile("Log files//output.txt", this->output);
@@ -173,7 +198,6 @@ void MainController::WriteException(const char* output, std::streamsize size)
 	std::string exception_text;
 	for (int i = 0; i < size; i++)
 		exception_text.append(1, output[i]);
-
 	mainWindow.addException(exception_text);
 	//this->output.append(QString::fromUtf8(exception_text.c_str()));
 }

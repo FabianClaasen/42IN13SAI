@@ -200,6 +200,11 @@ void MainWindow::addOutput(std::string output)
 	outputWindow->addOutput(output);
 }
 
+void MainWindow::PrintOutput()
+{
+	outputWindow->PrintOutput();
+}
+
 void MainWindow::addException(std::string exception)
 {
 	outputTab->setCurrentIndex(1);
