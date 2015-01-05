@@ -203,6 +203,8 @@ bool CodeEditor::replaceLine(int lineNumber, const QString& str)
 
 void CodeEditor::keyPressEvent(QKeyEvent *e)
 {
+	QTextCursor curs = textCursor();
+
 	int key = e->key();
 	// For a better behaviour of completer and enter
 	bool isEnterAndListVisible;
@@ -242,8 +244,6 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	}
 	else 
 	{
-		QTextCursor curs = textCursor();
-
 		if (curs.hasSelection())
 		{
 			e->ignore();
@@ -395,16 +395,23 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 	// Check for automatic completion or not
 	if ((e->modifiers() & Qt::ControlModifier) && (e->key() == Qt::Key_Space))
 	{
-		QModelIndex index = completer->popup()->currentIndex();
-		int count = completer->completionCount();
-		if (count == 1)
+		QString line = getLine(lineNumberAtPos(curs.position()));
+
+		if (!line.trimmed().startsWith("#"))
 		{
-			QString text = index.data().toString();
-			insertCompletion(text);
-			setSelectionInternalFunction(text);
+			QModelIndex index = completer->popup()->currentIndex();
+			int count = completer->completionCount();
+			if (count == 1)
+			{
+				QString text = index.data().toString();
+				insertCompletion(text);
+				setSelectionInternalFunction(text);
+			}
+			else
+			{
+				completer->complete(cr);
+			}
 		}
-		else
-			completer->complete(cr);
 	}
 	else if (setIndexAfterPrefix)
 	{

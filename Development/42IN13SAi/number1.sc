@@ -1,4 +1,4 @@
-func Main()
+func Main() # test
 [
-	prnt(1111);
-]]
+	prnt(1);
+]
