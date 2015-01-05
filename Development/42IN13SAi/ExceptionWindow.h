@@ -16,6 +16,8 @@ public:
 
 	void addException(std::string exception);
 	void clearExceptions();
+
+	void SetTheme(std::map<std::string, QColor> colors);
 	
 private:
 	QStringList exceptions;

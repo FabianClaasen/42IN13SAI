@@ -15,6 +15,8 @@
 
 #include "CodeEditor.h"
 #include "Highlighter.h"
+#include "OutputWindow.h"
+#include "ExceptionWindow.h"
 
 class MainWindow;
 
@@ -26,6 +28,10 @@ public:
 	Themer(MainWindow* p_main);
     virtual ~Themer();
     
+	// public output window setter
+	void SetOutputWindow(OutputWindow* outputWindow);
+	void SetExceptionWindow(ExceptionWindow* exceptionWindow);
+
     // public editor addition and removal
     void AddEditor(CodeEditor* codeEditor);
     void RemoveEditor(int index);
@@ -58,26 +64,32 @@ private:
     std::map<std::string, QColor> colors;
     std::map<std::string, QColor> syntaxColors;
     std::map<std::string, QColor> mainColors;
-    std::map<std::string, QString> outputColors;
+	std::map<std::string, QColor> outputWindowColors;
+	std::map<std::string, QColor> exceptionWindowColors;
     std::string fontFamily;
     int fontSize;
     
-    // editors and highlighter
+    // editors, output and highlighter
     std::vector<CodeEditor*> editors;
     std::vector<Highlighter *> highlighters;
+	OutputWindow* outputWindow;
+	ExceptionWindow* exceptionWindow;
     
     // load functions
     void LoadTheme(fs::path filePath);
     void LoadSettings();
     
     // Main window style setters
-    void SetWindow();
     void SetWindowStyles(Json::Value mainStyles);
     
     // Editor style setters
     void SetEditors();
     void SetEditor(CodeEditor* editor);
     void SetEditorStyles(Json::Value editorStyles);
+
+	// Output & exception style setters
+	void SetOutputWindowStyles(Json::Value outputStyles);
+	void SetExceptionWindowStyles(Json::Value SetExceptionWindowStyles);
     
     // Highlighter style setters
     void SetHighlighters();

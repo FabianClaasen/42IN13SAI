@@ -24,16 +24,10 @@ MainWindow::MainWindow(QWidget *parent)
 	QList<int> sizes = QList<int>() << 500 << 10;
 	splitter->setSizes(sizes);
 
+	themer.SetOutputWindow(outputWindow);
+	themer.SetExceptionWindow(exceptionWindow);
+
 	this->setCentralWidget(splitter);
-    
-    // Set themer
-    //Themer themer(this);
-    
-    // Set themes
-    /*std::map<std::string, QColor> mainStyles = themer.GetWindowStyles();
-    QPalette mainPalette(palette());
-    mainPalette.setColor(QPalette::Background, mainStyles["background"]);
-    setPalette(mainPalette);*/
 }
 
 void MainWindow::ShowMenuBar()

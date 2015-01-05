@@ -15,6 +15,10 @@
 			"current_line_highlighter": true,
 			"current_line_highlighter_color": [7, 54, 66]
 		},
+		"output" : {
+			"background_color": [0, 43, 54],
+			"text_color": [131, 148, 150]
+		},
 		"syntax" : {
 			"return_types": [203, 75, 22],
 			"identifiers": [133, 153, 0],

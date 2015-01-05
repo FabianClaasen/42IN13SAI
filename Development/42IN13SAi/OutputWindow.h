@@ -19,7 +19,7 @@ public:
 	QString setOutputPrecision(QString str);
 	void clearOutput();
     
-    void SetTheme(std::map<std::string, QString> colors);
+	void SetTheme(std::map<std::string, QColor> colors);
 private:
 	QStringList output;
 	QStringListModel* listModel;

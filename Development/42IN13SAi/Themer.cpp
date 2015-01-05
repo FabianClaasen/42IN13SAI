@@ -30,6 +30,20 @@ Themer::~Themer()
 {
 }
 
+void Themer::SetOutputWindow(OutputWindow* outputWindow)
+{
+	outputWindow->SetTheme(outputWindowColors);
+
+	this->outputWindow = outputWindow;
+}
+
+void Themer::SetExceptionWindow(ExceptionWindow* exceptionWindow)
+{
+	exceptionWindow->SetTheme(exceptionWindowColors);
+
+	this->exceptionWindow = exceptionWindow;
+}
+
 void Themer::AddEditor(CodeEditor* codeEditor)
 {
 	editors.push_back(codeEditor);
@@ -79,11 +93,15 @@ void Themer::SetTheme(std::string themeName)
     Json::Value editorStyles = themeStyles["editor"];
     SetEditorStyles(editorStyles);
     
+	// Set output/exception node and call the function
+	Json::Value outputStyles = themeStyles["output"];
+	SetOutputWindowStyles(outputStyles);
+	SetExceptionWindowStyles(outputStyles);
+
     // Set highlighter node and call the function
     Json::Value highlighterStyles = themeStyles["syntax"];
     SetHighlighterStyles(highlighterStyles);
     
-    SetWindow();
     SetEditors();
     SetHighlighters();
 }
@@ -96,11 +114,6 @@ void Themer::SetWindowStyles(Json::Value mainStyles)
     Json::Value bgColors = mainStyles["background_color"];
     QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
     mainColors.insert(std::map<std::string, QColor>::value_type("background", bg));
-    
-    // Output windows background color
-    Json::Value obgColors = mainStyles["output_windows"];
-    std::string obg = bgColors[0].asString() + "," + bgColors[1].asString() + "," + bgColors[2].asString();
-    outputColors.insert(std::map<std::string, QString>::value_type("background", QString::fromUtf8(obg.c_str())));
 }
 
 void Themer::SetEditorStyles(Json::Value editorStyles)
@@ -185,9 +198,24 @@ void Themer::SetHighlighterStyles(Json::Value highlighterStyles)
 	syntaxColors.insert(std::map<std::string, QColor>::value_type("comments", comments));
 }
 
-void Themer::SetWindow()
+void Themer::SetOutputWindowStyles(Json::Value outputStyles)
 {
-    main->SetOutputThemes(outputColors);
+	outputWindowColors.clear();
+
+	// Set the background QColor and add to map
+	Json::Value bgColors = outputStyles["background_color"];
+	QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+	outputWindowColors.insert(std::map<std::string, QColor>::value_type("background", bg));
+}
+
+void Themer::SetExceptionWindowStyles(Json::Value exceptionStyles)
+{
+	exceptionWindowColors.clear();
+
+	// Set the background QColor and add to map
+	Json::Value bgColors = exceptionStyles["background_color"];
+	QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+	exceptionWindowColors.insert(std::map<std::string, QColor>::value_type("background", bg));
 }
 
 std::map<std::string, QColor> Themer::GetWindowStyles()

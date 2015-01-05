@@ -8,13 +8,20 @@ ExceptionWindow::ExceptionWindow(QWidget *parent) : QListView(parent)
 	this->setFont(QFont("Consolas", 12));
 #endif
 
-	setStyleSheet("color:red;");
-
 	setEditTriggers(QAbstractItemView::NoEditTriggers);
 	setSelectionMode(QAbstractItemView::NoSelection);
 
 	listModel = new QStringListModel(exceptions, nullptr);
 	setModel(listModel);
+}
+
+void ExceptionWindow::SetTheme(std::map<std::string, QColor> colors)
+{
+	// Output colours
+	QPalette pallete;
+	pallete.setColor(QPalette::Active, QPalette::Base, colors["background"]);
+
+	this->setPalette(pallete);
 }
 
 void ExceptionWindow::addException(std::string exception)

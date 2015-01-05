@@ -196,6 +196,18 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 	if (compiler->PeekNext()->Type == MyTokenType::Equals)
 	{
 		compiler->GetNext(); // remove the '=' token
+
+		if (compiler->PeekNext()->Value.find(".") != std::string::npos)
+		{
+			std::string before = compiler->PeekNext()->Value.substr(0, compiler->PeekNext()->Value.find("."));
+			std::string after = compiler->PeekNext()->Value.substr(compiler->PeekNext()->Value.find("."));
+
+			if (before.size() > 7 || after.size() > 7)
+			{
+				throw IdentifierException("Float precision exception.");
+			}
+		}
+
 		expression = "$assignment";
 		std::shared_ptr<CompilerNode> node = ParseExpression();
 		nodeParameters.push_back(node);
