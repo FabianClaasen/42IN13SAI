@@ -115,7 +115,7 @@ void Themer::SetWindowStyles(Json::Value mainStyles)
     // Set the background color
     Json::Value bgColors = mainStyles["background_color"];
     QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
-    mainColors.insert(std::map<std::string, QColor>::value_type("background", bg));
+   mainColors.insert(std::map<std::string, QColor>::value_type("background", bg));
 }
 
 void Themer::SetEditorStyles(Json::Value editorStyles)
