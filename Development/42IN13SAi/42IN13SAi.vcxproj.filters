@@ -445,6 +445,13 @@
     <CustomBuild Include="DiagnosticsBuilder.h">
       <Filter>Header Files\Tokenizer</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\..\..\Desktop\icon.ico" />
+    <CustomBuild Include="resource1.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="resource2.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -514,17 +521,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource1.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource2.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="42IN13SAi.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\..\Desktop\icon.ico" />
   </ItemGroup>
 </Project>

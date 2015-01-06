@@ -21,6 +21,7 @@
 #include "InvalidInputException.h"
 #include "ZeroDivideException.h"
 #include "UnexpectedTypeException.h"
+#include "UnexpectedParameterException.h"
 
 class VirtualMachine : public QThread
 {	

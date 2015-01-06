@@ -1041,12 +1041,15 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFibonacciOperation(Compiler
 
 	if (num1 != int1)
 		throw UnexpectedTypeException("An UnexpectedTypeException occured in function 'fib'. Expected integer parameter.");
+	if (int1 >= 93)
+		throw UnexpectedParameterException("An UnexpectedParameterException occured in function 'fib'. Result won't be precise for input '"+std::to_string(int1)+"'.");
+
 	if (int1 < 0)
 		int1 *= -1;
-	int a = 1;
-	int b = 0;
+	long long a = 1;
+	long long b = 0;
 
-	int fib = 0;
+	long long fib = 0;
 
 	for (int i = 0; i < int1; ++i) {
 		b = fib;
@@ -1054,7 +1057,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFibonacciOperation(Compiler
 		a = b;
 	}
 
-	float output = fib;
+	long long output = fib;
 
 	// Create a new value compilernode to return
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
