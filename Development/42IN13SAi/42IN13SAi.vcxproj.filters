@@ -523,4 +523,7 @@
   <ItemGroup>
     <ResourceCompile Include="42IN13SAi.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Dropbox\42IN13SAI\icon.ico" />
+  </ItemGroup>
 </Project>

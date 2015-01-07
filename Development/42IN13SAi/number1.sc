@@ -1,4 +1,5 @@
-func Main() # test
+func Main()
 [
-	prnt(1);
+	var x = pow(12|12);
+   prnt(x);
 ]
