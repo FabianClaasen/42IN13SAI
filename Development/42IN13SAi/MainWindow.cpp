@@ -10,9 +10,13 @@ MainWindow::MainWindow(QWidget *parent)
 
 	outputWindow = new OutputWindow();
 	exceptionWindow = new ExceptionWindow();
+
 	outputTab = new QTabWidget();
 	outputTab->addTab(outputWindow, "Output");
 	outputTab->addTab(exceptionWindow, "Exceptions");
+
+	themer.SetOutputWindow(outputWindow);
+	themer.SetExceptionWindow(exceptionWindow);
 
 	//Make a layout to add different widgets
 	splitter = new QSplitter();
@@ -23,9 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 	QList<int> sizes = QList<int>() << 500 << 10;
 	splitter->setSizes(sizes);
-
-	themer.SetOutputWindow(outputWindow);
-	themer.SetExceptionWindow(exceptionWindow);
 
 	this->setCentralWidget(splitter);
 }
@@ -122,7 +123,11 @@ void MainWindow::ChangeTheme()
 	QAction* selectedAction = dynamic_cast<QAction*>(sender());
 	selectedAction->setChecked(true);
 	std::string newTheme = selectedAction->text().toLocal8Bit().constData();
+
 	themer.SetTheme(newTheme);
+
+	themer.SetOutputWindow(outputWindow);
+	themer.SetExceptionWindow(exceptionWindow);
 }
 
 void MainWindow::SetTheme(std::map<std::string, QColor> mainStyles)

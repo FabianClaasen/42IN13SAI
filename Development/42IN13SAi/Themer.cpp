@@ -95,9 +95,9 @@ void Themer::SetTheme(std::string themeName)
     
 	// Set output/exception node and call the function
 	Json::Value outputStyles = themeStyles["output"];
-	Json::Value exceptionStyles = themeStyles["exception"];
-
 	SetOutputWindowStyles(outputStyles);
+
+	Json::Value exceptionStyles = themeStyles["exception"];
 	SetExceptionWindowStyles(exceptionStyles);
 
     // Set highlighter node and call the function

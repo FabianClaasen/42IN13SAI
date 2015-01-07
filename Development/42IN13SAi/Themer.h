@@ -88,8 +88,8 @@ private:
     void SetEditorStyles(Json::Value editorStyles);
 
 	// Output & exception style setters
-	void SetOutputWindowStyles(Json::Value outputStyles);
-	void SetExceptionWindowStyles(Json::Value SetExceptionWindowStyles);
+	void SetOutputWindowStyles(Json::Value outputWindowStyles);
+	void SetExceptionWindowStyles(Json::Value exceptionWindowStyles);
     
     // Highlighter style setters
     void SetHighlighters();
