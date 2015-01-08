@@ -67,7 +67,11 @@ HEADERS += ./Grammar.h \
     ./jsoncpp/reader.h \
     ./jsoncpp/value.h \
     ./jsoncpp/version.h \
-    ./jsoncpp/writer.h
+    ./jsoncpp/writer.h \
+    $$PWD/Constant.h \
+    $$PWD/DiagnosticsBuilder.h \
+    $$PWD/ExceptionOutput.h \
+    $$PWD/StopExecuteDialog.h
 SOURCES += ./main.cpp \
     ./Grammar.cpp \
     ./LabelStack.cpp \
@@ -119,7 +123,11 @@ SOURCES += ./main.cpp \
     ./MainController.cpp \
     ./jsoncpp/json_reader.cpp \
     ./jsoncpp/json_value.cpp \
-    ./jsoncpp/json_writer.cpp
+    ./jsoncpp/json_writer.cpp \
+    $$PWD/Constant.cpp \
+    $$PWD/DiagnosticsBuilder.cpp \
+    $$PWD/ExceptionOutput.cpp \
+    $$PWD/StopExecuteDialog.cpp
 
 RESOURCES += \
     $$PWD/Resources.qrc
