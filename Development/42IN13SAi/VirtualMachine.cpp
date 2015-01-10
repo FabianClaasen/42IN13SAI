@@ -189,7 +189,7 @@ std::vector<std::shared_ptr<CompilerNode>> VirtualMachine::CheckParameters(Compi
 
 std::shared_ptr<LinkedList> VirtualMachine::findList(std::string key)
 {
-	for (int i = 0; i < nodeLists.size(); i++)
+	for (int i = nodeLists.size() - 1; i >= 0; i--)
 	{
 		if (nodeLists.at(i).first == key)
 		{
@@ -203,7 +203,7 @@ std::shared_ptr<LinkedList> VirtualMachine::findList(std::string key)
 
 int VirtualMachine::findPosition(std::string key)
 {
-	for (int i = 0; i < nodeLists.size(); i++)
+	for (int i = nodeLists.size() - 1; i >= 0; i--)
 	{
 		if (nodeLists.at(i).first == key)
 		{
