@@ -466,7 +466,6 @@ void Parser::ParseLoopStatement()
 	compiler->Match(MyTokenType::CloseMethod);
 	
 	//Finally add the jumpTo compilerNode
-	
 	compiler->GetSubroutine()->AddCompilerNode(jumpTo);
 }
 
@@ -663,7 +662,7 @@ std::shared_ptr<CompilerNode> Parser::ParseTerm()
 
             if (symbol == nullptr)
                 //compiler->addException("Symbol not found");
-                throw SymbolNotFoundException("Symbol not found");
+				throw SymbolNotFoundException("Symbol not found, line: " + std::to_string(token.LineNumber) + ", position: " + std::to_string(token.LinePosition) + ".");
 
 			node = std::make_shared<CompilerNode>("$getVariable", symbol->name, false);
 			return node;

@@ -676,6 +676,10 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDivideOperation(CompilerNod
 	float num2 = atof(param2->GetValue().c_str());
 	float output = num1 / num2;
 
+	// Check if num2 is not zero
+	if (num2 == 0)
+		throw ZeroDivideException("Cannot divide by zero");
+
 	// Create a new value compilernode to return
 	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
 }
