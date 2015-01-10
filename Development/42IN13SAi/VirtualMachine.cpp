@@ -50,16 +50,21 @@ VirtualMachine::~VirtualMachine(){}
 
 std::shared_ptr<CompilerNode> VirtualMachine::GetNext(std::shared_ptr<LinkedList> nodes)
 {
-	std::shared_ptr<ListNode> node = nodes->GetNext();
-
-	if (!node)
+	if (nodes)
 	{
-		node.reset();
-        throw MissingCompilerNodeException("Compilernode missing");
-        //exceptions.push_back("Compilernode missing");
-	}
 
-	return node->GetData();
+		std::shared_ptr<ListNode> node = nodes->GetNext();
+
+		if (!node)
+		{
+			node.reset();
+			throw MissingCompilerNodeException("Compilernode missing");
+			//exceptions.push_back("Compilernode missing");
+		}
+
+		return node->GetData();
+	}
+	return nullptr;
 }
 
 
@@ -101,16 +106,20 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::shared_ptr<Linke
 {
 	// Get the subroutine name
 	std::string subroutineName = currentSubroutine->name;
+
 	// Insert the linkedlist for this subroutine
-	nodeLists.insert(std::pair<std::string, std::shared_ptr<LinkedList>>
-						 (subroutineName, nodes));
+	//nodeLists.insert(std::pair<std::string, std::shared_ptr<LinkedList>>(subroutineName, nodes));
+	nodeLists.push_back(std::pair<std::string, std::shared_ptr<LinkedList>>(subroutineName, nodes));
+	//nodeLists.push_back(std::pair<std::string, LinkedList>(subroutineName, *nodes));
 
 	if (nodes->size() > 0)
 	{
 		std::shared_ptr<CompilerNode> node;
 		do
 		{
-			node = VirtualMachine::GetNext(nodeLists[subroutineName]);
+			//std::find(nodeLists.begin(), nodeLists.end(), std::pair<std::string, );
+			//node = VirtualMachine::GetNext(std::find(nodeLists.begin(), nodeLists.end(), subroutineName));
+			node = VirtualMachine::GetNext(findList(subroutineName));
 
 			if (node)
 			{
@@ -127,8 +136,10 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::shared_ptr<Linke
 					// Set the current node to the partner of the donothing node
 					if (node->GetJumpTo())
 					{
-						nodeLists[subroutineName]->SetCurrent(node->GetJumpTo());
-						node = nodeLists[subroutineName]->GetCurrentData();
+						//std::find(nodeLists.begin(), nodeLists.end(), subroutineName)
+						//node = std::find(nodeLists.begin(), nodeLists.end(), subroutineName)->GetCurrentData();
+						findList(subroutineName)->SetCurrent(node->GetJumpTo());
+						node = findList(subroutineName)->GetCurrentData();
 					}
 				}
 				else
@@ -139,7 +150,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNodes(std::shared_ptr<Linke
 	}
 	
 	// Erase the LinkedList
-	nodeLists.erase(subroutineName);
+	if (findPosition(subroutineName) >= 0)
+		nodeLists.erase(nodeLists.begin() + findPosition(subroutineName));
+	//nodeLists.erase(std::remove(nodeLists.begin()->first, nodeLists.end()->first, subroutineName));
 	
 	return nullptr;
 }
@@ -172,6 +185,33 @@ std::vector<std::shared_ptr<CompilerNode>> VirtualMachine::CheckParameters(Compi
 			parameters.at(i) = CallFunction(*param);
 	}
 	return parameters;
+}
+
+std::shared_ptr<LinkedList> VirtualMachine::findList(std::string key)
+{
+	for (int i = 0; i < nodeLists.size(); i++)
+	{
+		if (nodeLists.at(i).first == key)
+		{
+			return nodeLists.at(i).second;
+			//return std::make_shared<LinkedList>(nodeLists.at(i).second);
+		}
+	}
+
+	return nullptr;
+}
+
+int VirtualMachine::findPosition(std::string key)
+{
+	for (int i = 0; i < nodeLists.size(); i++)
+	{
+		if (nodeLists.at(i).first == key)
+		{
+			return i;
+		}
+	}
+
+	return -1;
 }
 
 #pragma region FunctionOperations
@@ -220,8 +260,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 		paramNum++;
 	}
 
-	return VirtualMachine::ExecuteNodes(currentSubroutine->GetCompilerNodeCollection());
+	return VirtualMachine::ExecuteNodes(std::make_shared<LinkedList>(*currentSubroutine->GetCompilerNodeCollection()));
 }
+
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteReturn(CompilerNode compilerNode)
 {
 	// Get the Node parameters
@@ -355,7 +396,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteWhile(CompilerNode compiler
 	else
 	{
 		// Condition is false, move linkedlist to donothing node
-		nodeLists[currentSubroutine->name]->SetCurrent(compilerNode.GetJumpTo(), true);
+		
+		//std::find(nodeLists.begin(), nodeLists.end(), currentSubroutine->name)->SetCurrent(compilerNode.GetJumpTo(), true);
+		findList(currentSubroutine->name)->SetCurrent(compilerNode.GetJumpTo(), true);
 		return nullptr;
 	}
 }
@@ -400,7 +443,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFor(CompilerNode compilerNo
 	else
 	{
 		// Condition is false, move linkedlist to donothing node
-		nodeLists[currentSubroutine->name]->SetCurrent(compilerNode.GetJumpTo(), true);
+		//std::find(nodeLists.begin(), nodeLists.end(), currentSubroutine->name)->SetCurrent(compilerNode.GetJumpTo(), true);
+		findList(currentSubroutine->name)->SetCurrent(compilerNode.GetJumpTo(), true);
 		return nullptr;
 	}
 }
@@ -422,7 +466,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteIf(CompilerNode compilerNod
 	else
 	{
 		// Condition is false, move linkedlist to donothing node
-		nodeLists[currentSubroutine->name]->SetCurrent(compilerNode.GetJumpTo(), true);
+		//std::find(nodeLists.begin(), nodeLists.end(), currentSubroutine->name)->SetCurrent(compilerNode.GetJumpTo(), true);
+		findList(currentSubroutine->name)->SetCurrent(compilerNode.GetJumpTo(), true);
 		return nullptr;
 	}
 }

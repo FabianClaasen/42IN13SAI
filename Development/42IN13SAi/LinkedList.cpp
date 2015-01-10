@@ -36,7 +36,7 @@ std::shared_ptr<ListNode> LinkedList::GetNext()
 			current = node;
 		return tempCurrent;
 	}
-	return std::make_shared<ListNode>(ListNode());
+	return nullptr;// std::make_shared<ListNode>(ListNode());
 }
 
 std::shared_ptr<ListNode> LinkedList::PeekPrevious()

@@ -137,7 +137,11 @@ private:
 
 	// Nodes 
 	std::shared_ptr<LinkedList> globalsList;
-	std::map<std::string, std::shared_ptr<LinkedList>> nodeLists;
+	std::vector<std::pair<std::string, std::shared_ptr<LinkedList>>> nodeLists;
+	//std::vector<std::pair<std::string, LinkedList>> nodeLists;
+
+	std::shared_ptr<LinkedList> findList(std::string key);
+	int findPosition(std::string key);
 
 	bool is_running;
 	
