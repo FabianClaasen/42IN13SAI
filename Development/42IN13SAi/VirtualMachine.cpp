@@ -232,23 +232,23 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
         throw FunctionNameExpectedException("Expected function name");
 
 	// Get the subroutine table and check if exists
-	currentSubroutine = subroutineTable->GetSubroutine(functionNode->GetValue());
-	if (currentSubroutine == nullptr)
+	std::shared_ptr<Subroutine> t_subroutine = std::make_shared<Subroutine>(*subroutineTable->GetSubroutine(functionNode->GetValue()));
+	if (t_subroutine == nullptr)
         //exceptions.push_back("Function " + functionNode->GetValue() + " does not exist");
         throw SubroutineNotFoundException("Function " + functionNode->GetValue() + " does not exist");
 
 	// Set the currentSymbolTable
-	currentSymbolTable = currentSubroutine->GetSymbolTable();
+	std::shared_ptr<SymbolTable> t_symboltable = std::make_shared<SymbolTable>(*t_subroutine->GetSymbolTable());
 
 	// Get parameter count and check if enough parameters are given
-	int parameterCount = currentSymbolTable->ParameterSize();
+	int parameterCount = t_symboltable->ParameterSize();
 	if (parameters.size() - 1 != parameterCount)
         //exceptions.push_back("Incorrect parameters");
         throw ParameterException((int)parameters.size() - 1, parameterCount, ParameterExceptionType::IncorrectParameters);
 
 	// Set the currentSymbolTable symbol values
 	int paramNum = 1;
-	std::vector<Symbol*> vSymbols = currentSymbolTable->GetSymbolVector();
+	std::vector<Symbol*> vSymbols = t_symboltable->GetSymbolVector();
 	for (Symbol* symbol : vSymbols)
 	{
 		std::shared_ptr<CompilerNode> param = parameters.at(paramNum);
@@ -259,6 +259,10 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 		symbol->SetValue(fParam);
 		paramNum++;
 	}
+
+	// Set the current subroutine and symboltable
+	currentSubroutine = t_subroutine.get();
+	currentSymbolTable = t_symboltable.get();
 
 	return VirtualMachine::ExecuteNodes(std::make_shared<LinkedList>(*currentSubroutine->GetCompilerNodeCollection()));
 }
