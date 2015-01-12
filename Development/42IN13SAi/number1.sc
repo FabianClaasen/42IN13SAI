@@ -1,5 +1,14 @@
 func Main()
 [
-	var x = pow(12|12);
-   prnt(x);
+	var x = 0;
+   
+   if (x == 10)
+   [
+   	prnt(x);
+   	x++;
+   ]
+   else
+   [
+   	prnt(1);
+   ]
 ]

@@ -304,7 +304,15 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAssignment(CompilerNode com
 		// Get the value of the node -> variable
 		std::string variableName = param1->GetValue();
 		if (param2->GetExpression() != "$value")
+		{
+			Subroutine* t_subroutine = currentSubroutine;
+			SymbolTable* t_symboltable = currentSymbolTable;
+			
 			param2 = CallFunction(*param2);
+
+			currentSubroutine = t_subroutine;
+			currentSymbolTable = t_symboltable;
+		}
 
 		// Get the variable from symboltable
 		// first check subSymbolTable

@@ -92,8 +92,11 @@ void Tokenizer::Tokenize()
         }
 	}
 
-	
+	// Check for partners
     CheckClosingPartners();
+
+	// Close the file
+	file.close();
 }
 
 void Tokenizer::CheckClosingPartners()

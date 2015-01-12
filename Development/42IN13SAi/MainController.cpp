@@ -110,7 +110,6 @@ void MainController::Execute()
 			virtual_machine->start();
 
 			// Start timer to print output
-			//QThread* thread = new QThread();
 			std::thread* thread = new std::thread([&](){
 				output_thread_running = true;
 
@@ -146,12 +145,8 @@ void MainController::Execute()
 
 void MainController::PrintOutput(QString output)
 {
-	//mutex.lock();
-
 	mainWindow.addOutput(output.toStdString());
 	this->output.append(output);
-	
-	//mutex.unlock();
 }
 
 void MainController::PrintException(QString exception)
@@ -216,13 +211,14 @@ std::string MainController::GetFileFromStream()
 	QString gen_code = mainWindow.GetText();
 
 	std::shared_ptr<QFile> file;
-	std::shared_ptr<QFile> currentFile;
+	std::shared_ptr<QFile> currentFile = nullptr;
 	if (currentFiles.size() > mainWindow.GetCurrentTabPosition())
 	{
 		currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition());
 	}
 
-	if (currentFile->fileName().endsWith(".cs"))
+	//currentFile
+	if (!currentFile->fileName().isEmpty() && currentFile->fileName().endsWith(".cs"))
 	{
 		file = currentFile;
 	}
@@ -234,6 +230,9 @@ std::string MainController::GetFileFromStream()
 	if (file->exists())
 	{
 		file->remove();
+		
+		if (file->error())
+			std::cout << file->errorString().toStdString() << std::endl;
 	}
 
 	file->open(QIODevice::ReadWrite | QIODevice::Text);
