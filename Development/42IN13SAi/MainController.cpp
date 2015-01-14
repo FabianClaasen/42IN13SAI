@@ -266,7 +266,7 @@ void MainController::LoadFile()
 	{
 		QString URI = mainWindow.OpenLoadDialog();
 
-		if (!URI.isEmpty() && URI.endsWith(".cs"))
+		if (!URI.isEmpty() && URI.endsWith(".sc"))
 		{
 			QString text = FileIO::LoadFile(URI);
 
@@ -276,7 +276,7 @@ void MainController::LoadFile()
 			mainWindow.AddFile(fileInfo, text);
 		}
 		else
-			throw LoadException("You can only save the file as a .cs file");
+			throw LoadException("You can only load .sc files");
 	}
 	catch (LoadException e)
 	{
@@ -297,7 +297,7 @@ void MainController::SaveFile()
 			currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition());
 		}
 
-		if (!currentFile->fileName().endsWith(".cs"))
+		if (!currentFile->fileName().endsWith(".sc"))
 		{
 			SaveAsFile();
 		}
@@ -326,7 +326,7 @@ void MainController::SaveAsFile()
 			mainWindow.SetTabTitle(fileInfo);
 		}
 		else
-			throw SaveException("You can only save the file as a .cs file");
+			throw SaveException("You can only save the file as a .sc file");
 	}
 	catch (SaveException e)
 	{
