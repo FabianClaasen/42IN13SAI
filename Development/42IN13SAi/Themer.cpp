@@ -30,6 +30,13 @@ Themer::~Themer()
 {
 }
 
+void Themer::SetMainWindow(MainWindow* mainWindow)
+{
+	mainWindow->SetTheme(mainColors);
+
+	this->mainWindow = mainWindow;
+}
+
 void Themer::SetOutputWindow(OutputWindow* outputWindow)
 {
 	outputWindow->SetTheme(outputWindowColors);
@@ -103,19 +110,9 @@ void Themer::SetTheme(std::string themeName)
     // Set highlighter node and call the function
     Json::Value highlighterStyles = themeStyles["syntax"];
     SetHighlighterStyles(highlighterStyles);
-    
+
     SetEditors();
     SetHighlighters();
-}
-
-void Themer::SetWindowStyles(Json::Value mainStyles)
-{
-    mainColors.clear();
-    
-    // Set the background color
-    Json::Value bgColors = mainStyles["background_color"];
-    QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
-   mainColors.insert(std::map<std::string, QColor>::value_type("background", bg));
 }
 
 void Themer::SetEditorStyles(Json::Value editorStyles)
@@ -163,6 +160,17 @@ void Themer::SetEditorStyles(Json::Value editorStyles)
     
     // Set the font size
     fontSize = editorStyles["font_size"].asInt();
+}
+
+void Themer::SetWindowStyles(Json::Value mainStyles)
+{
+	mainColors.clear();
+
+	// Set the background color
+	Json::Value bgColors = mainStyles["background_color"];
+	QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+
+	mainColors.insert(std::map<std::string, QColor>::value_type("background", bg));
 }
 
 void Themer::SetHighlighterStyles(Json::Value highlighterStyles)

@@ -3,6 +3,9 @@
 	"author": "Ethan Schoonover",
 	"author_url": "http://ethanschoonover.com/solarized",
 	"theme": {
+		"window" : {
+			"background_color" : [51, 85, 94]
+		},
 		"editor" : {
 			"background_color": [0, 43, 54],
 			"font_family": "DejaVu Sans Mono",

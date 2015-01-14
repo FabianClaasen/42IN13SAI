@@ -15,8 +15,11 @@ MainWindow::MainWindow(QWidget *parent)
 	outputTab->addTab(outputWindow, "Output");
 	outputTab->addTab(exceptionWindow, "Exceptions");
 
+	themer.SetMainWindow(this);
 	themer.SetOutputWindow(outputWindow);
 	themer.SetExceptionWindow(exceptionWindow);
+
+	SetTheme(themer.GetWindowStyles());
 
 	//Make a layout to add different widgets
 	splitter = new QSplitter();
@@ -126,6 +129,7 @@ void MainWindow::ChangeTheme()
 
 	themer.SetTheme(newTheme);
 
+	themer.SetMainWindow(this);
 	themer.SetOutputWindow(outputWindow);
 	themer.SetExceptionWindow(exceptionWindow);
 }

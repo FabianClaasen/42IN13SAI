@@ -4,8 +4,7 @@
 	"author_url": "http://ethanschoonover.com/solarized",
 	"theme": {
 		"window" : {
-			"background_color" : [238, 232, 213],
-			"output_windows": [253, 246, 227]
+			"background_color" : [254, 249, 235]
 		},
 		"editor" : {
 			"background_color": [253, 246, 227],

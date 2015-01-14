@@ -28,7 +28,8 @@ public:
 	Themer(MainWindow* p_main);
     virtual ~Themer();
     
-	// public output window setter
+	// public main & output -window setter
+	void SetMainWindow(MainWindow* mainWindow);
 	void SetOutputWindow(OutputWindow* outputWindow);
 	void SetExceptionWindow(ExceptionWindow* exceptionWindow);
 
@@ -69,9 +70,11 @@ private:
     std::string fontFamily;
     int fontSize;
     
-    // editors, output and highlighter
+    // editors, mainwindow, outputwindow and highlighter
     std::vector<CodeEditor*> editors;
     std::vector<Highlighter *> highlighters;
+
+	MainWindow* mainWindow;
 	OutputWindow* outputWindow;
 	ExceptionWindow* exceptionWindow;
     
