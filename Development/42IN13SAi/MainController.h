@@ -20,6 +20,9 @@
 #include "FileIO.h"
 #include "ExceptionOutput.h"
 #include "StopExecuteDialog.h"
+#include "ErrorDialog.h"
+#include "SaveException.h"
+#include "LoadException.h"
 
 class ConsoleOutput;
 class MainController : public QObject

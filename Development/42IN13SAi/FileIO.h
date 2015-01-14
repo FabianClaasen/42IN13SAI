@@ -6,6 +6,9 @@
 #include <qtextstream.h>
 #include <memory>
 
+#include "LoadException.h"
+#include "SaveException.h"
+
 class FileIO
 {
 public:

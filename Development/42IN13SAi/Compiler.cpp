@@ -41,11 +41,37 @@ Token Compiler::GetNext()
 	}
 	else
 	{
-        //exceptions.push_back("A MissingTokenException occured");
         throw MissingTokenException("A MissingTokenException occured.");
 	}
 
 	return token;
+}
+
+Token Compiler::GetCurrent()
+{
+    return *tokenizerTokens.at(currentIndex);
+}
+
+void Compiler::SkipUntil(MyTokenType tokenType)
+{
+    int level = tokenizerTokens.at(currentIndex)->Level;
+    
+    while (tokenizerTokens.at(currentIndex)->Type != tokenType && tokenizerTokens.at(currentIndex)->Level != level)
+    {
+        currentIndex++;
+    }
+    
+    if (tokenizerTokens.at(currentIndex)->Type == MyTokenType::EOL)
+        currentIndex++;
+}
+
+void Compiler::SkipUntil(Token token)
+{
+    Token toSkipTo = *tokenizerTokens.at(currentIndex);
+    while (&toSkipTo != &token)
+    {
+        currentIndex++;
+    }
 }
 
 // Set the tokenlist
@@ -175,9 +201,6 @@ void Compiler::ParseStatement()
 		if (!currentSubroutine.isEmpty)
 			currentSubroutine.AddCompilerNode(std::shared_ptr<CompilerNode>(InternalFunction(this).GetInternalFunction(MyTokenType::PrintLine)));
 		Match(MyTokenType::EOL);
-		
-		//else
-			//std::runtime_error("");
 		break;
 	case MyTokenType::Stop:
 		if (!currentSubroutine.isEmpty)
@@ -190,7 +213,6 @@ void Compiler::ParseStatement()
 		Match(MyTokenType::EOL);
 		break;
 	default:
-        //exceptions.push_back("A StatementNotFoundException occurred at line " + std::to_string(PeekNext()->LineNumber) +" on position " + std::to_string(PeekNext()->LinePosition)+".");
         throw StatementNotFoundException("A StatementNotFoundException occurred at line " + std::to_string(PeekNext()->LineNumber) +" on position " + std::to_string(PeekNext()->LinePosition)+".");
 		break;
 	}
@@ -326,7 +348,13 @@ std::string Compiler::TokenToString(MyTokenType type)
 	}
 }
 
+DiagnosticBuilder Compiler::Diag(ExceptionEnum exception)
+{
+    hasExceptions = true;
+    return DiagnosticBuilder(exception);
+}
+
 bool Compiler::HasExceptions()
 {
-	return false;
+	return hasExceptions;
 }

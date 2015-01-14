@@ -28,7 +28,8 @@ enum ExceptionEnum {
     err_unexpected_type,
     err_expected_lparen_after,
     err_expected_rparen_after,
-    err_unkown_stmt
+    err_unkown_stmt,
+    err_expected_parameter
 };
 
 #endif

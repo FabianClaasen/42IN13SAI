@@ -87,7 +87,7 @@ void Tokenizer::Tokenize()
         // Continue to next line, shouldn't tokenize anything after unkown character
         if (!match)
         {
-            Diag(Token(), ExceptionEnum::err_unkown_char) << lineRemaining.substr(0, 1) << lineNumber << linePosition;
+            Diag(ExceptionEnum::err_unkown_char) << lineRemaining.substr(0, 1) << lineNumber << linePosition;
             NextLine();
         }
 	}
@@ -126,7 +126,7 @@ std::shared_ptr<Token> Tokenizer::FindPartner(MyTokenType &type, int level)
         }
     }
 
-    Diag(Token(), ExceptionEnum::err_partner_not_found) << TokenToString(type) << lineNumber << linePosition;
+    Diag(ExceptionEnum::err_partner_not_found) << TokenToString(type) << lineNumber << linePosition;
     return std::shared_ptr<Token>();
 }
 
@@ -148,7 +148,7 @@ void Tokenizer::TryFindPartner(std::shared_ptr<Token> token)
 	}
 
 	// Didn't find a partner:
-    Diag(*token, ExceptionEnum::err_partner_not_found) << token->Value << token->LineNumber << token->LinePosition;
+    Diag(ExceptionEnum::err_partner_not_found) << token->Value << token->LineNumber << token->LinePosition;
 }
 
 bool Tokenizer::ShouldFindPartner(MyTokenType &type)
@@ -208,10 +208,10 @@ bool Tokenizer::HasExceptions()
     return hasExceptions;
 }
 
-DiagnosticBuilder Tokenizer::Diag(Token token, ExceptionEnum exception)
+DiagnosticBuilder Tokenizer::Diag(ExceptionEnum exception)
 {
     hasExceptions = true;
-    return DiagnosticBuilder(token, exception);
+    return DiagnosticBuilder(exception);
 }
 
 Tokenizer::~Tokenizer()

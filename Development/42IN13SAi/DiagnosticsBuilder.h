@@ -20,7 +20,7 @@
 class Token;
 class DiagnosticBuilder {
 public:
-    DiagnosticBuilder(const Token& tok, ExceptionEnum e);
+    DiagnosticBuilder(ExceptionEnum e);
     ~DiagnosticBuilder();
     
     
