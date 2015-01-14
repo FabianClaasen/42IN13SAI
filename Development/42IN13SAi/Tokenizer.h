@@ -188,5 +188,5 @@ private:
     /// @param token The Token the exception happened on
     /// @param exception The exception that happened
     ///
-    DiagnosticBuilder Diag(Token token, ExceptionEnum exception);
+    DiagnosticBuilder Diag(ExceptionEnum exception);
 };

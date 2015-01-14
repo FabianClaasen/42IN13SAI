@@ -37,7 +37,8 @@ const std::map<ExceptionEnum, std::string> ExceptionMessages::exceptionMessages
     { ExceptionEnum::err_expected_lparen_after, "Expected left bracket after '%s' (line %s)" },
     { ExceptionEnum::err_expected_rparen_after, "Expected right bracket after '%s' (line %s)" },
     { ExceptionEnum::err_unkown_stmt, "Unkown statement '%s' (line %s)" },
-    { ExceptionEnum::err_expected_ret, "Expected return type (line %s)" }
+    { ExceptionEnum::err_expected_ret, "Expected return type (line %s)" },
+    { ExceptionEnum::err_expected_parameter, "Expected parameter (line %s)"}
 };
 
 #endif
