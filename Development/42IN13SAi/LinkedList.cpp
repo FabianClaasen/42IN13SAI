@@ -100,7 +100,7 @@ std::shared_ptr<ListNode> LinkedList::findNode(std::shared_ptr<CompilerNode> nod
     
 	while (listNode != std::shared_ptr<ListNode>())
 	{
-		if (listNode->GetData()->GetJumpTo() == node->GetJumpTo())
+		if (listNode->GetData() == node)
 			return listNode;
 		listNode = listNode->GetNext();
 	}

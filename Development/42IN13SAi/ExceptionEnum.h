@@ -29,6 +29,7 @@ enum ExceptionEnum {
     err_expected_lparen_after,
     err_expected_rparen_after,
     err_unkown_stmt,
+    err_unexpected_keyword,
     err_expected_parameter
 };
 

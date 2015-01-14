@@ -332,58 +332,72 @@ void Parser::ParseFunctionCall()
 // Also check and parse if-else statement
 void Parser::ParseIfStatement()
 {
-	Token currentToken = compiler->GetNext();
-	bool hasPartner = false;
-
-	std::list<CompilerNode> innerIfStatementNodes;
-	std::list<CompilerNode> innerElseStatementNodes;
-	std::shared_ptr<CompilerNode> statementNode;
-	std::shared_ptr<CompilerNode> endNode;
-
-	if (currentToken.Type == MyTokenType::If)
-	{
-		if (currentToken.Partner != nullptr)
-		{
-			hasPartner = true;
-		}
-	}
-	else
-    {
-        //compiler->addException("An UnexpectedKeywordException occured. Expected an if keyword on line " + std::to_string(currentToken.LineNumber) + ".");
-        throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected an if keyword on line " + std::to_string(currentToken.LineNumber) + ".");
-	}
-
-	compiler->Match(MyTokenType::OpenBracket);
-
-	statementNode = ParseExpression();
-
-	compiler->Match(MyTokenType::CloseBracket);
-	compiler->Match(MyTokenType::OpenMethod);
-
-	//Make a do nothing compilerNode to jump to if the statement is false
-	std::vector<std::string> doNothing;
-	std::shared_ptr<CompilerNode> jumpTo = std::make_shared<CompilerNode>("$doNothing", "", false);
-
-	//Create the endNode before parsing the statements in the if/else
-	std::vector<std::shared_ptr<CompilerNode>> params;
-	params.push_back(statementNode);
-	endNode = std::make_shared<CompilerNode>("$if", params, jumpTo, false);
-	compiler->GetSubroutine()->AddCompilerNode(endNode);
+    Token currentToken = compiler->GetNext();
+    bool hasPartner = false;
     
-    // Parse the statements for a true condition
-	while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
-	{
-		compiler->ParseStatement();
-	}
+    std::list<CompilerNode> innerIfStatementNodes;
+    std::list<CompilerNode> innerElseStatementNodes;
+    std::shared_ptr<CompilerNode> statementNode;
+    std::shared_ptr<CompilerNode> endNode;
+    
+    if (currentToken.Type == MyTokenType::If)
+    {
+        if (currentToken.Partner != nullptr)
+        {
+            hasPartner = true;
+        }
+    }
+    else
+    {
+        compiler->Diag(ExceptionEnum::err_unexpected_keyword) << currentToken.LineNumber;
+        compiler->SkipUntil(MyTokenType::CloseMethod);
+        return;
+    }
+    
+    compiler->Match(MyTokenType::OpenBracket);
+    
+    statementNode = ParseExpression();
+    
+    std::vector<std::shared_ptr<CompilerNode>> params;
+    params.push_back(statementNode);
+    
+    compiler->Match(MyTokenType::CloseBracket);
+    compiler->Match(MyTokenType::OpenMethod);
+    
+    //Make a do nothing compilerNode to jump to if the statement is false
+    std::vector<std::string> doNothing;
+    std::shared_ptr<CompilerNode> jumpTo = std::make_shared<CompilerNode>("$doNothing", "", false);
+    
+    //Create the endNode before parsing the statements in the if/else
+    endNode = std::make_shared<CompilerNode>("$if", params, jumpTo, false);
+    compiler->GetSubroutine()->AddCompilerNode(endNode);
 
-	compiler->Match(MyTokenType::CloseMethod);
-
-    //Add the donothing to jump to if condition is false
+    while (compiler->PeekNext()->Type != MyTokenType::CloseMethod)
+    {
+        compiler->ParseStatement();
+    }
+    
+    compiler->Match(MyTokenType::CloseMethod);
+    
+    // Add a do nothing node to jump to if the 'if' has a partner and
+    // is finished with the true condition statements
+    std::shared_ptr<CompilerNode> finalDoNothing;
+    if (hasPartner)
+    {
+        finalDoNothing = std::make_shared<CompilerNode>("$doNothing", "donothing-end", false);
+        
+        std::shared_ptr<CompilerNode> trueDoNothing = std::make_shared<CompilerNode>("$doNothing", "donothing-halfway", finalDoNothing, false);
+        
+        // Add the do nothing for the true statements
+        compiler->GetSubroutine()->AddCompilerNode(trueDoNothing);
+    }
+    
+    //Add the donothing to jump to if the condition is false
     compiler->GetSubroutine()->AddCompilerNode(jumpTo);
     
     // If there is a else / else if parse that after the do nothing
-	if (hasPartner)
-	{
+    if (hasPartner)
+    {
         compiler->Match(MyTokenType::Else);
         compiler->Match(MyTokenType::OpenMethod);
         
@@ -393,7 +407,10 @@ void Parser::ParseIfStatement()
         }
         
         compiler->Match(MyTokenType::CloseMethod);
-	}
+    }
+    
+    // Add the end doNothing
+    compiler->GetSubroutine()->AddCompilerNode(finalDoNothing);
 }
 
 /*
@@ -419,7 +436,6 @@ void Parser::ParseLoopStatement()
 	}
 	else
 	{
-        //compiler->addException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");
         throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");
 	}
 
