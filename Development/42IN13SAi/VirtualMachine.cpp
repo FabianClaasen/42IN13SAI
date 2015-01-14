@@ -380,7 +380,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteStop(CompilerNode compilerN
 	if (compilerNode.GetNodeparameters().empty())
 	{
 		if (compilerNode.GetExpression() == "$stop")
-			std::exit(1);
+		{
+			is_running = false;
+		}
 		else
 			throw UnknownExpressionException("Unknown expression type");
 	}
