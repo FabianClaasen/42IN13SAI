@@ -1,14 +1,6 @@
+var x = pow(12|12);
+
 func Main()
 [
-	var x = 0;
-   
-   if (x == 10)
-   [
-   	prnt(x);
-   	x++;
-   ]
-   else
-   [
-   	prnt(1);
-   ]
+	prnt(x);
 ]

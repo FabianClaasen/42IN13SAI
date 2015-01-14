@@ -20,6 +20,9 @@
 #include "FileIO.h"
 #include "ExceptionOutput.h"
 #include "StopExecuteDialog.h"
+#include "ErrorDialog.h"
+#include "SaveException.h"
+#include "LoadException.h"
 
 class ConsoleOutput;
 class MainController : public QObject
@@ -42,6 +45,7 @@ class MainController : public QObject
 		std::vector<std::shared_ptr<QFile>> currentFiles;
 		boost::thread* workerThread;
 		StopExecuteDialog* dialog;
+		ErrorDialog* error_dialog;
 		QString output;
 		QMutex mutex;
 
@@ -62,6 +66,7 @@ class MainController : public QObject
 		void Quit();
 		void CloseTab(int index);
 		void HideDialog();
+		void CloseErrorDialog();
 		void StopVirtualMachine();
 
 	public slots:

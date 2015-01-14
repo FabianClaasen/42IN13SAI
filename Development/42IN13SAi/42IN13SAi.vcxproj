@@ -16,6 +16,7 @@
     <ClCompile Include="CodeEditor.cpp" />
     <ClCompile Include="Constant.cpp" />
     <ClCompile Include="DiagnosticsBuilder.cpp" />
+    <ClCompile Include="ErrorDialog.cpp" />
     <ClCompile Include="ExceptionOutput.cpp" />
     <ClCompile Include="ExceptionWindow.cpp" />
     <ClCompile Include="FileIO.cpp" />
@@ -77,6 +78,7 @@
     <ClCompile Include="LinkedList.cpp" />
     <ClCompile Include="ListIterator.cpp" />
     <ClCompile Include="ListNode.cpp" />
+    <ClCompile Include="LoadException.cpp" />
     <ClCompile Include="MainController.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Grammar.cpp" />
@@ -92,6 +94,7 @@
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="PartnerNotFoundException.cpp" />
     <ClCompile Include="RegexMatcher.cpp" />
+    <ClCompile Include="SaveException.cpp" />
     <ClCompile Include="StatementNotFoundException.cpp" />
     <ClCompile Include="StopExecuteDialog.cpp" />
     <ClCompile Include="SubroutineNotFoundException.cpp" />
@@ -1369,6 +1372,11 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\..\Dropbox\42IN13SAI\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ErrorDialog.h" />
+    <ClInclude Include="LoadException.h" />
+    <ClInclude Include="SaveException.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0F8E62D6-F5A0-4C66-AD23-F45D847EB1FE}</ProjectGuid>

@@ -17,7 +17,7 @@ void Compiler::Compile()
 	while (currentIndex != tokenizerTokens.size() - 1)
 	{
 		currentSubroutine = Subroutine();
-		ParseStatement();
+		ParseFunctionOrGlobal();
 	}
 }
 
@@ -147,6 +147,7 @@ void Compiler::ParseFunctionOrGlobal()
 	switch (PeekNext()->Type)
 	{
 	case MyTokenType::Function:
+	case MyTokenType::MainFunction:
 		Parser(this).ParseFunction();
 		break;
 	default:
@@ -199,7 +200,7 @@ void Compiler::ParseStatement()
 	case MyTokenType::PrintLine:
 		if (!currentSubroutine.isEmpty)
 			currentSubroutine.AddCompilerNode(std::shared_ptr<CompilerNode>(InternalFunction(this).GetInternalFunction(MyTokenType::PrintLine)));
-			Match(MyTokenType::EOL);
+		Match(MyTokenType::EOL);
 		break;
 	case MyTokenType::Stop:
 		if (!currentSubroutine.isEmpty)
@@ -209,7 +210,7 @@ void Compiler::ParseStatement()
 	case MyTokenType::AbcFormula:
 		if (!currentSubroutine.isEmpty)
 			currentSubroutine.AddCompilerNode(std::shared_ptr<CompilerNode>(InternalFunction(this).GetInternalFunction(MyTokenType::AbcFormula)));
-			Match(MyTokenType::EOL);
+		Match(MyTokenType::EOL);
 		break;
 	default:
         throw StatementNotFoundException("A StatementNotFoundException occurred at line " + std::to_string(PeekNext()->LineNumber) +" on position " + std::to_string(PeekNext()->LinePosition)+".");
