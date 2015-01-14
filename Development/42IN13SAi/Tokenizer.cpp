@@ -37,6 +37,17 @@ void Tokenizer::Tokenize()
 
 			if (matched > 0)
 			{
+                if (definition.myTokenType == MyTokenType::Extended_ASCII)
+                {
+                    Diag(ExceptionEnum::err_unkown_char) << lineRemaining.substr(0, 1) << lineNumber << linePosition;
+                    
+                    lineRemaining = "";
+                    NextLine();
+                    match = true;
+                    
+                    break;
+                }
+                
 				match = true;
 
 				if (definition.myTokenType == MyTokenType::Comment)

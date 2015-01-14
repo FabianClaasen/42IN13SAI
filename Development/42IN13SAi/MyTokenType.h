@@ -89,5 +89,8 @@ enum class MyTokenType : int {
 
 	// Constants
 	Math_PI,
-	Math_E
+	Math_E,
+    
+    // extra
+    Extended_ASCII
 };

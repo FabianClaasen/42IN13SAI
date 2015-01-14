@@ -5,6 +5,7 @@
 std::list<TokenDefinition> Grammar::getGrammar()
 {
     std::list<TokenDefinition> definitions;
+    definitions.push_back(TokenDefinition("[\\x80-\\xFF]*", MyTokenType::Extended_ASCII));
     definitions.push_back(TokenDefinition("var\\b", MyTokenType::Var));
 	definitions.push_back(TokenDefinition("\\{\\}\\b", MyTokenType::Array));
     
@@ -100,7 +101,7 @@ std::list<TokenDefinition> Grammar::getGrammar()
 
     definitions.push_back(TokenDefinition("[!@$%&*\"\\.]", MyTokenType::Special));
 	definitions.push_back(TokenDefinition("\\#(.*)", MyTokenType::Comment));
-    definitions.push_back(TokenDefinition("_?[a-zA-Z][a-zA-Z0-9_]*", MyTokenType::Identifier));
+    definitions.push_back(TokenDefinition("_?[^\\x0-\\x7F]*", MyTokenType::Identifier));
     
     definitions.push_back(TokenDefinition("\\;", MyTokenType::EOL));
     
