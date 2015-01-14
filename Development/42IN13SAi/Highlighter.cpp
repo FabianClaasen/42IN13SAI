@@ -22,18 +22,23 @@ Highlighter::Highlighter(std::map<std::string, QColor> colors, QTextDocument *pa
             case MyTokenType::Return:
                 setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["return_types"]);
                 break;
+
             case MyTokenType::If:
             case MyTokenType::Else:
             case MyTokenType::ElseIf:
             case MyTokenType::While:
             case MyTokenType::ForLoop:
+
                 setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["identifiers"]);
                 break;
+
             case MyTokenType::Function:
             case MyTokenType::MainFunction:
+
                 setCurrentFormat(currentFormat, rule, QRegExp("\\b(?!if|else|while|frl)[A-Za-z0-9_]+(?=\\()"), QFont::Bold, colors["functions"]);
 				setCurrentFormat(currentFormat, rule, QRegExp("\\bfunc\\b"), QFont::Normal, QColor(203, 75, 22));
                 break;
+
             case MyTokenType::OperatorDivide:
             case MyTokenType::OperatorMinus:
             case MyTokenType::OperatorMultiply:
@@ -41,21 +46,22 @@ Highlighter::Highlighter(std::map<std::string, QColor> colors, QTextDocument *pa
             case MyTokenType::OperatorRaised:
             case MyTokenType::UniOperatorMinus:
             case MyTokenType::UniOperatorPlus:
+
                 setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["operators"]);
                 break;
+
             case MyTokenType::Float:
                 setCurrentFormat(currentFormat, rule, QRegExp("(?=[.]?[0-9])[0-9]*(?:[.][0-9]*)?(?:[Ee][+-]?[0-9]+)?(?=[ );])$*"), QFont::Normal, colors["variable_types"]);
                 break;
+
 			case MyTokenType::Comment:
 				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["comments"]);
 				break;
+
             default:
 				break;
 		}
 	}
-
-	commentStartExpression = QRegExp("/\\*");
-	commentEndExpression = QRegExp("\\*/");
 }
 
 void Highlighter::setCurrentFormat(QTextCharFormat currentFormat, HighlightingRule rule, QRegExp regexPattern, QFont::Weight font, QColor color)
