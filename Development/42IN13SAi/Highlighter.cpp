@@ -32,6 +32,7 @@ Highlighter::Highlighter(std::map<std::string, QColor> colors, QTextDocument *pa
             case MyTokenType::Function:
             case MyTokenType::MainFunction:
                 setCurrentFormat(currentFormat, rule, QRegExp("\\b(?!if|else|while|frl)[A-Za-z0-9_]+(?=\\()"), QFont::Bold, colors["functions"]);
+				setCurrentFormat(currentFormat, rule, QRegExp("\\bfunc\\b"), QFont::Normal, QColor(203, 75, 22));
                 break;
             case MyTokenType::OperatorDivide:
             case MyTokenType::OperatorMinus:
@@ -43,7 +44,7 @@ Highlighter::Highlighter(std::map<std::string, QColor> colors, QTextDocument *pa
                 setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["operators"]);
                 break;
             case MyTokenType::Float:
-                setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["variable_types"]);
+                setCurrentFormat(currentFormat, rule, QRegExp("(?=[.]?[0-9])[0-9]*(?:[.][0-9]*)?(?:[Ee][+-]?[0-9]+)?(?=[ );])$*"), QFont::Normal, colors["variable_types"]);
                 break;
 			case MyTokenType::Comment:
 				setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["comments"]);
@@ -52,9 +53,6 @@ Highlighter::Highlighter(std::map<std::string, QColor> colors, QTextDocument *pa
 				break;
 		}
 	}
-
-	// Rule for func
-	setCurrentFormat(currentFormat, rule, QRegExp("\\bfunc\\b"), QFont::Normal, QColor(203, 75, 22));
 
 	commentStartExpression = QRegExp("/\\*");
 	commentEndExpression = QRegExp("\\*/");
