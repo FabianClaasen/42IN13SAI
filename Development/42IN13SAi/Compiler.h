@@ -21,6 +21,7 @@
 #include "ParameterNameException.h"
 #include "IdentifierException.h"
 #include "UnexpectedParameterException.h"
+#include "DiagnosticsBuilder.h"
 
 class InternalFunction;
 class Parser;
@@ -32,16 +33,25 @@ public:
 
 	// Functions
 	void Compile();
+    
 	std::shared_ptr<Token> PeekNext();
 	Token  GetNext();
-	Subroutine* GetSubroutine();
-	Symbol* GetSymbol(std::string name);
-	void SetTokenList(std::vector<std::shared_ptr<Token>> tokens);
+    Token GetCurrent();
+    void SkipUntil(MyTokenType tokenType);
+    void SkipUntil(Token token);
+	
+    void SetTokenList(std::vector<std::shared_ptr<Token>> tokens);
+    
+    Subroutine* GetSubroutine();
 	void SetSubroutine(Subroutine subroutine);
 	void AddSubroutine();
-	void AddSymbol(Symbol symbol);
-	void AddCompilerNode(std::shared_ptr<CompilerNode> node);
+	
+    void AddCompilerNode(std::shared_ptr<CompilerNode> node);
+    
 	bool HasSymbol(std::string symbolName);
+    Symbol* GetSymbol(std::string name);
+    void AddSymbol(Symbol symbol);
+    
 	void ParseGlobalStatement();
 	void ParseStatement();
 	bool IsInternalFunction(MyTokenType type);
@@ -56,6 +66,14 @@ public:
 	SymbolTable* GetSymbolTable();
 	SubroutineTable* GetSubroutineTable();
 	std::list<std::shared_ptr<CompilerNode>> GetCompilerNodes();
+    
+    /// Returns a DiagnosticBuilder for the exception occuring
+    ///
+    /// @see ExceptionEnum.h
+    /// @param token The Token the exception happened on
+    /// @param exception The exception that happened
+    ///
+    DiagnosticBuilder Diag(ExceptionEnum exception);
 	
 private:
 	// Variables
@@ -71,4 +89,8 @@ private:
 	void ParseFunctionOrGlobal();
 	void ParseFunctionOrAssignment();
 	std::string TokenToString(MyTokenType type);
+    
+    
+    bool hasExceptions;
+    bool isFatalException;
 };

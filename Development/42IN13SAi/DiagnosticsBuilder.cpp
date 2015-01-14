@@ -9,7 +9,7 @@
 #include "DiagnosticsBuilder.h"
 #include "Token.h"
 
-DiagnosticBuilder::DiagnosticBuilder(const Token& tok, ExceptionEnum e)
+DiagnosticBuilder::DiagnosticBuilder(ExceptionEnum e)
 {
     currentException = e;
     exceptionParams = new std::vector<std::string>();
@@ -62,5 +62,7 @@ const std::map<ExceptionEnum, std::string> DiagnosticBuilder::exceptionMessages
     { ExceptionEnum::err_unexpected_type, "Unexpected type '%s' (line %s)" },
     { ExceptionEnum::err_expected_lparen_after, "Expected left bracket after '%s' (line %s)" },
     { ExceptionEnum::err_expected_rparen_after, "Expected right bracket after '%s' (line %s)" },
-    { ExceptionEnum::err_unkown_stmt, "Unkown statement '%s' (line %s)" }
+    { ExceptionEnum::err_unkown_stmt, "Unkown statement '%s' (line %s)" },
+    { ExceptionEnum::err_expected_ret, "Expected return type (line %s)" },
+    { ExceptionEnum::err_expected_parameter, "Expected parameter (line %s at position %s)"}
 };
