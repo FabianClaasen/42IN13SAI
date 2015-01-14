@@ -29,6 +29,12 @@ QString FileIO::LoadFile(QString URI)
 			text.append("\n");
 		}
 	}
+
+	if (file.error())
+	{
+		throw LoadException(file.errorString().toStdString());
+	}
+
 	file.close();
 
 	return text;
@@ -43,9 +49,16 @@ void FileIO::SaveFile(QString URI, QString code)
 	}
 
 	file.open(QIODevice::ReadWrite | QIODevice::Text);
-	QTextStream stream(&file);
+	if (file.error())
+	{
+		throw SaveException(file.errorString().toStdString());
+	}
+	else
+	{
+		QTextStream stream(&file);
+		stream << code;
+	}
 
-	stream << code;
 	file.close();
 }
 
@@ -57,8 +70,15 @@ void FileIO::SaveFile(std::shared_ptr<QFile> file, QString code)
 	}
 
 	file->open(QIODevice::ReadWrite | QIODevice::Text);
-	QTextStream stream(file.get());
+	if (file->error())
+	{
+		throw SaveException(file->errorString().toStdString());
+	}
+	else
+	{
+		QTextStream stream(file.get());
+		stream << code;
+	}
 
-	stream << code;
 	file->close();
 }

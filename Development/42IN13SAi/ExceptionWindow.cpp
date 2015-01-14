@@ -19,7 +19,7 @@ void ExceptionWindow::SetTheme(std::map<std::string, QColor> colors)
 {
 	// Output colours
 	QPalette pallete;
-	pallete.setColor(QPalette::Active, QPalette::Base, colors["background"]);
+	pallete.setColor(QPalette::Base, colors["background"]);
 	pallete.setColor(QPalette::Text, colors["text"]);
 
 	this->setPalette(pallete);

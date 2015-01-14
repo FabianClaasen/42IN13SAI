@@ -181,7 +181,7 @@ std::vector<std::shared_ptr<CompilerNode>> VirtualMachine::CheckParameters(Compi
 		std::shared_ptr<CompilerNode> param = parameters.at(i);
 		// Check if the parameters are a value or another function call
 		// if function call, execute function
-		if (param->GetExpression() != "$value")
+		if (param != nullptr && param->GetExpression() != "$value")
 			parameters.at(i) = CallFunction(*param);
 	}
 	return parameters;
@@ -369,7 +369,6 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePrint(CompilerNode compiler
 	std::string valueToPrint = param1->GetValue();
 
 	//Add the value to print to the output
-	//std::clog << valueToPrint << std::endl;
 	emit PrintOutput(QString::fromUtf8(valueToPrint.c_str()));
 
 	return nullptr;
@@ -380,7 +379,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteStop(CompilerNode compilerN
 	if (compilerNode.GetNodeparameters().empty())
 	{
 		if (compilerNode.GetExpression() == "$stop")
-			std::exit(1);
+		{
+			is_running = false;
+		}
 		else
 			throw UnknownExpressionException("Unknown expression type");
 	}

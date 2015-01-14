@@ -38,6 +38,9 @@ void Parser::ParseFunction()
         
         if (compiler->GetSubroutineTable()->GetSubroutine(functionName.Value) != nullptr)
         {
+            
+            
+            
             throw ParseException("Function: '" + functionName.Value + "' already exists");
         }
 
@@ -639,17 +642,19 @@ std::shared_ptr<CompilerNode> Parser::ParseUniExpression()
 
 std::shared_ptr<CompilerNode> Parser::ParseTerm()
 {
-	Token token = compiler->GetNext();
+	Token token = *compiler->PeekNext();
 
 	std::shared_ptr<CompilerNode> node = nullptr;
 
 	if (token.Type == MyTokenType::Float)
 	{
+        token = compiler->GetNext();
 		node = std::make_shared<CompilerNode>("$value", token.Value, false);
 		return node;
 	}
 	else if (token.Type == MyTokenType::Identifier)
 	{
+        token = compiler->GetNext();
 		if (compiler->PeekNext()->Type == MyTokenType::OpenBracket)
 		{
 			return ParseFunctionCall(token);
@@ -670,31 +675,37 @@ std::shared_ptr<CompilerNode> Parser::ParseTerm()
 	}
 	else if (token.Type == MyTokenType::OpenBracket)
 	{
+        token = compiler->GetNext();
 		node = ParseExpression();
 		compiler->Match(MyTokenType::CloseBracket);
 		return node;
 	}
 	else if (token.Type == MyTokenType::OperatorMinus && compiler->PeekNext()->Type == MyTokenType::Float)
 	{
+        compiler->GetNext();
 		token = compiler->GetNext();
 		node = std::make_shared<CompilerNode>("$value", "-" + token.Value, false);
 	}
 	else if (compiler->IsInternalFunction(token.Type) && !(token.Type==MyTokenType::PrintLine || token.Type==MyTokenType::Stop))
 	{
+        token = compiler->GetNext();
 		node = std::shared_ptr<CompilerNode>(InternalFunction(compiler).GetInternalFunction(token.Type));
 			return node;
 	}
 	else if (compiler->IsConstant(token.Type))
 	{
+        token = compiler->GetNext();
 		node = std::shared_ptr<CompilerNode>(Constant(compiler).GetConstant(token.Type));
 			return node;
 	}
 	else if (compiler->PeekNext()->Type == MyTokenType::OpenBracket)
 	{
+        token = compiler->GetNext();
 		return ParseFunctionCall(token);
 	}
     else if (token.Type == MyTokenType::Return)
     {
+        token = compiler->GetNext();
         throw ParameterNameException("Return used as variable (line " + std::to_string(token.LineNumber) + ")");
     }
 	return node;

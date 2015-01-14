@@ -92,11 +92,22 @@ std::vector<std::shared_ptr<CompilerNode>> InternalFunction::parseParameters(int
 	compiler->Match(MyTokenType::OpenBracket);
 	while (expectedParams > 0) {
 		std::shared_ptr<CompilerNode> node(Parser(compiler).ParseExpression());
-		compiler_nodes.push_back(node);
-		expectedParams--;
-        if (expectedParams > 0)
+		
+        if (node != nullptr)
         {
-            compiler->Match(MyTokenType::Separator);
+            compiler_nodes.push_back(node);
+            expectedParams--;
+            if (expectedParams > 0)
+            {
+                compiler->Match(MyTokenType::Separator);
+            }
+        }
+        else
+        {
+            compiler->Diag(ExceptionEnum::err_expected_parameter) << compiler->GetCurrent().LineNumber << compiler->GetCurrent().LinePosition;
+            
+            compiler->SkipUntil(MyTokenType::CloseBracket);
+            break;
         }
 	}
 	compiler->Match(MyTokenType::CloseBracket);

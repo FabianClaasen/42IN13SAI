@@ -256,46 +256,73 @@ void MainController::NewFile()
 
 void MainController::LoadFile()
 {
-	QString URI = mainWindow.OpenLoadDialog();
-
-	if (!URI.isEmpty())
+	try
 	{
-		QString text = FileIO::LoadFile(URI);
+		QString URI = mainWindow.OpenLoadDialog();
 
-		// Add the loaded file
-		currentFiles.push_back(std::shared_ptr<QFile>(new QFile(URI)));
-		QFileInfo* fileInfo = new QFileInfo(URI);
-		mainWindow.AddFile(fileInfo, text);
+		if (!URI.isEmpty())
+		{
+			QString text = FileIO::LoadFile(URI);
+
+			// Add the loaded file
+			currentFiles.push_back(std::shared_ptr<QFile>(new QFile(URI)));
+			QFileInfo* fileInfo = new QFileInfo(URI);
+			mainWindow.AddFile(fileInfo, text);
+		}
+	}
+	catch (LoadException e)
+	{
+		ErrorDialog* dialog = new ErrorDialog(e.what());
+		connect(dialog->GetCloseButton(), SIGNAL(released()), this, SLOT(HideDialog()));
+		dialog->show();
 	}
 }
 
 void MainController::SaveFile()
 {
-	std::shared_ptr<QFile> currentFile;
+	try 
+	{
+		std::shared_ptr<QFile> currentFile;
 
-	if (currentFiles.size() > mainWindow.GetCurrentTabPosition())
-	{
-		currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition());
-	}
+		if (currentFiles.size() > mainWindow.GetCurrentTabPosition())
+		{
+			currentFile = currentFiles.at(mainWindow.GetCurrentTabPosition());
+		}
 
-	if (!currentFile->fileName().endsWith(".cs"))
-	{
-		SaveAsFile();
+		if (!currentFile->fileName().endsWith(".cs"))
+		{
+			SaveAsFile();
+		}
+		else
+		{
+			FileIO::SaveFile(currentFile, mainWindow.GetText());
+		}
 	}
-	else
+	catch (SaveException e)
 	{
-		FileIO::SaveFile(currentFile, mainWindow.GetText());
-	}	
+		ErrorDialog* dialog = new ErrorDialog(e.what());
+		connect(dialog->GetCloseButton(), SIGNAL(released()), this, SLOT(HideDialog()));
+		dialog->show();
+	}
 }
 
 void MainController::SaveAsFile()
 {
-	QString URI = mainWindow.OpenSaveDialog();
-	if (!URI.isEmpty())
+	try
 	{
-		FileIO::SaveFile(URI, mainWindow.GetText());
-		QFileInfo* fileInfo = new QFileInfo(URI);
-		mainWindow.SetTabTitle(fileInfo);
+		QString URI = mainWindow.OpenSaveDialog();
+		if (!URI.isEmpty())
+		{
+			FileIO::SaveFile(URI, mainWindow.GetText());
+			QFileInfo* fileInfo = new QFileInfo(URI);
+			mainWindow.SetTabTitle(fileInfo);
+		}
+	}
+	catch (SaveException e)
+	{
+		ErrorDialog* dialog = new ErrorDialog(e.what());
+		connect(dialog->GetCloseButton(), SIGNAL(released()), this, SLOT(HideDialog()));
+		dialog->show();
 	}
 }
 
