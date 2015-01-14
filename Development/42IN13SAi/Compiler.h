@@ -91,6 +91,6 @@ private:
 	std::string TokenToString(MyTokenType type);
     
     
-    bool hasExceptions;
+    bool hasExceptions = false;
     bool isFatalException;
 };
