@@ -188,6 +188,12 @@ void MainController::HideDialog()
 		dialog->hide();
 }
 
+void MainController::CloseErrorDialog()
+{
+	if (error_dialog != nullptr)
+		error_dialog->hide();
+}
+
 void MainController::WriteException(const char* output, std::streamsize size)
 {
 	std::string exception_text;
@@ -260,7 +266,7 @@ void MainController::LoadFile()
 	{
 		QString URI = mainWindow.OpenLoadDialog();
 
-		if (!URI.isEmpty())
+		if (!URI.isEmpty() && URI.endsWith(".cs"))
 		{
 			QString text = FileIO::LoadFile(URI);
 
@@ -269,12 +275,14 @@ void MainController::LoadFile()
 			QFileInfo* fileInfo = new QFileInfo(URI);
 			mainWindow.AddFile(fileInfo, text);
 		}
+		else
+			throw LoadException("You can only save the file as a .cs file");
 	}
 	catch (LoadException e)
 	{
-		ErrorDialog* dialog = new ErrorDialog(e.what());
-		connect(dialog->GetCloseButton(), SIGNAL(released()), this, SLOT(HideDialog()));
-		dialog->show();
+		error_dialog = new ErrorDialog(e.what());
+		connect(error_dialog->GetCloseButton(), SIGNAL(released()), this, SLOT(CloseErrorDialog()));
+		error_dialog->show();
 	}
 }
 
@@ -300,9 +308,9 @@ void MainController::SaveFile()
 	}
 	catch (SaveException e)
 	{
-		ErrorDialog* dialog = new ErrorDialog(e.what());
-		connect(dialog->GetCloseButton(), SIGNAL(released()), this, SLOT(HideDialog()));
-		dialog->show();
+		error_dialog = new ErrorDialog(e.what());
+		connect(error_dialog->GetCloseButton(), SIGNAL(released()), this, SLOT(CloseErrorDialog()));
+		error_dialog->show();
 	}
 }
 
@@ -311,18 +319,20 @@ void MainController::SaveAsFile()
 	try
 	{
 		QString URI = mainWindow.OpenSaveDialog();
-		if (!URI.isEmpty())
+		if (!URI.isEmpty() && URI.endsWith(".cs"))
 		{
 			FileIO::SaveFile(URI, mainWindow.GetText());
 			QFileInfo* fileInfo = new QFileInfo(URI);
 			mainWindow.SetTabTitle(fileInfo);
 		}
+		else
+			throw SaveException("You can only save the file as a .cs file");
 	}
 	catch (SaveException e)
 	{
-		ErrorDialog* dialog = new ErrorDialog(e.what());
-		connect(dialog->GetCloseButton(), SIGNAL(released()), this, SLOT(HideDialog()));
-		dialog->show();
+		error_dialog = new ErrorDialog(e.what());
+		connect(error_dialog->GetCloseButton(), SIGNAL(released()), this, SLOT(CloseErrorDialog()));
+		error_dialog->show();
 	}
 }
 

@@ -45,6 +45,7 @@ class MainController : public QObject
 		std::vector<std::shared_ptr<QFile>> currentFiles;
 		boost::thread* workerThread;
 		StopExecuteDialog* dialog;
+		ErrorDialog* error_dialog;
 		QString output;
 		QMutex mutex;
 
@@ -65,6 +66,7 @@ class MainController : public QObject
 		void Quit();
 		void CloseTab(int index);
 		void HideDialog();
+		void CloseErrorDialog();
 		void StopVirtualMachine();
 
 	public slots:
