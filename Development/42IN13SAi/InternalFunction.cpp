@@ -28,6 +28,12 @@ std::shared_ptr<CompilerNode> InternalFunction::GetInternalFunction(MyTokenType 
 		return getCompilerNode("$sin", 1);
 	case MyTokenType::Tangent:
 		return getCompilerNode("$tan", 1);
+	case MyTokenType::CosineR:
+		return getCompilerNode("$cosr", 1);
+	case MyTokenType::SineR:
+		return getCompilerNode("$sinr", 1);
+	case MyTokenType::TangentR:
+		return getCompilerNode("$tanr", 1);
 	case MyTokenType::Square:
 		return getCompilerNode("$sqr", 1);
 	case MyTokenType::Cube:

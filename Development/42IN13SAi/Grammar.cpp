@@ -30,7 +30,10 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("\\bcbrt\\b", MyTokenType::CubeRoot));
     definitions.push_back(TokenDefinition("\\bsin\\b", MyTokenType::Sine));
     definitions.push_back(TokenDefinition("\\bcos\\b", MyTokenType::Cosine));
-    definitions.push_back(TokenDefinition("\\btan\\b", MyTokenType::Tangent));
+	definitions.push_back(TokenDefinition("\\btan\\b", MyTokenType::Tangent));
+	definitions.push_back(TokenDefinition("\\bsinr\\b", MyTokenType::SineR));
+	definitions.push_back(TokenDefinition("\\bcosr\\b", MyTokenType::CosineR));
+	definitions.push_back(TokenDefinition("\\btanr\\b", MyTokenType::TangentR));
     definitions.push_back(TokenDefinition("\\bdeg\\b", MyTokenType::Degree));
     definitions.push_back(TokenDefinition("\\brad\\b", MyTokenType::Radiant));
     definitions.push_back(TokenDefinition("\\bperc\\b", MyTokenType::Percent));
