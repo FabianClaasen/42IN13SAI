@@ -103,7 +103,10 @@ SOURCES       = ../42IN13SAi/main.cpp \
 		../42IN13SAi/Constant.cpp \
 		../42IN13SAi/DiagnosticsBuilder.cpp \
 		../42IN13SAi/ExceptionOutput.cpp \
-		../42IN13SAi/StopExecuteDialog.cpp GeneratedFiles/qrc_Resources.cpp \
+		../42IN13SAi/StopExecuteDialog.cpp \
+		../42IN13SAi/LoadException.cpp \
+		../42IN13SAi/SaveException.cpp \
+		../42IN13SAi/ErrorDialog.cpp GeneratedFiles/qrc_Resources.cpp \
 		GeneratedFiles/release/moc_VirtualMachine.cpp \
 		GeneratedFiles/release/moc_CodeEditor.cpp \
 		GeneratedFiles/release/moc_MainWindow.cpp \
@@ -168,6 +171,9 @@ OBJECTS       = release/main.o \
 		release/DiagnosticsBuilder.o \
 		release/ExceptionOutput.o \
 		release/StopExecuteDialog.o \
+		release/LoadException.o \
+		release/SaveException.o \
+		release/ErrorDialog.o \
 		release/qrc_Resources.o \
 		release/moc_VirtualMachine.o \
 		release/moc_CodeEditor.o \
@@ -366,7 +372,10 @@ DIST          = ../../../Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		../42IN13SAi/Constant.h \
 		../42IN13SAi/DiagnosticsBuilder.h \
 		../42IN13SAi/ExceptionOutput.h \
-		../42IN13SAi/StopExecuteDialog.h ../42IN13SAi/main.cpp \
+		../42IN13SAi/StopExecuteDialog.h \
+		../42IN13SAi/LoadException.h \
+		../42IN13SAi/SaveException.h \
+		../42IN13SAi/ErrorDialog.h ../42IN13SAi/main.cpp \
 		../42IN13SAi/Grammar.cpp \
 		../42IN13SAi/LabelStack.cpp \
 		../42IN13SAi/RegexMatcher.cpp \
@@ -421,7 +430,10 @@ DIST          = ../../../Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		../42IN13SAi/Constant.cpp \
 		../42IN13SAi/DiagnosticsBuilder.cpp \
 		../42IN13SAi/ExceptionOutput.cpp \
-		../42IN13SAi/StopExecuteDialog.cpp
+		../42IN13SAi/StopExecuteDialog.cpp \
+		../42IN13SAi/LoadException.cpp \
+		../42IN13SAi/SaveException.cpp \
+		../42IN13SAi/ErrorDialog.cpp
 QMAKE_TARGET  = 42IN13SAi
 DESTDIR       = ../Release/#avoid trailing-slash linebreak
 TARGET        = ../Release/42IN13SAi
@@ -723,8 +735,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../42IN13SAi/Resources.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../42IN13SAi/Grammar.h ../42IN13SAi/LabelStack.h ../42IN13SAi/RegexMatcher.h ../42IN13SAi/Token.h ../42IN13SAi/TokenDefinition.h ../42IN13SAi/Tokenizer.h ../42IN13SAi/TokenizerController.h ../42IN13SAi/TokenPartner.h ../42IN13SAi/MyTokenType.h ../42IN13SAi/Compiler.h ../42IN13SAi/CompilerNode.h ../42IN13SAi/InternalFunction.h ../42IN13SAi/Parser.h ../42IN13SAi/Symbol.h ../42IN13SAi/SymbolTable.h ../42IN13SAi/SymbolKind.h ../42IN13SAi/Subroutine.h ../42IN13SAi/SubroutineKind.h ../42IN13SAi/SubroutineTable.h ../42IN13SAi/VirtualMachine.h ../42IN13SAi/FunctionCaller.h ../42IN13SAi/LinkedList.h ../42IN13SAi/ListIterator.h ../42IN13SAi/ListNode.h ../42IN13SAi/Themer.h ../42IN13SAi/CodeEditor.h ../42IN13SAi/MainWindow.h ../42IN13SAi/Highlighter.h ../42IN13SAi/resource.h ../42IN13SAi/OutputWindow.h ../42IN13SAi/ExceptionWindow.h ../42IN13SAi/InvalidInputException.h ../42IN13SAi/UnexpectedParameterException.h ../42IN13SAi/ZeroDivideException.h ../42IN13SAi/ParseException.h ../42IN13SAi/PartnerNotFoundException.h ../42IN13SAi/SymbolNotFoundException.h ../42IN13SAi/ParameterException.h ../42IN13SAi/ParameterExceptionType.h ../42IN13SAi/IdentifierException.h ../42IN13SAi/MissingTokenException.h ../42IN13SAi/ParameterNameException.h ../42IN13SAi/StatementNotFoundException.h ../42IN13SAi/UnexpectedKeywordException.h ../42IN13SAi/UnexpectedTypeException.h ../42IN13SAi/VariableNotFoundException.h ../42IN13SAi/FunctionNameExpectedException.h ../42IN13SAi/MissingCompilerNodeException.h ../42IN13SAi/MissingMainFunctionException.h ../42IN13SAi/SubroutineNotFoundException.h ../42IN13SAi/UnknownExpressionException.h ../42IN13SAi/FileIO.h ../42IN13SAi/MainController.h ../42IN13SAi/jsoncpp/assertions.h ../42IN13SAi/jsoncpp/autolink.h ../42IN13SAi/jsoncpp/config.h ../42IN13SAi/jsoncpp/features.h ../42IN13SAi/jsoncpp/forwards.h ../42IN13SAi/jsoncpp/json.h ../42IN13SAi/jsoncpp/json_batchallocator.h ../42IN13SAi/jsoncpp/json_tool.h ../42IN13SAi/jsoncpp/reader.h ../42IN13SAi/jsoncpp/value.h ../42IN13SAi/jsoncpp/version.h ../42IN13SAi/jsoncpp/writer.h ../42IN13SAi/Constant.h ../42IN13SAi/DiagnosticsBuilder.h ../42IN13SAi/ExceptionOutput.h ../42IN13SAi/StopExecuteDialog.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../42IN13SAi/main.cpp ../42IN13SAi/Grammar.cpp ../42IN13SAi/LabelStack.cpp ../42IN13SAi/RegexMatcher.cpp ../42IN13SAi/Token.cpp ../42IN13SAi/TokenDefinition.cpp ../42IN13SAi/Tokenizer.cpp ../42IN13SAi/TokenizerController.cpp ../42IN13SAi/TokenPartner.cpp ../42IN13SAi/Compiler.cpp ../42IN13SAi/CompilerNode.cpp ../42IN13SAi/InternalFunction.cpp ../42IN13SAi/Parser.cpp ../42IN13SAi/Symbol.cpp ../42IN13SAi/SymbolTable.cpp ../42IN13SAi/Subroutine.cpp ../42IN13SAi/SubroutineTable.cpp ../42IN13SAi/LinkedList.cpp ../42IN13SAi/ListIterator.cpp ../42IN13SAi/ListNode.cpp ../42IN13SAi/VirtualMachine.cpp ../42IN13SAi/FunctionCaller.cpp ../42IN13SAi/CodeEditor.cpp ../42IN13SAi/ExceptionWindow.cpp ../42IN13SAi/Highlighter.cpp ../42IN13SAi/MainWindow.cpp ../42IN13SAi/OutputWindow.cpp ../42IN13SAi/Themer.cpp ../42IN13SAi/FunctionNameExpectedException.cpp ../42IN13SAi/IdentifierException.cpp ../42IN13SAi/InvalidInputException.cpp ../42IN13SAi/MissingCompilerNodeException.cpp ../42IN13SAi/MissingMainFunctionException.cpp ../42IN13SAi/MissingTokenException.cpp ../42IN13SAi/ParameterNameException.cpp ../42IN13SAi/ParseException.cpp ../42IN13SAi/PartnerNotFoundException.cpp ../42IN13SAi/StatementNotFoundException.cpp ../42IN13SAi/SubroutineNotFoundException.cpp ../42IN13SAi/SymbolNotFoundException.cpp ../42IN13SAi/UnexpectedKeywordException.cpp ../42IN13SAi/UnexpectedParameterException.cpp ../42IN13SAi/UnexpectedTypeException.cpp ../42IN13SAi/UnknownExpressionException.cpp ../42IN13SAi/VariableNotFoundException.cpp ../42IN13SAi/ParameterException.cpp ../42IN13SAi/ZeroDivideException.cpp ../42IN13SAi/FileIO.cpp ../42IN13SAi/MainController.cpp ../42IN13SAi/jsoncpp/json_reader.cpp ../42IN13SAi/jsoncpp/json_value.cpp ../42IN13SAi/jsoncpp/json_writer.cpp ../42IN13SAi/Constant.cpp ../42IN13SAi/DiagnosticsBuilder.cpp ../42IN13SAi/ExceptionOutput.cpp ../42IN13SAi/StopExecuteDialog.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../42IN13SAi/Grammar.h ../42IN13SAi/LabelStack.h ../42IN13SAi/RegexMatcher.h ../42IN13SAi/Token.h ../42IN13SAi/TokenDefinition.h ../42IN13SAi/Tokenizer.h ../42IN13SAi/TokenizerController.h ../42IN13SAi/TokenPartner.h ../42IN13SAi/MyTokenType.h ../42IN13SAi/Compiler.h ../42IN13SAi/CompilerNode.h ../42IN13SAi/InternalFunction.h ../42IN13SAi/Parser.h ../42IN13SAi/Symbol.h ../42IN13SAi/SymbolTable.h ../42IN13SAi/SymbolKind.h ../42IN13SAi/Subroutine.h ../42IN13SAi/SubroutineKind.h ../42IN13SAi/SubroutineTable.h ../42IN13SAi/VirtualMachine.h ../42IN13SAi/FunctionCaller.h ../42IN13SAi/LinkedList.h ../42IN13SAi/ListIterator.h ../42IN13SAi/ListNode.h ../42IN13SAi/Themer.h ../42IN13SAi/CodeEditor.h ../42IN13SAi/MainWindow.h ../42IN13SAi/Highlighter.h ../42IN13SAi/resource.h ../42IN13SAi/OutputWindow.h ../42IN13SAi/ExceptionWindow.h ../42IN13SAi/InvalidInputException.h ../42IN13SAi/UnexpectedParameterException.h ../42IN13SAi/ZeroDivideException.h ../42IN13SAi/ParseException.h ../42IN13SAi/PartnerNotFoundException.h ../42IN13SAi/SymbolNotFoundException.h ../42IN13SAi/ParameterException.h ../42IN13SAi/ParameterExceptionType.h ../42IN13SAi/IdentifierException.h ../42IN13SAi/MissingTokenException.h ../42IN13SAi/ParameterNameException.h ../42IN13SAi/StatementNotFoundException.h ../42IN13SAi/UnexpectedKeywordException.h ../42IN13SAi/UnexpectedTypeException.h ../42IN13SAi/VariableNotFoundException.h ../42IN13SAi/FunctionNameExpectedException.h ../42IN13SAi/MissingCompilerNodeException.h ../42IN13SAi/MissingMainFunctionException.h ../42IN13SAi/SubroutineNotFoundException.h ../42IN13SAi/UnknownExpressionException.h ../42IN13SAi/FileIO.h ../42IN13SAi/MainController.h ../42IN13SAi/jsoncpp/assertions.h ../42IN13SAi/jsoncpp/autolink.h ../42IN13SAi/jsoncpp/config.h ../42IN13SAi/jsoncpp/features.h ../42IN13SAi/jsoncpp/forwards.h ../42IN13SAi/jsoncpp/json.h ../42IN13SAi/jsoncpp/json_batchallocator.h ../42IN13SAi/jsoncpp/json_tool.h ../42IN13SAi/jsoncpp/reader.h ../42IN13SAi/jsoncpp/value.h ../42IN13SAi/jsoncpp/version.h ../42IN13SAi/jsoncpp/writer.h ../42IN13SAi/Constant.h ../42IN13SAi/DiagnosticsBuilder.h ../42IN13SAi/ExceptionOutput.h ../42IN13SAi/StopExecuteDialog.h ../42IN13SAi/LoadException.h ../42IN13SAi/SaveException.h ../42IN13SAi/ErrorDialog.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../42IN13SAi/main.cpp ../42IN13SAi/Grammar.cpp ../42IN13SAi/LabelStack.cpp ../42IN13SAi/RegexMatcher.cpp ../42IN13SAi/Token.cpp ../42IN13SAi/TokenDefinition.cpp ../42IN13SAi/Tokenizer.cpp ../42IN13SAi/TokenizerController.cpp ../42IN13SAi/TokenPartner.cpp ../42IN13SAi/Compiler.cpp ../42IN13SAi/CompilerNode.cpp ../42IN13SAi/InternalFunction.cpp ../42IN13SAi/Parser.cpp ../42IN13SAi/Symbol.cpp ../42IN13SAi/SymbolTable.cpp ../42IN13SAi/Subroutine.cpp ../42IN13SAi/SubroutineTable.cpp ../42IN13SAi/LinkedList.cpp ../42IN13SAi/ListIterator.cpp ../42IN13SAi/ListNode.cpp ../42IN13SAi/VirtualMachine.cpp ../42IN13SAi/FunctionCaller.cpp ../42IN13SAi/CodeEditor.cpp ../42IN13SAi/ExceptionWindow.cpp ../42IN13SAi/Highlighter.cpp ../42IN13SAi/MainWindow.cpp ../42IN13SAi/OutputWindow.cpp ../42IN13SAi/Themer.cpp ../42IN13SAi/FunctionNameExpectedException.cpp ../42IN13SAi/IdentifierException.cpp ../42IN13SAi/InvalidInputException.cpp ../42IN13SAi/MissingCompilerNodeException.cpp ../42IN13SAi/MissingMainFunctionException.cpp ../42IN13SAi/MissingTokenException.cpp ../42IN13SAi/ParameterNameException.cpp ../42IN13SAi/ParseException.cpp ../42IN13SAi/PartnerNotFoundException.cpp ../42IN13SAi/StatementNotFoundException.cpp ../42IN13SAi/SubroutineNotFoundException.cpp ../42IN13SAi/SymbolNotFoundException.cpp ../42IN13SAi/UnexpectedKeywordException.cpp ../42IN13SAi/UnexpectedParameterException.cpp ../42IN13SAi/UnexpectedTypeException.cpp ../42IN13SAi/UnknownExpressionException.cpp ../42IN13SAi/VariableNotFoundException.cpp ../42IN13SAi/ParameterException.cpp ../42IN13SAi/ZeroDivideException.cpp ../42IN13SAi/FileIO.cpp ../42IN13SAi/MainController.cpp ../42IN13SAi/jsoncpp/json_reader.cpp ../42IN13SAi/jsoncpp/json_value.cpp ../42IN13SAi/jsoncpp/json_writer.cpp ../42IN13SAi/Constant.cpp ../42IN13SAi/DiagnosticsBuilder.cpp ../42IN13SAi/ExceptionOutput.cpp ../42IN13SAi/StopExecuteDialog.cpp ../42IN13SAi/LoadException.cpp ../42IN13SAi/SaveException.cpp ../42IN13SAi/ErrorDialog.cpp $(DISTDIR)/
 
 
 clean:compiler_clean 
@@ -2392,6 +2404,8 @@ GeneratedFiles/release/moc_MainController.cpp: ../../../Qt/5.4/gcc_64/include/Qt
 		../42IN13SAi/jsoncpp/features.h \
 		../42IN13SAi/jsoncpp/writer.h \
 		../42IN13SAi/FileIO.h \
+		../42IN13SAi/LoadException.h \
+		../42IN13SAi/SaveException.h \
 		../42IN13SAi/ExceptionOutput.h \
 		../42IN13SAi/MainController.h \
 		../42IN13SAi/StopExecuteDialog.h \
@@ -2400,6 +2414,7 @@ GeneratedFiles/release/moc_MainController.cpp: ../../../Qt/5.4/gcc_64/include/Qt
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QPushButton \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QVBoxLayout \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QHBoxLayout \
+		../42IN13SAi/ErrorDialog.h \
 		../42IN13SAi/MainController.h
 	/home/fabian/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/fabian/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/fabian/42IN13SAI/Development/42IN13SAi -I/home/fabian/42IN13SAI/Development/42IN13SAi/usr/lib/include/boost -I/home/fabian/42IN13SAI/Development/42IN13SAi/GeneratedFiles/Release -I/home/fabian/Qt/5.4/gcc_64/include -I/home/fabian/Qt/5.4/gcc_64/include/QtOpenGL -I/home/fabian/Qt/5.4/gcc_64/include/QtWidgets -I/home/fabian/Qt/5.4/gcc_64/include/QtGui -I/home/fabian/Qt/5.4/gcc_64/include/QtCore -I. ../42IN13SAi/MainController.h -o GeneratedFiles/release/moc_MainController.cpp
 
@@ -3063,13 +3078,16 @@ release/main.o: ../42IN13SAi/main.cpp ../../../Qt/5.4/gcc_64/include/QtWidgets/Q
 		../42IN13SAi/jsoncpp/features.h \
 		../42IN13SAi/jsoncpp/writer.h \
 		../42IN13SAi/FileIO.h \
+		../42IN13SAi/LoadException.h \
+		../42IN13SAi/SaveException.h \
 		../42IN13SAi/ExceptionOutput.h \
 		../42IN13SAi/StopExecuteDialog.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QLabel \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QPushButton \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QVBoxLayout \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QHBoxLayout
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QHBoxLayout \
+		../42IN13SAi/ErrorDialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/main.o ../42IN13SAi/main.cpp
 
 release/Grammar.o: ../42IN13SAi/Grammar.cpp ../42IN13SAi/Grammar.h \
@@ -3145,6 +3163,8 @@ release/Compiler.o: ../42IN13SAi/Compiler.cpp ../42IN13SAi/Compiler.h \
 		../42IN13SAi/ParameterNameException.h \
 		../42IN13SAi/IdentifierException.h \
 		../42IN13SAi/UnexpectedParameterException.h \
+		../42IN13SAi/DiagnosticsBuilder.h \
+		../42IN13SAi/ExceptionEnum.h \
 		../42IN13SAi/InternalFunction.h \
 		../42IN13SAi/Parser.h \
 		../42IN13SAi/Constant.h \
@@ -3178,6 +3198,8 @@ release/InternalFunction.o: ../42IN13SAi/InternalFunction.cpp ../42IN13SAi/Inter
 		../42IN13SAi/ParameterNameException.h \
 		../42IN13SAi/IdentifierException.h \
 		../42IN13SAi/UnexpectedParameterException.h \
+		../42IN13SAi/DiagnosticsBuilder.h \
+		../42IN13SAi/ExceptionEnum.h \
 		../42IN13SAi/Parser.h \
 		../42IN13SAi/Constant.h \
 		../42IN13SAi/SymbolNotFoundException.h \
@@ -3208,6 +3230,8 @@ release/Parser.o: ../42IN13SAi/Parser.cpp ../42IN13SAi/Parser.h \
 		../42IN13SAi/ParameterNameException.h \
 		../42IN13SAi/IdentifierException.h \
 		../42IN13SAi/UnexpectedParameterException.h \
+		../42IN13SAi/DiagnosticsBuilder.h \
+		../42IN13SAi/ExceptionEnum.h \
 		../42IN13SAi/Constant.h \
 		../42IN13SAi/SymbolNotFoundException.h \
 		../42IN13SAi/ZeroDivideException.h \
@@ -5116,7 +5140,9 @@ release/FileIO.o: ../42IN13SAi/FileIO.cpp ../42IN13SAi/FileIO.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/qregexp.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qshareddata.h
+		../../../Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		../42IN13SAi/LoadException.h \
+		../42IN13SAi/SaveException.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/FileIO.o ../42IN13SAi/FileIO.cpp
 
 release/MainController.o: ../42IN13SAi/MainController.cpp ../42IN13SAi/MainController.h \
@@ -5645,13 +5671,16 @@ release/MainController.o: ../42IN13SAi/MainController.cpp ../42IN13SAi/MainContr
 		../42IN13SAi/jsoncpp/features.h \
 		../42IN13SAi/jsoncpp/writer.h \
 		../42IN13SAi/FileIO.h \
+		../42IN13SAi/LoadException.h \
+		../42IN13SAi/SaveException.h \
 		../42IN13SAi/ExceptionOutput.h \
 		../42IN13SAi/StopExecuteDialog.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QLabel \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QPushButton \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QVBoxLayout \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QHBoxLayout
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QHBoxLayout \
+		../42IN13SAi/ErrorDialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/MainController.o ../42IN13SAi/MainController.cpp
 
 release/json_reader.o: ../42IN13SAi/jsoncpp/json_reader.cpp ../42IN13SAi/jsoncpp/assertions.h \
@@ -5703,6 +5732,8 @@ release/Constant.o: ../42IN13SAi/Constant.cpp ../42IN13SAi/Constant.h \
 		../42IN13SAi/ParameterNameException.h \
 		../42IN13SAi/IdentifierException.h \
 		../42IN13SAi/UnexpectedParameterException.h \
+		../42IN13SAi/DiagnosticsBuilder.h \
+		../42IN13SAi/ExceptionEnum.h \
 		../42IN13SAi/Parser.h \
 		../42IN13SAi/InternalFunction.h \
 		../42IN13SAi/SymbolNotFoundException.h \
@@ -6243,12 +6274,15 @@ release/ExceptionOutput.o: ../42IN13SAi/ExceptionOutput.cpp ../42IN13SAi/Excepti
 		../42IN13SAi/jsoncpp/features.h \
 		../42IN13SAi/jsoncpp/writer.h \
 		../42IN13SAi/FileIO.h \
+		../42IN13SAi/LoadException.h \
+		../42IN13SAi/SaveException.h \
 		../42IN13SAi/StopExecuteDialog.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QLabel \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QPushButton \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QVBoxLayout \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QHBoxLayout
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QHBoxLayout \
+		../42IN13SAi/ErrorDialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/ExceptionOutput.o ../42IN13SAi/ExceptionOutput.cpp
 
 release/StopExecuteDialog.o: ../42IN13SAi/StopExecuteDialog.cpp ../42IN13SAi/StopExecuteDialog.h \
@@ -6369,6 +6403,131 @@ release/StopExecuteDialog.o: ../42IN13SAi/StopExecuteDialog.cpp ../42IN13SAi/Sto
 		../../../Qt/5.4/gcc_64/include/QtWidgets/qgridlayout.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QHBoxLayout
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/StopExecuteDialog.o ../42IN13SAi/StopExecuteDialog.cpp
+
+release/LoadException.o: ../42IN13SAi/LoadException.cpp ../42IN13SAi/LoadException.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/LoadException.o ../42IN13SAi/LoadException.cpp
+
+release/SaveException.o: ../42IN13SAi/SaveException.cpp ../42IN13SAi/SaveException.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/SaveException.o ../42IN13SAi/SaveException.cpp
+
+release/ErrorDialog.o: ../42IN13SAi/ErrorDialog.cpp ../42IN13SAi/ErrorDialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qcolor.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qbrush.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qregion.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qline.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfont.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfontinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qcursor.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qkeysequence.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qset.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qurl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qurlquery.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfile.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QLabel \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qlabel.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qframe.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QPushButton \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QVBoxLayout \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qboxlayout.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qlayout.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qlayoutitem.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qgridlayout.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QHBoxLayout
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/ErrorDialog.o ../42IN13SAi/ErrorDialog.cpp
 
 release/qrc_Resources.o: GeneratedFiles/qrc_Resources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/qrc_Resources.o GeneratedFiles/qrc_Resources.cpp
