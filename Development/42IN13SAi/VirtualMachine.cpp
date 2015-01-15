@@ -1083,7 +1083,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 		}
 
 		// Print value
-		std::clog << abcOutput << std::endl;
+		emit PrintOutput(QString::fromUtf8(abcOutput.c_str()));
 	}
 
 	// Create a new value compilernode to return
