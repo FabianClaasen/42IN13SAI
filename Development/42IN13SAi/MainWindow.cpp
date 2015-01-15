@@ -271,14 +271,29 @@ QAbstractItemModel* MainWindow::modelFromFile(const QString& fileName)
 
 QString MainWindow::OpenLoadDialog()
 {
-	return QFileDialog::getOpenFileName(this, tr("Open file"), "", tr("Text Files (*.sc)"));
+    QFileDialog dlg(this, tr("Open file"));
+    dlg.setAcceptMode(QFileDialog::AcceptOpen);
+    QString URI;
+    if (dlg.exec())
+        URI = dlg.selectedFiles().at(0);
+    else
+        URI = "canceled";
+
+    return URI;
 }
 
 QString MainWindow::OpenSaveDialog()
 {
-	return QFileDialog::getSaveFileName(this, tr("Save file"), "", tr("Text Files (*.sc)"));
-}
+    QFileDialog dlg(this, tr("Save file"));
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+    QString URI;
+    if (dlg.exec())
+        URI = dlg.selectedFiles().at(0);
+    else
+        URI = "canceled";
 
+    return URI;
+}
 void MainWindow::CodeIsExecuting(bool status)
 {
 	if (status)

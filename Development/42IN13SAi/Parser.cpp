@@ -164,57 +164,6 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
         return std::make_shared<CompilerNode>();
     }
 
-	// Check if the identifier exists
-	if (!newIdentifier)
-	{
-		Symbol* symbol = GetSymbol(identifier.Value);
-
-        if (symbol == nullptr)
-        {
-            compiler->Diag(ExceptionEnum::err_unkown_identifier) << identifier.Value << currentToken.LineNumber;
-            compiler->SkipUntil(MyTokenType::EOL);
-            return std::make_shared<CompilerNode>();
-        }
-	}
-	else
-	{
-		Symbol* identifierSymbol;
-
-		if (subroutine->isEmpty)
-		{
-			identifierSymbol = new Symbol(identifier.Value, identifier.Type, SymbolKind::Global);
-		}
-		else
-		{
-			identifierSymbol = new Symbol(identifier.Value, identifier.Type, SymbolKind::Local);
-		}
-
-		if (!compiler->GetSubroutine()->isEmpty)
-		{
-			compiler->GetSubroutine()->AddLocal(*identifierSymbol);
-
-			delete identifierSymbol;
-			identifierSymbol = nullptr;
-		}
-		else if (!compiler->HasSymbol(identifierSymbol->name))
-		{
-			compiler->AddSymbol(*identifierSymbol);
-
-			delete identifierSymbol;
-			identifierSymbol = nullptr;
-		}
-		else
-		{
-            Symbol sym = *identifierSymbol;
-			delete identifierSymbol;
-            identifierSymbol = nullptr;
-            
-            compiler->Diag(ExceptionEnum::err_identifier_in_use) << sym.GetValue() << currentToken.LineNumber;
-            compiler->SkipUntil(MyTokenType::EOL);
-            return std::shared_ptr<CompilerNode>();
-		}
-	}
-
 	std::shared_ptr<CompilerNode> id = std::make_shared<CompilerNode>("$identifier", identifier.Value, nullptr);
 	nodeParameters.push_back(id);
 
@@ -302,6 +251,57 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		parameters.push_back(ParseExpression());
 		nodeParameters.push_back(std::make_shared<CompilerNode>(CompilerNode(command, parameters, nullptr, false)));
 		endNode = std::make_shared<CompilerNode>(expression, nodeParameters, nullptr, false);
+	}
+
+	// Check if the identifier exists
+	if (!newIdentifier)
+	{
+		Symbol* symbol = GetSymbol(identifier.Value);
+
+		if (symbol == nullptr)
+		{
+			compiler->Diag(ExceptionEnum::err_unkown_identifier) << identifier.Value << currentToken.LineNumber;
+			compiler->SkipUntil(MyTokenType::EOL);
+			return std::make_shared<CompilerNode>();
+		}
+	}
+	else
+	{
+		Symbol* identifierSymbol;
+
+		if (subroutine->isEmpty)
+		{
+			identifierSymbol = new Symbol(identifier.Value, identifier.Type, SymbolKind::Global);
+		}
+		else
+		{
+			identifierSymbol = new Symbol(identifier.Value, identifier.Type, SymbolKind::Local);
+		}
+
+		if (!compiler->GetSubroutine()->isEmpty)
+		{
+			compiler->GetSubroutine()->AddLocal(*identifierSymbol);
+
+			delete identifierSymbol;
+			identifierSymbol = nullptr;
+		}
+		else if (!compiler->HasSymbol(identifierSymbol->name))
+		{
+			compiler->AddSymbol(*identifierSymbol);
+
+			delete identifierSymbol;
+			identifierSymbol = nullptr;
+		}
+		else
+		{
+			Symbol sym = *identifierSymbol;
+			delete identifierSymbol;
+			identifierSymbol = nullptr;
+
+			compiler->Diag(ExceptionEnum::err_identifier_in_use) << sym.GetValue() << currentToken.LineNumber;
+			compiler->SkipUntil(MyTokenType::EOL);
+			return std::shared_ptr<CompilerNode>();
+		}
 	}
 
 	// Check if the code is closed
@@ -432,11 +432,11 @@ void Parser::ParseIfStatement()
             compiler->ParseStatement();
         }
         
-        compiler->Match(MyTokenType::CloseMethod);
+		compiler->Match(MyTokenType::CloseMethod);
+
+		// Add the end doNothing
+		compiler->GetSubroutine()->AddCompilerNode(finalDoNothing);
     }
-    
-    // Add the end doNothing
-    compiler->GetSubroutine()->AddCompilerNode(finalDoNothing);
 }
 
 /*
