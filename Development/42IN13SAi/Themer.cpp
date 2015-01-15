@@ -4,7 +4,7 @@
 Themer::Themer()
 {
     settingsPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
-#ifndef _WIN32
+#ifdef __APPLE__
     settingsPath = QCoreApplication::applicationDirPath().toStdString() + "/settings.json";
 #endif
     
@@ -18,7 +18,7 @@ Themer::Themer(MainWindow* p_main)
     
 	//std::string newPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
 	settingsPath = QDir::currentPath().append("/Resources/settings.json").toLocal8Bit().constData();
-#ifndef _WIN32
+#ifndef __APPLE__
     settingsPath = QCoreApplication::applicationDirPath().toStdString() + "/settings.json";
 #endif
     
@@ -101,11 +101,11 @@ void Themer::SetTheme(std::string themeName)
     SetEditorStyles(editorStyles);
     
 	// Set output/exception node and call the function
-	Json::Value outputStyles = themeStyles["output"];
-	SetOutputWindowStyles(outputStyles);
+    Json::Value outputStyles = themeStyles["output"];
+    SetOutputWindowStyles(outputStyles);
 
-	Json::Value exceptionStyles = themeStyles["exception"];
-	SetExceptionWindowStyles(exceptionStyles);
+    Json::Value exceptionStyles = themeStyles["exception"];
+    SetExceptionWindowStyles(exceptionStyles);
 
     // Set highlighter node and call the function
     Json::Value highlighterStyles = themeStyles["syntax"];
@@ -168,7 +168,16 @@ void Themer::SetWindowStyles(Json::Value mainStyles)
 
 	// Set the background color
 	Json::Value bgColors = mainStyles["background_color"];
-	QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+    QColor bg;
+
+    bg = QColor(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+
+#ifdef __linux__
+    if(currentThemeName == "Solarized Light")
+        bg = QColor(253, 246, 227);
+    else
+        bg = QColor(0, 43, 54);
+#endif
 
 	mainColors.insert(std::map<std::string, QColor>::value_type("background", bg));
 }
@@ -213,11 +222,28 @@ void Themer::SetOutputWindowStyles(Json::Value outputStyles)
 	outputWindowColors.clear();
 
 	// Set the background QColor and add to map
-	Json::Value bgColors = outputStyles["background_color"];
-	QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+    Json::Value bgColors = outputStyles["background_color"];
+    QColor bg;
+    bg = QColor(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+
+#ifdef __linux__
+    if(currentThemeName == "Solarized Light")
+        bg = QColor(253, 246, 227);
+    else
+        bg = QColor(0, 43, 54);
+#endif
 
 	Json::Value textColors = outputStyles["text_color"];
-	QColor txt(textColors[0].asInt(), textColors[1].asInt(), textColors[2].asInt());
+
+    QColor txt;
+    txt = QColor(textColors[0].asInt(), textColors[1].asInt(), textColors[2].asInt());
+
+#ifdef __linux__
+    if(currentThemeName == "Solarized Light")
+        txt = QColor(101, 123, 131);
+    else
+        txt = QColor(0, 43, 54);
+#endif
 
 	outputWindowColors.insert(std::map<std::string, QColor>::value_type("background", bg));
 	outputWindowColors.insert(std::map<std::string, QColor>::value_type("text", txt));
@@ -229,10 +255,26 @@ void Themer::SetExceptionWindowStyles(Json::Value exceptionStyles)
 
 	// Set the background QColor and add to map
 	Json::Value bgColors = exceptionStyles["background_color"];
-	QColor bg(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+    QColor bg;
+    bg = QColor(bgColors[0].asInt(), bgColors[1].asInt(), bgColors[2].asInt());
+
+#ifdef __linux__
+    if(currentThemeName == "Solarized Light")
+        bg = QColor(253, 246, 227);
+    else
+        bg = QColor(0, 43, 54);
+#endif
 
 	Json::Value textColors = exceptionStyles["text_color"];
-	QColor txt(textColors[0].asInt(), textColors[1].asInt(), textColors[2].asInt());
+    QColor txt;
+    txt = QColor(textColors[0].asInt(), textColors[1].asInt(), textColors[2].asInt());
+
+#ifdef __linux__
+    if(currentThemeName == "Solarized Light")
+        txt = QColor(101, 123, 131);
+    else
+        txt = QColor(0, 43, 54);
+#endif
 
 	exceptionWindowColors.insert(std::map<std::string, QColor>::value_type("background", bg));
 	exceptionWindowColors.insert(std::map<std::string, QColor>::value_type("text", txt));
@@ -293,7 +335,7 @@ std::vector<std::string> Themer::GetThemesVector()
 
 std::string Themer::GetCurrentTheme()
 {
-	return currentThemeName;
+    return currentThemeName;
 }
 
 void Themer::LoadSettings()
