@@ -51,9 +51,9 @@ const std::map<ExceptionEnum, std::string> DiagnosticBuilder::exceptionMessages
     { ExceptionEnum::err_function_been_defined, "Redefinition of function '%s' (line %s)" },
     { ExceptionEnum::err_parameter_in_use, "Redefinition of parameter '%s' (line %s)" },
     { ExceptionEnum::err_function_in_function, "Function in function not allowed (line %s)" },
-    { ExceptionEnum::err_unexpected_return, "Expected return type (line %s)" },
+    { ExceptionEnum::err_unexpected_return, "Unexpected return type (line %s)" },
     { ExceptionEnum::err_expected_identifier, "Expected identifier (line %s)" },
-    { ExceptionEnum::err_unkown_identifier, "Unkown identifier (line %s)" },
+    { ExceptionEnum::err_unkown_identifier, "Unkown identifier '%s' (line %s)" },
     { ExceptionEnum::err_identifier_in_use, "Redefinition of identifier '%s' (line %s)" },
     { ExceptionEnum::err_expected_keyword, "Expected keyword (line %s)" },
     { ExceptionEnum::err_zero_divide, "Can't divide by zero (line %s)" },
@@ -65,5 +65,6 @@ const std::map<ExceptionEnum, std::string> DiagnosticBuilder::exceptionMessages
     { ExceptionEnum::err_unkown_stmt, "Unkown statement '%s' (line %s)" },
     { ExceptionEnum::err_unexpected_keyword, "An UnexpectedKeywordException occured. Expected an if keyword on line %s."},
     { ExceptionEnum::err_expected_ret, "Expected return type (line %s)" },
-    { ExceptionEnum::err_expected_parameter, "Expected parameter (line %s at position %s)"}
+    { ExceptionEnum::err_expected_parameter, "Expected parameter (line %s at position %s)"},
+    { ExceptionEnum::err_float_precision, "Float precision exception (line %s)" }
 };

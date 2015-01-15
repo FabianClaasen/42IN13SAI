@@ -213,7 +213,8 @@ void Compiler::ParseStatement()
 		Match(MyTokenType::EOL);
 		break;
 	default:
-        throw StatementNotFoundException("A StatementNotFoundException occurred at line " + std::to_string(PeekNext()->LineNumber) +" on position " + std::to_string(PeekNext()->LinePosition)+".");
+            Diag(ExceptionEnum::err_var_not_found) << PeekNext()->Value << PeekNext()->LineNumber;
+            SkipUntil(MyTokenType::EOL);
 		break;
 	}
 }

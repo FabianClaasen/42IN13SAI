@@ -600,18 +600,21 @@ std::shared_ptr<CompilerNode> Parser::ParseAddExpression()
 		std::shared_ptr<CompilerNode> secondParsedExpr = ParseMulExpression();
 		std::vector<std::shared_ptr<CompilerNode>> parameters;
 
-		switch (addOp.Type)
+		if (secondParsedExpr != nullptr)
 		{
-            case MyTokenType::OperatorPlus:
-                parameters.push_back(parsedExpr);
-                parameters.push_back(secondParsedExpr);
-                parsedExpr = std::make_shared<CompilerNode>(CompilerNode("$add", parameters, nullptr, false));
-                break;
-            case MyTokenType::OperatorMinus:
-                parameters.push_back(parsedExpr);
-                parameters.push_back(secondParsedExpr);
-                parsedExpr = std::make_shared<CompilerNode>(CompilerNode("$min", parameters, nullptr, false));
-                break;
+			switch (addOp.Type)
+			{
+			case MyTokenType::OperatorPlus:
+				parameters.push_back(parsedExpr);
+				parameters.push_back(secondParsedExpr);
+				parsedExpr = std::make_shared<CompilerNode>(CompilerNode("$add", parameters, nullptr, false));
+				break;
+			case MyTokenType::OperatorMinus:
+				parameters.push_back(parsedExpr);
+				parameters.push_back(secondParsedExpr);
+				parsedExpr = std::make_shared<CompilerNode>(CompilerNode("$min", parameters, nullptr, false));
+				break;
+			}
 		}
 	}
 
@@ -627,31 +630,33 @@ std::shared_ptr<CompilerNode> Parser::ParseMulExpression()
 		std::shared_ptr<CompilerNode> secondTerm = ParseUniExpression();
 		std::vector<std::shared_ptr<CompilerNode>> parameters;
 
-		switch (mullOp.Type)
+		if (secondTerm != nullptr)
 		{
-		case MyTokenType::OperatorMultiply:
-			parameters.push_back(term);
-			parameters.push_back(secondTerm);
-			term = std::make_shared<CompilerNode>("$mul", parameters, nullptr, false);
-			break;
-		case MyTokenType::OperatorDivide:
-			parameters.push_back(term);
-			if (secondTerm->GetValue() == "0")
-            {
-                compiler->Diag(ExceptionEnum::err_zero_divide) << mullOp.LineNumber;
-                secondTerm = nullptr;
+			switch (mullOp.Type)
+			{
+			case MyTokenType::OperatorMultiply:
+				parameters.push_back(term);
+				parameters.push_back(secondTerm);
+				term = std::make_shared<CompilerNode>("$mul", parameters, nullptr, false);
+				break;
+			case MyTokenType::OperatorDivide:
+				parameters.push_back(term);
+				parameters.push_back(secondTerm);
+				if (secondTerm->GetValue() == "0")
+				{
+                    compiler->Diag(ExceptionEnum::err_zero_divide) << mullOp.LineNumber;
+                    secondTerm = nullptr;
+				}
+				term = std::make_shared<CompilerNode>("$div", parameters, nullptr, false);
+				break;
+			case MyTokenType::OperatorRaised:
+				parameters.push_back(term);
+				parameters.push_back(secondTerm);
+				term = std::make_shared<CompilerNode>("$raise", parameters, nullptr, false);
+				break;
 			}
-            parameters.push_back(secondTerm);
-			term = std::make_shared<CompilerNode>("$div", parameters, nullptr, false);
-			break;
-		case MyTokenType::OperatorRaised:
-			parameters.push_back(term);
-			parameters.push_back(secondTerm);
-			term = std::make_shared<CompilerNode>("$raise", parameters, nullptr, false);
-			break;
 		}
 	}
-
 	return term;
 }
 
@@ -661,23 +666,26 @@ std::shared_ptr<CompilerNode> Parser::ParseUniExpression()
 
 	while (IsNextTokenUniOp())
 	{
-		Token uniOp = compiler->GetNext();
-		std::vector<std::shared_ptr<CompilerNode>> parameters;
-
-		switch (uniOp.Type)
+		if (term != nullptr)
 		{
-		case MyTokenType::UniOperatorPlus:
-			parameters.push_back(term);
-			term = std::make_shared<CompilerNode>("$uniPlus", parameters, nullptr, false);
-			if (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
-				compiler->Match(MyTokenType::EOL);
-			break;
-		case MyTokenType::UniOperatorMinus:
-			parameters.push_back(term);
-			term = std::make_shared<CompilerNode>("$uniMin", parameters, nullptr, false);
-			if (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
-				compiler->Match(MyTokenType::EOL);
-			break;
+			Token uniOp = compiler->GetNext();
+			std::vector<std::shared_ptr<CompilerNode>> parameters;
+
+			switch (uniOp.Type)
+			{
+			case MyTokenType::UniOperatorPlus:
+				parameters.push_back(term);
+				term = std::make_shared<CompilerNode>("$uniPlus", parameters, nullptr, false);
+				if (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
+					compiler->Match(MyTokenType::EOL);
+				break;
+			case MyTokenType::UniOperatorMinus:
+				parameters.push_back(term);
+				term = std::make_shared<CompilerNode>("$uniMin", parameters, nullptr, false);
+				if (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
+					compiler->Match(MyTokenType::EOL);
+				break;
+			}
 		}
 	}
 
@@ -710,8 +718,10 @@ std::shared_ptr<CompilerNode> Parser::ParseTerm()
 			Symbol* symbol = GetSymbol(identifier);
 
             if (symbol == nullptr)
-                //compiler->addException("Symbol not found");
-				throw SymbolNotFoundException("Symbol not found, line: " + std::to_string(token.LineNumber) + ", position: " + std::to_string(token.LinePosition) + ".");
+            {
+                compiler->Diag(ExceptionEnum::err_var_not_found) << identifier << token.LineNumber;
+                symbol = new Symbol("fault", MyTokenType::Identifier, SymbolKind::None);
+            }
 
 			node = std::make_shared<CompilerNode>("$getVariable", symbol->name, false);
 			return node;
@@ -750,8 +760,9 @@ std::shared_ptr<CompilerNode> Parser::ParseTerm()
     else if (token.Type == MyTokenType::Return)
     {
         token = compiler->GetNext();
-        throw ParameterNameException("Return used as variable (line " + std::to_string(token.LineNumber) + ")");
+        compiler->Diag(ExceptionEnum::err_ret_as_var) << token.LineNumber;
     }
+
 	return node;
 }
 
