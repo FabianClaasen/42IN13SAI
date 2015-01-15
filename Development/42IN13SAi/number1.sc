@@ -1,6 +1,7 @@
-var x = pow(12|12);
-
 func Main()
 [
-	prnt(x);
+	if(3 == 3)
+   [
+   	prnt(1000);
+   ]
 ]

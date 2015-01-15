@@ -384,6 +384,29 @@ void Parser::ParseIfStatement()
     
     statementNode = ParseExpression();
     
+	std::vector<std::shared_ptr<CompilerNode>>  node_params = statementNode->GetNodeparameters();
+	if (node_params.size() > 0)
+	{
+		if (node_params[1] != nullptr)
+		{
+			if (!((node_params[0]->GetExpression() == "$getVariable" && node_params[1]->GetExpression() == "$getVariable")
+				|| (node_params[0]->GetExpression() == "$value" && node_params[1]->GetExpression() == "$getVariable")
+				|| (node_params[0]->GetExpression() == "$getVariable" && node_params[1]->GetExpression() == "$value")
+				|| (node_params[0]->GetExpression() == "$value" && node_params[1]->GetExpression() == "$value")))
+			{
+				compiler->Diag(ExceptionEnum::err_expected_identifier) << currentToken.LineNumber;
+				compiler->SkipUntil(MyTokenType::CloseMethod);
+				return;
+			}
+		}
+	}
+	else
+	{
+		compiler->Diag(ExceptionEnum::err_expected_identifier) << currentToken.LineNumber;
+		compiler->SkipUntil(MyTokenType::CloseMethod);
+		return;
+	}
+
     std::vector<std::shared_ptr<CompilerNode>> params;
     params.push_back(statementNode);
     
