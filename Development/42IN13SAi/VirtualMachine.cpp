@@ -427,13 +427,23 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFor(CompilerNode compilerNo
 	if (parameters.size() != 3)
 		throw ParameterException(3, parameters.size(), ParameterExceptionType::IncorrectParameters);
 
+	std::shared_ptr<CompilerNode> _assignment = parameters.at(0);
+	std::shared_ptr<CompilerNode> identifier = _assignment->GetNodeparameters().at(0);
+	if (currentSymbolTable->GetSymbol(identifier->GetValue()) != nullptr && currentSymbolTable->GetSymbol(identifier->GetValue())->IsSet())
+	{
+		std::shared_ptr<CompilerNode> expression = parameters.at(2);
+		if (expression->GetExpression() != "$value")
+			expression = CallFunction(*expression);
+	}
+
 	std::shared_ptr<CompilerNode> assignment = parameters.at(0);
 	if (assignment->GetExpression() == "$assignment")
 	{
 		std::shared_ptr<CompilerNode> identifier = assignment->GetNodeparameters().at(0);
 		// If the symboltable doesn't contain the variable it's the first time in the for loop.
 		// Add the symbol to the table so it doesn't keep getting reset
-		if (currentSymbolTable->GetSymbol(identifier->GetValue()) == nullptr)
+		Symbol* symbol = currentSymbolTable->GetSymbol(identifier->GetValue());
+		if (symbol == nullptr || !symbol->IsSet()) 
 		{
 			currentSymbolTable->AddSymbol(Symbol(identifier->GetValue(), MyTokenType::Float, SymbolKind::Local));
 			CallFunction(*assignment);
@@ -447,9 +457,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFor(CompilerNode compilerNo
 	// Check if condition is true.
 	if (condition->GetValue() == "1")
 	{
-		std::shared_ptr<CompilerNode> expression = parameters.at(2);
-		if (expression->GetExpression() != "$value")
-			expression = CallFunction(*expression);
+		// Do something...
+		
 
 		return nullptr;
 	}
