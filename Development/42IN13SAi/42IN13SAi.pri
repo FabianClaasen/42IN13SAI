@@ -71,7 +71,10 @@ HEADERS += ./Grammar.h \
     $$PWD/Constant.h \
     $$PWD/DiagnosticsBuilder.h \
     $$PWD/ExceptionOutput.h \
-    $$PWD/StopExecuteDialog.h
+    $$PWD/StopExecuteDialog.h \
+    $$PWD/LoadException.h \
+    $$PWD/SaveException.h \
+    $$PWD/ErrorDialog.h
 SOURCES += ./main.cpp \
     ./Grammar.cpp \
     ./LabelStack.cpp \
@@ -127,7 +130,10 @@ SOURCES += ./main.cpp \
     $$PWD/Constant.cpp \
     $$PWD/DiagnosticsBuilder.cpp \
     $$PWD/ExceptionOutput.cpp \
-    $$PWD/StopExecuteDialog.cpp
+    $$PWD/StopExecuteDialog.cpp \
+    $$PWD/LoadException.cpp \
+    $$PWD/SaveException.cpp \
+    $$PWD/ErrorDialog.cpp
 
 RESOURCES += \
     $$PWD/Resources.qrc
