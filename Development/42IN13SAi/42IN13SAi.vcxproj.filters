@@ -209,12 +209,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_MainController.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_VirtualMachine.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_VirtualMachine.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="ErrorDialog.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
@@ -223,6 +217,12 @@
     </ClCompile>
     <ClCompile Include="LoadException.cpp">
       <Filter>Source Files\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_VirtualMachine.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_VirtualMachine.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -461,6 +461,16 @@
     <CustomBuild Include="resource2.h">
       <Filter>Generated Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\..\..\Dropbox\42IN13SAI\icon.ico" />
+    <CustomBuild Include="ErrorDialog.h">
+      <Filter>Header Files\Qt</Filter>
+    </CustomBuild>
+    <CustomBuild Include="LoadException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SaveException.h">
+      <Filter>Header Files\Exceptions</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -531,19 +541,5 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="42IN13SAi.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\..\Dropbox\42IN13SAI\icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ErrorDialog.h">
-      <Filter>Header Files\Qt</Filter>
-    </ClInclude>
-    <ClInclude Include="LoadException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="SaveException.h">
-      <Filter>Header Files\Exceptions</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
