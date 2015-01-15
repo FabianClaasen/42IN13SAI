@@ -432,11 +432,11 @@ void Parser::ParseIfStatement()
             compiler->ParseStatement();
         }
         
-        compiler->Match(MyTokenType::CloseMethod);
+		compiler->Match(MyTokenType::CloseMethod);
+
+		// Add the end doNothing
+		compiler->GetSubroutine()->AddCompilerNode(finalDoNothing);
     }
-    
-    // Add the end doNothing
-    compiler->GetSubroutine()->AddCompilerNode(finalDoNothing);
 }
 
 /*
