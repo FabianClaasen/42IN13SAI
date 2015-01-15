@@ -56,7 +56,7 @@ void Compiler::SkipUntil(MyTokenType tokenType)
 {
     int level = tokenizerTokens.at(currentIndex)->Level;
     
-    while (tokenizerTokens.at(currentIndex)->Type != tokenType && tokenizerTokens.at(currentIndex)->Level != level)
+    while (tokenizerTokens.at(currentIndex)->Type != tokenType || tokenizerTokens.at(currentIndex)->Level != level)
     {
         currentIndex++;
     }
