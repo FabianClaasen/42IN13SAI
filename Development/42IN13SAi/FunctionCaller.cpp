@@ -63,8 +63,11 @@ void FunctionCaller::fillFunctionMap()
 
 	// Complex Math Operations
 	functions.insert(functionMap::value_type("$sin", &VirtualMachine::ExecuteSinOperation));
+	functions.insert(functionMap::value_type("$sinr", &VirtualMachine::ExecuteSinrOperation));
 	functions.insert(functionMap::value_type("$cos", &VirtualMachine::ExecuteCosOperation));
+	functions.insert(functionMap::value_type("$cosr", &VirtualMachine::ExecuteCosrOperation));
 	functions.insert(functionMap::value_type("$tan", &VirtualMachine::ExecuteTanOperation));
+	functions.insert(functionMap::value_type("$tanr", &VirtualMachine::ExecuteTanrOperation));
 
 	functions.insert(functionMap::value_type("$sqr", &VirtualMachine::ExecuteSqrOperation));
 	functions.insert(functionMap::value_type("$cbc", &VirtualMachine::ExecuteCbcOperation));

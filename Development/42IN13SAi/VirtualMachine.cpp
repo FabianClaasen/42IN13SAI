@@ -237,7 +237,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
     if (sub != nullptr)
         t_subroutine = std::make_shared<Subroutine>(*sub);
     
-	if (t_subroutine)
+	if (!t_subroutine)
         //exceptions.push_back("Function " + functionNode->GetValue() + " does not exist");
         throw SubroutineNotFoundException("Function " + functionNode->GetValue() + " does not exist");
 
@@ -822,6 +822,20 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSinOperation(CompilerNode c
 
 	// Parse the parameters to a double for mathmatic operation
 	double num1 = atof(param1->GetValue().c_str());
+	double output = std::sin(num1 * (M_PI/180));
+
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSinrOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+
+	// Parse the parameters to a double for mathmatic operation
+	double num1 = atof(param1->GetValue().c_str());
 	double output = std::sin(num1);
 
 	// Create a new value compilernode to return
@@ -836,6 +850,20 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCosOperation(CompilerNode c
 
 	// Parse the parameters to a double for mathmatic operation
 	double num1 = atof(param1->GetValue().c_str());
+	double output = std::cos(num1* (M_PI / 180));
+
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCosrOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+
+	// Parse the parameters to a double for mathmatic operation
+	double num1 = atof(param1->GetValue().c_str());
 	double output = std::cos(num1);
 
 	// Create a new value compilernode to return
@@ -843,6 +871,20 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCosOperation(CompilerNode c
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteTanOperation(CompilerNode compilerNode)
+{
+	// Get the Node parameters
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
+
+	// Parse the parameters to a double for mathmatic operation
+	double num1 = atof(param1->GetValue().c_str());
+	double output = std::tan(num1* (M_PI / 180));
+
+	// Create a new value compilernode to return
+	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+}
+
+std::shared_ptr<CompilerNode> VirtualMachine::ExecuteTanrOperation(CompilerNode compilerNode)
 {
 	// Get the Node parameters
 	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
