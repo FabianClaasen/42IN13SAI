@@ -50,8 +50,8 @@ Highlighter::Highlighter(std::map<std::string, QColor> colors, QTextDocument *pa
                 setCurrentFormat(currentFormat, rule, QRegExp(QString::fromUtf8(iter->matcher.GetRegexString().c_str())), QFont::Normal, colors["operators"]);
                 break;
 
-            case MyTokenType::Float:						//Negative Look ahead!												// Look ahead!
-                setCurrentFormat(currentFormat, rule, QRegExp("(?![a-zA-Z ])(?=[.]?[0-9])[0-9]*(?:[.][0-9]*)?(?:[Ee][+-]?[0-9]+)?(?=[ +-/\*\|);])$*"), QFont::Normal, colors["variable_types"]);
+            case MyTokenType::Float:
+                setCurrentFormat(currentFormat, rule, QRegExp("\\b((?:[0-9eE]+\.)?[0-9eE]+)"), QFont::Normal, colors["variable_types"]);
                 break;
 
 			case MyTokenType::Comment:
