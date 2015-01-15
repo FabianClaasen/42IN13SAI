@@ -8,7 +8,7 @@
 class SymbolTable {
 private:
     typedef std::unordered_map<std::string, Symbol> symbolMap;
-    symbolMap symbols;
+    std::shared_ptr<symbolMap> symbols;
 
 public:
     SymbolTable();
