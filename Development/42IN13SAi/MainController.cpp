@@ -146,7 +146,7 @@ void MainController::Execute()
 void MainController::PrintOutput(QString output)
 {
     mainWindow.addOutput(output.toStdString());
-    this->output.append(output);
+    this->output.append(output + "\n");
 }
 
 void MainController::PrintException(QString exception)
