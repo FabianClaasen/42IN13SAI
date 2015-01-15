@@ -273,6 +273,7 @@ QString MainWindow::OpenLoadDialog()
 {
     QFileDialog dlg(this, tr("Open file"));
     dlg.setAcceptMode(QFileDialog::AcceptOpen);
+    dlg.setNameFilter(tr("Text files (*.sc)"));
     QString URI;
     if (dlg.exec())
         URI = dlg.selectedFiles().at(0);
@@ -286,6 +287,7 @@ QString MainWindow::OpenSaveDialog()
 {
     QFileDialog dlg(this, tr("Save file"));
     dlg.setAcceptMode(QFileDialog::AcceptSave);
+    dlg.setNameFilter(tr("Text files (*.sc)"));
     QString URI;
     if (dlg.exec())
         URI = dlg.selectedFiles().at(0);

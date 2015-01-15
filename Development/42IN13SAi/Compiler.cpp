@@ -247,6 +247,9 @@ bool Compiler::IsInternalFunction(MyTokenType type)
 		case MyTokenType::Cosine:
 		case MyTokenType::Sine:
 		case MyTokenType::Tangent:
+		case MyTokenType::CosineR:
+		case MyTokenType::SineR:
+		case MyTokenType::TangentR:
 		case MyTokenType::Square:
 		case MyTokenType::Cube:
 		case MyTokenType::Power:

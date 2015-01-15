@@ -84,8 +84,11 @@ public:
 	std::shared_ptr<CompilerNode> ExecuteCbrtOperation(CompilerNode compilerNode);
 
 	std::shared_ptr<CompilerNode> ExecuteSinOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteSinrOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteCosOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteCosrOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteTanOperation(CompilerNode compilerNode);
+	std::shared_ptr<CompilerNode> ExecuteTanrOperation(CompilerNode compilerNode);
 
 	std::shared_ptr<CompilerNode> ExecuteDegreeOperation(CompilerNode compilerNode);
 	std::shared_ptr<CompilerNode> ExecuteRadiantOperation(CompilerNode compilerNode);
