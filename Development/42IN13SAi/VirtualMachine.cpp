@@ -1024,7 +1024,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGcdOperation(CompilerNode c
 	if (int2 < 0)
 		int2 *= -1;
 
-	long long output = 0;
+	long long output = 1;
 
 	for (long long i = 1; i <= int1&&i <= int2; i++)
 		if (int1%i == 0 && int2%i == 0)
@@ -1092,7 +1092,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 		}
 
 		// Print value
-		std::clog << abcOutput << std::endl;
+		emit PrintOutput(QString::fromUtf8(abcOutput.c_str()));
 	}
 
 	// Create a new value compilernode to return

@@ -38,18 +38,20 @@ void Parser::ParseFunction()
         
         if (compiler->GetSubroutineTable()->GetSubroutine(functionName.Value) != nullptr)
         {
-            
-            
-            
-            throw ParseException("Function: '" + functionName.Value + "' already exists");
+            compiler->Diag(ExceptionEnum::err_function_been_defined) << currentToken.Value << currentToken.LineNumber;
+            compiler->SkipUntil(MyTokenType::CloseMethod);
+            return;
         }
 
 		compiler->Match(MyTokenType::OpenBracket);
 
 		// Set the parameters
 		if (currentToken.Type == MyTokenType::MainFunction && compiler->PeekNext()->Type != MyTokenType::CloseBracket)
-			throw ParseException("Main function can't contain parameters (line " + std::to_string(currentToken.LineNumber) + ")");
-            //compiler->addException("Main function can't contain parameters (line " + std::to_string(currentToken.LineNumber) + ")");
+        {
+            compiler->Diag(ExceptionEnum::err_main_parameters) << currentToken.LineNumber;
+            compiler->SkipUntil(MyTokenType::CloseBracket);
+            return;
+        }
 
 		while (compiler->PeekNext()->Type != MyTokenType::CloseBracket)
 		{
@@ -71,8 +73,10 @@ void Parser::ParseFunction()
 					symbolTable.AddSymbol(parameterSymbol);
 				}
                 else
-					throw ParseException("Parameter name: " + parameter.Value + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
-                    //compiler->addException("Parameter name: " + parameter.Value + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
+                {
+                    compiler->Diag(ExceptionEnum::err_parameter_in_use) << parameter.Value << currentToken.LineNumber;
+                    compiler->SkipUntil(MyTokenType::CloseBracket);
+                }
 			}
 		}
 
@@ -88,7 +92,10 @@ void Parser::ParseFunction()
 		{
             // Catch function in function exception
             if (compiler->PeekNext()->Type == MyTokenType::Function || compiler->PeekNext()->Type == MyTokenType::MainFunction)
-                throw UnexpectedTypeException("Function in function not allowed (line " + std::to_string(compiler->PeekNext()->LineNumber) + ")");
+            {
+                compiler->Diag(ExceptionEnum::err_function_in_function) << compiler->PeekNext()->LineNumber;
+                return;
+            }
             
 			compiler->ParseStatement();
 		}
@@ -99,14 +106,22 @@ void Parser::ParseFunction()
 		compiler->AddSubroutine();
 	}
     else
-		throw UnexpectedTypeException("Expected return type (line " + std::to_string(currentToken.LineNumber) + ")");
-        //compiler->addException("Expected return type (line " + std::to_string(currentToken.LineNumber) + ")");
+    {
+        compiler->Diag(ExceptionEnum::err_expected_ret) << currentToken.LineNumber;
+        compiler->SkipUntil(MyTokenType::OpenMethod);
+        compiler->SkipUntil(*compiler->GetCurrent().Partner);
+        return;
+    }
 }
 
 void Parser::ParseReturn()
 {
     if (compiler->GetSubroutine()->returnType == MyTokenType::Void)
-        throw UnexpectedKeywordException("Unexpected return in void function (line "+ std::to_string(compiler->PeekNext()->LineNumber) + ")");
+    {
+        compiler->Diag(ExceptionEnum::err_unexpected_return) << compiler->PeekNext()->LineNumber;
+        compiler->SkipUntil(MyTokenType::EOL);
+        return;
+    }
     
 	compiler->Match(MyTokenType::Return);
 	
@@ -143,8 +158,11 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 
 	// Check if the identifier is a identifier
     if (identifier.Type != MyTokenType::Identifier)
-        //compiler->addException("An IdentifierException occured. Identifier expected. (line " + std::to_string(currentToken.LineNumber) + ")");
-        throw IdentifierException("An IdentifierException occured. Identifier expected. (line " + std::to_string(currentToken.LineNumber) + ")");
+    {
+        compiler->Diag(ExceptionEnum::err_expected_identifier) << currentToken.LineNumber;
+        compiler->SkipUntil(MyTokenType::EOL);
+        return std::make_shared<CompilerNode>();
+    }
 
 	// Check if the identifier exists
 	if (!newIdentifier)
@@ -152,8 +170,11 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		Symbol* symbol = GetSymbol(identifier.Value);
 
         if (symbol == nullptr)
-            //compiler->addException("An IdentifierException occured. The identifier: " + identifier.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
-            throw IdentifierException("An IdentifierException occured. The identifier: " + identifier.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
+        {
+            compiler->Diag(ExceptionEnum::err_unkown_identifier) << identifier.Value << currentToken.LineNumber;
+            compiler->SkipUntil(MyTokenType::EOL);
+            return std::make_shared<CompilerNode>();
+        }
 	}
 	else
 	{
@@ -187,8 +208,10 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
             Symbol sym = *identifierSymbol;
 			delete identifierSymbol;
             identifierSymbol = nullptr;
-            //compiler->addException("An IdentifierException occured. The identifier: " + std::to_string(identifierSymbol->GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
-            throw IdentifierException("An IdentifierException occured. The identifier: " + std::to_string(sym.GetValue()) + " is already in use (line " + std::to_string(currentToken.LineNumber) + ")");
+            
+            compiler->Diag(ExceptionEnum::err_identifier_in_use) << sym.GetValue() << currentToken.LineNumber;
+            compiler->SkipUntil(MyTokenType::EOL);
+            return std::shared_ptr<CompilerNode>();
 		}
 	}
 
@@ -207,7 +230,7 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 
 			if (before.size() > 7 || after.size() > 7)
 			{
-				throw IdentifierException("Float precision exception.");
+                compiler->Diag(ExceptionEnum::err_float_precision) << compiler->PeekNext()->LineNumber;
 			}
 		}
 
@@ -267,8 +290,11 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 		// Check if the function is an assignment
 		currentToken = compiler->GetNext();
 		if (currentToken.Type != MyTokenType::Equals)
-            //compiler->addException("An IdentifierException occured. The token: " + currentToken.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
-            throw IdentifierException("An IdentifierException occured. The token: " + currentToken.Value + " does not exist (line " + std::to_string(currentToken.LineNumber) + ")");
+        {
+            compiler->Diag(ExceptionEnum::err_expected_identifier) << currentToken.LineNumber;
+            compiler->SkipUntil(MyTokenType::EOL);
+            return std::make_shared<CompilerNode>();
+        }
 
 		// Add the parameters to the parameters list
 		expression = "$assignment";
@@ -436,7 +462,9 @@ void Parser::ParseLoopStatement()
 	}
 	else
 	{
-        throw UnexpectedKeywordException("An UnexpectedKeywordException occured. Expected a loop keyword on line " + std::to_string(currentToken.LineNumber)+ ".");
+        compiler->Diag(ExceptionEnum::err_unexpected_keyword) << currentToken.LineNumber;
+        compiler->SkipUntil(MyTokenType::CloseMethod);
+        return;
 	}
 
 	compiler->Match(MyTokenType::OpenBracket);
@@ -616,8 +644,8 @@ std::shared_ptr<CompilerNode> Parser::ParseMulExpression()
 				parameters.push_back(secondTerm);
 				if (secondTerm->GetValue() == "0")
 				{
-					//compiler->addException("Can't divide by zero");
-					throw ZeroDivideException("Can't divide by zero");
+                    compiler->Diag(ExceptionEnum::err_zero_divide) << mullOp.LineNumber;
+                    secondTerm = nullptr;
 				}
 				term = std::make_shared<CompilerNode>("$div", parameters, nullptr, false);
 				break;
@@ -629,7 +657,6 @@ std::shared_ptr<CompilerNode> Parser::ParseMulExpression()
 			}
 		}
 	}
-
 	return term;
 }
 
@@ -691,8 +718,10 @@ std::shared_ptr<CompilerNode> Parser::ParseTerm()
 			Symbol* symbol = GetSymbol(identifier);
 
             if (symbol == nullptr)
-                //compiler->addException("Symbol not found");
-				throw SymbolNotFoundException("Symbol not found, line: " + std::to_string(token.LineNumber) + ", position: " + std::to_string(token.LinePosition) + ".");
+            {
+                compiler->Diag(ExceptionEnum::err_var_not_found) << identifier << token.LineNumber;
+                symbol = new Symbol("fault", MyTokenType::Identifier, SymbolKind::None);
+            }
 
 			node = std::make_shared<CompilerNode>("$getVariable", symbol->name, false);
 			return node;
@@ -731,7 +760,7 @@ std::shared_ptr<CompilerNode> Parser::ParseTerm()
     else if (token.Type == MyTokenType::Return)
     {
         token = compiler->GetNext();
-        throw ParameterNameException("Return used as variable (line " + std::to_string(token.LineNumber) + ")");
+        compiler->Diag(ExceptionEnum::err_ret_as_var) << token.LineNumber;
     }
 
 	return node;
