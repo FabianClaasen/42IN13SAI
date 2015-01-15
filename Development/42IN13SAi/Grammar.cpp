@@ -21,37 +21,37 @@ std::list<TokenDefinition> Grammar::getGrammar()
     definitions.push_back(TokenDefinition("\\|", MyTokenType::Separator));
 
     //internal functions
-    definitions.push_back(TokenDefinition("\\bprnt\\b", MyTokenType::PrintLine));
-    definitions.push_back(TokenDefinition("\\bstop\\b", MyTokenType::Stop));
-    definitions.push_back(TokenDefinition("\\bsqr\\b", MyTokenType::Square));
-	definitions.push_back(TokenDefinition("\\bcbc\\b", MyTokenType::Cube));
-	definitions.push_back(TokenDefinition("\\bpow\\b", MyTokenType::Power));
-    definitions.push_back(TokenDefinition("\\bsqrt\\b", MyTokenType::SquareRoot));
-    definitions.push_back(TokenDefinition("\\bcbrt\\b", MyTokenType::CubeRoot));
-    definitions.push_back(TokenDefinition("\\bsin\\b", MyTokenType::Sine));
-    definitions.push_back(TokenDefinition("\\bcos\\b", MyTokenType::Cosine));
-    definitions.push_back(TokenDefinition("\\btan\\b", MyTokenType::Tangent));
-    definitions.push_back(TokenDefinition("\\bdeg\\b", MyTokenType::Degree));
-    definitions.push_back(TokenDefinition("\\brad\\b", MyTokenType::Radiant));
-    definitions.push_back(TokenDefinition("\\bperc\\b", MyTokenType::Percent));
-    definitions.push_back(TokenDefinition("\\bperm\\b", MyTokenType::Permillage));
-    definitions.push_back(TokenDefinition("\\blog10\\b", MyTokenType::CommonLog));
-	definitions.push_back(TokenDefinition("\\blog2\\b", MyTokenType::BinaryLog));
-	definitions.push_back(TokenDefinition("\\blog\\b", MyTokenType::Log));
-    definitions.push_back(TokenDefinition("\\bln\\b", MyTokenType::NaturalLog));
-    definitions.push_back(TokenDefinition("\\bmod\\b", MyTokenType::Modulo));
-	definitions.push_back(TokenDefinition("\\bgcd\\b", MyTokenType::Gcd));
-	definitions.push_back(TokenDefinition("\\bdis\\b", MyTokenType::Discriminant));
-	definitions.push_back(TokenDefinition("\\babc\\b", MyTokenType::AbcFormula));
-	definitions.push_back(TokenDefinition("\\bfib\\b", MyTokenType::Fibonacci));
-	definitions.push_back(TokenDefinition("\\bpyt\\b", MyTokenType::Pythagoras));
-	definitions.push_back(TokenDefinition("\\bpyth\\b", MyTokenType::PythagorasH));
+    definitions.push_back(TokenDefinition("\\bprnt(?=\\()\\b", MyTokenType::PrintLine));
+    definitions.push_back(TokenDefinition("\\bstop(?=\\()\\b", MyTokenType::Stop));
+    definitions.push_back(TokenDefinition("\\bsqr(?=\\()\\b", MyTokenType::Square));
+	definitions.push_back(TokenDefinition("\\bcbc(?=\\()\\b", MyTokenType::Cube));
+	definitions.push_back(TokenDefinition("\\bpow(?=\\()\\b", MyTokenType::Power));
+    definitions.push_back(TokenDefinition("\\bsqrt(?=\\()\\b", MyTokenType::SquareRoot));
+    definitions.push_back(TokenDefinition("\\bcbrt(?=\\()\\b", MyTokenType::CubeRoot));
+    definitions.push_back(TokenDefinition("\\bsin(?=\\()\\b", MyTokenType::Sine));
+    definitions.push_back(TokenDefinition("\\bcos(?=\\()\\b", MyTokenType::Cosine));
+    definitions.push_back(TokenDefinition("\\btan(?=\\()\\b", MyTokenType::Tangent));
+    definitions.push_back(TokenDefinition("\\bdeg(?=\\()\\b", MyTokenType::Degree));
+    definitions.push_back(TokenDefinition("\\brad(?=\\()\\b", MyTokenType::Radiant));
+    definitions.push_back(TokenDefinition("\\bperc(?=\\()\\b", MyTokenType::Percent));
+    definitions.push_back(TokenDefinition("\\bperm(?=\\()\\b", MyTokenType::Permillage));
+    definitions.push_back(TokenDefinition("\\blog10(?=\\()\\b", MyTokenType::CommonLog));
+	definitions.push_back(TokenDefinition("\\blog2(?=\\()\\b", MyTokenType::BinaryLog));
+	definitions.push_back(TokenDefinition("\\blog(?=\\()\\b", MyTokenType::Log));
+    definitions.push_back(TokenDefinition("\\bln(?=\\()\\b", MyTokenType::NaturalLog));
+    definitions.push_back(TokenDefinition("\\bmod(?=\\()\\b", MyTokenType::Modulo));
+	definitions.push_back(TokenDefinition("\\bgcd(?=\\()\\b", MyTokenType::Gcd));
+	definitions.push_back(TokenDefinition("\\bdis(?=\\()\\b", MyTokenType::Discriminant));
+	definitions.push_back(TokenDefinition("\\babc(?=\\()\\b", MyTokenType::AbcFormula));
+	definitions.push_back(TokenDefinition("\\bfib(?=\\()\\b", MyTokenType::Fibonacci));
+	definitions.push_back(TokenDefinition("\\bpyt(?=\\()\\b", MyTokenType::Pythagoras));
+	definitions.push_back(TokenDefinition("\\bpyth(?=\\()\\b", MyTokenType::PythagorasH));
 
-	definitions.push_back(TokenDefinition("\\bdist\\b", MyTokenType::Distance));
-	definitions.push_back(TokenDefinition("\\bvelo\\b", MyTokenType::Velocity));
-	definitions.push_back(TokenDefinition("\\btime\\b", MyTokenType::Time));
-	definitions.push_back(TokenDefinition("\\bavgv\\b", MyTokenType::AverageVelocity));
-	definitions.push_back(TokenDefinition("\\baccl\\b", MyTokenType::Acceleration));
+	definitions.push_back(TokenDefinition("\\bdist(?=\\()\\b", MyTokenType::Distance));
+	definitions.push_back(TokenDefinition("\\bvelo(?=\\()\\b", MyTokenType::Velocity));
+	definitions.push_back(TokenDefinition("\\btime(?=\\()\\b", MyTokenType::Time));
+	definitions.push_back(TokenDefinition("\\bavgv(?=\\()\\b", MyTokenType::AverageVelocity));
+	definitions.push_back(TokenDefinition("\\baccl(?=\\()\\b", MyTokenType::Acceleration));
 
 	// math constants
 	definitions.push_back(TokenDefinition("\\bM_PI\\b", MyTokenType::Math_PI));
