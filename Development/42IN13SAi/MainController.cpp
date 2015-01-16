@@ -274,6 +274,7 @@ void MainController::LoadFile()
             currentFiles.push_back(std::shared_ptr<QFile>(new QFile(URI)));
             QFileInfo* fileInfo = new QFileInfo(URI);
             mainWindow.AddFile(fileInfo, text);
+            delete fileInfo;
         }
         else if(!(URI == "canceled"))
             throw LoadException("You can only load .sc files");
@@ -324,6 +325,7 @@ void MainController::SaveAsFile()
             FileIO::SaveFile(URI, mainWindow.GetText());
             QFileInfo* fileInfo = new QFileInfo(URI);
 			mainWindow.SetTabTitle(fileInfo);
+            delete fileInfo;
         }
         else if(!(URI == "canceled"))
             throw SaveException("You can only save the file as a .sc file");
