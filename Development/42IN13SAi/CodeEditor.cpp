@@ -295,6 +295,17 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 					}
 				}
 
+				// Only a single line was selected
+				if (lineStart == lineEnd)
+				{
+					curs.clearSelection();
+
+					curs.setPosition(startPos - 1);
+					curs.setPosition(endPos - 1, QTextCursor::KeepAnchor);
+
+					this->setTextCursor(curs);
+				}
+
 				return;
 			}
 		}
