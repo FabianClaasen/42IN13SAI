@@ -5,14 +5,20 @@ SymbolTable::SymbolTable()
     symbols = std::make_shared<symbolMap>(symbolMap());
 }
 
+std::vector<std::pair<std::string, Symbol>>::iterator SymbolTable::HasSymbolIt(std::string symbolName)
+{
+    symbolMap::iterator it = std::find_if(symbols->begin(), symbols->end(),
+                                          [&](std::pair<std::string, Symbol>& pair){
+                                              return pair.first == symbolName;
+                                          });
+    return it;
+}
+
 bool SymbolTable::HasSymbol(std::string symbolName)
 {
 	if (symbols->size() > 0)
 	{
-		auto symbol = symbols->find(symbolName);
-		if (symbol == symbols->end())
-			return false;
-		return true;
+        return HasSymbolIt(symbolName) != symbols->end();
 	}
     
     return false;
@@ -22,14 +28,15 @@ void SymbolTable::AddSymbol(Symbol symbol)
 {
     if (!HasSymbol(symbol.name))
     {
-        symbols->insert(std::make_pair(symbol.name, symbol));
+        symbols->push_back(std::make_pair(symbol.name, symbol));
     }
 }
 
 Symbol* SymbolTable::GetSymbol(std::string symbolName)
 {
-    if (HasSymbol(symbolName))
-        return &((*symbols)[symbolName]);
+    symbolMap::iterator it = HasSymbolIt(symbolName);
+    if (it != symbols->end())
+        return &(it->second);
     return nullptr;
 }
 
