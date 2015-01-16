@@ -309,6 +309,10 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 				return;
 			}
 		}
+		else if (key == Qt::Key_Backtab)
+		{
+			return; // Ignore
+		}
 
 		// Check for special indents
 		if (key == Qt::Key_Tab || key == Qt::Key_Return)
