@@ -35,7 +35,7 @@ public:
 	void Compile();
     
 	std::shared_ptr<Token> PeekNext();
-	Token  GetNext();
+	Token GetNext();
     Token GetCurrent();
     void SkipUntil(MyTokenType tokenType);
     void SkipUntil(std::shared_ptr<Token>);
