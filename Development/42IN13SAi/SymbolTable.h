@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <algorithm>
 #include <vector>
 #include <memory>
 #include "Symbol.h"
