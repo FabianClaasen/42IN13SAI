@@ -97,6 +97,7 @@ void Tokenizer::Tokenize()
         if (!match)
         {
             Diag(ExceptionEnum::err_unkown_char) << lineRemaining.substr(0, 1) << lineNumber << linePosition;
+			lineRemaining = "";
             NextLine();
         }
 	}
