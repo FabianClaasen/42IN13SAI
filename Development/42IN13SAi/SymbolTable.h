@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include "Symbol.h"
+#include <memory>
 
 class SymbolTable {
 private:

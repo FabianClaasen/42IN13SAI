@@ -204,7 +204,6 @@ std::shared_ptr<LinkedList> VirtualMachine::findList(std::string key)
 		if (nodeLists.at(i).first == key)
 		{
 			return nodeLists.at(i).second;
-			//return std::make_shared<LinkedList>(nodeLists.at(i).second);
 		}
 	}
 
@@ -247,8 +246,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
     if (sub != nullptr)
         t_subroutine = std::make_shared<Subroutine>(*sub);
     
-	if (!t_subroutine)
-        //exceptions.push_back("Function " + functionNode->GetValue() + " does not exist");
+	if (t_subroutine == nullptr)
         throw SubroutineNotFoundException("Function " + functionNode->GetValue() + " does not exist");
 
 	// Set the currentSymbolTable
@@ -379,11 +377,16 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePrint(CompilerNode compiler
 	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
-	// Get the new value
-	std::string valueToPrint = param1->GetValue();
-
-	//Add the value to print to the output
-	emit PrintOutput(QString::fromUtf8(valueToPrint.c_str()));
+	if (param1 != nullptr)
+    {
+        // Get the new value
+        std::string valueToPrint = param1->GetValue();
+        
+        //Add the value to print to the output
+        emit PrintOutput(QString::fromUtf8(valueToPrint.c_str()));
+    }
+    else
+        throw ParameterException(1, ParameterExceptionType::IncorrectParameters);
 
 	return nullptr;
 }

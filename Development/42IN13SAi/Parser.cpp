@@ -121,7 +121,7 @@ void Parser::ParseFunction()
     {
         compiler->Diag(ExceptionEnum::err_expected_ret) << currentToken.LineNumber;
         compiler->SkipUntil(MyTokenType::OpenMethod);
-        compiler->SkipUntil(*compiler->GetCurrent().Partner);
+        compiler->SkipUntil(compiler->GetCurrent().Partner.lock());
         return;
     }
 }
@@ -381,7 +381,7 @@ void Parser::ParseIfStatement()
     
     if (currentToken.Type == MyTokenType::If)
     {
-        if (currentToken.Partner != nullptr)
+        if (currentToken.Partner.lock() != nullptr)
         {
             hasPartner = true;
         }
@@ -393,37 +393,47 @@ void Parser::ParseIfStatement()
         return;
     }
     
-    compiler->Match(MyTokenType::OpenBracket);
+    std::shared_ptr<Token> skipToOnEx = compiler->ReturnOnMatch(MyTokenType::OpenBracket).Partner.lock();
+    
     
     statementNode = ParseExpression();
     
-	std::vector<std::shared_ptr<CompilerNode>>  node_params = statementNode->GetNodeparameters();
-	if (node_params.size() > 0)
-	{
-		if (node_params[1] != nullptr)
-		{
-			if (!((node_params[0]->GetExpression() == "$getVariable" && node_params[1]->GetExpression() == "$getVariable")
-				|| (node_params[0]->GetExpression() == "$value" && node_params[1]->GetExpression() == "$getVariable")
-				|| (node_params[0]->GetExpression() == "$getVariable" && node_params[1]->GetExpression() == "$value")
-				|| (node_params[0]->GetExpression() == "$value" && node_params[1]->GetExpression() == "$value")))
-			{
-				compiler->Diag(ExceptionEnum::err_expected_identifier) << currentToken.LineNumber;
-				compiler->SkipUntil(MyTokenType::CloseMethod);
-				return;
-			}
-		}
-	}
-	else
-	{
-		compiler->Diag(ExceptionEnum::err_expected_identifier) << currentToken.LineNumber;
-		compiler->SkipUntil(MyTokenType::CloseMethod);
-		return;
-	}
-
+    // Check if conditions could be parsed
+    if (statementNode == nullptr)
+    {
+        compiler->Diag(ExceptionEnum::err_expected_parameter) << currentToken.LineNumber << currentToken.LinePosition;
+        compiler->SkipUntil(skipToOnEx); // close bracket
+    }
+    else
+    {
+        // Check the params
+        std::vector<std::shared_ptr<CompilerNode>>  node_params = statementNode->GetNodeparameters();
+        if (node_params.size() > 0)
+        {
+            if (node_params[1] != nullptr)
+            {
+                if (!((node_params[0]->GetExpression() == "$getVariable" && node_params[1]->GetExpression() == "$getVariable")
+                      || (node_params[0]->GetExpression() == "$value" && node_params[1]->GetExpression() == "$getVariable")
+                      || (node_params[0]->GetExpression() == "$getVariable" && node_params[1]->GetExpression() == "$value")
+                      || (node_params[0]->GetExpression() == "$value" && node_params[1]->GetExpression() == "$value")))
+                {
+                    compiler->Diag(ExceptionEnum::err_expected_identifier) << currentToken.LineNumber;
+                    compiler->SkipUntil(skipToOnEx); // close bracket
+                }
+                else
+                    compiler->Match(MyTokenType::CloseBracket);
+            }
+        }
+        else
+        {
+            compiler->Diag(ExceptionEnum::err_expected_identifier) << currentToken.LineNumber;
+            compiler->SkipUntil(skipToOnEx); // close bracket
+        }
+    }
+    
     std::vector<std::shared_ptr<CompilerNode>> params;
     params.push_back(statementNode);
     
-    compiler->Match(MyTokenType::CloseBracket);
     compiler->Match(MyTokenType::OpenMethod);
     
     //Make a do nothing compilerNode to jump to if the statement is false
