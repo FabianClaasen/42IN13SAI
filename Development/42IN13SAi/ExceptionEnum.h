@@ -31,7 +31,8 @@ enum ExceptionEnum {
     err_unkown_stmt,
     err_unexpected_keyword,
     err_expected_parameter,
-    err_float_precision
+    err_float_precision,
+    err_expected_ret_type
 };
 
 #endif

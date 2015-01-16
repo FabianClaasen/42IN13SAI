@@ -64,7 +64,8 @@ const std::map<ExceptionEnum, std::string> DiagnosticBuilder::exceptionMessages
     { ExceptionEnum::err_expected_rparen_after, "Expected right bracket after '%s' (line %s)" },
     { ExceptionEnum::err_unkown_stmt, "Unkown statement '%s' (line %s)" },
     { ExceptionEnum::err_unexpected_keyword, "An UnexpectedKeywordException occured. Expected an if keyword on line %s."},
-    { ExceptionEnum::err_expected_ret, "Expected return type (line %s)" },
+    { ExceptionEnum::err_expected_ret, "Expected return (line %s)" },
     { ExceptionEnum::err_expected_parameter, "Expected parameter (line %s at position %s)"},
-    { ExceptionEnum::err_float_precision, "Float precision exception (line %s)" }
+    { ExceptionEnum::err_float_precision, "Float precision exception (line %s)" },
+    { ExceptionEnum::err_expected_ret_type, "Expected return type (line %s)" }
 };
