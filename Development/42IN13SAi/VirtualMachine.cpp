@@ -233,11 +233,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 
 	// Get the subroutine table and check if exists
     Subroutine* sub = subroutineTable->GetSubroutine(functionNode->GetValue());
-    std::shared_ptr<Subroutine> t_subroutine = std::make_shared<Subroutine>();
+    std::shared_ptr<Subroutine> t_subroutine = nullptr;
     if (sub != nullptr)
         t_subroutine = std::make_shared<Subroutine>(*sub);
     
-	if (!t_subroutine)
+	if (t_subroutine == nullptr)
         //exceptions.push_back("Function " + functionNode->GetValue() + " does not exist");
         throw SubroutineNotFoundException("Function " + functionNode->GetValue() + " does not exist");
 

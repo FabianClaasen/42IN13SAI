@@ -86,7 +86,12 @@ void Parser::ParseFunction()
 		// Check if the functions starts and create a subroutine
 		compiler->Match(MyTokenType::OpenMethod);
 		compiler->SetSubroutine(Subroutine(functionName.Value, returnType.Type, SubroutineKind::Function, symbolTable));
-
+        
+        bool shouldHaveReturn = false;
+        bool hasReturn = false;
+        if (returnType.Type != MyTokenType::Void)
+            shouldHaveReturn = true;
+        
 		// Set all the statements inside this subroutine
 		while (compiler->PeekNext()->Type != MyTokenType::CloseMethod && compiler->PeekNext()->Level > 1)
 		{
@@ -97,8 +102,15 @@ void Parser::ParseFunction()
                 return;
             }
             
+            if (shouldHaveReturn)
+                hasReturn = compiler->PeekNext()->Type == MyTokenType::Return;
+            
 			compiler->ParseStatement();
 		}
+        
+        // Check if function has return if it needs one
+        if (shouldHaveReturn && !hasReturn)
+            compiler->Diag(ExceptionEnum::err_expected_ret) << compiler->GetCurrent().LineNumber;
 
 		// Check if the subroutine is closed correctly
 		// And add the subroutine to the subroutine table
