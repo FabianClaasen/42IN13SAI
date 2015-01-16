@@ -38,7 +38,7 @@ public:
 	Token GetNext();
     Token GetCurrent();
     void SkipUntil(MyTokenType tokenType);
-    void SkipUntil(Token token);
+    void SkipUntil(std::shared_ptr<Token>);
 	
     void SetTokenList(std::vector<std::shared_ptr<Token>> tokens);
     
@@ -60,6 +60,7 @@ public:
 	CompilerNode ParseConstant();
 
 	void Match(MyTokenType type);
+    Token ReturnOnMatch(MyTokenType type);
 	bool HasExceptions();
 
 	//Info to send to VM

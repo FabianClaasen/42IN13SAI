@@ -65,12 +65,14 @@ void Compiler::SkipUntil(MyTokenType tokenType)
         currentIndex++;
 }
 
-void Compiler::SkipUntil(Token token)
+void Compiler::SkipUntil(std::shared_ptr<Token> token)
 {
-    Token toSkipTo = *tokenizerTokens.at(currentIndex);
-    while (&toSkipTo != &token)
+    std::shared_ptr<Token> pToken = token;
+    std::shared_ptr<Token> toSkipTo = tokenizerTokens.at(currentIndex);
+    while (toSkipTo.get() != pToken.get())
     {
         currentIndex++;
+        toSkipTo = tokenizerTokens.at(currentIndex);
     }
 }
 
@@ -127,7 +129,6 @@ void Compiler::Match(MyTokenType type)
 {
 	if (Compiler::PeekNext() == nullptr)
 	{
-		//exceptions.push_back("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
 		throw UnexpectedTypeException("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
 	}
 
@@ -135,9 +136,24 @@ void Compiler::Match(MyTokenType type)
 
 	if (currentToken.Type != type)
 	{
-        //exceptions.push_back("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
 		throw UnexpectedTypeException("An UnexpectedTypeException occured at line " + std::to_string(currentToken.LineNumber) + " on position " + std::to_string(currentToken.LinePosition) + ". Expected: " + TokenToString(type));
 	}
+}
+
+Token Compiler::ReturnOnMatch(MyTokenType type)
+{
+    if (Compiler::PeekNext() == nullptr)
+    {
+        throw UnexpectedTypeException("An UnexpectedTypeException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ". Expected: " + TokenToString(type));
+    }
+    
+    Token currentToken = GetNext(); // Bestaat al
+    
+    if (currentToken.Type != type)
+    {
+        throw UnexpectedTypeException("An UnexpectedTypeException occured at line " + std::to_string(currentToken.LineNumber) + " on position " + std::to_string(currentToken.LinePosition) + ". Expected: " + TokenToString(type));
+    }
+    return currentToken;
 }
 
 // Check if you need to parse a function or a global.
@@ -166,7 +182,6 @@ void Compiler::ParseGlobalStatement()
 		Parser(this).ParseAssignmentStatement(false);
 		break;
 	default:
-        //exceptions.push_back("A VariableNotFoundException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ".");
         throw VariableNotFoundException("A VariableNotFoundException occured at line " + std::to_string(PeekNext()->LineNumber) + " on position " + std::to_string(PeekNext()->LinePosition) + ".");
 		break;
 	}
