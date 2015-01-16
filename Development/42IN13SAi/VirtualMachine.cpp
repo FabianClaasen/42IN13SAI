@@ -276,6 +276,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 	currentSubroutine = t_subroutine.get();
 	currentSymbolTable = t_symboltable.get();
 
+	SymbolTable* temp = new SymbolTable(*currentSymbolTable);
+	currentSymbolTable = temp;
+
 	return VirtualMachine::ExecuteNodes(std::make_shared<LinkedList>(*currentSubroutine->GetCompilerNodeCollection()));
 }
 

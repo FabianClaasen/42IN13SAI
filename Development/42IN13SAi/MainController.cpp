@@ -110,7 +110,7 @@ void MainController::Execute()
             virtual_machine->start();
 
             // Start timer to print output
-            outputThread = new std::thread([&](){
+			output_thread = new std::thread([&](){
                 output_thread_running = true;
 
                 start_time = std::clock();
@@ -356,6 +356,5 @@ void MainController::CloseTab(int index)
 MainController::~MainController()
 {
     // Empty
-
-    delete outputThread;
+    //delete output_thread;
 }
