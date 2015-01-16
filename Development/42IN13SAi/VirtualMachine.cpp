@@ -35,7 +35,7 @@ void VirtualMachine::quit()
 std::string VirtualMachine::toString(long double number)
 {
 	std::ostringstream strs;
-	strs << std::fixed << std::setprecision(16) << number;
+	strs << std::fixed << std::setprecision(14) << number;
 	std::string str = strs.str();
 	return str;
 }
