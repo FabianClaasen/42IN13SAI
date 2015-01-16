@@ -289,11 +289,16 @@ QString MainWindow::OpenSaveDialog()
     dlg.setAcceptMode(QFileDialog::AcceptSave);
     dlg.setNameFilter(tr("Text files (*.sc)"));
     QString URI;
-    if (dlg.exec())
-        URI = dlg.selectedFiles().at(0);
-    else
-        URI = "canceled";
-
+	if (dlg.exec())
+	{
+		URI = dlg.selectedFiles().at(0);
+		if (!URI.endsWith(".sc"))
+			URI = URI + ".sc";
+	}
+	else
+	{
+		URI = "canceled";
+	}
     return URI;
 }
 void MainWindow::CodeIsExecuting(bool status)
