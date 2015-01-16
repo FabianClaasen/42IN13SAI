@@ -167,6 +167,8 @@ void MainController::StopVirtualMachine()
     FileIO::SaveFile("Log files//output.txt", this->output);
 }
 
+#include <time.h> 
+
 void MainController::VirtualMachineFinished()
 {
     tokenizer_controller = nullptr;
@@ -179,7 +181,12 @@ void MainController::VirtualMachineFinished()
     mainWindow.PrintOutput();
 
     // Save the output in an output file
-    FileIO::SaveFile("Log files//output.txt", this->output);
+	time_t timer = time_t();
+	std::string uri = "Log files//output" + std::to_string(time(&timer)) + ".txt";
+	FileIO::SaveFile(uri.c_str(), this->output);
+
+	// Clear the output
+	output = "";
 }
 
 void MainController::HideDialog()
