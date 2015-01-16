@@ -49,7 +49,7 @@ class MainController : public QObject
 		QString output;
 		QMutex mutex;
 
-        std::thread* outputThread;
+        std::thread* output_thread;
 
 		double start_time;
 		bool output_thread_running;

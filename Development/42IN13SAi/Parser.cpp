@@ -190,7 +190,7 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 			std::string before = value.substr(0, value.find("."));
 			std::string after = value.substr(value.find(".")+1);
 
-			if (before.size() + after.size() > 17 || after.size() > 16)
+			if (before.size() + after.size() > 15 || after.size() > 15)
 			{
                 compiler->Diag(ExceptionEnum::err_float_precision) << compiler->PeekNext()->LineNumber;
 			}

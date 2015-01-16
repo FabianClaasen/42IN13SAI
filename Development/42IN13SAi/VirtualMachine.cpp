@@ -35,7 +35,7 @@ void VirtualMachine::quit()
 std::string VirtualMachine::toString(long double number)
 {
 	std::ostringstream strs;
-	strs << std::fixed << std::setprecision(16) << number;
+	strs << std::fixed << std::setprecision(14) << number;
 	std::string str = strs.str();
 	return str;
 }
@@ -275,6 +275,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 	// Set the current subroutine and symboltable
 	currentSubroutine = t_subroutine.get();
 	currentSymbolTable = t_symboltable.get();
+
+	SymbolTable* temp = new SymbolTable(*currentSymbolTable);
+	currentSymbolTable = temp;
 
 	return VirtualMachine::ExecuteNodes(std::make_shared<LinkedList>(*currentSubroutine->GetCompilerNodeCollection()));
 }
