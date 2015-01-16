@@ -7,7 +7,7 @@
 class Symbol
 {
 private:
-	float value;
+	long double value;
 public:
     const std::string name;
     const MyTokenType type;
@@ -19,7 +19,7 @@ public:
     Symbol& operator=(const Symbol& other);
     virtual ~Symbol();
     
-    float GetValue();
+	long double GetValue();
 	bool IsSet();
-    void SetValue(float p_value);
+	void SetValue(long double p_value);
 };

@@ -1,6 +1,8 @@
 #define _USE_MATH_DEFINES
 #include "VirtualMachine.h"
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <math.h>
 
 VirtualMachine::VirtualMachine(SymbolTable* symboltable, SubroutineTable* subroutine, std::shared_ptr<LinkedList> globalsNodes)
@@ -28,6 +30,14 @@ void VirtualMachine::run()
 void VirtualMachine::quit()
 {
 	is_running = false;
+}
+
+std::string VirtualMachine::toString(long double number)
+{
+	std::ostringstream strs;
+	strs << std::fixed << std::setprecision(16) << number;
+	std::string str = strs.str();
+	return str;
 }
 
 VirtualMachine::VirtualMachine(const VirtualMachine &other) : globalsSymboltable(other.globalsSymboltable), currentSubroutine(other.currentSubroutine), currentSymbolTable(other.currentSymbolTable), subroutineTable(other.subroutineTable), globalsList(other.globalsList)
@@ -233,11 +243,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 
 	// Get the subroutine table and check if exists
     Subroutine* sub = subroutineTable->GetSubroutine(functionNode->GetValue());
-    std::shared_ptr<Subroutine> t_subroutine = nullptr;
+    std::shared_ptr<Subroutine> t_subroutine = std::make_shared<Subroutine>();
     if (sub != nullptr)
         t_subroutine = std::make_shared<Subroutine>(*sub);
     
-	if (t_subroutine == nullptr)
+	if (!t_subroutine)
         //exceptions.push_back("Function " + functionNode->GetValue() + " does not exist");
         throw SubroutineNotFoundException("Function " + functionNode->GetValue() + " does not exist");
 
@@ -259,7 +269,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 		if (param->GetExpression() != "$value")
 			param = CallFunction(*param);
 
-		double fParam = atof(param->GetValue().c_str());
+		long double fParam = atof(param->GetValue().c_str());
 		symbol->SetValue(fParam);
 		paramNum++;
 	}
@@ -267,9 +277,6 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 	// Set the current subroutine and symboltable
 	currentSubroutine = t_subroutine.get();
 	currentSymbolTable = t_symboltable.get();
-
-	SymbolTable* test = new SymbolTable(*currentSymbolTable);
-	currentSymbolTable = test;
 
 	return VirtualMachine::ExecuteNodes(std::make_shared<LinkedList>(*currentSubroutine->GetCompilerNodeCollection()));
 }
@@ -332,7 +339,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAssignment(CompilerNode com
 			current_symbol = globalsSymboltable->GetSymbol(variableName);
 
 		// Get the param value and set in temp var
-		double valueToSet = atof(param2->GetValue().c_str());
+		long double valueToSet = atof(param2->GetValue().c_str());
 		current_symbol->SetValue(valueToSet);
 	}
 
@@ -359,7 +366,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGetVariable(CompilerNode co
 		current_symbol = globalsSymboltable->GetSymbol(parameter);
 
 	// Create the return node
-	std::shared_ptr<CompilerNode> returnNode = std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(current_symbol->GetValue()), false));
+	std::shared_ptr<CompilerNode> returnNode = std::make_shared<CompilerNode>(CompilerNode("$value", toString(current_symbol->GetValue()), false));
 
 	return returnNode;
 }
@@ -369,7 +376,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGetVariable(CompilerNode co
 std::shared_ptr<CompilerNode> VirtualMachine::ExecutePrint(CompilerNode compilerNode)
 {
 	// Get the Node parameters
-	std::vector<std::shared_ptr<CompilerNode>> parameters = CheckParameters(compilerNode, 1);
+	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Get the new value
@@ -517,7 +524,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLessCondition(CompilerNode 
 	bool output = num1 < num2;
 
 	// Set boolean to true if num1 < num2, else return false (inside the node)
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLessOrEqCondition(CompilerNode compilerNode)
@@ -533,7 +540,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLessOrEqCondition(CompilerN
 	bool output = num1 <= num2;
 
 	// Set boolean to true if num1 < num2, else return false (inside the node)
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGreaterCondition(CompilerNode compilerNode)
@@ -549,7 +556,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGreaterCondition(CompilerNo
 	bool output = num1 > num2;
 
 	// Set boolean to true if num1 > num2, else return false (inside the node)
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGreaterOrEqCondition(CompilerNode compilerNode)
@@ -565,7 +572,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGreaterOrEqCondition(Compil
 	bool output = num1 >= num2;
 
 	// Set boolean to true if num1 > num2, else return false (inside the node)
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteEqualCondition(CompilerNode compilerNode)
@@ -581,7 +588,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteEqualCondition(CompilerNode
 	bool output = num1 == num2;
 
 	// Set boolean to true if num1 == num2, else return false (inside the node)
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNotEqualCondition(CompilerNode compilerNode)
@@ -592,12 +599,12 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNotEqualCondition(CompilerN
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Set numbers / values
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
 	bool output = num1 != num2;
 
 	// Set boolean to true if num1 != num2, else return false (inside the node)
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteOr(CompilerNode compilerNode)
@@ -616,16 +623,16 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteOr(CompilerNode compilerNod
         param1 = CallFunction(*param1);
     
     if (param1->GetValue() == "1")
-        return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(true), false));
+        return std::make_shared<CompilerNode>(CompilerNode("$value", toString(true), false));
     
     std::shared_ptr<CompilerNode> param2 = parameters.at(1);
     if (param2->GetExpression() != "$value")
         param2 = CallFunction(*param2);
     
     if (param2->GetValue() == "1")
-        return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(true), false));
+        return std::make_shared<CompilerNode>(CompilerNode("$value", toString(true), false));
     
-    return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(false), false));
+    return std::make_shared<CompilerNode>(CompilerNode("$value", toString(false), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAnd(CompilerNode compilerNode)
@@ -635,7 +642,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAnd(CompilerNode compilerNo
     std::shared_ptr<CompilerNode> param2 = parameters.at(1);
     
     bool output = (param1->GetValue() == "1" && param2->GetValue() == "1");
-    return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+    return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 #pragma endregion ConditionalStatements
@@ -649,12 +656,18 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAddOperation(CompilerNode c
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
-	double output = num1 + num2;
+	std::string num1s = param1->GetValue();
+	std::string num2s = param2->GetValue();
+
+	const char* num1ss = num1s.c_str();
+	const char* num2ss = num2s.c_str();
+
+	long double num1 = strtod(num1ss, NULL);//atof(num1ss);
+	long double num2 = atof(num2ss);
+	long double output = num1 + num2;
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteMinusOperation(CompilerNode compilerNode)
@@ -665,12 +678,12 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteMinusOperation(CompilerNode
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
-	double output = num1 - num2;
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
+	long double output = num1 - num2;
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteMultiplyOperation(CompilerNode compilerNode)
@@ -681,12 +694,12 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteMultiplyOperation(CompilerN
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
-	double output = num1 * num2;
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
+	long double output = num1 * num2;
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDivideOperation(CompilerNode compilerNode)
@@ -697,16 +710,16 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDivideOperation(CompilerNod
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
-	double output = num1 / num2;
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
+	long double output = num1 / num2;
 
 	// Check if num2 is not zero
 	if (num2 == 0)
 		throw ZeroDivideException("Cannot divide by zero");
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteUniMinOperation(CompilerNode compilerNode)
@@ -716,11 +729,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteUniMinOperation(CompilerNod
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double output = num1 - 1;
+	long double num1 = atof(param1->GetValue().c_str());
+	long double output = num1 - 1;
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteUniPlusOperation(CompilerNode compilerNode)
@@ -730,11 +743,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteUniPlusOperation(CompilerNo
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double output = num1 + 1;
+	long double num1 = atof(param1->GetValue().c_str());
+	long double output = num1 + 1;
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 #pragma endregion SimpleMath
@@ -747,11 +760,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSqrOperation(CompilerNode c
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
 
-	double output = std::pow(num1, 2);
+	long double output = std::pow(num1, 2);
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCbcOperation(CompilerNode compilerNode)
@@ -761,11 +774,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCbcOperation(CompilerNode c
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
 
-	double output = std::pow(num1, 3);
+	long double output = std::pow(num1, 3);
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecutePowOperation(CompilerNode compilerNode)
@@ -776,14 +789,14 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePowOperation(CompilerNode c
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
 
 	// TODO CHECKS
 
-	double output = std::pow(num1, num2);
+	long double output = std::pow(num1, num2);
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSqrtOperation(CompilerNode compilerNode)
@@ -793,13 +806,13 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSqrtOperation(CompilerNode 
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
 	if (num1 < 0)
 		throw InvalidInputException("InvalidInputException occured. Can't calculate square root of negative value.");
 
-	double output = std::sqrt(num1);
+	long double output = std::sqrt(num1);
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCbrtOperation(CompilerNode compilerNode)
@@ -809,11 +822,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCbrtOperation(CompilerNode 
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
 
-	double output = std::cbrt(num1);
+	long double output = std::cbrt(num1);
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 
@@ -824,11 +837,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSinOperation(CompilerNode c
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double output = std::sin(num1 * (M_PI/180));
+	long double num1 = atof(param1->GetValue().c_str());
+	long double output = std::sin(num1 * (M_PI / 180));
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSinrOperation(CompilerNode compilerNode)
@@ -838,11 +851,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteSinrOperation(CompilerNode 
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double output = std::sin(num1);
+	long double num1 = atof(param1->GetValue().c_str());
+	long double output = std::sin(num1);
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCosOperation(CompilerNode compilerNode)
@@ -852,11 +865,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCosOperation(CompilerNode c
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double output = std::cos(num1* (M_PI / 180));
+	long double num1 = atof(param1->GetValue().c_str());
+	long double output = std::cos(num1* (M_PI / 180));
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCosrOperation(CompilerNode compilerNode)
@@ -866,11 +879,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCosrOperation(CompilerNode 
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double output = std::cos(num1);
+	long double num1 = atof(param1->GetValue().c_str());
+	long double output = std::cos(num1);
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteTanOperation(CompilerNode compilerNode)
@@ -880,11 +893,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteTanOperation(CompilerNode c
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double output = std::tan(num1* (M_PI / 180));
+	long double num1 = atof(param1->GetValue().c_str());
+	long double output = std::tan(num1* (M_PI / 180));
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteTanrOperation(CompilerNode compilerNode)
@@ -894,11 +907,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteTanrOperation(CompilerNode 
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double output = std::tan(num1);
+	long double num1 = atof(param1->GetValue().c_str());
+	long double output = std::tan(num1);
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDegreeOperation(CompilerNode compilerNode)
@@ -908,11 +921,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDegreeOperation(CompilerNod
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double output = num1 * (180 / M_PI);
+	long double num1 = atof(param1->GetValue().c_str());
+	long double output = num1 * (180 / M_PI);
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteRadiantOperation(CompilerNode compilerNode)
@@ -922,10 +935,10 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteRadiantOperation(CompilerNo
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double output = num1 * (M_PI / 180);
+	long double num1 = atof(param1->GetValue().c_str());
+	long double output = num1 * (M_PI / 180);
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecutePercentOperation(CompilerNode compilerNode)
@@ -936,13 +949,13 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePercentOperation(CompilerNo
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
 	if (num2 == 0)
 		throw ZeroDivideException("Division by 0 exception occured.");
-	double output = (num1 / num2) * 100;
+	long double output = (num1 / num2) * 100;
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecutePermillageOperation(CompilerNode compilerNode)
@@ -953,13 +966,13 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePermillageOperation(Compile
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
 	if (num2 == 0)
 		throw ZeroDivideException("Division by 0 exception occured.");
-	double output = (num1 / num2) * 1000;
+	long double output = (num1 / num2) * 1000;
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCommonLogOperation(CompilerNode compilerNode)
@@ -969,14 +982,14 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteCommonLogOperation(Compiler
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation	
-	double num1 = atof(param1->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
 	
 	if (num1 <= 0)
 		throw InvalidInputException("Invalid Input");
 
-	double output = std::log10(num1);
+	long double output = std::log10(num1);
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteBinaryLogOperation(CompilerNode compilerNode)
@@ -986,14 +999,14 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteBinaryLogOperation(Compiler
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
 
 	if (num1 <= 0)
 		throw InvalidInputException("Invalid Input");
 
-	double output = std::log2(num1);
+	long double output = std::log2(num1);
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNaturalLogOperation(CompilerNode compilerNode)
@@ -1003,14 +1016,14 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteNaturalLogOperation(Compile
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
 
 	if (num1 <= 0)
 		throw InvalidInputException("Invalid Input");
 
-	double output = std::log(num1);
+	long double output = std::log(num1);
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLogOperation(CompilerNode compilerNode)
@@ -1021,15 +1034,15 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteLogOperation(CompilerNode c
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
 
 	if (num1 <= 0 || num2 <= 0 || num2 == 1)
 		throw InvalidInputException("Invalid Input");
 
-	double output = std::log(num1) / std::log(num2);
+	long double output = std::log(num1) / std::log(num2);
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteModuloOperation(CompilerNode compilerNode)
@@ -1040,15 +1053,15 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteModuloOperation(CompilerNod
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
 
 	if (num2 == 0)
 		throw ZeroDivideException("Division by 0 exception occured.");
 
-	double output = std::fmod(num1, num2);
+	long double output = std::fmod(num1, num2);
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGcdOperation(CompilerNode compilerNode)
@@ -1059,8 +1072,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGcdOperation(CompilerNode c
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
 
 	long long int1 = num1;
 	long long int2 = num2;
@@ -1079,7 +1092,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGcdOperation(CompilerNode c
 		if (int1%i == 0 && int2%i == 0)
 			output = i;
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDiscriminantOperation(CompilerNode compilerNode)
@@ -1091,14 +1104,14 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDiscriminantOperation(Compi
 	std::shared_ptr<CompilerNode> param3 = parameters.at(2);
 
 	// Parse the parameters to a double for mathmatic operation
-	double numA = atof(param1->GetValue().c_str());
-	double numB = atof(param2->GetValue().c_str());
-	double numC = atof(param3->GetValue().c_str());
+	long double numA = atof(param1->GetValue().c_str());
+	long double numB = atof(param2->GetValue().c_str());
+	long double numC = atof(param3->GetValue().c_str());
 
-	double output = std::pow(numB, 2) - (4 * numA * numC);
+	long double output = std::pow(numB, 2) - (4 * numA * numC);
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode compilerNode)
 {
@@ -1109,9 +1122,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 	std::shared_ptr<CompilerNode> param3 = parameters.at(2);
 
 	// Parse the parameters to a double for mathmatic operation
-	double numA = atof(param1->GetValue().c_str());
-	double numB = atof(param2->GetValue().c_str());
-	double numC = atof(param3->GetValue().c_str());
+	long double numA = atof(param1->GetValue().c_str());
+	long double numB = atof(param2->GetValue().c_str());
+	long double numC = atof(param3->GetValue().c_str());
 
 	if (numA == 0)
 	{
@@ -1119,9 +1132,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 	}
 	else
 	{
-		double disc = std::pow(numB, 2) - (4 * numA * numC);
-		double x1, x2;
-		std::string abcOutput = "The discriminant is " + std::to_string(disc) + ".\n";
+		long double disc = std::pow(numB, 2) - (4 * numA * numC);
+		long double x1, x2;
+		std::string abcOutput = "The discriminant is " + toString(disc) + ".\n";
 		if (disc < 0)
 		{
 			abcOutput = abcOutput + "There is no real root because the discriminant is negative.";
@@ -1131,13 +1144,13 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAbcOperation(CompilerNode c
 			x1 = (-numB / (2 * numA));
 			if (x1 == -0)
 				x1 = 0;
-			abcOutput = abcOutput + "There is one real root because the discriminant is zero.\nThe root is " + std::to_string(x1) + ".";
+			abcOutput = abcOutput + "There is one real root because the discriminant is zero.\nThe root is " + toString(x1) + ".";
 		}
 		else if (disc > 0)
 		{
 			x1 = (-numB + std::sqrt(disc)) / (2 * numA);
 			x2 = (-numB - std::sqrt(disc)) / (2 * numA);
-			abcOutput = abcOutput + "There are two real roots because the discriminant is positive.\nThe roots are " + std::to_string(x1) + " and " + std::to_string(x2) + ".";
+			abcOutput = abcOutput + "There are two real roots because the discriminant is positive.\nThe roots are " + toString(x1) + " and " + toString(x2) + ".";
 		}
 
 		// Print value
@@ -1155,13 +1168,13 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFibonacciOperation(Compiler
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
 	long long int1 = num1;
 
 	if (num1 != int1)
 		throw UnexpectedTypeException("An UnexpectedTypeException occured in function 'fib'. Expected integer parameter.");
 	if (int1 >= 93)
-		throw UnexpectedParameterException("An UnexpectedParameterException occured in function 'fib'. Result won't be precise for input '"+std::to_string(int1)+"'.");
+		throw UnexpectedParameterException("An UnexpectedParameterException occured in function 'fib'. Result won't be precise for input '"+toString(int1)+"'.");
 
 	if (int1 < 0)
 		int1 *= -1;
@@ -1179,7 +1192,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFibonacciOperation(Compiler
 	long long output = fib;
 
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecutePythagoreanOperation(CompilerNode compilerNode)
@@ -1190,8 +1203,8 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePythagoreanOperation(Compil
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num = atof(param1->GetValue().c_str());
-	double numC = atof(param2->GetValue().c_str());
+	long double num = atof(param1->GetValue().c_str());
+	long double numC = atof(param2->GetValue().c_str());
 
 	if (num <= 0 || numC <= 0 )
 		throw InvalidInputException("An InvalidInputException occured. Input for 'pyt' can't be negative.");
@@ -1199,9 +1212,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePythagoreanOperation(Compil
 	if (num > numC)
 		throw InvalidInputException("An InvalidInputException occured. Input 'c' can't be smaller than 'x'");
 
-	double output = std::sqrt(pow(numC, 2) - pow(num, 2));
+	long double output = std::sqrt(pow(numC, 2) - pow(num, 2));
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecutePythagoreanHOperation(CompilerNode compilerNode)
@@ -1212,15 +1225,15 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecutePythagoreanHOperation(Compi
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double numA = atof(param1->GetValue().c_str());
-	double numB = atof(param2->GetValue().c_str());
+	long double numA = atof(param1->GetValue().c_str());
+	long double numB = atof(param2->GetValue().c_str());
 
 	if (numA <= 0 || numB <= 0)
 		throw InvalidInputException("An InvalidInputException occured. Input for 'pyth' can't be negative.");
 
-	double output = std::sqrt(pow(numA, 2) + pow(numB, 2));
+	long double output = std::sqrt(pow(numA, 2) + pow(numB, 2));
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 
@@ -1235,11 +1248,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteDistanceOperation(CompilerN
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
-	double output = num1*num2;
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
+	long double output = num1*num2;
 // Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteVelocityOperation(CompilerNode compilerNode){
@@ -1249,13 +1262,13 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteVelocityOperation(CompilerN
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
 	if (num2 == 0)
 		throw ZeroDivideException("Division by 0 exception occured.");
-	double output = num1 / num2;
+	long double output = num1 / num2;
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteTimeOperation(CompilerNode compilerNode){
@@ -1265,13 +1278,13 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteTimeOperation(CompilerNode 
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
 	if (num2 == 0)
 		throw ZeroDivideException("Division by 0 exception occured.");
-	double output = num1 / num2;
+	long double output = num1 / num2;
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAverageVelocityOperation(CompilerNode compilerNode){
@@ -1281,14 +1294,14 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAverageVelocityOperation(Co
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
 	if (num2 == 0)
 		throw ZeroDivideException("Division by 0 exception occured.");
 
-	double output = num1 / num2;
+	long double output = num1 / num2;
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAccelerationOperation(CompilerNode compilerNode){
@@ -1298,14 +1311,14 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAccelerationOperation(Compi
 	std::shared_ptr<CompilerNode> param2 = parameters.at(1);
 
 	// Parse the parameters to a double for mathmatic operation
-	double num1 = atof(param1->GetValue().c_str());
-	double num2 = atof(param2->GetValue().c_str());
+	long double num1 = atof(param1->GetValue().c_str());
+	long double num2 = atof(param2->GetValue().c_str());
 	if (num2 == 0)
 		throw ZeroDivideException("Division by 0 exception occured.");
 
-	double output = num1 / num2;
+	long double output = num1 / num2;
 	// Create a new value compilernode to return
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(output), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(output), false));
 }
 #pragma endregion Physics
 
@@ -1313,11 +1326,11 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteAccelerationOperation(Compi
 // PI
 std::shared_ptr<CompilerNode> VirtualMachine::ExecutePiConstant(CompilerNode compilerNode)
 {
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(M_PI), false));	
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(M_PI), false));	
 }
 // EULER
 std::shared_ptr<CompilerNode> VirtualMachine::ExecuteEConstant(CompilerNode compilerNode)
 {
-	return std::make_shared<CompilerNode>(CompilerNode("$value", std::to_string(M_E), false));
+	return std::make_shared<CompilerNode>(CompilerNode("$value", toString(M_E), false));
 }
 #pragma endregion MathConstants

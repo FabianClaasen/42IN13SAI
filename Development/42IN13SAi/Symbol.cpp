@@ -24,7 +24,7 @@ Symbol& Symbol::operator=(const Symbol& other)
     return *this;
 }
 
-void Symbol::SetValue(float p_value)
+void Symbol::SetValue(long double p_value)
 {
 	value = p_value;
 	is_set = true;
@@ -35,7 +35,7 @@ bool Symbol::IsSet()
 	return is_set;
 }
 
-float Symbol::GetValue()
+long double Symbol::GetValue()
 {
     return value;
 }

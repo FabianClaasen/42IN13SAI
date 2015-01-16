@@ -184,12 +184,13 @@ std::shared_ptr<CompilerNode> Parser::ParseAssignmentStatement(bool forLoop)
 	{
 		compiler->GetNext(); // remove the '=' token
 
-		if (compiler->PeekNext()->Value.find(".") != std::string::npos)
+		std::string value = compiler->PeekNext()->Value;
+		if (value.find(".") != std::string::npos)
 		{
-			std::string before = compiler->PeekNext()->Value.substr(0, compiler->PeekNext()->Value.find("."));
-			std::string after = compiler->PeekNext()->Value.substr(compiler->PeekNext()->Value.find("."));
+			std::string before = value.substr(0, value.find("."));
+			std::string after = value.substr(value.find(".")+1);
 
-			if (before.size() > 7 || after.size() > 7)
+			if (before.size() + after.size() > 17 || after.size() > 16)
 			{
                 compiler->Diag(ExceptionEnum::err_float_precision) << compiler->PeekNext()->LineNumber;
 			}

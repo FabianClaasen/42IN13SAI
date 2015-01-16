@@ -147,6 +147,8 @@ private:
 	int findPosition(std::string key);
 
 	bool is_running;
+
+	std::string toString(long double number);
 	
 signals:
 	void PrintException(QString);
