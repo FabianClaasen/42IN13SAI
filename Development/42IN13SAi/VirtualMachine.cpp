@@ -238,7 +238,6 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
         t_subroutine = std::make_shared<Subroutine>(*sub);
     
 	if (t_subroutine == nullptr)
-        //exceptions.push_back("Function " + functionNode->GetValue() + " does not exist");
         throw SubroutineNotFoundException("Function " + functionNode->GetValue() + " does not exist");
 
 	// Set the currentSymbolTable
