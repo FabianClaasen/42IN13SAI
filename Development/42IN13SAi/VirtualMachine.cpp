@@ -419,7 +419,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteWhile(CompilerNode compiler
 	std::shared_ptr<CompilerNode> condition = parameters.at(0);
 
 	// Check if condition is true.
-	if (condition->GetValue() == "1")
+	if (condition->GetValue()[0] == '1')
 	{
 		return nullptr;
 	}
@@ -472,7 +472,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFor(CompilerNode compilerNo
 		condition = CallFunction(*condition);
 
 	// Check if condition is true.
-	if (condition->GetValue() == "1")
+	if (condition->GetValue()[0] == '1')
 	{
 		// Do something...
 		
@@ -498,7 +498,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteIf(CompilerNode compilerNod
 	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
 	std::shared_ptr<CompilerNode> condition = parameters.at(0);
 
-	if (condition->GetValue() == "1")
+	if (condition->GetValue()[0] == '1')
 	{
 		return nullptr;
 	}

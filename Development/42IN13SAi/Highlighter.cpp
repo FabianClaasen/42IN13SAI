@@ -51,7 +51,7 @@ Highlighter::Highlighter(std::map<std::string, QColor> colors, QTextDocument *pa
                 break;
 
             case MyTokenType::Float:
-                setCurrentFormat(currentFormat, rule, QRegExp("\\b((?:[0-9]*[eE]?[0-9]+\.)?[0-9]*[eE]?[0-9]+)"), QFont::Normal, colors["variable_types"]);
+                setCurrentFormat(currentFormat, rule, QRegExp("\\b((?:[0-9]*[eE]?[0-9]+\\.)?[0-9]*[eE]?[0-9]+)"), QFont::Normal, colors["variable_types"]);
                 break;
 
 			case MyTokenType::Comment:
