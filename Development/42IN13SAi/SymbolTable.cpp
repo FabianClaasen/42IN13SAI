@@ -7,13 +7,14 @@ SymbolTable::SymbolTable()
 
 bool SymbolTable::HasSymbol(std::string symbolName)
 {
-    if (symbols->size() > 0)
-    {
-        auto symbol = symbols->find(symbolName);
-        if (symbol == symbols->end())
-            return false;
-        return true;
-    }
+	if (symbols->size() > 0)
+	{
+		auto symbol = symbols->find(symbolName);
+		if (symbol == symbols->end())
+			return false;
+		return true;
+	}
+    
     return false;
 }
 

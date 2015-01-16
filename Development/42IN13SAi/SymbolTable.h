@@ -3,7 +3,9 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
+#include <memory>
 #include "Symbol.h"
+#include <memory>
 
 class SymbolTable {
 private:

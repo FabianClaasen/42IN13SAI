@@ -110,7 +110,7 @@ void MainController::Execute()
             virtual_machine->start();
 
             // Start timer to print output
-            std::thread* thread = new std::thread([&](){
+            outputThread = new std::thread([&](){
                 output_thread_running = true;
 
                 start_time = std::clock();
@@ -319,14 +319,11 @@ void MainController::SaveAsFile()
     try
     {
         QString URI = mainWindow.OpenSaveDialog();
-        if (!URI.isEmpty())
+		if (!URI.isEmpty() && URI != "canceled")
         {
-            if(!URI.endsWith(".sc"))
-                URI = URI + ".sc";
-
             FileIO::SaveFile(URI, mainWindow.GetText());
             QFileInfo* fileInfo = new QFileInfo(URI);
-            mainWindow.SetTabTitle(fileInfo);
+			mainWindow.SetTabTitle(fileInfo);
         }
         else if(!(URI == "canceled"))
             throw SaveException("You can only save the file as a .sc file");
@@ -357,4 +354,6 @@ void MainController::CloseTab(int index)
 MainController::~MainController()
 {
     // Empty
+
+    delete outputThread;
 }

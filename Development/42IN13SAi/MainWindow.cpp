@@ -92,7 +92,7 @@ CodeEditor* MainWindow::CreateEditor()
 	QString str = QDir::currentPath();
 	str.append("/Resources/words.txt");
 
-	completer->setModel(modelFromFile(str));
+    completer->setModel(modelFromFile(str));
 	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
 	completer->setCaseSensitivity(Qt::CaseSensitive);
 	completer->setWrapAround(false);
@@ -250,7 +250,7 @@ QAbstractItemModel* MainWindow::modelFromFile(const QString& fileName)
 {
 	QFile file(fileName);
 	if (!file.open(QFile::ReadOnly))
-		return new QStringListModel(completer);
+        return new QStringListModel(completer);
 
 #ifndef QT_NO_CURSOR
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -266,7 +266,7 @@ QAbstractItemModel* MainWindow::modelFromFile(const QString& fileName)
 #ifndef QT_NO_CURSOR
 	QApplication::restoreOverrideCursor();
 #endif
-	return new QStringListModel(words, completer);
+    return new QStringListModel(words, completer);
 }
 
 QString MainWindow::OpenLoadDialog()
@@ -289,11 +289,16 @@ QString MainWindow::OpenSaveDialog()
     dlg.setAcceptMode(QFileDialog::AcceptSave);
     dlg.setNameFilter(tr("Text files (*.sc)"));
     QString URI;
-    if (dlg.exec())
-        URI = dlg.selectedFiles().at(0);
-    else
-        URI = "canceled";
-
+	if (dlg.exec())
+	{
+		URI = dlg.selectedFiles().at(0);
+		if (!URI.endsWith(".sc"))
+			URI = URI + ".sc";
+	}
+	else
+	{
+		URI = "canceled";
+	}
     return URI;
 }
 void MainWindow::CodeIsExecuting(bool status)

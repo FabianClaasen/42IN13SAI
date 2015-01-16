@@ -267,6 +267,9 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteFunction(CompilerNode compi
 	currentSubroutine = t_subroutine.get();
 	currentSymbolTable = t_symboltable.get();
 
+	SymbolTable* test = new SymbolTable(*currentSymbolTable);
+	currentSymbolTable = test;
+
 	return VirtualMachine::ExecuteNodes(std::make_shared<LinkedList>(*currentSubroutine->GetCompilerNodeCollection()));
 }
 
@@ -365,7 +368,7 @@ std::shared_ptr<CompilerNode> VirtualMachine::ExecuteGetVariable(CompilerNode co
 std::shared_ptr<CompilerNode> VirtualMachine::ExecutePrint(CompilerNode compilerNode)
 {
 	// Get the Node parameters
-	std::vector<std::shared_ptr<CompilerNode> > parameters = CheckParameters(compilerNode, 1);
+	std::vector<std::shared_ptr<CompilerNode>> parameters = CheckParameters(compilerNode, 1);
 	std::shared_ptr<CompilerNode> param1 = parameters.at(0);
 
 	// Get the new value
