@@ -121,7 +121,7 @@ void Parser::ParseFunction()
     {
         compiler->Diag(ExceptionEnum::err_expected_ret) << currentToken.LineNumber;
         compiler->SkipUntil(MyTokenType::OpenMethod);
-        compiler->SkipUntil(*compiler->GetCurrent().Partner);
+        compiler->SkipUntil(*compiler->GetCurrent().Partner.lock());
         return;
     }
 }
@@ -380,7 +380,7 @@ void Parser::ParseIfStatement()
     
     if (currentToken.Type == MyTokenType::If)
     {
-        if (currentToken.Partner != nullptr)
+        if (currentToken.Partner.lock() != nullptr)
         {
             hasPartner = true;
         }

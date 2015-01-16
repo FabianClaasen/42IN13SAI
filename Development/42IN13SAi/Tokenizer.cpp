@@ -66,7 +66,7 @@ void Tokenizer::Tokenize()
                     std::shared_ptr<Token> temp = FindPartner(definition.myTokenType, level);
                     if (temp)
                     {
-                        if (temp->Partner == nullptr)
+                        if (temp->Partner.lock() == nullptr)
                             partner = temp;
                     }
 				}

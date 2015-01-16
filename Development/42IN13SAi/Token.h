@@ -40,7 +40,7 @@ public:
     
     /// If the token has a partner this will contain it
     ///
-	std::shared_ptr<Token> Partner;
+	std::weak_ptr<Token> Partner;
     
     /// Sets all the data for the token
     ///
